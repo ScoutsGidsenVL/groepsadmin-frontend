@@ -1,0 +1,12 @@
+.p-fileupload .p-fileupload-choose {
+  background: $sgv-donkergroen;
+  border: 1px solid $sgv-donkergroen;
+  &:hover {
+    background: $sgv-donkergroen;
+    border: 1px solid $sgv-lichtgroen;
+  }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 0.2rem $sgv-lichtgroen !important;
+  }
+}

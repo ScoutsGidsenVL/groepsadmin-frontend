@@ -1,0 +1,351 @@
+@import "./footer";
+@import "./github";
+@import "./top_menubalk";
+@import "./menubalk";
+@import "./lid";
+@import "./datePicker";
+@import "./adres";
+@import "./input";
+@import "./button";
+@import "./mail";
+
+.content {
+  min-height: 60vh;
+  overflow-x: hidden;
+}
+
+.p-card {
+  .p-card-content,
+  .p-card-title {
+    text-align: left;
+  }
+  .p-card-title {
+    color: $sgv-donkergroen;
+  }
+}
+
+.p-dropdown:hover {
+  border-color: $sgv-donkergroen !important;
+}
+
+.p-dropdown.p-focus {
+  box-shadow: 0 0 0 0.2px $sgv-lichtgroen !important;
+  border-color: $sgv-lichtgroen !important;
+}
+
+.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 0.2rem transparent !important;
+  border-color: $sgv-lichtgroen !important;
+}
+.p-inputtext:enabled:hover {
+  border-color: $sgv-donkergroen !important;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  box-shadow: 0 0 0 0.2px $sgv-lichtgroen !important;
+  border-color: $sgv-lichtgroen !important;
+  background: $sgv-lichtgroen !important;
+}
+
+.p-checkbox .p-checkbox-box.p-focus {
+  box-shadow: 0 0 0 0.2px $sgv-lichtgroen !important;
+  border-color: $sgv-lichtgroen !important;
+}
+
+.p-checkbox .p-checkbox-box:hover {
+  border-color: $sgv-lichtgroen !important;
+}
+
+.help-button-wrapper {
+  position: absolute;
+  margin-top: 2px;
+  .help-button {
+    cursor: pointer;
+    color: $sgv-donkergroen;
+  }
+}
+
+.p-accordion-header-link:hover {
+  text-decoration: none !important;
+}
+.p-accordion-header-link:focus {
+  box-shadow: 0 0 0 0.2rem transparent !important;
+  border-color: $sgv-lichtgroen !important;
+}
+
+.width-100 {
+  width: 100% !important;
+}
+
+.plus-icon {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ml--05 {
+  margin-left: - 0.5rem !important;
+}
+
+.mt--05 {
+  margin-top: - 0.5rem !important;
+}
+
+.remove-button-wrapper {
+  height: 30px !important;
+}
+
+.mr-05 {
+  margin-right: 0.5rem !important;
+}
+
+.add-button {
+  background-color: transparent !important;
+  color: $sgv-donkergroen !important;
+  border: 1px solid;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+}
+
+.remove-button {
+  &:hover {
+    border: 1px solid darkred !important;
+    box-shadow: 0 0 0 0.5px darkred !important;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.custom-input-styling {
+  .p-inputtext:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-lichtgroen !important;
+  }
+  .p-inputtext:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+  }
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.mail-link {
+  color: $sgv-donkergroen !important;
+  &hover {
+    text-decoration: underline;
+  }
+}
+
+.p-splitbutton  {
+  .p-button {
+    background-color: $sgv-donkergroen;
+    border-color: white
+
+  }
+
+  .p-button:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-lichtgroen !important;
+  }
+  .p-button:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+}
+
+.bovenbalk {
+  margin-top: 2em;
+  margin-bottom: 0.1em;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.panel-subtitle {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.p-dropdown-label {
+  text-align: left !important;
+}
+
+.padding-left-2-5em {
+  padding-left: 2.5em !important;
+}
+
+.padding-left-4em {
+  padding-left: 4em !important;
+}
+
+.padding-left-5em {
+  padding-left: 5em !important;
+}
+
+
+.padding-right-5em {
+  padding-right: 5em !important;
+}
+
+.padding-right-4em {
+  padding-right: 4em !important;
+}
+
+.padding-top-2em {
+  padding-top: 2em !important;
+}
+
+.custom-title {
+  color: $sgv-donkergroen;
+}
+
+.beschrijving a {
+  color: $sgv-donkergroen !important;
+  &hover {
+    text-decoration: underline;
+  }
+}
+
+.ml-25 {
+  margin-left: 0.75rem !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

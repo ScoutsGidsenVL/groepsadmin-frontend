@@ -1,26 +1,17 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <Header />
+  <confirmDialog/>
+  <toast position="top-center"/>
   <router-view />
+  <Footer />
 </template>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: museo_sans500, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
   color: #2c3e50;
 }
 
@@ -28,3 +19,13 @@
   color: #42b983;
 }
 </style>
+<script>
+import Footer from "@/components/global/Footer";
+import Header from "@/components/global/Header";
+export default {
+  components: {
+    Header,
+    Footer,
+  },
+};
+</script>

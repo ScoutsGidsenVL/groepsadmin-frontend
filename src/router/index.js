@@ -1,25 +1,58 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../views/Home.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import Dashboard from "@/views/Dashboard";
+import Ledenlijst from "@/views/Ledenlijst";
+import Ledenaantallen from "@/views/Ledenaantallen";
+import IndividueleSteekkaart from "@/views/IndividueleSteekkaart";
+import Groep from "@/views/Groep";
+import Lid from "@/views/Lid";
+import Mail from "@/views/Mail";
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/mail",
+    name: "Mail",
+    component: Mail,
   },
+  {
+    path: "/ledenlijst",
+    name: "Ledenlijst",
+    component: Ledenlijst,
+  },
+  {
+    path: "/ledenaantallen",
+    name: "Ledenaantallen",
+    component: Ledenaantallen,
+  },
+  {
+    path: "/groepsinstellingen",
+    name: "Groepsinstellingen",
+    component: Groep,
+  },
+  {
+    path: "/lid/:id",
+    name: "Lid",
+    component: Lid,
+  },
+  {
+    path: "/",
+    redirect: {
+      name: "Dashboard",
+    },
+  },
+  {
+    path: "/lid/individuelesteekkaart/:id",
+    name: "IndividueleSteekkaart",
+    component: IndividueleSteekkaart
+  }
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 

@@ -1,0 +1,178 @@
+/* XYZ Type */
+/* Sample CSS for Aglet Slab */
+
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-ExtraLight.eot');
+  src: url('AgletSlab-ExtraLight.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-ExtraLight.woff2') format('woff2'),
+       url('AgletSlab-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-ExtraLightItalic.eot');
+  src: url('AgletSlab-ExtraLightItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-ExtraLightItalic.woff2') format('woff2'),
+       url('AgletSlab-ExtraLightItalic.woff') format('woff');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Light.eot');
+  src: url('AgletSlab-Light.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Light.woff2') format('woff2'),
+       url('AgletSlab-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-LightItalic.eot');
+  src: url('AgletSlab-LightItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-LightItalic.woff2') format('woff2'),
+       url('AgletSlab-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Regular.eot');
+  src: url('AgletSlab-Regular.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Regular.woff2') format('woff2'),
+       url('AgletSlab-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Italic.eot');
+  src: url('AgletSlab-Italic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Italic.woff2') format('woff2'),
+       url('AgletSlab-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Semibold.eot');
+  src: url('AgletSlab-Semibold.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Semibold.woff2') format('woff2'),
+       url('AgletSlab-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-SemiboldItalic.eot');
+  src: url('AgletSlab-SemiboldItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-SemiboldItalic.woff2') format('woff2'),
+       url('AgletSlab-SemiboldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Bold.eot');
+  src: url('AgletSlab-Bold.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Bold.woff2') format('woff2'),
+       url('AgletSlab-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-BoldItalic.eot');
+  src: url('AgletSlab-BoldItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-BoldItalic.woff2') format('woff2'),
+       url('AgletSlab-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Black.eot');
+  src: url('AgletSlab-Black.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Black.woff2') format('woff2'),
+       url('AgletSlab-Black.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-BlackItalic.eot');
+  src: url('AgletSlab-BlackItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-BlackItalic.woff2') format('woff2'),
+       url('AgletSlab-BlackItalic.woff') format('woff');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-Ultra.eot');
+  src: url('AgletSlab-Ultra.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-Ultra.woff2') format('woff2'),
+       url('AgletSlab-Ultra.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aglet Slab';
+  src: url('AgletSlab-UltraItalic.eot');
+  src: url('AgletSlab-UltraItalic.eot?#iefix') format('embedded-opentype'),
+       url('AgletSlab-UltraItalic.woff2') format('woff2'),
+       url('AgletSlab-UltraItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+}
+
+.Aglet_Slab_extra_light {
+  font-family:'Aglet Slab';
+  font-weight:200; 
+}
+
+.Aglet_Slab_light {
+  font-family:'Aglet Slab';
+  font-weight:300; 
+}
+
+.Aglet_Slab_regular {
+  font-family:'Aglet Slab';
+  font-weight:400; 
+}
+
+.Aglet_Slab_semibold {
+  font-family:'Aglet Slab';
+  font-weight:600; 
+}
+
+.Aglet_Slab_bold {
+  font-family:'Aglet Slab';
+  font-weight:700; 
+}
+
+.Aglet_Slab_black {
+  font-family:'Aglet Slab';
+  font-weight:800; 
+}
+
+.Aglet_Slab_ultra {
+  font-family:'Aglet Slab';
+  font-weight:900; 
+}

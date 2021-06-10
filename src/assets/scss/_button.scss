@@ -1,0 +1,48 @@
+.save-button {
+  width: 4rem !important;
+  height: 4rem !important;
+  color: white !important;
+  background: $sgv-donkergroen !important;
+  border: 1px solid $sgv-donkergroen !important;
+  z-index: 999;
+  top: 52rem;
+}
+
+.delete-button {
+  width: 4rem !important;
+  height: 4rem !important;
+  color: white !important;
+  background: $sgv-rood !important;
+  border: 1px solid $sgv-rood !important;
+  z-index: 999;
+  top: 52rem;
+}
+
+.send-button {
+  width: 4rem !important;
+  height: 4rem !important;
+  color: white !important;
+  background: $sgv-oranje !important;
+  border: 1px solid $sgv-oranje !important;
+  z-index: 999;
+  top: 52rem;
+}
+
+.animate {
+  animation: glowing 1300ms 3 linear;
+}
+
+@keyframes glowing {
+  0% {
+    background-color: $sgv-donkergroen;
+    box-shadow: 0 0 5px $sgv-donkergroen;
+  }
+  50% {
+    background-color: $sgv-lichtgroen;
+    box-shadow: 0 0 20px $sgv-lichtgroen;
+  }
+  100% {
+    background-color: $sgv-donkergroen;
+    box-shadow: 0 0 5px $sgv-donkergroen;
+  }
+}

@@ -1,4 +1,4 @@
-# groepsadmin-client-vue
+# groepsadmin-frontend
 
 ## Project setup
 ```

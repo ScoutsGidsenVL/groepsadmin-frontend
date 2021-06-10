@@ -1,0 +1,60 @@
+.footer {
+  background: black;
+  display: block;
+  position: relative;
+  width: 100%;
+  bottom: -55px;
+  overflow: hidden;
+  color: $font-white !important;
+}
+
+.footer a {
+  color: $font-white;
+  box-sizing: border-box;
+
+  &:hover {
+    color: $font-white;
+    text-decoration: underline;
+  }
+}
+
+.footer-contact-logo {
+  min-width: 75px;
+  max-width: 75px;
+  height: 110px;
+  margin-right: 2em;
+
+  svg {
+    fill: $font-white !important;
+    margin-top: -1.5rem
+  }
+}
+
+.footer-contact-address {
+  text-align: left;
+}
+
+.footer-partner {
+  display: inline-block;
+  a {
+    img {
+      max-width: 140px;
+      max-height: 70px;
+    }
+
+    .img-fluid.vlaanderen {
+      max-width: 160px !important;
+      max-height: 91px !important;
+    }
+  }
+}
+
+.footer-bottom-legal {
+  margin-left: 0 !important;
+}
+
+@media only screen and (max-width: 390px) {
+  .footer-contact-logo {
+    display: none
+  }
+}
