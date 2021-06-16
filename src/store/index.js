@@ -1,6 +1,7 @@
 import {createStore} from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import RestService from "@/services/api/RestService";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default createStore({
     plugins: [createPersistedState()],
@@ -9,12 +10,13 @@ export default createStore({
         gebruikersnaam: "",
         token: "",
         profiel: null,
-        indexedGroepen: {},
+            indexedGroepen: {},
         groepen: {},
         groepenLaden: false,
         functiesLaden: false,
         functies: [],
         kolommen: [],
+        mailSjabloon: null,
     },
     mutations: {
         setNaam(state, naam) {
@@ -46,6 +48,15 @@ export default createStore({
         },
         setKolommen(state, kolommen) {
             state.kolommen = kolommen;
+        },
+        setMailSjabloon(state, mailSjabloon) {
+            if (mailSjabloon){
+                state.mailSjabloon = {};
+                state.mailSjabloon = Object.assign({}, mailSjabloon);
+                state.mailSjabloon.naam = mailSjabloon.naam + " gewijzigd maar nog niet opgeslagen op " + DateUtil.formatteerDatum(new Date());
+            } else {
+                state.mailSjabloon = null;
+            }
         }
     },
     getters: {
@@ -81,6 +92,9 @@ export default createStore({
         },
         kolommen(state) {
             return state.kolommen;
+        },
+        mailSjabloon(state) {
+            return state.mailSjabloon;
         }
     },
     actions: {
