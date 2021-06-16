@@ -16,7 +16,7 @@
     </div>
     <div class="row">
       <p class="beschrijving col-12 col-sm-4" v-html="beschrijving" v-if="beschrijving"></p>
-      <small class="p-invalid col-12 col-sm-8 p-error" v-if="invalid">{{ errorMessage}} </small>
+      <small class="p-invalid col-12 col-sm-8 p-error" v-if="invalid" :class="!beschrijving ? 'offset-sm-4' : ''">{{ errorMessage}} </small>
     </div>
   </div>
 </template>
