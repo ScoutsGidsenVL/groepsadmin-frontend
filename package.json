@@ -32,6 +32,7 @@
     "vee-validate": "^4.3.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-loading-overlay": "0.0.0",
     "vuejs-logger": "^1.5.5",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.0.0-beta.3"
