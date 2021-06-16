@@ -9,13 +9,13 @@
 }
 
 .delete-button {
-  width: 4rem !important;
-  height: 4rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
   color: white !important;
   background: $sgv-rood !important;
   border: 1px solid $sgv-rood !important;
   z-index: 999;
-  top: 52rem;
+  margin-top: 1px;
 }
 
 .send-button {
@@ -44,5 +44,51 @@
   100% {
     background-color: $sgv-donkergroen;
     box-shadow: 0 0 5px $sgv-donkergroen;
+  }
+}
+
+.p-dialog-footer .save-button-dialog {
+  background-color: $sgv-donkergroen !important;
+  color: white;
+  border-color: $sgv-lichtgroen !important;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-lichtgroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+}
+
+.p-dialog-footer .cancel-button-dialog {
+  background-color: $sgv-rood !important;
+  color: white;
+  border-color: $sgv-rood !important;
+  &:hover {
+    border: 1px solid $sgv-rood !important;
+    box-shadow: 0 0 0 1px $sgv-rood !important;
+    color: white;
+  }
+  &:active {
+    border: 1px solid $sgv-rood !important;
+    color: white;
+  }
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    color: white;
+    border-color: $sgv-rood !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-rood !important;
+    color: white;
+    background-color: $sgv-rood;
   }
 }

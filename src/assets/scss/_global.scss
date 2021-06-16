@@ -219,133 +219,43 @@
   margin-left: 0.75rem !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.clean-link {
+  text-decoration: none;
+  background-color: transparent;
+}
+
+@media (min-width: 992px) {
+  .mr-lg-9,
+  .mx-lg-9 {
+    margin-right: 5em !important;
+  }
+
+  .pl-lg-2-5em {
+    padding-left: 2.5em !important;
+  }
+
+  .pl-lg-4em {
+    padding-left: 4em !important;
+  }
+
+  .pl-lg-5em {
+    padding-left: 5em !important;
+  }
+
+
+  .pr-lg-5em {
+    padding-right: 5em !important;
+  }
+
+  .pr-lg-4em {
+    padding-right: 4em !important;
+  }
+
+  .pt-lg-2em {
+    padding-top: 2em !important;
+  }
+}
+
+.autocomplete-input {
+  width: 100% !important;
+}
