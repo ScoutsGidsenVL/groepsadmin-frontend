@@ -40,6 +40,21 @@ export default {
         return apiClient().get(baseUrl + "sjabloon/mail");
     },
 
+    getMailSjabloonOpId(id) {
+        return apiClient().get(baseUrl + "sjabloon/mail/" +id);
+    },
+
+    verwijderSjabloon(id) {
+        return apiClient().delete(baseUrl + "sjabloon/mail/" +id)
+    },
+
+    updateSjabloon(id, sjabloon) {
+        return apiClient().patch(baseUrl + "sjabloon/mail/" +id, sjabloon)
+    },
+
+    saveSjabloon(sjabloon) {
+        return apiClient().post(baseUrl + "sjabloon/mail", sjabloon)
+    },
     getKolomType() {
         return apiClient().get(baseUrl + "ledenlijst/kolom-type");
     },
