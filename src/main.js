@@ -20,7 +20,9 @@ import getClient from "./services/keycloak/keycloak-config";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {fas, faUser} from "@fortawesome/free-solid-svg-icons";
 import mitt from 'mitt';
-import VueGoogleMaps from '@fawmi/vue-google-maps'
+import VueGoogleMaps from '@fawmi/vue-google-maps';
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
+import Loading from 'vue3-loading-overlay';
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
@@ -34,7 +36,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ToastService from "primevue/toastservice";
 import GoogleMaps from "@/services/google/GoogleMaps";
 
-
 library.add(fas, faUser);
 
 // add primevue components
@@ -45,6 +46,7 @@ app.use(ConfirmPopup)
 app.use(ConfirmDialog)
 app.use(ConfirmationService)
 app.use(Toast)
+app.use(Loading)
 app.use(Accordion)
 app.use(AccordionTab)
 app.use(router);
