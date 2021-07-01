@@ -195,7 +195,7 @@ export default {
               severity: 'error',
               summary: 'Wijzigingen',
               detail: 'Er is iets misgegaan bij het opslaan',
-              life: 3000
+              life: 8000
             });
             console.log(error);
           })
