@@ -10,13 +10,17 @@ export default createStore({
         gebruikersnaam: "",
         token: "",
         profiel: null,
-            indexedGroepen: {},
+        indexedGroepen: {},
         groepen: {},
         groepenLaden: false,
         functiesLaden: false,
         functies: [],
         kolommen: [],
         mailSjabloon: null,
+        etiketSjabloon: null,
+        huidigeFilter: null,
+        geselecteerdeLeden: [],
+        lidIds: [],
     },
     mutations: {
         setNaam(state, naam) {
@@ -49,14 +53,32 @@ export default createStore({
         setKolommen(state, kolommen) {
             state.kolommen = kolommen;
         },
+        setHuidigeFilter(state, huidigeFilter) {
+            state.huidigeFilter = huidigeFilter;
+        },
+        setLidIds(state, lidIds) {
+            state.lidIds = lidIds;
+        },
         setMailSjabloon(state, mailSjabloon) {
-            if (mailSjabloon){
+            if (mailSjabloon) {
                 state.mailSjabloon = {};
                 state.mailSjabloon = Object.assign({}, mailSjabloon);
                 state.mailSjabloon.naam = mailSjabloon.naam + " gewijzigd maar nog niet opgeslagen op " + DateUtil.formatteerDatum(new Date());
             } else {
                 state.mailSjabloon = null;
             }
+        },
+        setEtiketSjabloon(state, etiketSjabloon) {
+            if (etiketSjabloon) {
+                state.etiketSjabloon = {};
+                state.etiketSjabloon = Object.assign({}, etiketSjabloon);
+                state.etiketSjabloon.naam = etiketSjabloon.naam + " gewijzigd maar nog niet opgeslagen op " + DateUtil.formatteerDatum(new Date());
+            } else {
+                state.etiketSjabloon = null;
+            }
+        },
+        setGeselecteerdeLeden(state, geselecteerdeLeden) {
+            state.geselecteerdeLeden = geselecteerdeLeden;
         }
     },
     getters: {
@@ -95,6 +117,18 @@ export default createStore({
         },
         mailSjabloon(state) {
             return state.mailSjabloon;
+        },
+        etiketSjabloon(state) {
+            return state.etiketSjabloon;
+        },
+        huidigeFilter(state) {
+            return state.huidigeFilter;
+        },
+        geselecteerdeLeden(state) {
+            return state.geselecteerdeLeden;
+        },
+        lidIds(state) {
+            return state.lidIds;
         }
     },
     actions: {
@@ -111,7 +145,7 @@ export default createStore({
                     commit("setGroepenLaden", false);
                 })
         },
-        getFuncties({commit}){
+        getFuncties({commit}) {
             commit("setFunctiesLaden", true)
             return RestService.getFuncties()
                 .then(response => {
@@ -120,7 +154,7 @@ export default createStore({
 
                 })
         },
-        getKolommen({commit}){
+        getKolommen({commit}) {
             return RestService.getKolomType()
                 .then(response => {
                     commit("setKolommen", response.data.kolommen)
