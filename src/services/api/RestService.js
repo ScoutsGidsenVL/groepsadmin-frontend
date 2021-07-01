@@ -1,4 +1,7 @@
 import apiClient from "@/services/api/ApiClient";
+import apiClientCsv from "@/services/api/ApiClientCsv";
+import apiClientPdf from "@/services/api/ApiClientPdf";
+import apiClientMail from "@/services/api/ApiClientMail";
 
 const baseUrl = "/groepsadmin/rest-ga/";
 
@@ -36,6 +39,35 @@ export default {
         return apiClient().get(baseUrl + "functie");
     },
 
+    getLeden(offset) {
+        return apiClient().get(baseUrl + "ledenlijst?offset=" + offset)
+    },
+
+    getLedenCsv(offset, lidIds) {
+        return apiClientCsv().post(baseUrl + "ledenlijst?offset=" + offset, lidIds)
+    },
+
+    getLedenPdf(offset, lidIds) {
+        return apiClientPdf().post(baseUrl + "ledenlijst?offset=" + offset, lidIds)
+    },
+
+    getLedenSteekkaartPdf(lidIds) {
+        return apiClientPdf().post(baseUrl + "ledenlijst/steekkaart", lidIds)
+    },
+
+    getHuidigeFilter() {
+        return apiClient().get(baseUrl + "ledenlijst/filter/huidige")
+    },
+
+    getFilterOpId(id){
+        return apiClient().get(baseUrl + "ledenlijst/filter/" + id)
+    },
+
+    // todo vereenvoudigen dmv een parameter icm mail
+    getEtiketSjablonen() {
+        return apiClient().get(baseUrl + "sjabloon/etiket");
+    },
+
     getMailSjablonen() {
         return apiClient().get(baseUrl + "sjabloon/mail");
     },
@@ -44,16 +76,40 @@ export default {
         return apiClient().get(baseUrl + "sjabloon/mail/" +id);
     },
 
-    verwijderSjabloon(id) {
+    verwijderMailSjabloon(id) {
         return apiClient().delete(baseUrl + "sjabloon/mail/" +id)
     },
 
-    updateSjabloon(id, sjabloon) {
+    updateMailSjabloon(id, sjabloon) {
         return apiClient().patch(baseUrl + "sjabloon/mail/" +id, sjabloon)
     },
 
-    saveSjabloon(sjabloon) {
+    saveMailSjabloon(sjabloon) {
         return apiClient().post(baseUrl + "sjabloon/mail", sjabloon)
+    },
+
+    getEtiketSjabloonOpId(id) {
+        return apiClient().get(baseUrl + "sjabloon/etiket/" +id);
+    },
+
+    verwijderEtiketSjabloon(id) {
+        return apiClient().delete(baseUrl + "sjabloon/etiket/" +id)
+    },
+
+    updateEtiketSjabloon(id, sjabloon) {
+        return apiClient().patch(baseUrl + "sjabloon/etiket/" +id, sjabloon)
+    },
+
+    printEtiketten(offset, data) {
+        return apiClientPdf().post(baseUrl + "ledenlijst/etiket?offset=" + offset, data)
+    },
+
+    verstuurMail(bevestiging, formData) {
+        return apiClientMail().post(baseUrl + "ledenlijst/mail?bevestig=" + bevestiging, formData)
+    },
+
+    saveEtiketSjabloon(sjabloon) {
+        return apiClient().post(baseUrl + "sjabloon/etiket/dummyid", sjabloon)
     },
     getKolomType() {
         return apiClient().get(baseUrl + "ledenlijst/kolom-type");
