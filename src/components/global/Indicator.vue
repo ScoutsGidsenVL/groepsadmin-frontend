@@ -1,5 +1,4 @@
 <template>
-
   <div class="vld-parent">
     <loading :active="isLoading"
              :is-full-page="fullPage"
