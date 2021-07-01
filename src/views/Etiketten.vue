@@ -320,7 +320,7 @@ export default {
 
   methods: {
     getSjablonen() {
-      RestService.getEtiketSjablonen()
+      RestService.getSjablonen("etiket")
         .then(res => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
@@ -360,7 +360,7 @@ export default {
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
-          RestService.updateEtiketSjabloon(this.sjabloon.id, this.sjabloon)
+          RestService.updateSjabloon("etiket", this.sjabloon.id, this.sjabloon)
             .then(res => {
               this.getSjablonen();
               this.sjabloon = res.data;
@@ -424,7 +424,7 @@ export default {
         header: 'Sjabloon verwijderen',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          RestService.verwijderEtiketSjabloon(this.sjabloon.id)
+          RestService.verwijderSjabloon("etiket", this.sjabloon.id)
             .then(() => {
               this.setStandaardSjabloon();
               this.sjablonen.forEach((listSjabloon, index) => {

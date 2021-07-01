@@ -64,40 +64,24 @@ export default {
     },
 
     // todo vereenvoudigen dmv een parameter icm mail
-    getEtiketSjablonen() {
-        return apiClient().get(baseUrl + "sjabloon/etiket");
+    getSjablonen(type) {
+        return apiClient().get(baseUrl + "sjabloon/" + type);
     },
 
-    getMailSjablonen() {
-        return apiClient().get(baseUrl + "sjabloon/mail");
+    getSjabloonOpId(type, id) {
+        return apiClient().get(baseUrl + "sjabloon/" + type + "/" +id);
     },
 
-    getMailSjabloonOpId(id) {
-        return apiClient().get(baseUrl + "sjabloon/mail/" +id);
+    verwijderSjabloon(type, id) {
+        return apiClient().delete(baseUrl + "sjabloon/" + type + "/" +id)
     },
 
-    verwijderMailSjabloon(id) {
-        return apiClient().delete(baseUrl + "sjabloon/mail/" +id)
+    updateSjabloon(type, id, sjabloon) {
+        return apiClient().patch(baseUrl + "sjabloon/" + type + "/" +id, sjabloon)
     },
 
-    updateMailSjabloon(id, sjabloon) {
-        return apiClient().patch(baseUrl + "sjabloon/mail/" +id, sjabloon)
-    },
-
-    saveMailSjabloon(sjabloon) {
-        return apiClient().post(baseUrl + "sjabloon/mail", sjabloon)
-    },
-
-    getEtiketSjabloonOpId(id) {
-        return apiClient().get(baseUrl + "sjabloon/etiket/" +id);
-    },
-
-    verwijderEtiketSjabloon(id) {
-        return apiClient().delete(baseUrl + "sjabloon/etiket/" +id)
-    },
-
-    updateEtiketSjabloon(id, sjabloon) {
-        return apiClient().patch(baseUrl + "sjabloon/etiket/" +id, sjabloon)
+    saveSjabloon(type, sjabloon) {
+        return apiClient().post(baseUrl + "sjabloon/" + type, sjabloon)
     },
 
     printEtiketten(offset, data) {
@@ -111,6 +95,7 @@ export default {
     saveEtiketSjabloon(sjabloon) {
         return apiClient().post(baseUrl + "sjabloon/etiket/dummyid", sjabloon)
     },
+
     getKolomType() {
         return apiClient().get(baseUrl + "ledenlijst/kolom-type");
     },
