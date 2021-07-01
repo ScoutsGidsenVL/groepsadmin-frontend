@@ -120,7 +120,7 @@
       </Dialog>
     </div>
     <div>
-      <confirm-dialog :dialog-visible="confirmationDialog" :message="buildMessage()" @confirm="confirmMail" @cancel="cancelMail" class="confirm-dialog"> </confirm-dialog>
+      <confirm-dialog :dialog-visible="confirmationDialog" :message="buildMessage()" @confirm="bevestigMail" @cancel="cancelMail" class="confirm-dialog"> </confirm-dialog>
     </div>
   </div>
 </template>
@@ -154,6 +154,7 @@ export default {
   data() {
     return {
       kolommenLaden: false,
+      bevestig: false,
       sorteerLeden: false,
       mailVersturen: false,
       isLoadingLeden: false,
@@ -172,32 +173,32 @@ export default {
       geselecteerdeLeden: [],
       leden: [],
       sjabloon: {
-        naam: '',
+        naam: "",
         lidIds: [],
-        onderwerp: '',
-        inhoud: '',
+        onderwerp: "",
+        inhoud: "",
         bestemming: {
           lid: false,
           contacten: false,
           groepseigenGegevens: []
         },
-        van: '',
-        replyTo: '',
-        bcc: '',
+        van: "",
+        replyTo: "",
+        bcc: "",
       },
       defaultSjabloon: {
-        naam: '',
+        naam: "",
         lidIds: [],
-        onderwerp: '',
-        inhoud: '',
+        onderwerp: "",
+        inhoud: "",
         bestemming: {
           lid: false,
           contacten: false,
           groepseigenGegevens: []
         },
-        van: '',
-        replyTo: '',
-        bcc: '',
+        van: "",
+        replyTo: "",
+        bcc: "",
       },
       sjablonen: [],
       menuItems: [],
@@ -206,8 +207,13 @@ export default {
         canCancel: false,
         fullPage: true,
         useSlot: false,
-        actionText: '',
+        actionText: "",
       },
+      feedback: {
+        boodschap: "",
+        infoLink: "",
+        vraag: ""
+      }
     }
   },
   created() {
@@ -310,7 +316,7 @@ export default {
 
   methods: {
     getSjablonen(lifecycle) {
-      RestService.getMailSjablonen()
+      RestService.getSjablonen("mail")
         .then(res => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
@@ -348,7 +354,7 @@ export default {
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
-          RestService.updateMailSjabloon(this.sjabloon.id, this.sjabloon)
+          RestService.updateSjabloon("mail", this.sjabloon.id, this.sjabloon)
             .then(res => {
               this.getSjablonen('update');
               this.sjabloon = res.data;
@@ -376,7 +382,7 @@ export default {
             })
         } else {
           this.sjabloon.naam = naam;
-          RestService.saveMailSjabloon(this.sjabloon)
+          RestService.saveSjabloon("mail", this.sjabloon)
             .then(res => {
               this.getSjablonen('save');
               this.sjabloon = res.data;
@@ -455,7 +461,7 @@ export default {
         header: 'Sjabloon verwijderen',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          RestService.verwijderMailSjabloon(this.sjabloon.id)
+          RestService.verwijderSjabloon("mail", this.sjabloon.id)
             .then(() => {
               this.setStandaardSjabloon();
               this.sjablonen.forEach((listSjabloon, index) => {
@@ -482,8 +488,7 @@ export default {
     },
 
     buildMessage() {
-      let invoegwoord = this.lidIds.size > 1 ? 'leden' : 'lid';
-      return 'Je staat op het punt ' + this.lidIds.size +  ' ' + invoegwoord  + ' te mailen. <br/> Ben je zeker? <br/> <a class="clickable custom-title mt-4" href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden" target="_blank">Meer info...</a> ';
+      return this.feedback.boodschap +  "<br/>" + this.feedback.vraag + "<br/>" + '<a class="clickable custom-title mt-4" href=' + this.feedback.infoLink + ' target="_blank">Meer info...</a> ';
     },
 
     openDialog () {
@@ -492,11 +497,16 @@ export default {
 
     send() {
       this.filterLeden();
-      this.openDialog();
+      this.sendMail()
     },
 
-    confirmMail() {
-      this.changes = false;
+    bevestigMail() {
+      this.bevestig = true;
+      this.sendMail();
+      this.confirmationDialog = false;
+    },
+
+    sendMail() {
       // We hebben enkel de ID's nodig om door te sturen naar de api
 
       var sjabloonObj = {
@@ -529,12 +539,17 @@ export default {
       formData.append("sjabloon", sjabloon);
 
       this.mailVersturen = true;
-      RestService.verstuurMail(true, formData)
-        .then(function (res) {
+      RestService.verstuurMail(this.bevestig, formData)
+        .then((res) =>  {
+          this.changes = false;
+          this.bevestig = false;
           console.log("mail was sent TO list", res);
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((error) => {
+          this.feedback.boodschap = error.response.data.boodschap;
+          this.feedback.vraag = error.response.data.vraag;
+          this.feedback.infoLink = error.response.data.infoLink;
+          this.openDialog();
         });
 
     },
