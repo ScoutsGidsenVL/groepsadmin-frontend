@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="p-grid row">
-      <label class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3"> {{ label }} </label>
+      <label class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3"> {{ label }}
+        <span class="help-button-wrapper">
+          <a :href="helpLink" target="_blank"><i class="fas fa-question-circle help-button ml-2" v-if="helpLink" title="Meer info..."></i></a></span>
+      </label>
       <div class="col-12 col-sm-8 p-md-8" :class="bold ? 'font-weight-bolder' : ''">
         <inputText
           class="w-100"
@@ -55,7 +58,11 @@ export default {
     },
     errorMessage: {
       type: String
-    }
+    },
+    helpLink: {
+      type: String,
+      default: null
+    },
   },
   methods: {
     changeValue($event) {

@@ -12,8 +12,7 @@
           @change="check"
         />
         <span class="help-button-wrapper">
-      <i class="fas fa-question-circle help-button ml-2" v-if="helpLink" title="Meer info..."><a :href="helpLink"
-                                                                                                 target="_blank"></a></i>
+          <a :href="helpLink" target="_blank"><i class="fas fa-question-circle help-button ml-2" v-if="helpLink" title="Meer info..."></i></a>
       </span>
       </div>
     </div>
@@ -66,6 +65,10 @@ export default {
       this.$emit('check');
       this.$emit('changeValue');
     },
+
+    showMessage() {
+      console.log('KABOEM')
+    }
   },
   setup(props, {emit}) {
     return {
