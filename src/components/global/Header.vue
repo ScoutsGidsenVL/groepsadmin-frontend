@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sticky-top position-sticky">
     <TopMenuBalk />
     <Menubalk />
   </div>
