@@ -1,14 +1,13 @@
 import axios from "axios";
 import store from "@/store";
 
-export default function apiClient() {
+export default function apiClientScv() {
     return axios.create({
         withCredentials: false,
         headers: {
-            Accept: "application/json",
+            Accept: "text/csv",
             Authorization: "bearer " + store.getters.token,
-            responseType: 'arraybuffer',
-            "Content-Type": "application/json",
         },
+        responseType: 'arrayBuffer'
     });
 }
