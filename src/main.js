@@ -23,6 +23,8 @@ import mitt from 'mitt';
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import Loading from 'vue3-loading-overlay';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
@@ -35,17 +37,32 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ToastService from "primevue/toastservice";
 import GoogleMaps from "@/services/google/GoogleMaps";
+import DataTable from "primevue/datatable";
+import ProgressSpinner from 'primevue/progressspinner';
 
 library.add(fas, faUser);
 
 // add primevue components
 const app = createApp(App);
+app.use(Dialog);
+app.use(InputText);
+app.use(Card);
+app.use(Button);
+app.use(Checkbox);
+app.use(fas);
+app.use(library);
+app.use(Toast);
+app.use(ToastService);
 app.use(store);
 app.use(Dropdown)
 app.use(ConfirmPopup)
+app.use(DataTable)
 app.use(ConfirmDialog)
 app.use(ConfirmationService)
 app.use(Toast)
+app.use(Column)
+app.use(ColumnGroup)
+app.use(ProgressSpinner)
 app.use(Loading)
 app.use(Accordion)
 app.use(AccordionTab)
@@ -98,15 +115,7 @@ app.use(PrimeVue, {
         ],
     },
 });
-app.use(Dialog);
-app.use(InputText);
-app.use(Card);
-app.use(Button);
-app.use(Checkbox);
-app.use(fas);
-app.use(library);
-app.use(Toast);
-app.use(ToastService);
+
 
 app.component("icon", FontAwesomeIcon);
 app.component("card", Card);
@@ -120,6 +129,11 @@ app.component("accordionTab", AccordionTab);
 app.component("confirmPopup", ConfirmPopup);
 app.component("confirmDialog", ConfirmDialog);
 app.component("toast", Toast);
+app.component("dataTable", DataTable);
+app.component("column", Column);
+app.component("ColumnGroup", ColumnGroup);
+app.component("Spinner", ProgressSpinner);
+app.component("Dialog", Dialog);
 
 const emitter = mitt();
 app.config.globalProperties.emitter = emitter;
