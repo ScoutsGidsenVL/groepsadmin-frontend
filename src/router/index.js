@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import Ledenlijst from "@/views/Ledenlijst";
 import Ledenaantallen from "@/views/Ledenaantallen";
@@ -6,6 +6,7 @@ import IndividueleSteekkaart from "@/views/IndividueleSteekkaart";
 import Groep from "@/views/Groep";
 import Lid from "@/views/Lid";
 import Mail from "@/views/Mail";
+import Etiketten from "@/views/Etiketten";
 
 const routes = [
   {
@@ -14,9 +15,14 @@ const routes = [
     component: Dashboard,
   },
   {
-    path: "/mail",
+    path: "/ledenlijst/mail",
     name: "Mail",
     component: Mail,
+  },
+  {
+    path: "/ledenlijst/etiket",
+    name: "Etiket",
+    component: Etiketten,
   },
   {
     path: "/ledenlijst",
