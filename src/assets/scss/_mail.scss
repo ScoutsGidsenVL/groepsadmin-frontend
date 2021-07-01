@@ -10,3 +10,16 @@
     box-shadow: 0 0 0 0.2rem $sgv-lichtgroen !important;
   }
 }
+
+.mail-button {
+  background: $sgv-oranje !important;
+  border: 1px solid $sgv-oranje !important;
+  &:hover {
+    background: $sgv-oranje !important;
+    border: 1px solid $sgv-oranje !important;
+  }
+  &:focus {
+    border: 1px solid $sgv-oranje !important;
+    box-shadow: 0 0 0 0.2rem $sgv-oranje !important;
+  }
+}

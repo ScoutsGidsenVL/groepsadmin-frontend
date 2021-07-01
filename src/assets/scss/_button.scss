@@ -8,6 +8,11 @@
   top: 52rem;
 }
 
+.info-button {
+  cursor: pointer;
+  color: $sgv-donkergroen;
+}
+
 .delete-button {
   width: 2.5rem !important;
   height: 2.5rem !important;
@@ -91,4 +96,32 @@
     color: white;
     background-color: $sgv-rood;
   }
+}
+
+.add-button {
+  background-color: transparent !important;
+  color: $sgv-donkergroen !important;
+  border: 1px solid;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+}
+
+.remove-button {
+  &:hover {
+    border: 1px solid darkred !important;
+    box-shadow: 0 0 0 0.5px darkred !important;
+  }
+}
+
+.export-button {
+  font-size: 1.3rem;
+  color: white !important;
+  background: $sgv-donkergroen !important;
+  border: 1px solid $sgv-donkergroen !important;
+  z-index: 999;
 }

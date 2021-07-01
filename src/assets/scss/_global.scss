@@ -77,11 +77,6 @@
   width: 100% !important;
 }
 
-.plus-icon {
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .ml--05 {
   margin-left: - 0.5rem !important;
 }
@@ -96,26 +91,6 @@
 
 .mr-05 {
   margin-right: 0.5rem !important;
-}
-
-.add-button {
-  background-color: transparent !important;
-  color: $sgv-donkergroen !important;
-  border: 1px solid;
-  &:hover {
-    border: 1px solid $sgv-donkergroen !important;
-    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
-  }
-  &:active {
-    border: 1px solid $sgv-donkergroen !important;
-  }
-}
-
-.remove-button {
-  &:hover {
-    border: 1px solid darkred !important;
-    box-shadow: 0 0 0 0.5px darkred !important;
-  }
 }
 
 .clickable {
@@ -258,4 +233,48 @@
 
 .autocomplete-input {
   width: 100% !important;
+}
+
+.mt--1 {
+ margin-top: -1em;
+}
+
+.table-checkbox input[type=checkbox] {
+  height: 20px !important;
+  width:  20px !important;
+}
+
+.true-icon {
+  color: #00b400;
+}
+
+.false-icon {
+  color: $sgv-rood
+}
+
+@keyframes p-progress-spinner-custom-color {
+  100%,
+  0% {
+    stroke: $sgv-donkergroen !important;
+  }
+  40% {
+    stroke: $sgv-lichtgroen !important;
+  }
+  66% {
+    stroke: $sgv-lichtgroen !important;
+  }
+  80%,
+  90% {
+    stroke: $sgv-lichtgroen !important;
+  }
+}
+
+.p-fileupload-content {
+  display: none !important;
+}
+
+.p-fileupload-buttonbar {
+  background: transparent !important;
+  border: 0 solid transparent !important;
+  margin-left: -1em !important;
 }
