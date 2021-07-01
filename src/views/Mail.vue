@@ -1,7 +1,10 @@
 <template>
   <div>
-    <indicator :action-text="indicator.actionText" :is-loading="indicator.isLoading"
-               :use-slot="indicator.useSlot"></indicator>
+    <div>
+      <indicator :is-loading="indicator.isLoading"
+                 :use-slot="indicator.useSlot">
+      </indicator>
+    </div>
     <div class="overflow-hidden">
       <div>
         <save-template-dialog :open="openModal" :sjablonen="sjablonen" @closeModal="closeModal"
@@ -11,7 +14,7 @@
       <div class="pl-lg-4em mt-2">
         <div class="row">
           <div class="col-lg-6 text-align-left mb-5">
-            <BaseDropdown v-model="sjabloon" :options="sjablonen" label="Opgeslagen sjabloon kiezen"
+            <BaseDropdown v-model="sjabloon" :options="sjablonen" label="Opgeslagen sjablonen"
                           @changeValue="selecteerSjabloon"></BaseDropdown>
           </div>
           <Button icon="pi pi-trash"
@@ -34,7 +37,11 @@
 
         <div class="row">
           <div class="col-sm-2 text-align-left">
-            <label>Ontvangers</label>
+            <label>Ontvangers: <span
+              v-if="leden.length > 0"> {{ leden.length === 1 ? '1 lid' : leden.length + " leden" }}</span><span
+              v-if="leden.length > 0" @click="toonLeden" class="clickable custom-title"> (details)</span>
+              <span v-if="isLoadingLeden" class="mt-1">Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i></span>
+            </label>
           </div>
           <div class="col-lg-8 text-align-left">
             <BaseCheckboxLeft label="Stuur naar leden" v-model="sjabloon.bestemming.lid"></BaseCheckboxLeft>
@@ -69,10 +76,12 @@
         </label>
         <FileUpload
           name="bijlages[]"
-          mode="basic" :customUpload="true"
-          @uploader="myUploader" :multiple="true"
+          :customUpload="true"
+          @select="selectFiles" :multiple="true"
           :maxFileSize="4999999"
           chooseLabel="Kies bestand"
+          :showUploadButton="false"
+          :showCancelButton="false"
           invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
           class="ml-3 mr-lg-9"/>
         <div class="col-lg-8">
@@ -95,6 +104,24 @@
         </div>
       </div>
     </div>
+    <div>
+      <Dialog header="Ontvangers" v-model:visible="openOntvangerDialog" :style="{width: '25vw', 'max-height': '35vw'}"
+              :modal="true">
+        <div class="email-leden col-xs-12">
+          <ul>
+            <li v-for="(lid, index) in leden" :key=index>
+              <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
+              <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
+              <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam">&nbsp;{{ lid.volledigenaam }} </span>
+              <span v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"> - geen naam beschikbaar - </span>
+            </li>
+          </ul>
+        </div>
+      </Dialog>
+    </div>
+    <div>
+      <confirm-dialog :dialog-visible="confirmationDialog" :message="buildMessage()" @confirm="confirmMail" @cancel="cancelMail" class="confirm-dialog"> </confirm-dialog>
+    </div>
   </div>
 </template>
 
@@ -108,7 +135,8 @@ import BaseCheckboxLeft from "@/components/input/BaseCheckboxLeft";
 import FileUpload from "primevue/fileupload";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
 import Indicator from "@/components/global/Indicator";
-
+import Dialog from "primevue/dialog";
+import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 
 export default {
   name: "Mail",
@@ -119,16 +147,30 @@ export default {
     Editor,
     FileUpload,
     SaveTemplateDialog,
-    Indicator
+    Indicator,
+    Dialog,
+    ConfirmDialog
   },
   data() {
     return {
       kolommenLaden: false,
+      sorteerLeden: false,
+      mailVersturen: false,
+      isLoadingLeden: false,
+      confirmationDialog: false,
+      lidIds: new Set(),
+      offset: 0,
+      totaalAantalLeden: 0,
+      openOntvangerDialog: false,
       openModal: false,
       error: false,
       errors: [],
       changes: false,
+      saved: false,
       kolommen: [],
+      files: [],
+      geselecteerdeLeden: [],
+      leden: [],
       sjabloon: {
         naam: '',
         lidIds: [],
@@ -171,11 +213,12 @@ export default {
   created() {
     this.getSjablonen('creating');
 
-    window.setInterval(function(){
-      if (this.changes){
+    window.setInterval(function () {
+      if (this.changes && !this.saved) {
         this.$store.commit('setMailSjabloon', this.sjabloon);
+        this.saved = true;
       }
-    }.bind(this),120000);
+    }.bind(this), 120000);
 
     RestService.getKolomType()
       .then(res => {
@@ -185,6 +228,22 @@ export default {
           }
         })
       })
+
+    if (this.$store.getters.geselecteerdeLeden && this.$store.getters.geselecteerdeLeden.length > 0) {
+      this.isLoadingLeden = true;
+      this.$store.getters.geselecteerdeLeden.forEach(lid => {
+        this.geselecteerdeLeden.push(lid);
+        this.leden.push({
+          'voornaam': lid.waarden['be.vvksm.groepsadmin.model.column.VoornaamColumn'],
+          'achternaam': lid.waarden['be.vvksm.groepsadmin.model.column.AchternaamColumn'],
+          'volledigenaam': lid.waarden['be.vvksm.groepsadmin.model.column.VolledigeNaamColumn']
+        })
+      })
+      this.filterLeden();
+      this.isLoadingLeden = false;
+    } else {
+      this.getLeden()
+    }
   },
 
   watch: {
@@ -193,6 +252,7 @@ export default {
         if (newValue.naam) {
           this.changes = true;
           this.sjabloonIsValid();
+          this.saved = false;
         }
       },
       deep: true
@@ -255,11 +315,20 @@ export default {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
             this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
-              if (sjabloon.naam.indexOf('blanco') > -1 && lifecycle === 'creating') {
-                this.sjabloon = sjabloon;
-              }
+            if (sjabloon.naam.indexOf('blanco') > -1 && lifecycle === 'creating') {
+              this.sjabloon = sjabloon;
+            }
           });
           this.getOpgeslagenMailSjabloon();
+        })
+        .catch(error => {
+          this.error = true;
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Wijzigingen',
+            detail: error,
+            life: 8000
+          })
         })
     },
 
@@ -279,7 +348,7 @@ export default {
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
-          RestService.updateSjabloon(this.sjabloon.id, this.sjabloon)
+          RestService.updateMailSjabloon(this.sjabloon.id, this.sjabloon)
             .then(res => {
               this.getSjablonen('update');
               this.sjabloon = res.data;
@@ -295,8 +364,8 @@ export default {
               this.$toast.add({
                 severity: 'error',
                 summary: 'Wijzigingen',
-                detail: 'Er is iets misgegaan bij het opslaan',
-                life: 3000
+                detail: error,
+                life: 8000
               })
               console.log(error);
             })
@@ -307,7 +376,7 @@ export default {
             })
         } else {
           this.sjabloon.naam = naam;
-          RestService.saveSjabloon(this.sjabloon)
+          RestService.saveMailSjabloon(this.sjabloon)
             .then(res => {
               this.getSjablonen('save');
               this.sjabloon = res.data;
@@ -324,26 +393,69 @@ export default {
               this.$toast.add({
                 severity: 'error',
                 summary: 'Wijzigingen',
-                detail: 'Er is iets misgegaan bij het opslaan',
-                life: 3000
+                detail: error,
+                life: 8000
               });
             })
-          .finally(() => {
-            this.changes = false;
-            this.indicator.isLoading = false;
-            this.$store.commit('setMailSjabloon', null);
-          })
+            .finally(() => {
+              this.changes = false;
+              this.indicator.isLoading = false;
+              this.$store.commit('setMailSjabloon', null);
+            })
         }
       }
       this.closeModal();
     },
+
+    filterLeden() {
+      this.lidIds = new Set();
+      this.geselecteerdeLeden.forEach(lid => {
+        this.lidIds.add(lid.id);
+      })
+    },
+
+    getLeden() {
+      this.isLoadingLeden = true;
+      RestService.getLeden(this.offset)
+        .then(res => {
+          this.totaalAantalLeden = res.data.totaal;
+          res.data.leden.forEach(lid => {
+            this.geselecteerdeLeden.push(lid);
+            this.leden.push({
+              'voornaam': lid.waarden['be.vvksm.groepsadmin.model.column.VoornaamColumn'],
+              'achternaam': lid.waarden['be.vvksm.groepsadmin.model.column.AchternaamColumn'],
+              'volledigenaam': lid.waarden['be.vvksm.groepsadmin.model.column.VolledigeNaamColumn']
+            })
+          })
+          this.offset = this.leden.length;
+          if (this.totaalAantalLeden > this.leden.length) {
+            this.offset = this.leden.length;
+            this.getLeden();
+          }
+          this.filterLeden();
+        })
+        .catch(error => {
+          console.log(error);
+          this.error = true;
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ophalen leden',
+            detail: error.message,
+            life: 8000
+          })
+        })
+        .finally(() => {
+          this.isLoadingLeden = false;
+        })
+    },
+
     remove(sjabloon) {
       this.$confirm.require({
         message: 'Ben je zeker dat je sjabloon: ' + sjabloon.naam + ' wil verwijderen?',
         header: 'Sjabloon verwijderen',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          RestService.verwijderSjabloon(this.sjabloon.id)
+          RestService.verwijderMailSjabloon(this.sjabloon.id)
             .then(() => {
               this.setStandaardSjabloon();
               this.sjablonen.forEach((listSjabloon, index) => {
@@ -351,12 +463,16 @@ export default {
                   this.sjablonen.splice(index, 1);
                 }
               })
+              this.$toast.add({severity: 'success', summary: 'Sjabloon', detail: 'Sjabloon verwijderd.', life: 3000});
+            })
+            .catch(error => {
+              this.error = true;
               this.$toast.add({
-                severity: 'success',
-                summary: 'Sjabloon',
-                detail: 'Sjabloon verwijderd.',
-                life: 3000
-              });
+                severity: 'error',
+                summary: 'Wijzigingen',
+                detail: error,
+                life: 8000
+              })
             })
         },
         reject: () => {
@@ -364,8 +480,71 @@ export default {
         }
       });
     },
+
+    buildMessage() {
+      let invoegwoord = this.lidIds.size > 1 ? 'leden' : 'lid';
+      return 'Je staat op het punt ' + this.lidIds.size +  ' ' + invoegwoord  + ' te mailen. <br/> Ben je zeker? <br/> <a class="clickable custom-title mt-4" href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden" target="_blank">Meer info...</a> ';
+    },
+
+    openDialog () {
+      this.confirmationDialog = true;
+    },
+
     send() {
-      //Todo na ledenlijst
+      this.filterLeden();
+      this.openDialog();
+    },
+
+    confirmMail() {
+      this.changes = false;
+      // We hebben enkel de ID's nodig om door te sturen naar de api
+
+      var sjabloonObj = {
+        "bcc": this.sjabloon.bcc,
+        "replyTo": this.sjabloon.replyTo,
+        "inhoud": this.sjabloon.inhoud,
+        "onderwerp": this.sjabloon.onderwerp,
+        "van": this.sjabloon.van,
+        "bestemming": {
+          "lid": this.sjabloon.bestemming.lid,
+          "contacten": this.sjabloon.bestemming.contacten,
+          "groepseigenGegevens": []
+        },
+        "lidIds": []
+      };
+
+      this.lidIds.forEach(id => {
+        sjabloonObj.lidIds.push(id);
+      })
+
+      var formData = new FormData();
+      // bijlages toevoegen aan multipart/form-data
+      this.files.forEach(function (file) {
+        formData.append("attachments", file)
+      });
+
+      var sjabloon = new Blob([JSON.stringify(sjabloonObj)], {type: "application/json"});
+
+      // sjabloon toevoegen aan multipart/form-data
+      formData.append("sjabloon", sjabloon);
+
+      this.mailVersturen = true;
+      RestService.verstuurMail(true, formData)
+        .then(function (res) {
+          console.log("mail was sent TO list", res);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+    },
+
+    cancelMail() {
+      this.confirmationDialog = false;
+    },
+
+    toonLeden() {
+      this.openOntvangerDialog = true;
     },
 
     sjabloonIsValid() {
@@ -383,17 +562,19 @@ export default {
 
     getOpgeslagenMailSjabloon() {
       let sjabloon = this.$store.getters.mailSjabloon;
-      if (sjabloon){
+      if (sjabloon) {
         this.sjablonen.push({label: sjabloon.naam, value: sjabloon})
       }
     },
 
-    myUploader(event) {
-      console.log(event)
+    selectFiles(event) {
+      this.files = event.files;
     },
+
     closeModal() {
       this.openModal = false;
     },
+
     setStandaardSjabloon() {
       this.sjablonen.forEach((sjabloon) => {
         if (sjabloon.label.indexOf('blanco') > -1) {
@@ -409,6 +590,7 @@ export default {
         header: 'Wijzigingen',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
+          this.$store.commit('setMailSjabloon', this.sjabloon);
           next();
         },
         reject: () => {
