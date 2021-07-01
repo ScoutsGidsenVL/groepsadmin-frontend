@@ -2,7 +2,7 @@
   <div class="bovenbalk">
     <div class="d-flex justify-content-between">
       <div>
-        <h4 class="ml-4 mt-2">{{ volledigeNaam }}</h4>
+        <h4 class="ml-4 mt-2" >{{ volledigeNaam }}</h4>
       </div>
       <div class="justify-content-end">
         <SplitButton label="Individuele steekkaart" @click="gaNaarIndividueleSteekkaart" :model="items" style="width: auto; min-width: 285px"></SplitButton>
@@ -55,7 +55,11 @@ export default {
   },
   computed: {
     volledigeNaam() {
-      return this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam;
+      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam){
+        return this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam;
+      } else {
+        return " ";
+      }
     }
   }
 };
