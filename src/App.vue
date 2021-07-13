@@ -1,7 +1,7 @@
 <template>
   <Header />
-  <confirmDialog/>
-  <toast position="bottom-right"/>
+  <confirmDialog />
+  <toast position="bottom-right" />
   <router-view />
   <Footer />
 </template>

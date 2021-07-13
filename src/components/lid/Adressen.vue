@@ -1,10 +1,15 @@
 <template>
-  <div class="adressen-card ml-4 mb-4 ">
+  <div class="adressen-card ml-4 mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span> {{ title }}</span>
-          <Button icon="pi pi-plus" class="p-button-rounded p-button-outlined mt-1 add-button" @click="voegAdresToe" title="Voeg adres toe" />
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded p-button-outlined mt-1 add-button"
+            @click="voegAdresToe"
+            title="Voeg adres toe"
+          />
         </div>
       </template>
       <template #content>
@@ -13,8 +18,21 @@
             <template #header>
               <div class="d-flex col-12 justify-content-between">
                 <span>{{ setHeader(adres) }}</span>
-                <i class="pi pi-envelope mr-3" v-if="adressen[index].postadres" title="postadres"></i>
-                <Button v-if="!adressen[index].postadres" icon="pi pi-trash" class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1" @click="$event.stopPropagation(); remove(index)" title="Verwijder adres" />
+                <i
+                  class="pi pi-envelope mr-3"
+                  v-if="adressen[index].postadres"
+                  title="postadres"
+                ></i>
+                <Button
+                  v-if="!adressen[index].postadres"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
+                  @click="
+                    $event.stopPropagation();
+                    remove(index);
+                  "
+                  title="Verwijder adres"
+                />
               </div>
             </template>
             <base-dropdown
@@ -35,13 +53,50 @@
               :value="adressen[index].straat"
               v-if="adressen[index].land === 'BE'"
             />
-            <BaseInput v-if="adressen[index] && adressen[index].land !== 'BE'" label="Postcode" v-model="adressen[index].postcode" type="text"/>
-            <BaseInput v-if="adressen[index] && adressen[index].land !== 'BE'" label="Gemeente" v-model="adressen[index].gemeente" :disabled="!adressen[index].postcode" type="text"/>
-            <BaseInput v-if="adressen[index] && adressen[index].land !== 'BE'" label="Straat" v-model="adressen[index].straat" :disabled="!adressen[index].postcode" type="text"/>
-            <BaseInput label="Nummer" v-model="adressen[index].nummer" :disabled="!adressen[index].straat" type="text"/>
-            <BaseInput label="Bus" v-model="adressen[index].bus" :disabled="!adressen[index].straat" type="text"/>
-            <BaseInput label="Telefoon" v-model="adressen[index].telefoon" type="text"/>
-            <BaseCheckbox label="Postadres" multiple="false" v-model="adressen[index].postadres" @change="zetPostadres(index)" :disabled="adressen[index].postadres"/>
+            <BaseInput
+              v-if="adressen[index] && adressen[index].land !== 'BE'"
+              label="Postcode"
+              v-model="adressen[index].postcode"
+              type="text"
+            />
+            <BaseInput
+              v-if="adressen[index] && adressen[index].land !== 'BE'"
+              label="Gemeente"
+              v-model="adressen[index].gemeente"
+              :disabled="!adressen[index].postcode"
+              type="text"
+            />
+            <BaseInput
+              v-if="adressen[index] && adressen[index].land !== 'BE'"
+              label="Straat"
+              v-model="adressen[index].straat"
+              :disabled="!adressen[index].postcode"
+              type="text"
+            />
+            <BaseInput
+              label="Nummer"
+              v-model="adressen[index].nummer"
+              :disabled="!adressen[index].straat"
+              type="text"
+            />
+            <BaseInput
+              label="Bus"
+              v-model="adressen[index].bus"
+              :disabled="!adressen[index].straat"
+              type="text"
+            />
+            <BaseInput
+              label="Telefoon"
+              v-model="adressen[index].telefoon"
+              type="text"
+            />
+            <BaseCheckbox
+              label="Postadres"
+              multiple="false"
+              v-model="adressen[index].postadres"
+              @change="zetPostadres(index)"
+              :disabled="adressen[index].postadres"
+            />
           </accordionTab>
         </accordion>
       </template>
@@ -55,8 +110,8 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import { reactive, toRefs } from "@vue/reactivity";
+import { onUpdated } from "@vue/runtime-core";
 
 export default {
   name: "Adressen",
@@ -69,7 +124,7 @@ export default {
   },
   props: {
     title: {
-      type: String
+      type: String,
     },
     modelValue: {
       type: Object,
@@ -79,82 +134,84 @@ export default {
   data() {
     return {
       landen: [
-        {label: 'België', value: 'BE'},
-        {label: 'Duitsland', value: 'DE'},
-        {label: 'Frankrijk', value: 'FR'},
-        {label: 'Groot-Brittannië', value: 'GB'},
-        {label: 'Luxemburg', value: 'LU'},
-        {label: 'Nederland', value: 'NL'},
-        {label: 'Canada', value: 'CA'},
-      ]
-    }
+        { label: "België", value: "BE" },
+        { label: "Duitsland", value: "DE" },
+        { label: "Frankrijk", value: "FR" },
+        { label: "Groot-Brittannië", value: "GB" },
+        { label: "Luxemburg", value: "LU" },
+        { label: "Nederland", value: "NL" },
+        { label: "Canada", value: "CA" },
+      ],
+    };
   },
   methods: {
     remove(index) {
-        this.$confirm.require({
-          message: 'Ben je zeker dat je dit adres wil verwijderen?',
-          header: 'Adres verwijderen',
-          icon: 'pi pi-exclamation-triangle',
-          accept: () => {
-            this.adressen.splice(1, index)
-          },
-          reject: () => {
-            this.$confirm.close();
-          }
-        });
+      this.$confirm.require({
+        message: "Ben je zeker dat je dit adres wil verwijderen?",
+        header: "Adres verwijderen",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.adressen.splice(1, index);
+        },
+        reject: () => {
+          this.$confirm.close();
+        },
+      });
     },
 
     zetPostadres(index) {
       for (const adres of this.adressen) {
-        adres.postadres = false
+        adres.postadres = false;
       }
       this.adressen[index].postadres = true;
     },
-    veranderLand(index){
-        this.adressen[index].postcode = "";
-        this.adressen[index].gemeente = ""
-        this.adressen[index].straat = "";
-        this.adressen[index].nummer = "";
-        this.adressen[index].bus = "";
+    veranderLand(index) {
+      this.adressen[index].postcode = "";
+      this.adressen[index].gemeente = "";
+      this.adressen[index].straat = "";
+      this.adressen[index].nummer = "";
+      this.adressen[index].bus = "";
     },
     setHeader(adres) {
-      return adres.gemeente ? adres.straat + " " + adres.nummer + ", " + adres.gemeente : "Nieuw adres";
+      return adres.gemeente
+        ? adres.straat + " " + adres.nummer + ", " + adres.gemeente
+        : "Nieuw adres";
     },
     voegAdresToe() {
       let nieuwAdres = {
         land: "BE",
         postadres: false,
         omschrijving: "",
-        id: 'tempadres' + Date.now(),
-        bus: '',
+        id: "tempadres" + Date.now(),
+        bus: "",
         gemeente: "",
-        postcode: ""
-      }
+        postcode: "",
+      };
 
       let bestaandPostadres = false;
       for (const adres of this.adressen) {
-        if (adres.postadres){
-          bestaandPostadres = true
+        if (adres.postadres) {
+          bestaandPostadres = true;
         }
       }
 
-      if (!bestaandPostadres){
+      if (!bestaandPostadres) {
         nieuwAdres.postadres = true;
       }
       this.adressen.push(nieuwAdres);
-    }
+    },
   },
   setup(props) {
     const state = reactive({
-      adressen: null
-    })
+      adressen: null,
+    });
 
     onUpdated(() => {
-      state.adressen = props.modelValue.adressen
-    })
+      state.adressen = props.modelValue.adressen;
+    });
 
     return { ...toRefs(state) };
-  }
+  },
 };
 </script>
 

@@ -7,8 +7,16 @@
         </div>
       </template>
       <template #content>
-        <adressen v-model="geselecteerdeGroep" @showMarker="toonMarker" class="mb-5"></adressen>
-        <google-maps :groep="geselecteerdeGroep" :zichtbareMarker="zichtbareMarker" class="mt-3"/>
+        <adressen
+          v-model="geselecteerdeGroep"
+          @showMarker="toonMarker"
+          class="mb-5"
+        ></adressen>
+        <google-maps
+          :groep="geselecteerdeGroep"
+          :zichtbareMarker="zichtbareMarker"
+          class="mt-3"
+        />
       </template>
     </card>
   </div>
@@ -22,34 +30,32 @@ export default {
   name: "Lokalen",
   components: {
     Adressen,
-    GoogleMaps
+    GoogleMaps,
   },
   data() {
     return {
-      zichtbareMarker: ''
-    }
+      zichtbareMarker: "",
+    };
   },
   props: {
     title: {
-      type: String
+      type: String,
     },
     groep: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  methods:{
+  methods: {
     toonMarker(index) {
       this.zichtbareMarker = index;
-    }
+    },
   },
   computed: {
     geselecteerdeGroep() {
       return this.groep;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

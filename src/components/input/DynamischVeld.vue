@@ -1,48 +1,55 @@
 <template>
   <div>
     <div v-for="(veld, index) in schema" :key="index">
-      <BaseInput v-if="veld.type === 'tekst'"
-                 v-model="waarde[veld.id]"
-                 :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
-                 :label="veld.label"
-                 :beschrijving="veld.beschrijving"
-                 @changeValue="changeValue(veld.id, waarde[veld.id])"
-                 class="text-align-left"
-                 :invalid="errors[veld.id] === 'required'"
-                 error-message="Gelieve dit veld in te vullen"
+      <BaseInput
+        v-if="veld.type === 'tekst'"
+        v-model="waarde[veld.id]"
+        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :label="veld.label"
+        :beschrijving="veld.beschrijving"
+        @changeValue="changeValue(veld.id, waarde[veld.id])"
+        class="text-align-left"
+        :invalid="errors[veld.id] === 'required'"
+        error-message="Gelieve dit veld in te vullen"
       >
       </BaseInput>
-      <BaseCheckbox v-if="veld.type === 'vinkje'"
-                    v-model="waarde[veld.id]"
-                    :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
-                    :label="veld.label"
-                    :beschrijving="veld.beschrijving"
-                    @changeValue="changeValue(veld.id, waarde[veld.id])"
-                    class="text-align-left">
+      <BaseCheckbox
+        v-if="veld.type === 'vinkje'"
+        v-model="waarde[veld.id]"
+        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :label="veld.label"
+        :beschrijving="veld.beschrijving"
+        @changeValue="changeValue(veld.id, waarde[veld.id])"
+        class="text-align-left"
+      >
       </BaseCheckbox>
-      <BaseDropdown v-if="veld.type === 'lijst'"
-                    v-model="waarde[veld.id]"
-                    :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
-                    :label="veld.label"
-                    :beschrijving="veld.beschrijving"
-                    @changeValue="changeValue(veld.id, waarde[veld.id])"
-                    :options="vulOpties(veld.keuzes)"
-                    class="text-align-left">
+      <BaseDropdown
+        v-if="veld.type === 'lijst'"
+        v-model="waarde[veld.id]"
+        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :label="veld.label"
+        :beschrijving="veld.beschrijving"
+        @changeValue="changeValue(veld.id, waarde[veld.id])"
+        :options="vulOpties(veld.keuzes)"
+        class="text-align-left"
+      >
       </BaseDropdown>
-      <BaseTextArea v-if="veld.type === 'tekst_meerdere_lijnen'"
-                    v-model="waarde[veld.id]"
-                    :beschrijving="veld.beschrijving"
-                    :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
-                    :label="veld.label"
-                    @changeValue="changeValue(veld.id, waarde[veld.id])"
-                    class="text-align-left">
+      <BaseTextArea
+        v-if="veld.type === 'tekst_meerdere_lijnen'"
+        v-model="waarde[veld.id]"
+        :beschrijving="veld.beschrijving"
+        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :label="veld.label"
+        @changeValue="changeValue(veld.id, waarde[veld.id])"
+        class="text-align-left"
+      >
       </BaseTextArea>
     </div>
   </div>
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
+import { reactive, toRefs } from "@vue/reactivity";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import BaseDropdown from "@/components/input/BaseDropdown";
@@ -58,28 +65,28 @@ export default {
   },
   props: {
     modelValue: {
-      type: [String, Number, Boolean]
+      type: [String, Number, Boolean],
     },
     veld: {
-      type: Object
+      type: Object,
     },
     groepIndex: {
-      type: String
+      type: String,
     },
     errors: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     vulOpties(options) {
       let keuzes = [];
       options.forEach(function (optie) {
-        keuzes.push({label: optie, value: optie})
-      })
+        keuzes.push({ label: optie, value: optie });
+      });
       return keuzes;
     },
     changeValue(veld, waarde) {
-      this.$emit('changeValue', veld, waarde, this.groepIndex)
+      this.$emit("changeValue", veld, waarde, this.groepIndex);
     },
   },
 
@@ -87,15 +94,13 @@ export default {
     const state = reactive({
       schema: props.veld,
       waarde: props.modelValue,
-    })
+    });
 
     return {
       ...toRefs(state),
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

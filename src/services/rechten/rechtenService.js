@@ -1,8 +1,3 @@
 export default {
-
-
-    hasPermission(){
-
-    }
-
-}
+  hasPermission() {},
+};

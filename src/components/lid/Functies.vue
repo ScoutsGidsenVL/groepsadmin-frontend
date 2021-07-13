@@ -1,5 +1,5 @@
 <template>
-  <div class="functies-card ml-4 mb-4 ">
+  <div class="functies-card ml-4 mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
@@ -19,17 +19,25 @@
                 <div class="flex-row">
                   <div class="justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}</label>
-                    <Button icon="pi pi-times" class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1 mt-2" @click="$event.stopPropagation(); end(functie.id)" title="Stop functie" />
+                    <Button
+                      icon="pi pi-times"
+                      class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1 mt-2"
+                      @click="
+                        $event.stopPropagation();
+                        end(functie.id);
+                      "
+                      title="Stop functie"
+                    />
                   </div>
                 </div>
                 <div class="flex-row">
                   <div class="justify-content-start">
-                    <label class="ml-4 font-weight-bolder">{{ functie.naam }}</label>
+                    <label class="ml-4 font-weight-bolder">{{
+                      functie.naam
+                    }}</label>
                   </div>
                 </div>
               </div>
-
-
             </div>
           </accordionTab>
         </accordion>
@@ -45,32 +53,32 @@ export default {
   name: "Functies",
   props: {
     modelValue: {
-      type: Object
+      type: Object,
     },
     title: {
-      type: String
-    }
+      type: String,
+    },
   },
   computed: {
     functies() {
-      return this.modelValue
-    }
+      return this.modelValue;
+    },
   },
   methods: {
     groepsNaam(groepsnummer) {
       const groep = this.$store.getters.groepByNummer(groepsnummer);
-      return groepsnummer + " - " + groep.naam
+      return groepsnummer + " - " + groep.naam;
     },
     getFunctie(functieId) {
       return this.$store.getters.functieById(functieId);
     },
-    formatteerDatum(datum){
-     return DateUtil.formatteerDatum(datum);
+    formatteerDatum(datum) {
+      return DateUtil.formatteerDatum(datum);
     },
-    end(id){
-      console.log(id)
-    }
-  }
+    end(id) {
+      console.log(id);
+    },
+  },
 };
 </script>
 

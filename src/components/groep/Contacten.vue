@@ -3,7 +3,10 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> {{ title }}</span><span class="small mt-1" v-if="contactenImporteren">Contacten laden &nbsp;<i class="fas fa-spinner fa-spin"></i></span>
+          <span> {{ title }}</span
+          ><span class="small mt-1" v-if="contactenImporteren"
+            >Contacten laden &nbsp;<i class="fas fa-spinner fa-spin"></i
+          ></span>
         </div>
       </template>
       <template #content>
@@ -11,18 +14,40 @@
           <label class="f-500"> Groepsleiding</label>
         </div>
         <div class="ml-3" v-if="groep.vga">
-          <label class="underline"> Verantwoordelijke Groepsadministratie</label>
+          <label class="underline">
+            Verantwoordelijke Groepsadministratie</label
+          >
           <div>
-            <i class="fas fa-user"></i><span class="ml-3">{{ groep.vga.vgagegevens.voornaam }} {{ groep.vga.vgagegevens.achternaam}}</span> <br>
-            <i class="fas fa-envelope"></i><span class="ml-3"><a class="mail-link" href="mailto:{{ groep.vga.email }}">{{ groep.vga.email }}</a></span>
+            <i class="fas fa-user"></i
+            ><span class="ml-3"
+              >{{ groep.vga.vgagegevens.voornaam }}
+              {{ groep.vga.vgagegevens.achternaam }}</span
+            >
+            <br />
+            <i class="fas fa-envelope"></i
+            ><span class="ml-3"
+              ><a class="mail-link" href="mailto:{{ groep.vga.email }}">{{
+                groep.vga.email
+              }}</a></span
+            >
           </div>
         </div>
-        <br>
+        <br />
         <div class="ml-3" v-if="groep.fv">
           <label class="underline"> Financieel Verantwoordelijke</label>
-          <div >
-            <i class="fas fa-user"></i><span class="ml-3">{{ groep.fv.vgagegevens.voornaam }} {{ groep.fv.vgagegevens.achternaam}}</span> <br>
-            <i class="fas fa-envelope"></i><span class="ml-3"><a class="mail-link" href="mailto:{{ groep.fv.email }}">{{ groep.fv.email }}</a></span>
+          <div>
+            <i class="fas fa-user"></i
+            ><span class="ml-3"
+              >{{ groep.fv.vgagegevens.voornaam }}
+              {{ groep.fv.vgagegevens.achternaam }}</span
+            >
+            <br />
+            <i class="fas fa-envelope"></i
+            ><span class="ml-3"
+              ><a class="mail-link" href="mailto:{{ groep.fv.email }}">{{
+                groep.fv.email
+              }}</a></span
+            >
           </div>
         </div>
       </template>
@@ -38,11 +63,11 @@ export default {
       type: Object,
     },
     contactenLaden: {
-      type: Boolean
+      type: Boolean,
     },
     title: {
-      type: String
-    }
+      type: String,
+    },
   },
   computed: {
     contactenImporteren() {
@@ -50,11 +75,9 @@ export default {
     },
     groep() {
       return this.modelValue;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

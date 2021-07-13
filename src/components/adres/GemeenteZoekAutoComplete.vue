@@ -43,18 +43,21 @@ export default {
   },
   props: {
     label: {
-      type: String
+      type: String,
     },
     modelValue: {
-      type: Object
+      type: Object,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   mounted() {
-    this.zoekTerm = this.adres.postcode && this.adres.gemeente ? this.adres.postcode + " " + this.adres.gemeente : null;
+    this.zoekTerm =
+      this.adres.postcode && this.adres.gemeente
+        ? this.adres.postcode + " " + this.adres.gemeente
+        : null;
   },
   methods: {
     zoekGemeente() {
@@ -68,25 +71,25 @@ export default {
       this.adres.straat = "";
       this.adres.bus = "";
       this.adres.nummer = "";
-      this.emitter.emit('clearStraat', null);
+      this.emitter.emit("clearStraat", null);
     },
-
   },
 
   created() {
     this.$watch(
       () => this.modelValue,
       () => {
-        this.zoekTerm = this.modelValue.postcode + " " + this.modelValue.gemeente
+        this.zoekTerm =
+          this.modelValue.postcode + " " + this.modelValue.gemeente;
       }
-    )
+    );
   },
 
   computed: {
     adres() {
       return this.modelValue;
     },
-  }
+  },
 };
 </script>
 

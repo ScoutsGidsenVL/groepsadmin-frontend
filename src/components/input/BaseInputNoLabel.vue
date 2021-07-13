@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseInputNoLabel",
@@ -27,13 +27,14 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(props, { emit }) {
     return {
-      value:  useModelWrapper(props, emit, 'modelValue')   }
-  }
+      value: useModelWrapper(props, emit, "modelValue"),
+    };
+  },
 };
 </script>
 

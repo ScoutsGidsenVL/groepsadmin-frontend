@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-4 mb-4 ">
+  <div class="ml-4 mb-4">
     <card>
       <template #title> Persoonlijk</template>
       <template #content>
@@ -8,13 +8,13 @@
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseInput
             v-model="lid.vgagegevens.achternaam"
             label="Achternaam"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
@@ -25,7 +25,7 @@
             v-model="lid.gebruikersnaam"
             label="Gebruikersnaam"
             type="text"
-            :disabled=true
+            :disabled="true"
           ></BaseInput>
           <BaseDropDown
             v-model="lid.persoonsgegevens.geslacht"
@@ -50,19 +50,19 @@
             v-model="lid.email"
             label="Email"
             type="email"
-            :disabled=false
+            :disabled="false"
           ></BaseInput>
           <BaseInput
             v-model="lid.persoonsgegevens.gsm"
             label="GSM"
             type="text"
-            :disabled=false
+            :disabled="false"
           ></BaseInput>
           <BaseInput
             v-model="lid.persoonsgegevens.rekeningnummer"
             label="Rekeningnummer"
             type="text"
-            :disabled=false
+            :disabled="false"
           ></BaseInput>
           <BaseCheckbox
             type="checkbox"
@@ -81,46 +81,46 @@ import DatePicker from "@/components/input/DatePicker";
 import BaseDropDown from "@/components/input/BaseDropdown";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import { reactive, toRefs } from "@vue/reactivity";
+import { onUpdated } from "@vue/runtime-core";
 
 export default {
   name: "Persoonlijk",
-  components: {DatePicker, BaseInput, BaseCheckbox, BaseDropDown},
+  components: { DatePicker, BaseInput, BaseCheckbox, BaseDropDown },
   data() {
     return {
       geslacht: [
-        {label: 'Mannelijk', value: 'man'},
-        {label: 'Vrouwelijk', value: 'vrouw'},
-        {label: 'Andere', value: 'andere'}
-      ]
-    }
+        { label: "Mannelijk", value: "man" },
+        { label: "Vrouwelijk", value: "vrouw" },
+        { label: "Andere", value: "andere" },
+      ],
+    };
   },
   props: {
     modelValue: {
       type: Object,
-    }
+    },
   },
   setup(props) {
     const state = reactive({
       lid: {
-        voornaam: '',
-        achternaam: '',
-        email: '',
-        gebruikersnaam: '',
+        voornaam: "",
+        achternaam: "",
+        email: "",
+        gebruikersnaam: "",
         links: [],
         persoonsgegevens: {},
         vgagegevens: {},
-        verbondsgegevens: {}
+        verbondsgegevens: {},
       },
-    })
+    });
 
     onUpdated(() => {
-      state.lid = props.modelValue
-    })
+      state.lid = props.modelValue;
+    });
 
-    return {...toRefs(state)};
-  }
+    return { ...toRefs(state) };
+  },
 };
 </script>
 

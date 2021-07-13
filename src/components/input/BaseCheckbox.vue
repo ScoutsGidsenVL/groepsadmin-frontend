@@ -12,8 +12,14 @@
           @change="check"
         />
         <span class="help-button-wrapper">
-          <a :href="helpLink" target="_blank"><i class="fas fa-question-circle help-button ml-2" v-if="helpLink" title="Meer info..."></i></a>
-      </span>
+          <a :href="helpLink" target="_blank"
+            ><i
+              class="fas fa-question-circle help-button ml-2"
+              v-if="helpLink"
+              title="Meer info..."
+            ></i
+          ></a>
+        </span>
       </div>
     </div>
     <p class="beschrijving" v-html="beschrijving" v-if="beschrijving"></p>
@@ -21,7 +27,7 @@
 </template>
 
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseCheckbox",
@@ -40,41 +46,41 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     helpLink: {
       type: String,
-      default: null
+      default: null,
     },
     beschrijving: {
-      type: String
+      type: String,
     },
     bold: {
-      type: Boolean
+      type: Boolean,
     },
     invalid: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorMessage: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     check() {
-      this.$emit('check');
-      this.$emit('changeValue');
+      this.$emit("check");
+      this.$emit("changeValue");
     },
 
     showMessage() {
-      console.log('KABOEM')
-    }
+      console.log("KABOEM");
+    },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
-      value: useModelWrapper(props, emit, 'modelValue')
-    }
-  }
+      value: useModelWrapper(props, emit, "modelValue"),
+    };
+  },
 };
 </script>
 

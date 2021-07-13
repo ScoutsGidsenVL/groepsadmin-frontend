@@ -2,10 +2,15 @@
   <div class="bovenbalk">
     <div class="d-flex justify-content-between">
       <div>
-        <h4 class="ml-4 mt-2" >{{ volledigeNaam }}</h4>
+        <h4 class="ml-4 mt-2">{{ volledigeNaam }}</h4>
       </div>
       <div class="justify-content-end">
-        <SplitButton label="Individuele steekkaart" @click="gaNaarIndividueleSteekkaart" :model="items" style="width: auto; min-width: 285px"></SplitButton>
+        <SplitButton
+          label="Individuele steekkaart"
+          @click="gaNaarIndividueleSteekkaart"
+          :model="items"
+          style="width: auto; min-width: 285px"
+        ></SplitButton>
       </div>
     </div>
   </div>
@@ -16,52 +21,67 @@ import SplitButton from "primevue/splitbutton";
 
 export default {
   name: "LidBovenBalk",
-  components:{
-    SplitButton
+  components: {
+    SplitButton,
   },
   props: {
     lid: {
-      type: Object
+      type: Object,
     },
     id: {
-      type: String
-    }
+      type: String,
+    },
   },
 
-  data(){
+  data() {
     return {
       items: [
         {
-          label: 'Communicatievoorkeuren',
-          icon: 'fas fa-satellite-dish',
+          label: "Communicatievoorkeuren",
+          icon: "fas fa-satellite-dish",
           command: () => {
-            this.$toast.add({ severity: 'success', summary: 'Communicatievoorkeuren', detail: 'We gaan naar communicatievoorkeuren', life: 3000});
-          }
+            this.$toast.add({
+              severity: "success",
+              summary: "Communicatievoorkeuren",
+              detail: "We gaan naar communicatievoorkeuren",
+              life: 3000,
+            });
+          },
         },
         {
-          label: 'Nieuw lid',
-          icon: 'fas fa-user-plus',
+          label: "Nieuw lid",
+          icon: "fas fa-user-plus",
           command: () => {
-            this.$toast.add({ severity: 'success', summary: 'Nieuw', detail: 'Nieuw lid toevoegen', life: 3000});
-          }
+            this.$toast.add({
+              severity: "success",
+              summary: "Nieuw",
+              detail: "Nieuw lid toevoegen",
+              life: 3000,
+            });
+          },
         },
-      ]
-    }
+      ],
+    };
   },
   methods: {
     gaNaarIndividueleSteekkaart() {
-      this.$router.push({name: 'IndividueleSteekkaart', params: {id: this.lid.id}})
-    }
+      this.$router.push({
+        name: "IndividueleSteekkaart",
+        params: { id: this.lid.id },
+      });
+    },
   },
   computed: {
     volledigeNaam() {
-      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam){
-        return this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam;
+      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
+        return (
+          this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam
+        );
       } else {
         return " ";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

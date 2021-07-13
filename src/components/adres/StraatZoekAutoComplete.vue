@@ -44,21 +44,21 @@ export default {
   },
   props: {
     label: {
-      type: String
+      type: String,
     },
     modelValue: {
-      type: Object
+      type: Object,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   mounted() {
     this.zoekTerm = this.modelValue.straat;
-    this.emitter.on("clearStraat", value => {
+    this.emitter.on("clearStraat", (value) => {
       this.zoekTerm = value;
-    })
+    });
   },
   created() {
     this.$watch(
@@ -66,30 +66,31 @@ export default {
       () => {
         this.zoekTerm = this.modelValue.straat;
       }
-    )
+    );
   },
   methods: {
     zoekStraat() {
-      RestService.zoekStraat(this.zoekTerm, this.modelValue.postcode).then((response) => {
-        this.gefilterdeStraten = response.data;
-      });
+      RestService.zoekStraat(this.zoekTerm, this.modelValue.postcode).then(
+        (response) => {
+          this.gefilterdeStraten = response.data;
+        }
+      );
     },
     kiesStraat(event) {
-      this.adres.straat = event.value
+      this.adres.straat = event.value;
     },
     verwijderStraat() {
       this.adres.straat = "";
       this.zoekTerm = "";
-
-    }
+    },
   },
   computed: {
     adres: {
       get() {
-        return this.modelValue
+        return this.modelValue;
       },
-    }
-  }
+    },
+  },
 };
 </script>
 

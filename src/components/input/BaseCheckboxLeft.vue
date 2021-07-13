@@ -11,7 +11,12 @@
           @change="check"
         />
         <span class="help-button-wrapper">
-          <i class="fas fa-question-circle help-button ml-2" v-if="helpLink" title="Meer info..."><a :href="helpLink" target="_blank"></a></i>
+          <i
+            class="fas fa-question-circle help-button ml-2"
+            v-if="helpLink"
+            title="Meer info..."
+            ><a :href="helpLink" target="_blank"></a
+          ></i>
         </span>
       </div>
       <label class="p-col-4 p-mb-2 p-mb-md-0"> {{ label }} </label>
@@ -21,7 +26,7 @@
 </template>
 
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseCheckbox",
@@ -40,37 +45,37 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     helpLink: {
       type: String,
-      default: null
+      default: null,
     },
     beschrijving: {
-      type: String
+      type: String,
     },
     bold: {
-      type: Boolean
+      type: Boolean,
     },
     invalid: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorMessage: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     check() {
-      this.$emit('check');
-      this.$emit('changeValue');
+      this.$emit("check");
+      this.$emit("changeValue");
     },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
-      value: useModelWrapper(props, emit, 'modelValue')
-    }
-  }
+      value: useModelWrapper(props, emit, "modelValue"),
+    };
+  },
 };
 </script>
 

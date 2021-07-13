@@ -10,7 +10,8 @@
       :options="m"
       :key="index"
       :clickable="true"
-      @click="openWindow(index, m)">
+      @click="openWindow(index, m)"
+    >
     </GMapMarker>
 
     <GMapInfoWindow
@@ -18,8 +19,9 @@
       :options="{
         maxWidth: 300,
         pixelOffset: {
-          width: 0, height:-45
-        }
+          width: 0,
+          height: -45,
+        },
       }"
       :position="infoWindow.position"
       :opened="infoWindow.open"
@@ -28,33 +30,32 @@
     >
       <p v-html="infoWindow.template"></p>
     </GMapInfoWindow>
-
   </GMapMap>
 </template>
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 import GoogleMaps from "@/services/google/GoogleMaps";
 
 export default defineComponent({
   name: "GoogleMaps",
   props: {
     groep: {
-      type: Object
+      type: Object,
     },
     zichtbareMarker: {
-      type: [String, Number]
-    }
+      type: [String, Number],
+    },
   },
   data() {
     return {
       key: GoogleMaps.getKey(),
       windowOpen: false,
       infoWindow: {
-        position: {lat: 0, lng: 0},
+        position: { lat: 0, lng: 0 },
         open: false,
-        template: ''
-      }
-    }
+        template: "",
+      },
+    };
   },
   methods: {
     openWindow(index, marker) {
@@ -63,24 +64,24 @@ export default defineComponent({
       this.infoWindow.open = true;
     },
     close() {
-      this.infoWindow.open = false
-    }
+      this.infoWindow.open = false;
+    },
   },
   created() {
-    this.$watch('zichtbareMarker', () => {
-      this.openWindow(this.zichtbareMarker, this.markers[this.zichtbareMarker])
-    })
+    this.$watch("zichtbareMarker", () => {
+      this.openWindow(this.zichtbareMarker, this.markers[this.zichtbareMarker]);
+    });
   },
   computed: {
     geselecteerdeGroep() {
-      return this.groep
+      return this.groep;
     },
     centerPoint() {
-      return GoogleMaps.berekenCenter(this.geselecteerdeGroep.adressen)
+      return GoogleMaps.berekenCenter(this.geselecteerdeGroep.adressen);
     },
     markers() {
       return GoogleMaps.bepaalMarkers(this.geselecteerdeGroep.adressen);
     },
   },
-})
+});
 </script>

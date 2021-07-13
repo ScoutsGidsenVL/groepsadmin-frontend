@@ -1,6 +1,11 @@
 <template>
-  <Dialog :header="bestaandSjabloon ? 'Sjabloon overschrijven' : 'Sjabloon opslaan'" v-model:visible="openModal" :style="{width: '50vw'}" :modal="true"
-          :closable="false">
+  <Dialog
+    :header="bestaandSjabloon ? 'Sjabloon overschrijven' : 'Sjabloon opslaan'"
+    v-model:visible="openModal"
+    :style="{ width: '50vw' }"
+    :modal="true"
+    :closable="false"
+  >
     <AutoComplete
       class="adres-autocomplete d-flex custom-input-styling"
       v-model="zoekTerm"
@@ -24,8 +29,19 @@
     </AutoComplete>
 
     <template #footer>
-      <Button label="Annuleer" icon="pi pi-times" @click="closeModal" class="p-button-text cancel-button-dialog"/>
-      <Button :label="bestaandSjabloon ? 'Overschrijven' : 'Opslaan'" icon="pi pi-save" @click="opslaan" autofocus class="save-button-dialog"/>
+      <Button
+        label="Annuleer"
+        icon="pi pi-times"
+        @click="closeModal"
+        class="p-button-text cancel-button-dialog"
+      />
+      <Button
+        :label="bestaandSjabloon ? 'Overschrijven' : 'Opslaan'"
+        icon="pi pi-save"
+        @click="opslaan"
+        autofocus
+        class="save-button-dialog"
+      />
     </template>
   </Dialog>
 </template>
@@ -43,64 +59,64 @@ export default {
   props: {
     open: {
       type: Boolean,
-      default: true
+      default: true,
     },
     sjablonen: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
-      zoekTerm: '',
+      zoekTerm: "",
       error: false,
       mailSjablonen: null,
       bestaandSjabloon: false,
       geselecteerdeSjabloon: null,
-    }
+    };
   },
 
   methods: {
     closeModal() {
-      this.$emit('closeModal');
+      this.$emit("closeModal");
     },
     zoekBestaandSjabloon() {
       this.mailSjablonen = [];
       this.sjablonen.forEach((sjabloon) => {
-        if (sjabloon.label.indexOf(this.zoekTerm) > -1){
+        if (sjabloon.label.indexOf(this.zoekTerm) > -1) {
           this.mailSjablonen.push(sjabloon);
         }
-      })
+      });
     },
     kiesSjabloon(event) {
       this.zoekTerm = event.value.label;
       this.selecteerSjabloon();
-      this.checkBestaandSjabloon()
+      this.checkBestaandSjabloon();
     },
     opslaan() {
       if (this.zoekTerm) {
-        this.$emit('opslaan', this.zoekTerm, this.geselecteerdeSjabloon);
+        this.$emit("opslaan", this.zoekTerm, this.geselecteerdeSjabloon);
       } else {
-        this.error = true
+        this.error = true;
       }
     },
 
     checkBestaandSjabloon() {
-      let bestaandeNaam = false
+      let bestaandeNaam = false;
       this.sjablonen.forEach((sjabloon) => {
-        if (sjabloon.label === this.zoekTerm){
-          bestaandeNaam = true
+        if (sjabloon.label === this.zoekTerm) {
+          bestaandeNaam = true;
         }
-      })
+      });
       this.bestaandSjabloon = bestaandeNaam;
     },
 
     selecteerSjabloon() {
       this.sjablonen.forEach((sjabloon) => {
-        if (sjabloon.label === this.zoekTerm){
-          this.geselecteerdeSjabloon = sjabloon
+        if (sjabloon.label === this.zoekTerm) {
+          this.geselecteerdeSjabloon = sjabloon;
         }
-      })
-    }
+      });
+    },
   },
   watch: {
     zoekTerm: {
@@ -110,16 +126,14 @@ export default {
         }
         this.checkBestaandSjabloon();
       },
-    }
+    },
   },
   computed: {
     openModal() {
       return this.open;
-    }
+    },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

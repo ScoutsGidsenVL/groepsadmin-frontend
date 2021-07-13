@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-4 mb-4 ">
+  <div class="ml-4 mb-4">
     <card>
       <template #title> Algemeen</template>
       <template #content>
@@ -8,31 +8,31 @@
             v-model="groep.naam"
             label="Groepsnaam"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseInput
             v-model="groep.groepsnummer"
             label="Groepsnummer"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseInput
             v-model="groep.website"
             label="Website"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseTextArea
             v-model="groep.vrijeInfo"
             label="Vrije info"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseInput
             v-model="groep.email"
             label="E-mail"
             type="email"
-            :disabled=true
+            :disabled="true"
           />
           <date-picker
             v-model="groep.opgericht"
@@ -43,7 +43,7 @@
             v-model="groep.rekeningnummer"
             label="Rekeningnummer"
             type="text"
-            :disabled=true
+            :disabled="true"
           />
           <BaseCheckbox
             type="checkbox"
@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import { reactive, toRefs } from "@vue/reactivity";
+import { onUpdated } from "@vue/runtime-core";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
@@ -76,44 +76,41 @@ export default {
   props: {
     modelValue: {
       type: Object,
-    }
+    },
   },
 
   computed: {
     facturatieLeidingCheck() {
       return this.groep;
-    }
+    },
   },
 
   setup(props) {
     const state = reactive({
       groep: {
-        naam: '',
-        groepsnummer: '',
-        rekeningnummer: '',
-        vrijeInfo: '',
-        opgericht: '',
+        naam: "",
+        groepsnummer: "",
+        rekeningnummer: "",
+        vrijeInfo: "",
+        opgericht: "",
         facturatieLeidingCheck: false,
         facturatieLedenCheck: false,
         adressen: [],
-        email: '',
-        website: '',
+        email: "",
+        website: "",
         contacten: [],
         groepseigenGegevens: [],
         groepseigenFuncties: [],
-
       },
-    })
+    });
 
     onUpdated(() => {
-      state.groep = props.modelValue
-    })
+      state.groep = props.modelValue;
+    });
 
-    return {...toRefs(state)};
-  }
-}
+    return { ...toRefs(state) };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

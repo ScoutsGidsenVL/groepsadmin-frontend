@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="p-grid row">
-      <label class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3" v-html="label" v-if="label"> </label>
+      <label
+        class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3"
+        v-html="label"
+        v-if="label"
+      >
+      </label>
       <div class="col-12 col-sm-8 p-md-8" :class="!label ? 'ml-4' : ''">
         <dropdown
           class="width-100"
@@ -17,7 +22,7 @@
   </div>
 </template>
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseDropdown",
@@ -29,7 +34,7 @@ export default {
     options: {
       type: Array,
       default() {
-        return []
+        return [];
       },
     },
     modelValue: {
@@ -38,34 +43,33 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     beschrijving: {
-      type: String
+      type: String,
     },
     bold: {
-      type: Boolean
+      type: Boolean,
     },
     invalid: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorMessage: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     changeValue($event) {
-      this.$emit('update:modelValue', $event.value);
-      this.$emit('changeValue', $event.value);
-    }
+      this.$emit("update:modelValue", $event.value);
+      this.$emit("changeValue", $event.value);
+    },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
-      value: useModelWrapper(props, emit, 'modelValue')
-    }
+      value: useModelWrapper(props, emit, "modelValue"),
+    };
   },
-
 };
 </script>
 

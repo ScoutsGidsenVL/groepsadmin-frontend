@@ -1,13 +1,9 @@
-<template>
-
-</template>
+<template></template>
 
 <script>
 export default {
-  name: "GroepseigenGegevens"
-}
+  name: "GroepseigenGegevens",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

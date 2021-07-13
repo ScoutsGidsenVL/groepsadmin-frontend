@@ -1,44 +1,44 @@
 <template>
   <div class="vld-parent">
-    <loading :active="isLoading"
-             :is-full-page="fullPage"
-             :color="color"
-             :loader="loader"
-             :background-color="bgColor"
-             :height="height"
-             :width="width"
-             transition="fade"
+    <loading
+      :active="isLoading"
+      :is-full-page="fullPage"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :height="height"
+      :width="width"
+      transition="fade"
     >
     </loading>
   </div>
 </template>
 
 <script>
-import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
-import Loading from 'vue3-loading-overlay';
-
+import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
+import Loading from "vue3-loading-overlay";
 
 export default {
   components: {
-    Loading
+    Loading,
   },
   name: "Indicator",
   props: {
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     fullPage: {
       type: Boolean,
-      default: true
+      default: true,
     },
     canCancel: {
       type: Boolean,
-      default: false
+      default: false,
     },
     useSlot: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loader: {
       type: String,
@@ -59,11 +59,9 @@ export default {
     width: {
       type: Number,
       default: 128,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

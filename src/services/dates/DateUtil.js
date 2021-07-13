@@ -12,5 +12,6 @@ export default {
   },
 
   formatteerDatum(datum) {
-    return moment(String(datum)).format('DD/MM/YYYY')}
+    return moment(String(datum)).format("DD/MM/YYYY");
+  },
 };
