@@ -39,11 +39,11 @@ pipeline {
       }
     }
 
-//     stage('deploy') {
-//       steps {
-//         sh 'ssh lxc-deb-rundeck.vvksm.local sudo -u rundeck /opt/deploy-ga-frontend.sh frontend ${BRANCH_NAME}'
-//       }
-//     }
+    stage('deploy') {
+      steps {
+        sh 'ssh lxc-deb-rundeck.vvksm.local sudo -u rundeck /opt/deploy-ga.sh frontend ${BRANCH_NAME}'
+      }
+    }
   }
 
   post {
