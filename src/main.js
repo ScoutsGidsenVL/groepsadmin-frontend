@@ -1,4 +1,4 @@
-import {createApp} from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -12,21 +12,21 @@ import Dropdown from "primevue/dropdown";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import ConfirmPopup from "primevue/confirmpopup";
-import ConfirmDialog from 'primevue/confirmdialog';
-import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from "primevue/confirmdialog";
+import ConfirmationService from "primevue/confirmationservice";
 import InputText from "primevue/inputtext";
 import Keycloak from "keycloak-js";
 import getClient from "./services/keycloak/keycloak-config";
-import {library} from "@fortawesome/fontawesome-svg-core";
-import {fas, faUser} from "@fortawesome/free-solid-svg-icons";
-import mitt from 'mitt';
-import VueGoogleMaps from '@fawmi/vue-google-maps';
-import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
-import Loading from 'vue3-loading-overlay';
-import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas, faUser } from "@fortawesome/free-solid-svg-icons";
+import mitt from "mitt";
+import VueGoogleMaps from "@fawmi/vue-google-maps";
+import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
+import Loading from "vue3-loading-overlay";
+import Column from "primevue/column";
+import ColumnGroup from "primevue/columngroup";
 
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
 import "primevue/resources/primevue.min.css"; //core css
 import "primeicons/primeicons.css"; //icons
@@ -38,7 +38,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ToastService from "primevue/toastservice";
 import GoogleMaps from "@/services/google/GoogleMaps";
 import DataTable from "primevue/datatable";
-import ProgressSpinner from 'primevue/progressspinner';
+import ProgressSpinner from "primevue/progressspinner";
 
 library.add(fas, faUser);
 
@@ -54,68 +54,69 @@ app.use(library);
 app.use(Toast);
 app.use(ToastService);
 app.use(store);
-app.use(Dropdown)
-app.use(ConfirmPopup)
-app.use(DataTable)
-app.use(ConfirmDialog)
-app.use(ConfirmationService)
-app.use(Toast)
-app.use(Column)
-app.use(ColumnGroup)
-app.use(ProgressSpinner)
-app.use(Loading)
-app.use(Accordion)
-app.use(AccordionTab)
+app.use(Dropdown);
+app.use(ConfirmPopup);
+app.use(DataTable);
+app.use(ConfirmDialog);
+app.use(ConfirmationService);
+app.use(Toast);
+app.use(Column);
+app.use(ColumnGroup);
+app.use(ProgressSpinner);
+app.use(Loading);
+app.use(Accordion);
+app.use(AccordionTab);
 app.use(router);
-app.use(VueGoogleMaps, {load: {
-    key: GoogleMaps.getKey()
-    }});
-app.use(PrimeVue, {
-    locale: {
-        accept: 'Ja',
-        reject: 'Nee',
-        dayNames: [
-            "Zondag",
-            "Maandag",
-            "Dinsdag",
-            "Woensdag",
-            "Donderdag",
-            "Vrijdag",
-            "Zaterdag",
-        ],
-        dayNamesShort: ["Zon", "Maa", "Din", "Woe", "Don", "Vri", "Zat"],
-        dayNamesMin: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
-        monthNames: [
-            "Januari",
-            "Februari",
-            "Maart",
-            "April",
-            "Mei",
-            "Juni",
-            "Juli",
-            "Augustus",
-            "September",
-            "Oktober",
-            "November",
-            "December",
-        ],
-        monthNamesShort: [
-            "Jan",
-            "Feb",
-            "Maa",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Okt",
-            "Nov",
-            "Dec",
-        ],
-    },
+app.use(VueGoogleMaps, {
+  load: {
+    key: GoogleMaps.getKey(),
+  },
 });
-
+app.use(PrimeVue, {
+  locale: {
+    accept: "Ja",
+    reject: "Nee",
+    dayNames: [
+      "Zondag",
+      "Maandag",
+      "Dinsdag",
+      "Woensdag",
+      "Donderdag",
+      "Vrijdag",
+      "Zaterdag",
+    ],
+    dayNamesShort: ["Zon", "Maa", "Din", "Woe", "Don", "Vri", "Zat"],
+    dayNamesMin: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
+    monthNames: [
+      "Januari",
+      "Februari",
+      "Maart",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Augustus",
+      "September",
+      "Oktober",
+      "November",
+      "December",
+    ],
+    monthNamesShort: [
+      "Jan",
+      "Feb",
+      "Maa",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec",
+    ],
+  },
+});
 
 app.component("icon", FontAwesomeIcon);
 app.component("card", Card);
@@ -141,28 +142,33 @@ app.config.globalProperties.emitter = emitter;
 let initOptions = getClient();
 const keycloak = Keycloak(initOptions);
 
-keycloak.init({onLoad: initOptions.onLoad}).then((auth) => {
-    if (!auth) {
-        window.location.reload();
-    } else {
-        store.commit("setToken", keycloak.token)
-        store.commit("setNaam", keycloak.idTokenParsed.name);
-        store.commit("setGebruikersnaam", keycloak.idTokenParsed.preferred_username);
-        store.dispatch("getGroepen");
-        store.dispatch("getFuncties");
-        store.dispatch("getKolommen");
-        app.mount("#app")
-    }
+keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
+  if (!auth) {
+    window.location.reload();
+  } else {
+    store.commit("setToken", keycloak.token);
+    store.commit("setNaam", keycloak.idTokenParsed.name);
+    store.commit(
+      "setGebruikersnaam",
+      keycloak.idTokenParsed.preferred_username
+    );
+    store.dispatch("getGroepen");
+    store.dispatch("getFuncties");
+    store.dispatch("getKolommen");
+    app.mount("#app");
+  }
 
-    //Token Refresh
-    setInterval(() => {
-        keycloak.updateToken(70).then((refreshed) => {
-            if (refreshed) {
-                store.commit("setToken", keycloak.token)
-            }
-        }).catch(() => {
-            console.log('Failed to refresh token');
-        });
-    }, 6000)
-
+  //Token Refresh
+  setInterval(() => {
+    keycloak
+      .updateToken(70)
+      .then((refreshed) => {
+        if (refreshed) {
+          store.commit("setToken", keycloak.token);
+        }
+      })
+      .catch(() => {
+        console.log("Failed to refresh token");
+      });
+  }, 6000);
 });
