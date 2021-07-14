@@ -1,6 +1,6 @@
 <template>
   <div class="menubalk">
-    <img src="/static/img/bg-texture.jpg" alt="background" class="background" />
+    <img src="@/static/img/bg-texture.jpg" alt="background" class="background" />
     <div class="row item-menu mr-1">
       <div class="ga-logo clickable" @click="goToDashBoard">
         <img src="/static/img/ga-logo.svg" alt="ga logo" />
