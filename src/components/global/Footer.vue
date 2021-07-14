@@ -246,7 +246,7 @@
                 target="_blank"
               >
                 <img
-                  src="/static/img/hopper_logo_wit_liggend.png"
+                  :src="`${publicPath}static/img/hopper_logo_wit_liggend.png`"
                   class="img-fluid"
                 />
               </a>
@@ -259,7 +259,7 @@
                 target="_blank"
               >
                 <img
-                  src="/static/img/vlaanderen-verbeelding-werkt.png"
+                  :src="`${publicPath}static/img/vlaanderen-verbeelding-werkt.png`"
                   class="img-fluid vlaanderen"
                 />
               </a>
@@ -295,6 +295,7 @@ export default {
   data() {
     return {
       app_version: process.env.VUE_APP_VERSION,
+      publicPath: process.env.BASE_URL
     };
   },
 };
