@@ -1,4 +1,4 @@
-import { createRouter } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import Ledenlijst from "@/views/Ledenlijst";
 import Ledenaantallen from "@/views/Ledenaantallen";
@@ -58,6 +58,7 @@ const routes = [
 ];
 
 const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 });
 
