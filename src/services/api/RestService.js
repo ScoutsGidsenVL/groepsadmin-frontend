@@ -1,13 +1,13 @@
 import apiClient from "@/services/api/ApiClient";
+import apiConfig from "@/services/api/ApiConfig";
 import apiClientCsv from "@/services/api/ApiClientCsv";
 import apiClientPdf from "@/services/api/ApiClientPdf";
 import apiClientMail from "@/services/api/ApiClientMail";
-import apiData from "../../../public/config.json";
 
-const apiConfig = apiData.api.baseUrl;
+const backendUrl = apiConfig().host;
 let baseUrl = "";
 if (process.env.NODE_ENV === "production") {
-  baseUrl = apiConfig + "/groepsadmin/rest-ga/";
+  baseUrl = backendUrl + "/groepsadmin/rest-ga/";
 } else {
   baseUrl = "/groepsadmin/rest-ga/";
 }
