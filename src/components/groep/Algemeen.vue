@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-4 mb-4">
+  <div class="mb-4">
     <card>
       <template #title> Algemeen</template>
       <template #content>

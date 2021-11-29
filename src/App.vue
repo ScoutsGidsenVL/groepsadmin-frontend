@@ -1,9 +1,10 @@
 <template>
-  <Header />
+  <SideMenu />
   <confirmDialog />
   <toast position="bottom-right" />
-  <router-view />
-  <Footer />
+  <transition>
+    <router-view class="app-content"/>
+  </transition>
 </template>
 
 <style>
@@ -20,12 +21,10 @@
 }
 </style>
 <script>
-import Footer from "@/components/global/Footer";
-import Header from "@/components/global/Header";
+import SideMenu from "@/components/global/Menu";
 export default {
   components: {
-    Header,
-    Footer,
+    SideMenu
   },
 };
 </script>

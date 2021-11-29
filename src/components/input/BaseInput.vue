@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="p-grid row">
-      <label class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3">
+      <label class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3">
         {{ label }}
         <span class="help-button-wrapper">
           <a :href="helpLink" target="_blank"
@@ -13,7 +13,7 @@
         ></span>
       </label>
       <div
-        class="col-12 col-sm-8 p-md-8"
+        class="col-12 col-sm-7 p-md-8"
         :class="bold ? 'font-weight-bolder' : ''"
       >
         <inputText

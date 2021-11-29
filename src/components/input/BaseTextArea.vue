@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="p-grid row">
-      <label class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3"> {{ label }} </label>
-      <div class="col-12 col-sm-8 p-md-8">
+      <label class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3"> {{ label }} </label>
+      <div class="col-12 col-sm-7 p-md-8">
         <Textarea
           class="w-100"
           v-bind="$attrs"

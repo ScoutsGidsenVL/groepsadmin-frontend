@@ -1,12 +1,108 @@
 <template>
-  <div class="content">
-    <h1>dashboard</h1>
+  <div>
+    <div class="content container lg:ml-8">
+      <loader :show-loader="showLoader"></loader>
+      <div class="d-flex lg:mt-8 sm:mt-4 mt-6">
+        <h1 class="welkom-titel text-align-left md:text-center text-sm sm:text-lg md:text-3xl">Welkom {{ gebruiker }}</h1>
+      </div>
+      <!--    <button @click="showLoader = !showLoader">Show spinner!</button>-->
+      <div class="row container-block sm:mt-5">
+        <div class="col-10">
+          <div class="row">
+            <div v-for="menuItem in menuItems" :key="menuItem.label" class="col-lg-5 mb-4 dashboard-block">
+              <dashboard-block :link="menuItem.link" :title="menuItem.label" :icoon="menuItem.icon"
+                               :visible="menuItem.condition" :internal="menuItem.internal">
+              </dashboard-block>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 justify-content-start d-flex">
+          <h5 class="text-align-left"><strong>Snel naar</strong></h5>
+          <ul>
+
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
+  <Footer/>
 </template>
 
 <script>
+import Loader from "@/components/global/Loader";
+import DashboardBlock from "@/components/global/DashboardBlock";
+import Footer from "@/components/global/Footer";
+
 export default {
   name: "Dashboard",
+  components: {Footer, DashboardBlock, Loader},
+  data() {
+    return {
+      showLoader: false,
+      gebruiker: null,
+      menuItems: [
+        {
+          label: "Profiel",
+          condition: true,
+          icon: "far fa-user",
+          link: "Profiel",
+          internal: true,
+        },
+        {
+          label: "Individuele steekkaart",
+          condition: true,
+          icon: "far fa-notes-medical",
+          link: "IndividueleSteekkaart",
+          internal: true,
+        },
+        {
+          label: "Communicatievoorkeuren",
+          condition: true,
+          icon: "far fa-satellite-dish",
+          link: "IndividueleSteekkaart",
+          internal: true,
+        },
+        {
+          label: "Leden",
+          condition: true,
+          icon: "far fa-users",
+          link: "Ledenlijst",
+          internal: true,
+        },
+        {
+          label: "Ledenaantallen",
+          condition: true,
+          icon: "far fa-chart-area",
+          link: "Ledenaantallen",
+          internal: true,
+        },
+        {
+          label: "Groep",
+          condition: true,
+          icon: "far fa-cogs",
+          link: "Groepsinstellingen",
+          internal: true,
+        },
+        {
+          label: "Lidaanvragen",
+          condition: true,
+          icon: "far fa-address-book",
+          link: "Aanvragen",
+          internal: true,
+        },
+        {
+          label: "Verzekeringen",
+          condition: true,
+          icon: "far fa-umbrella",
+          link: "https://vz.scoutsengidsenvlaanderen.be",
+          internal: false,
+        },
+      ],
+    }
+  },
+  mounted() {
+    this.gebruiker = localStorage.getItem("firstName");
+  },
 };
 </script>
 

@@ -1,13 +1,15 @@
 @import "./footer";
 @import "./github";
 @import "./top_menubalk";
-@import "./menubalk";
 @import "./lid";
 @import "./datePicker";
 @import "./adres";
 @import "./input";
 @import "./button";
 @import "./mail";
+@import "./menu";
+@import "./loader";
+@import "./dashboard";
 
 .content {
   min-height: 60vh;
@@ -93,6 +95,10 @@
   margin-right: 0.5rem !important;
 }
 
+.ml-4em {
+  margin-left: 4em !important;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -135,13 +141,16 @@
   }
 }
 
-.bovenbalk {
-  margin-top: 2em;
-  margin-bottom: 0.1em;
-}
-
 .text-align-left {
   text-align: left;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.p-datatable-row-expansion td {
+  background-color: $sgv-info !important;
 }
 
 .panel-subtitle {
@@ -195,8 +204,8 @@
 }
 
 .clean-link {
-  text-decoration: none;
-  background-color: transparent;
+  text-decoration: none !important;
+  background-color: transparent !important;
 }
 
 @media (min-width: 992px) {
@@ -239,6 +248,10 @@
  margin-top: -1em;
 }
 
+.pl-4em {
+  padding-left: 4em !important;
+}
+
 .table-checkbox input[type=checkbox] {
   height: 20px !important;
   width:  20px !important;
@@ -277,4 +290,32 @@
   background: transparent !important;
   border: 0 solid transparent !important;
   margin-left: -1em !important;
+}
+
+.z999 {
+  z-index: 999;
+}
+
+a.clean-link:hover {
+  color: $sgv-lichtgroen !important;
+}
+
+.app-content {
+  position: absolute;
+}
+
+
+@media screen and (min-width: 768px) {
+  .md\:w-90 {
+    width: 95% !important;
+  }
+}
+
+.groep-select {
+  margin-left: -1.5em;
+}
+
+.p-breadcrumb {
+  padding: 0 !important;
+  border: none !important;
 }

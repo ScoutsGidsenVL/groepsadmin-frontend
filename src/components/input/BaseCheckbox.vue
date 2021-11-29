@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="p-grid ml--05 row">
-      <label class="p-col-4 p-mb-2 p-mb-md-0"> {{ label }} </label>
-      <div class="p-col-6">
+    <div class="row">
+      <div class="col-9 col-sm-5 p-mb-2 p-mb-md-0">
+        <label> {{ label }} </label>
+      </div>
+      <div class="col-2 col-sm-7">
         <checkbox
           class="ml-1"
           v-bind="$attrs"

@@ -2,12 +2,12 @@
   <div>
     <div class="p-grid row">
       <label
-        class="col-12 col-sm-4 p-mb-2 p-mb-md-0 mt-3"
+        class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3"
         v-html="label"
         v-if="label"
       >
       </label>
-      <div class="col-12 col-sm-8 p-md-8" :class="!label ? 'ml-4' : ''">
+      <div class="col-12 col-sm-7 p-md-8" :class="!label ? 'ml-4' : ''">
         <dropdown
           class="width-100"
           :options="options"

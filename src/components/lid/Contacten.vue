@@ -1,5 +1,5 @@
 <template>
-  <div class="contacten-card ml-4 mb-4">
+  <div class="contacten-card mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">

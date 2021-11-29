@@ -25,6 +25,11 @@ import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 import Loading from "vue3-loading-overlay";
 import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup";
+import VueRouter from 'vue-router';
+import Breadcrumb from "primevue/breadcrumb";
+import "./assets/fonts/Museo Sans/stylesheet.css";
+import Menu from "primevue/menu";
+
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
@@ -48,6 +53,7 @@ app.use(Dialog);
 app.use(InputText);
 app.use(Card);
 app.use(Button);
+app.use(VueRouter);
 app.use(Checkbox);
 app.use(fas);
 app.use(library);
@@ -59,7 +65,6 @@ app.use(ConfirmPopup);
 app.use(DataTable);
 app.use(ConfirmDialog);
 app.use(ConfirmationService);
-app.use(Toast);
 app.use(Column);
 app.use(ColumnGroup);
 app.use(ProgressSpinner);
@@ -129,12 +134,13 @@ app.component("accordion", Accordion);
 app.component("accordionTab", AccordionTab);
 app.component("confirmPopup", ConfirmPopup);
 app.component("confirmDialog", ConfirmDialog);
-app.component("toast", Toast);
 app.component("dataTable", DataTable);
 app.component("column", Column);
 app.component("ColumnGroup", ColumnGroup);
 app.component("Spinner", ProgressSpinner);
 app.component("Dialog", Dialog);
+app.component("Breadcrumb", Breadcrumb);
+app.component("Menu", Menu);
 
 const emitter = mitt();
 app.config.globalProperties.emitter = emitter;

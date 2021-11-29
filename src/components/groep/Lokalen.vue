@@ -1,9 +1,9 @@
 <template>
-  <div class="lokalen-card ml-4 mb-4">
+  <div class="lokalen-card lg:ml-4 mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> {{ title }}</span>
+          <span> Lokalen</span>
         </div>
       </template>
       <template #content>
@@ -38,9 +38,6 @@ export default {
     };
   },
   props: {
-    title: {
-      type: String,
-    },
     groep: {
       type: Object,
     },

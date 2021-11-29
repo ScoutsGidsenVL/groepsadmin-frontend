@@ -3,6 +3,7 @@ import apiConfig from "@/services/api/ApiConfig";
 import apiClientCsv from "@/services/api/ApiClientCsv";
 import apiClientPdf from "@/services/api/ApiClientPdf";
 import apiClientMail from "@/services/api/ApiClientMail";
+import axios from "axios";
 
 const backendUrl = apiConfig().host;
 let baseUrl = "";
@@ -47,6 +48,10 @@ export default {
 
   getFuncties() {
     return apiClient().get(baseUrl + "functie");
+  },
+
+  getAanvragen() {
+    return apiClient().get(baseUrl + "lid/aanvraag");
   },
 
   getLeden(offset) {
@@ -139,4 +144,13 @@ export default {
   saveIndividueleSteekkaart(id, gegevens) {
     return apiClient().patch(baseUrl + "lid/" + id + "/steekkaart", gegevens);
   },
+
+  verwijderAanvraag(link) {
+    return axios.delete(link.href);
+  },
+
+  root() {
+    return apiClient().get(baseUrl);
+  }
+
 };

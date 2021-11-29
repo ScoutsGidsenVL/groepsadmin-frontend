@@ -9,6 +9,9 @@
     <div class="confirmation-content">
       <span v-html="message"></span>
     </div>
+    <div>
+
+    </div>
     <template #footer>
       <Button
         label="Nee"
@@ -42,17 +45,14 @@ export default {
       type: Boolean,
       default: false,
     },
-    type: {
-      type: String
-    }
   },
   methods: {
     bevestig() {
-      this.$emit("confirm", this.type);
+      this.$emit("bevestigMail");
     },
 
     annuleer() {
-      this.$emit("cancel");
+      this.$emit("bevestigGeenMail");
     },
   },
   computed: {

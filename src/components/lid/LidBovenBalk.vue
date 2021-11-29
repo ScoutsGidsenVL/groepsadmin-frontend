@@ -2,7 +2,7 @@
   <div class="bovenbalk">
     <div class="d-flex justify-content-between">
       <div>
-        <h4 class="ml-4 mt-2">{{ volledigeNaam }}</h4>
+        <h4 class="mt-2 lg:ml-4">{{ volledigeNaam }}</h4>
       </div>
       <div class="justify-content-end">
         <SplitButton
@@ -22,7 +22,7 @@ import SplitButton from "primevue/splitbutton";
 export default {
   name: "LidBovenBalk",
   components: {
-    SplitButton,
+    SplitButton
   },
   props: {
     lid: {

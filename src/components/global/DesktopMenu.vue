@@ -4,7 +4,7 @@
       <div
         v-if="menuItem.condition"
         class="menu-item mr-4 clickable"
-        @click="goto(menuItem)"
+        @click="goto(menuItem.link)"
       >
         <i
           :class="menuItem.icon"

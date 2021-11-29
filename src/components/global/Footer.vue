@@ -269,7 +269,7 @@
       </div>
       <div class="row mb-2">
         <div class="col-12 d-flex justify-content-lg-end">
-          <small class="ml-3">versie: {{ app_version || "0" }}</small>
+          <small class="ml-3">Versie: {{ app_version || "0" }}</small>
         </div>
       </div>
       <div class="footer-bottom-legal small text-white row">

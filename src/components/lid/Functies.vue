@@ -1,5 +1,5 @@
 <template>
-  <div class="functies-card ml-4 mb-4">
+  <div class="functies-card mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
@@ -67,7 +67,7 @@ export default {
   methods: {
     groepsNaam(groepsnummer) {
       const groep = this.$store.getters.groepByNummer(groepsnummer);
-      return groepsnummer + " - " + groep.naam;
+      return groep.naam + " - " + groepsnummer;
     },
     getFunctie(functieId) {
       return this.$store.getters.functieById(functieId);

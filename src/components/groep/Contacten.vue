@@ -1,9 +1,9 @@
 <template>
-  <div class="contacten-card ml-4 mb-4">
+  <div class="contacten-card lg:ml-4 mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> {{ title }}</span
+          <span>Contact</span
           ><span class="small mt-1" v-if="contactenImporteren"
             >Contacten laden &nbsp;<i class="fas fa-spinner fa-spin"></i
           ></span>
@@ -18,18 +18,13 @@
             Verantwoordelijke Groepsadministratie</label
           >
           <div>
-            <i class="fas fa-user"></i
-            ><span class="ml-3"
-              >{{ groep.vga.vgagegevens.voornaam }}
-              {{ groep.vga.vgagegevens.achternaam }}</span
-            >
+            <i class="fas fa-user"></i><span class="ml-3">{{ groep.vga.naam }}</span>
             <br />
             <i class="fas fa-envelope"></i
             ><span class="ml-3"
               ><a class="mail-link" href="mailto:{{ groep.vga.email }}">{{
                 groep.vga.email
-              }}</a></span
-            >
+              }}</a></span>
           </div>
         </div>
         <br />
@@ -38,9 +33,7 @@
           <div>
             <i class="fas fa-user"></i
             ><span class="ml-3"
-              >{{ groep.fv.vgagegevens.voornaam }}
-              {{ groep.fv.vgagegevens.achternaam }}</span
-            >
+              >{{ groep.fv.naam }}</span>
             <br />
             <i class="fas fa-envelope"></i
             ><span class="ml-3"
@@ -64,9 +57,6 @@ export default {
     },
     contactenLaden: {
       type: Boolean,
-    },
-    title: {
-      type: String,
     },
   },
   computed: {
