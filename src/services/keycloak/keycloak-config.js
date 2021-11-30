@@ -24,7 +24,7 @@ export default function getClient() {
       returnClient.clientId = "groepsadmin-staging-client";
       break;
     case "https://ga-staging.scoutsengidsenvlaanderen.be":
-      returnClient.clientId = "ga-staging-client";
+      returnClient.clientId = "ga-staging-frontend";
       break;
     case "https://groepsadmin.scoutsengidsenvlaanderen.be":
       returnClient.url = "https://login.scoutsengidsenvlaanderen.be/auth";
