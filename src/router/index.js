@@ -13,7 +13,7 @@ import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
 
 const routes = [
   {
-    path: "/dashboard",
+    path: "/groepsadmin/frontend/dashboard",
     name: "Dashboard",
     component: Dashboard,
     meta: { isAuthorized: true }
@@ -66,7 +66,7 @@ const routes = [
     component: Lid,
   },
   {
-    path: "/",
+    path: "/groepsadmin/frontend/",
     redirect: {
       name: "Dashboard",
     },
@@ -86,7 +86,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory("/groepsadmin/frontend"),
+  history: createWebHistory("/"),
   routes,
 });
 
