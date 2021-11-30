@@ -10,10 +10,11 @@ import Etiketten from "@/views/Etiketten";
 import Aanvragen from "@/views/Aanvragen";
 import LidToevoegen from "@/views/LidToevoegen";
 import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
+import NotFoundComponent from "@/views/NotFoundComponent";
 
 const routes = [
   {
-    path: "/groepsadmin/frontend/dashboard",
+    path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
     meta: { isAuthorized: true }
@@ -66,7 +67,7 @@ const routes = [
     component: Lid,
   },
   {
-    path: "/groepsadmin/frontend/",
+    path: "/",
     redirect: {
       name: "Dashboard",
     },
@@ -83,10 +84,15 @@ const routes = [
     component: Communicatievoorkeuren,
     meta: { isAuthorized: true }
   },
+  {
+    path: '/:catchAll(.*)',
+    component: NotFoundComponent,
+    name: 'NotFound'
+  }
 ];
 
 const router = createRouter({
-  history: createWebHistory("/"),
+  history: createWebHistory("/groepsadmin/frontend/"),
   routes,
 });
 
