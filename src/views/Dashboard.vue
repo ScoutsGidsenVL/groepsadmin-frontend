@@ -59,7 +59,7 @@ export default {
           label: "Communicatievoorkeuren",
           condition: true,
           icon: "far fa-satellite-dish",
-          link: "IndividueleSteekkaart",
+          link: "Communicatievoorkeuren",
           internal: true,
         },
         {

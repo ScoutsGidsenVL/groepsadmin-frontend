@@ -86,7 +86,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory("/groepsadmin/frontend/"),
+  history: createWebHistory("/groepsadmin/frontend"),
   routes,
 });
 
