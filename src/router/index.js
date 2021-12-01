@@ -92,8 +92,9 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory("/groepsadmin/frontend/"),
+  history: createWebHistory("/"),
   routes,
+
 });
 
 router.beforeEach((to, from, next) => {
