@@ -20,19 +20,12 @@ export default function getClient() {
     case "https://ga-dev-tvl.scoutsengidsenvlaanderen.be":
       returnClient.clientId = "ga-dev-tvl-client";
       break;
-    case "https://groepsadmin-develop.scoutsengidsenvlaanderen.net":
-      returnClient.clientId = "groepsadmin-staging-client";
-      break;
     case "https://ga-staging.scoutsengidsenvlaanderen.be":
       returnClient.clientId = "ga-staging-frontend";
       break;
     case "https://groepsadmin.scoutsengidsenvlaanderen.be":
       returnClient.url = "https://login.scoutsengidsenvlaanderen.be/auth";
       returnClient.clientId = "groepsadmin-production-client";
-      break;
-    case "https://ga-production.scoutsengidsenvlaanderen.be":
-      returnClient.url = "https://login.scoutsengidsenvlaanderen.be/auth";
-      returnClient.clientId = "ga-production-client";
       break;
   }
   return returnClient;
