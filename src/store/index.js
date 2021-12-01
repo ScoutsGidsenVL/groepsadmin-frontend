@@ -22,6 +22,7 @@ export default createStore({
     goedTeKeurenLid: null,
     geselecteerdeLeden: [],
     lidIds: [],
+    links: [],
   },
   mutations: {
     setNaam(state, naam) {
@@ -90,6 +91,9 @@ export default createStore({
     setGeselecteerdeLeden(state, geselecteerdeLeden) {
       state.geselecteerdeLeden = geselecteerdeLeden;
     },
+    setLinks(state, links) {
+      state.links = links;
+    }
   },
   getters: {
     naam(state) {
@@ -142,6 +146,9 @@ export default createStore({
     },
     goedTeKeurenLid(state) {
       return state.goedTeKeurenLid;
+    },
+    links(state) {
+      return state.links;
     }
   },
   actions: {
@@ -169,6 +176,11 @@ export default createStore({
         commit("setKolommen", response.data.kolommen);
       });
     },
+    getLinks({ commit }) {
+      return RestService.root().then((response) => {
+        commit("setLinks", response.data.links);
+      })
+    }
   },
   modules: {},
 });

@@ -161,6 +161,7 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
     store.dispatch("getGroepen");
     store.dispatch("getFuncties");
     store.dispatch("getKolommen");
+    store.dispatch("getLinks");
     app.mount("#app");
   }
 

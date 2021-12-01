@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory,} from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import Ledenlijst from "@/views/Ledenlijst";
 import Ledenaantallen from "@/views/Ledenaantallen";
@@ -10,117 +10,112 @@ import Etiketten from "@/views/Etiketten";
 import Aanvragen from "@/views/Aanvragen";
 import LidToevoegen from "@/views/LidToevoegen";
 import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
-import NotFoundComponent from "@/views/NotFoundComponent";
+import rechtenService from "@/services/rechten/rechtenService";
 
 const routes = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: Dashboard,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/ledenlijst/mail",
-    name: "Mail",
-    component: Mail,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/ledenlijst/etiket",
-    name: "Etiket",
-    component: Etiketten,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/ledenlijst",
-    name: "Ledenlijst",
-    component: Ledenlijst,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/ledenaantallen",
-    name: "Ledenaantallen",
-    component: Ledenaantallen,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/groepsinstellingen",
-    name: "Groepsinstellingen",
-    component: Groep,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/aanvragen",
-    name: "Aanvragen",
-    component: Aanvragen,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/lid/toevoegen",
-    name: "lidToevoegen",
-    component: LidToevoegen,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/lid/:id",
-    name: "Lid",
-    component: Lid,
-  },
-  {
-    path: "/",
-    redirect: {
-      name: "Dashboard",
+    {
+        path: "/dashboard",
+        name: "Dashboard",
+        component: Dashboard,
+        meta: {isAuthorized: true}
     },
-  },
-  {
-    path: "/lid/individuelesteekkaart/:id",
-    name: "IndividueleSteekkaart",
-    component: IndividueleSteekkaart,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: "/lid/communicatievoorkeuren",
-    name: "Communicatievoorkeuren",
-    component: Communicatievoorkeuren,
-    meta: { isAuthorized: true }
-  },
-  {
-    path: '/:catchAll(.*)',
-    component: NotFoundComponent,
-    name: 'NotFound'
-  }
+    {
+        path: "/ledenlijst/mail",
+        name: "Mail",
+        component: Mail,
+        meta: {
+            isAuthorized: rechtenService.hasAccess("ledenlijst")
+        }
+    },
+    {
+        path: "/ledenlijst/etiket",
+        name: "Etiket",
+        component: Etiketten,
+        meta: {
+            isAuthorized: rechtenService.hasAccess("ledenlijst")
+        }
+    },
+    {
+        path: "/ledenlijst",
+        name: "Ledenlijst",
+        component: Ledenlijst,
+        meta: {
+            isAuthorized: rechtenService.hasAccess("ledenlijst")
+        }
+    },
+    {
+        path: "/ledenaantallen",
+        name: "Ledenaantallen",
+        component: Ledenaantallen,
+        meta: {isAuthorized: true}
+    },
+    {
+        path: "/groepsinstellingen",
+        name: "Groepsinstellingen",
+        component: Groep,
+        meta: {
+            isAuthorized: rechtenService.hasAccess("groepen")
+
+        }
+    },
+    {
+        path: "/aanvragen",
+        name: "Aanvragen",
+        component: Aanvragen,
+        meta: {
+            isAuthorized: rechtenService.hasAccess("aanvragen")
+        }
+
+},
+    {
+        path: "/lid/toevoegen",
+        name: "lidToevoegen",
+        component: LidToevoegen,
+        meta: {isAuthorized: true}
+    },
+    {
+        path: "/lid/:id",
+        name: "Lid",
+        component: Lid,
+        meta: {
+            isAuthorized: true
+        }
+    },
+    {
+        path: "/",
+        redirect: {
+            name: "Dashboard",
+        },
+    },
+    {
+        path: "/lid/individuelesteekkaart/:id",
+        name: "IndividueleSteekkaart",
+        component: IndividueleSteekkaart,
+        meta: {isAuthorized: true}
+    },
+    {
+        path: "/lid/communicatievoorkeuren",
+        name: "Communicatievoorkeuren",
+        component: Communicatievoorkeuren,
+        meta: {isAuthorized: true}
+    },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory("/"),
-  routes,
+    history: createWebHistory("/"),
+    routes,
 
 });
 
 router.beforeEach((to, from, next) => {
-  // if (to.matched.some(record => record.meta.isAuthorized)){
-  //   // check if lid has access
-  //   next({
-  //     path: '/lid/profiel',
-  //   })
-  // }
-  // console.log(from);
-  // console.log(next);
-  // if (to.matched.some(record => record.meta.isAuthorized)) {
-  //   // this route requires auth, check if logged in
-  //   // if not, redirect to login page.
-  //   if (!auth.loggedIn()) {
-  //     next({
-  //       path: '/login',
-  //       query: { redirect: to.fullPath }
-  //     })
-  //   } else {
-  //     next()
-  //   }
-  // } else {
-  //   next() // make sure to always call next()!
-  // }
-  next();
+    // Als gebruiker geen toegang heeft dan redirecten naar dashboard
+    if (!to.meta.isAuthorized) {
+        next({
+            name: "Dashboard",
+        })
+    } else {
+        next()
+    }
 })
 
 export default router;

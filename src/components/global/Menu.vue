@@ -6,7 +6,7 @@
       </div>
       <div class="menu">
         <ul>
-          <li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item clickable">
+          <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item clickable">
             <div @click="goto(menuItem)">
               <div class="menu-icon">
                 <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
@@ -47,6 +47,7 @@
 <script>
 import WikiService from "@/services/wiki/WikiService";
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "SideMenu",
@@ -58,7 +59,7 @@ export default {
       menuItems: [
         {
           label: "Ledenlijst",
-          condition: true,
+          condition: "ledenlijst",
           icon: "far fa-users",
           link: "Ledenlijst",
           command: () => {
@@ -67,7 +68,7 @@ export default {
         },
         {
           label: "Ledenaantallen",
-          condition: true,
+          condition: "groepen",
           icon: "far fa-chart-area",
           link: "Ledenaantallen",
           command: () => {
@@ -76,7 +77,7 @@ export default {
         },
         {
           label: "Groep",
-          condition: true,
+          condition: "groepen",
           icon: "far fa-cogs",
           link: "Groepsinstellingen",
           command: () => {
@@ -89,12 +90,12 @@ export default {
           icon: "far fa-user",
           link: "Profiel",
           command: () => {
-            this.$router.push({name: 'Lid', params: {id: "profiel"}})
+            this.$router.push({name: 'Profiel', params: {id: "profiel"}})
           }
         },
         {
           label: "Lidaanvragen",
-          condition: true,
+          condition: "aanvragen",
           icon: "far fa-address-book",
           link: "Aanvragen",
           command: () => {
@@ -143,13 +144,16 @@ export default {
   },
   computed: {
     desktopMenuItems: function () {
-      return this.menuItems;
+      return this.menuItems.filter(obj => {
+        console.log(obj)
+        return obj.condition === true || rechtenService.hasAccess(obj.condition);
+      });
     },
     mobileMenuItems: function () {
       return this.menuItems.filter(obj => {
-        return obj.label !== 'Zoeken'
+        return obj.label !== 'Zoeken' || rechtenService.hasAccess(obj.condition);
       })
-    }
+    },
   }
 }
 </script>
