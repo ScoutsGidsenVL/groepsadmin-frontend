@@ -145,7 +145,6 @@ export default {
   computed: {
     desktopMenuItems: function () {
       return this.menuItems.filter(obj => {
-        console.log(obj)
         return obj.condition === true || rechtenService.hasAccess(obj.condition);
       });
     },

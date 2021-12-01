@@ -1,63 +1,68 @@
 <template>
   <div>
-    <indicator
-      :is-loading="indicator.isLoading"
-      :use-slot="indicator.useSlot"
-    ></indicator>
-    <div class="p-4">
-      <Button
-        icon="pi pi-save"
-        class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
-        v-show="changes"
-        @click="save"
-        :class="changes ? 'animate' : ''"
-        :disabled="erZijnErrors"
-      />
-      <div class="row">
-        <div
-          class="pull-left d-flex flex-column float-left text-align-left ml-3"
-        >
-          <h3 class="panel-title">Individuele steekkaart</h3>
-          <p class="panel-subtitle">
-            {{ teBekijkenLid.vgagegevens.voornaam }}
-            {{ teBekijkenLid.vgagegevens.achternaam }}
-          </p>
-          <p class="panel-subtitle">
-            Geboortedatum: {{ teBekijkenLid.vgagegevens.geboortedatum }}
-          </p>
-          <p class="panel-subtitle">
-            Laatste aanpassing:
-            {{ teBekijkenLid.vgagegevens.individueleSteekkaartdatumaangepast }}
-          </p>
+    <Loader
+      :showLoader="isLoadingGegevens"
+    ></Loader>
+    <div class="lg:ml-4">
+      <indicator
+        :is-loading="indicator.isLoading"
+        :use-slot="indicator.useSlot"
+      ></indicator>
+      <div class="p-4 lg:ml-8">
+        <Button
+          icon="pi pi-save"
+          class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
+          v-show="changes"
+          @click="save"
+          :class="changes ? 'animate' : ''"
+          :disabled="erZijnErrors"
+        />
+        <div class="row">
+          <div
+            class="pull-left d-flex flex-column float-left text-align-left ml-3"
+          >
+            <h3 class="panel-title">Individuele steekkaart</h3>
+            <p class="panel-subtitle">
+              {{ teBekijkenLid.vgagegevens.voornaam }}
+              {{ teBekijkenLid.vgagegevens.achternaam }}
+            </p>
+            <p class="panel-subtitle">
+              Geboortedatum: {{ teBekijkenLid.vgagegevens.geboortedatum }}
+            </p>
+            <p class="panel-subtitle">
+              Laatste aanpassing:
+              {{ teBekijkenLid.vgagegevens.individueleSteekkaartdatumaangepast }}
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col-12">
-          <form>
-            <accordion :multiple="true" v-model:activeIndex="activeIndex">
-              <accordionTab
-                v-for="(groep, index) in layoutGroepen"
-                :key="index"
-              >
-                <template #header>
-                  <div class="d-flex col-12 justify-content-between">
-                    <span class="text-align-left">{{ groep[0].label }}</span>
-                  </div>
-                </template>
-                <p
-                  v-html="groep[0].beschrijving"
-                  class="text-align-left beschrijving"
-                ></p>
-                <DynamischVeld
-                  :model-value="steekkaartWaarden"
-                  :veld="groep"
-                  :errors="errors"
-                  @changeValue="changeValue"
-                  class="text-align-left"
-                ></DynamischVeld>
-              </accordionTab>
-            </accordion>
-          </form>
+        <div class="row mt-5">
+          <div class="col-12">
+            <form>
+              <accordion :multiple="true" v-model:activeIndex="activeIndex">
+                <accordionTab
+                  v-for="(groep, index) in layoutGroepen"
+                  :key="index"
+                >
+                  <template #header>
+                    <div class="d-flex col-12 justify-content-between">
+                      <span class="text-align-left">{{ groep[0].label }}</span>
+                    </div>
+                  </template>
+                  <p
+                    v-html="groep[0].beschrijving"
+                    class="text-align-left beschrijving"
+                  ></p>
+                  <DynamischVeld
+                    :model-value="steekkaartWaarden"
+                    :veld="groep"
+                    :errors="errors"
+                    @changeValue="changeValue"
+                    class="text-align-left"
+                  ></DynamischVeld>
+                </accordionTab>
+              </accordion>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -68,14 +73,16 @@
 import RestService from "@/services/api/RestService";
 import DynamischVeld from "@/components/input/DynamischVeld";
 import Indicator from "@/components/global/Indicator";
+import Loader from "@/components/global/Loader";
 
 export default {
   name: "IndividueleSteekkaart",
-  components: { Indicator, DynamischVeld },
+  components: {Indicator, DynamischVeld, Loader},
   data() {
     return {
       id: "",
       eigenProfiel: false,
+      isLoadingGegevens: false,
       error: false,
       steekkaart: null,
       activeIndex: [0],
@@ -104,30 +111,32 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id;
+    this.isLoadingGegevens = true;
     RestService.getIndividueleSteekkaart(this.id)
       .then((response) => {
-      this.steekkaartWaarden = response.data.gegevens.waarden;
-      this.layout = response.data.gegevens.schema;
-      if (this.id === this.$store.getters.profiel.id) {
-        this.eigenProfiel = true;
-      }
-      this.sorteer();
-      this.groepeer();
-      this.setActiveIndexen();
-      this.changes = false;
-      this.checkForm();
-    })
-    .catch(error => {
-      if (error.response.status === 403) {
-        this.$toast.add({
-          severity: "error",
-          summary: error.response.data.titel,
-          detail: error.response.data.beschrijving,
-          life: 8000,
-        });
-        this.$router.push({name: "Dashboard"});
-      }
-    });
+        this.steekkaartWaarden = response.data.gegevens.waarden;
+        this.layout = response.data.gegevens.schema;
+        if (this.id === this.$store.getters.profiel.id) {
+          this.eigenProfiel = true;
+        }
+        this.sorteer();
+        this.groepeer();
+        this.setActiveIndexen();
+        this.changes = false;
+        this.checkForm();
+        this.isLoadingGegevens = false;
+      })
+      .catch(error => {
+        if (error.response.status === 403) {
+          this.$toast.add({
+            severity: "error",
+            summary: error.response.data.titel,
+            detail: error.response.data.beschrijving,
+            life: 8000,
+          });
+          this.$router.push({name: "Dashboard"});
+        }
+      });
 
     RestService.getLid(this.id).then((response) => {
       this.lid = response.data;

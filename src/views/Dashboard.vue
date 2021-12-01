@@ -9,7 +9,7 @@
       <div class="row container-block sm:mt-5">
         <div class="col-10">
           <div class="row">
-            <div v-for="menuItem in menuItems" :key="menuItem.label" class="col-lg-5 mb-4 dashboard-block">
+            <div v-for="menuItem in dashboardItems" :key="menuItem.label" class="col-lg-5 mb-4 dashboard-block">
               <dashboard-block :link="menuItem.link" :title="menuItem.label" :icoon="menuItem.icon"
                                :visible="menuItem.condition" :internal="menuItem.internal">
               </dashboard-block>
@@ -32,6 +32,7 @@
 import Loader from "@/components/global/Loader";
 import DashboardBlock from "@/components/global/DashboardBlock";
 import Footer from "@/components/global/Footer";
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "Dashboard",
@@ -64,28 +65,28 @@ export default {
         },
         {
           label: "Leden",
-          condition: true,
+          condition: "ledenlijst",
           icon: "far fa-users",
           link: "Ledenlijst",
           internal: true,
         },
         {
           label: "Ledenaantallen",
-          condition: true,
+          condition: "groepen",
           icon: "far fa-chart-area",
           link: "Ledenaantallen",
           internal: true,
         },
         {
           label: "Groep",
-          condition: true,
+          condition: "groepen",
           icon: "far fa-cogs",
           link: "Groepsinstellingen",
           internal: true,
         },
         {
           label: "Lidaanvragen",
-          condition: true,
+          condition: "aanvragen",
           icon: "far fa-address-book",
           link: "Aanvragen",
           internal: true,
@@ -103,6 +104,13 @@ export default {
   mounted() {
     this.gebruiker = localStorage.getItem("firstName");
   },
+  computed: {
+    dashboardItems: function () {
+      return this.menuItems.filter(obj => {
+        return obj.condition === true || rechtenService.hasAccess(obj.condition);
+      });
+    }
+  }
 };
 </script>
 
