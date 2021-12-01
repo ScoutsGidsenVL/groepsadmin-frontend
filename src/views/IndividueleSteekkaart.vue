@@ -104,7 +104,8 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id;
-    RestService.getIndividueleSteekkaart(this.id).then((response) => {
+    RestService.getIndividueleSteekkaart(this.id)
+      .then((response) => {
       this.steekkaartWaarden = response.data.gegevens.waarden;
       this.layout = response.data.gegevens.schema;
       if (this.id === this.$store.getters.profiel.id) {
@@ -115,6 +116,17 @@ export default {
       this.setActiveIndexen();
       this.changes = false;
       this.checkForm();
+    })
+    .catch(error => {
+      if (error.response.status === 403) {
+        this.$toast.add({
+          severity: "error",
+          summary: error.response.data.titel,
+          detail: error.response.data.beschrijving,
+          life: 8000,
+        });
+        this.$router.push({name: "Dashboard"});
+      }
     });
 
     RestService.getLid(this.id).then((response) => {
