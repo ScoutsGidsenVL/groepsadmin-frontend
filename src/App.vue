@@ -2,9 +2,7 @@
   <SideMenu />
   <confirmDialog />
   <toast position="bottom-right" />
-  <transition>
-    <router-view class="app-content"/>
-  </transition>
+  <router-view class="app-content"/>
 </template>
 
 <style>
