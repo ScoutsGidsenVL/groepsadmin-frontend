@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="lg:ml-8">
+    <Loader :show-loader="laden"></Loader>
     <div>
       <indicator
         :is-loading="indicator.isLoading"
@@ -7,7 +8,7 @@
       >
       </indicator>
     </div>
-    <div class="overflow-hidden">
+    <div class="overflow-hidden lg:ml-6">
       <div>
         <save-template-dialog
           :open="openModal"
@@ -66,7 +67,7 @@
         <div class="row">
           <div class="col-sm-2 text-align-left">
             <label
-              >Ontvangers:
+            >Ontvangers:
               <span v-if="leden.length > 0">
                 {{
                   leden.length === 1 ? "1 lid" : leden.length + " leden"
@@ -79,10 +80,12 @@
                 (details)</span
               >
               <span v-if="isLoadingLeden" class="mt-1"
-                >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
+              >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
               ></span>
             </label>
           </div>
+        </div>
+        <div class="row">
           <div class="col-lg-8 text-align-left">
             <BaseCheckboxLeft
               label="Stuur naar leden"
@@ -117,7 +120,7 @@
       </div>
       <div class="row ml-5 mb-3">
         <label class="col-lg-2 text-align-left mt-1"
-          >Bijlage (max. 5MB)
+        >Bijlage (max. 5MB)
           <a
             href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
             target="_blank"
@@ -181,7 +184,7 @@
               <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
               <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
               <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
-                >&nbsp;{{ lid.volledigenaam }}
+              >&nbsp;{{ lid.volledigenaam }}
               </span>
               <span
                 v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
@@ -218,6 +221,7 @@ import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
 import Indicator from "@/components/global/Indicator";
 import Dialog from "primevue/dialog";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import Loader from "@/components/global/Loader";
 
 export default {
   name: "Mail",
@@ -231,6 +235,7 @@ export default {
     Indicator,
     Dialog,
     ConfirmDialog,
+    Loader
   },
   data() {
     return {
@@ -333,7 +338,7 @@ export default {
           volledigenaam:
             lid.waarden[
               "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-            ],
+              ],
         });
       });
       this.filterLeden();
@@ -411,7 +416,7 @@ export default {
         .then((res) => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
-            this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
+            this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
             if (
               sjabloon.naam.indexOf("blanco") > -1 &&
               lifecycle === "creating"
@@ -527,11 +532,11 @@ export default {
               achternaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.AchternaamColumn"
-                ],
+                  ],
               volledigenaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-                ],
+                  ],
             });
           });
           this.offset = this.leden.length;
@@ -696,7 +701,7 @@ export default {
     getOpgeslagenMailSjabloon() {
       let sjabloon = this.$store.getters.mailSjabloon;
       if (sjabloon) {
-        this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
+        this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
       }
     },
 

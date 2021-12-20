@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <indicator
-      :action-text="indicator.actionText"
-      :is-loading="indicator.isLoading"
-      :use-slot="indicator.useSlot"
-    ></indicator>
-    <div class="overflow-hidden">
+  <div class="lg:ml-8">
+    <Loader :show-loader="laden"></Loader>
+    <div class="overflow-hidden  lg:ml-6">
       <div>
         <save-template-dialog
           :open="openModal"
@@ -213,10 +209,10 @@ import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import Editor from "@tinymce/tinymce-vue";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
-import Indicator from "@/components/global/Indicator";
 import RestService from "@/services/api/RestService";
 import store from "@/store";
 import Dialog from "primevue/dialog";
+import Loader from "@/components/global/Loader";
 
 export default {
   name: "Etiketten",
@@ -226,7 +222,7 @@ export default {
     BaseDropdown,
     Editor,
     SaveTemplateDialog,
-    Indicator,
+    Loader,
     Dialog,
   },
   data() {
@@ -236,6 +232,7 @@ export default {
       errors: [],
       geselecteerdeLeden: [],
       isLoadingLeden: false,
+      laden: false,
       kolommen: [],
       kolommenLaden: false,
       leden: [],
@@ -293,13 +290,6 @@ export default {
       },
       sjablonen: [],
       menuItems: [],
-      indicator: {
-        isLoading: false,
-        canCancel: false,
-        fullPage: true,
-        useSlot: false,
-        actionText: "",
-      },
     };
   },
   created() {
@@ -449,7 +439,7 @@ export default {
     },
     opslaan(naam, value) {
       this.sjabloonIsValid();
-      this.indicator.isLoading = true;
+      this.laden = true;
       if (!this.error) {
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
@@ -477,7 +467,7 @@ export default {
             })
             .finally(() => {
               this.changes = false;
-              this.indicator.isLoading = false;
+              this.laden = false;
               this.$store.commit("setEtiketSjabloon", null);
             });
         } else {
@@ -505,7 +495,7 @@ export default {
             })
             .finally(() => {
               this.changes = false;
-              this.indicator.isLoading = false;
+              this.laden = false;
               this.$store.commit("setEtiketSjabloon", null);
             });
         }
@@ -590,7 +580,7 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          this.indicator.isLoading = false;
+          this.laden = false;
         });
     },
 
