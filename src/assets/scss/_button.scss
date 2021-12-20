@@ -109,6 +109,9 @@
   &:active {
     border: 1px solid $sgv-donkergroen !important;
   }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+  }
 }
 
 .approve-button {
@@ -122,7 +125,11 @@
   &:active {
     border: 1px solid $sgv-donkergroen !important;
   }
+  &:focus {
+    box-shadow: 0 0 0 0.2rem $sgv-lichtgroen !important;
+  }
 }
+
 
 .reject-button {
   background-color: $sgv-rood !important;
@@ -135,9 +142,13 @@
   &:active {
     border: 1px solid $sgv-rood !important;
   }
+  &:focus {
+    box-shadow: 0 0 0 0.2rem $sgv-lichtrood !important;
+  }
 }
 
 .remove-button {
+  font-size: 2em;
   &:hover {
     border: 1px solid darkred !important;
     box-shadow: 0 0 0 0.5px darkred !important;

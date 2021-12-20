@@ -10,6 +10,8 @@
 @import "./menu";
 @import "./loader";
 @import "./dashboard";
+@import "./functie";
+@import "./dialog";
 
 .content {
   min-height: 60vh;
@@ -319,3 +321,23 @@ a.clean-link:hover {
   padding: 0 !important;
   border: none !important;
 }
+
+.p-card .p-card-title {
+  margin-bottom: 0 !important;
+}
+
+.p-toast-message-success {
+  background: $sgv-donkergroen !important;
+  border: solid $sgv-lichtgroen !important;
+  border-width: 0 0 0 6px !important;
+  color: white !important;
+  .p-toast-message-content {
+    .p-toast-message-icon {
+      color: white !important;
+    }
+    .p-toast-icon-close {
+      color: white !important;
+    }
+  }
+}
+

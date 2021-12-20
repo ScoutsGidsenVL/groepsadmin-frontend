@@ -6,3 +6,19 @@
 .kolom-select {
   height: 55px;
 }
+
+.custom-checkbox {
+  margin-top: 10px !important;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: $sgv-donkergroen !important;
+}
+
+.p-inputswitch.p-focus .p-inputswitch-slider {
+  box-shadow: 0 0 0.2em $sgv-donkergroen !important;
+}
+
+.groepseigengegevens label {
+  margin-top: 0 !important;
+}

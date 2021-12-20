@@ -2,19 +2,44 @@
   top: 0;
   z-index: 999;
   display: flex;
-  width: 130px;
+  width: 135px;
   justify-content: center;
-  clip-path: polygon(33% 17%, 85% 16%, 100% 0%, 0% 0%, 0% 19%, 0% 45%, 0% 100%, 54% 100.00%, 54% 18%);
-  background-color: #000000;
+  clip-path: polygon(0 0,100% 0,88% 90%,0 100%);
+  background-color: $sgv-donkergroen;
   position: fixed;
-  height: 100%;
+  height: 180px;
+}
 
+.desktop-menu {
   &:hover {
-    clip-path: none;
-    transition: width .4s ease-in-out;
-    width: 320px;
+    .header_logo_inner {
+      clip-path: none;
+      transition: width .4s ease-in-out;
+      width: 320px;
+      background-color: white;
+      border-right: solid 1px #7b8f1c;
+    }
 
+    .ga-logo {
+      filter: grayscale(1) invert(1);
+      left: -17em !important;
+      img {
+        left: -9em !important
+      }
+    }
+    .menu-wrapper {
+      filter: none;
+      border-right: solid 1px $sgv-donkergroen;
+    }
     .menu {
+      background-color: white;
+      border-right: solid 1px #7b8f1c;
+      height: 100vh;
+      transition: width .42s ease-out;
+      width: 333px;
+      top: 10.9em;
+      padding-top: 3em;
+      clip-path: none;
       ul {
         li {
           transition: border-bottom-width 1s;
@@ -23,10 +48,11 @@
 
         li:last-child {
           transition: width .3s linear;
-          width: 320px;
+          width: 333px;
+
           .lid-search {
-            transition: visibility .5s cubic-bezier(1,.01,.99,.62), opacity .5s cubic-bezier(1,.01,.99,.62);
-            width: 320px;
+            transition: visibility .5s cubic-bezier(1, .01, .99, .62), opacity .5s cubic-bezier(1, .01, .99, .62);
+            width: 333px;
             visibility: visible;
             opacity: 1;
           }
@@ -34,39 +60,46 @@
       }
     }
   }
+}
 
-  .menu {
-    position: absolute;
-    left: -0.8em;
-    top: 15em;
-    right: 0;
+.menu-wrapper {
+  position: fixed;
+  filter: drop-shadow(1px -11px 2px rgba(123, 143, 28, 0.3));
+  z-index: 99;
+}
 
-    ul {
-      list-style: none;
+.menu {
+  position: fixed;
+  background-color: white;
+  left: -0.8em;
+  right: 0;
+  top: 9.3em;
+  padding-top: 3em;
+  height: 100vh;
+  width: 80px;
+  clip-path: polygon(0px -12px, 100.00% 6px, 100% 100%, 0px 100%);
+  ul {
+    list-style: none;
 
-      li {
-        height: 65px;
-        display: flex;
-        align-items: center;
-        border-bottom-width: 0;
+    li {
+      height: 65px;
+      display: flex;
+      align-items: center;
+      border-bottom-width: 0;
+    }
+
+    li:last-child {
+      left: 0;
+      padding-left: 20px;
+      position: fixed;
+      width: 70px;
+      border-bottom: none !important;
+      .menu-icon {
+        top: 11px !important;
       }
-
-      li:last-child {
-        background-color: #f8f9fa;
-        color: black;
-        bottom: 0;
-        left: 0;
-        padding-left: 20px;
-        position: fixed;
-        width: 70px;
-        border-bottom: none !important;
-        .menu-icon {
-          top: 11px !important;
-        }
-        .lid-search {
-          visibility: hidden;
-          opacity: 0;
-        }
+      .lid-search {
+        visibility: hidden;
+        opacity: 0;
       }
     }
   }
@@ -74,12 +107,12 @@
 
 .ga-logo {
   img {
-    left: 5px;
+    left: 15px;
     width: 95px;
     height: 70px;
     object-fit: contain;
     position: absolute;
-    margin-top: 2em;
+    margin-top: 3em;
   }
 }
 
@@ -88,7 +121,7 @@
   height: 130px;
   width: 100%;
   clip-path: polygon(0 130px, 0% 0%, 150px 0%, 132px 80.00%);
-  background-color: black;
+  background-color: $sgv-donkergroen;
   img {
     left: 5px;
     width: 95px;
@@ -96,13 +129,13 @@
     object-fit: contain;
     position: absolute;
     margin-top: 1em;
-    background-color: black;
+    background-color: transparent;
   }
 }
 
 .menu-item {
-  color: white;
-  font-size: 1.2rem;
+  color: $sgv-donkergroen;
+  font-size: 1.2rem !important;
 
   &:hover {
     color: $sgv-lichtgroen;
@@ -187,4 +220,8 @@
   ul li .p-menuitem-link{
     font-size: 1.8em;
   }
+}
+
+.mobile-menu-button {
+  background-color: $sgv-donkergroen;
 }
