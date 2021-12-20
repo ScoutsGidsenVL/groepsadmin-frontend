@@ -23,7 +23,9 @@ export default {
   },
 
   async getLid(id) {
-    return apiClient().get(baseUrl + "lid/" + id);
+    if (id) {
+      return apiClient().get(baseUrl + "lid/" + id);
+    }
   },
 
   zoekGemeente(zoekTerm) {
@@ -44,6 +46,10 @@ export default {
 
   getGroepOpId(id) {
     return apiClient().get(baseUrl + "groep/" + id);
+  },
+
+  getGroepOpNummer(nummer) {
+    return apiClient().get(baseUrl + "groep/" + nummer);
   },
 
   getFuncties() {
@@ -151,6 +157,9 @@ export default {
 
   root() {
     return apiClient().get(baseUrl);
-  }
+  },
 
+  updateLid(id, lid) {
+    return apiClient().patch(baseUrl + "lid/" + id + "?bevestig=" + true, lid)
+  }
 };
