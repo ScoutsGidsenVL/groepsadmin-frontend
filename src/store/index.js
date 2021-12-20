@@ -12,6 +12,7 @@ export default createStore({
     profiel: null,
     indexedGroepen: {},
     groepen: {},
+    inactieveGroepen: {},
     groepenLaden: false,
     functiesLaden: false,
     functies: [],
@@ -126,6 +127,9 @@ export default createStore({
     groepByNummer: (state) => (index) => {
       return state.groepen.find((groep) => groep.id === index);
     },
+    inactieveGroepByNummer: (state) => (index) => {
+      return state.inactieveGroepen[index];
+    },
     kolommen(state) {
       return state.kolommen;
     },
@@ -149,6 +153,9 @@ export default createStore({
     },
     links(state) {
       return state.links;
+    },
+    inactieveGroepen(state) {
+      return state.inactieveGroepen;
     }
   },
   actions: {
@@ -180,6 +187,18 @@ export default createStore({
       return RestService.root().then((response) => {
         commit("setLinks", response.data.links);
       })
+    },
+    getProfiel({ commit }) {
+      return RestService.getLid("profiel").then((response) => {
+        commit("setProfiel", response.data);
+      })
+    },
+    addGroep({commit, getters}, nummer) {
+      RestService.getGroepOpNummer(nummer)
+          .then(res => {
+            getters.inactieveGroepen[nummer] = res.data;
+            commit("setGroepenLaden", false);
+          })
     }
   },
   modules: {},
