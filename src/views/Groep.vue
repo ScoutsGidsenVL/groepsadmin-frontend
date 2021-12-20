@@ -46,7 +46,7 @@
 <script>
 import Algemeen from "@/components/groep/Algemeen";
 import BaseDropdown from "@/components/input/BaseDropdown";
-import specialeFuncties from "@/services/functies/specialeFuncties";
+import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import Contacten from "@/components/groep/Contacten";
 import Lokalen from "@/components/groep/Lokalen";
 

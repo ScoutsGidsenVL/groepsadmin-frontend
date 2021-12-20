@@ -1,6 +1,8 @@
 <template>
-  <div class="content">
-    <h1>ledenaantallen</h1>
+  <div class="content lg:ml-8">
+    <div class="lg:ml-8">
+      <h1>ledenaantallen</h1>
+    </div>
   </div>
 </template>
 
