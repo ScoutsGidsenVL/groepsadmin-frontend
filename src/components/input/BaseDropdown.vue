@@ -2,7 +2,7 @@
   <div>
     <div class="p-grid row">
       <label
-        class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3"
+        class="col-12 col-sm-5 p-mb-2 p-mb-md-0 sm:mt-3"
         v-html="label"
         v-if="label"
       >

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="custom-checkbox">
     <div class="row">
       <div class="col-9 col-sm-5 p-mb-2 p-mb-md-0">
         <label> {{ label }} </label>

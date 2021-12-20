@@ -9,7 +9,6 @@
         :beschrijving="veld.beschrijving"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
-        :invalid="errors[veld.id] === 'required'"
         error-message="Gelieve dit veld in te vullen"
       >
       </BaseInput>
