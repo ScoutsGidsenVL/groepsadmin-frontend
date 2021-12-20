@@ -44,33 +44,18 @@ import ToastService from "primevue/toastservice";
 import GoogleMaps from "@/services/google/GoogleMaps";
 import DataTable from "primevue/datatable";
 import ProgressSpinner from "primevue/progressspinner";
-
+import InputSwitch from 'primevue/inputswitch';
 library.add(fas, faUser);
 
 // add primevue components
 const app = createApp(App);
-app.use(Dialog);
-app.use(InputText);
-app.use(Card);
-app.use(Button);
 app.use(VueRouter);
-app.use(Checkbox);
 app.use(fas);
 app.use(library);
-app.use(Toast);
 app.use(ToastService);
 app.use(store);
-app.use(Dropdown);
-app.use(ConfirmPopup);
-app.use(DataTable);
-app.use(ConfirmDialog);
 app.use(ConfirmationService);
-app.use(Column);
-app.use(ColumnGroup);
-app.use(ProgressSpinner);
 app.use(Loading);
-app.use(Accordion);
-app.use(AccordionTab);
 app.use(router);
 app.use(VueGoogleMaps, {
   load: {
@@ -141,6 +126,7 @@ app.component("Spinner", ProgressSpinner);
 app.component("Dialog", Dialog);
 app.component("Breadcrumb", Breadcrumb);
 app.component("Menu", Menu);
+app.component("InputSwitch", InputSwitch);
 
 const emitter = mitt();
 app.config.globalProperties.emitter = emitter;
@@ -158,6 +144,7 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
       "setGebruikersnaam",
       keycloak.idTokenParsed.preferred_username
     );
+    store.dispatch("getProfiel");
     store.dispatch("getGroepen");
     store.dispatch("getFuncties");
     store.dispatch("getKolommen");
