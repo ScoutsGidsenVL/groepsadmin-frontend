@@ -12,16 +12,17 @@
     <template #footer>
       <Button
         label="Nee"
-        icon="pi pi-check"
+        icon="pi pi-times"
         @click="annuleer"
-        class="p-button-text cancel-button"
-        autofocus
+        class="p-button-text reject-button"
+
       />
       <Button
         label="Ja"
-        icon="pi pi-times"
+        icon="pi pi-check"
         @click="bevestig"
-        class="p-button-text accept-button"
+        class="p-button-text approve-button"
+        autofocus
       />
     </template>
   </Dialog>
