@@ -1,29 +1,33 @@
 <template>
-  <div class="hidden lg:block">
+  <div class="hidden lg:block desktop-menu">
     <div class="header_logo_inner">
       <div class="ga-logo clickable" @click="goToDashBoard">
         <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo"/>
       </div>
+    </div>
+    <div class="menu-wrapper">
       <div class="menu">
-        <ul>
-          <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item clickable">
-            <div @click="goto(menuItem)">
-              <div class="menu-icon">
-                <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
-                   class="menu-icon"
-                   :title="menuItem.label.toLowerCase()"
-                />
+        <div>
+          <ul>
+            <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item clickable">
+              <div @click="goto(menuItem)">
+                <div class="menu-icon">
+                  <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
+                     class="menu-icon"
+                     :title="menuItem.label.toLowerCase()"
+                  />
+                </div>
+                <div
+                  v-if="menuItem.label !== 'Zoeken'"
+                  :class="[activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
+                  class="menu-item-text"
+                >{{ menuItem.label }}
+                </div>
+                <lid-zoek-auto-complete v-if="menuItem.label === 'Zoeken'"/>
               </div>
-              <div
-                v-if="menuItem.label !== 'Zoeken'"
-                :class="[activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
-                class="menu-item-text"
-              >{{ menuItem.label }}
-              </div>
-              <lid-zoek-auto-complete v-if="menuItem.label === 'Zoeken'"/>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +41,7 @@
       </div>
       <div class="right-0">
         <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
-                class="bg-black menu-button p-button-rounded"/>
+                class="mobile-menu-button menu-button p-button-rounded"/>
         <Menu id="overlay_menu" ref="menu" :model="mobileMenuItems" :popup="true" class="mobile-menu"/>
       </div>
     </div>
