@@ -58,26 +58,32 @@
               label="Postcode"
               v-model="adressen[index].postcode"
               type="text"
+              :invalid="isPostcodeIngevuld(index)"
+              error-message="Gelieve een postcode in te vullen"
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
               label="Gemeente"
               v-model="adressen[index].gemeente"
-              :disabled="!adressen[index].postcode"
               type="text"
+              :invalid="isGemeenteIngevuld(index)"
+              error-message="Gelieve een gemeente in te vullen"
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
               label="Straat"
               v-model="adressen[index].straat"
-              :disabled="!adressen[index].postcode"
               type="text"
+              :invalid="isStraatIngevuld(index)"
+              error-message="Gelieve een straat in te vullen"
             />
             <BaseInput
               label="Nummer"
               v-model="adressen[index].nummer"
               :disabled="!adressen[index].straat"
               type="text"
+              :invalid="isNummerIngevuld(index)"
+              error-message="Gelieve een nummer in te vullen"
             />
             <BaseInput
               label="Bus"
@@ -110,8 +116,8 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import { reactive, toRefs } from "@vue/reactivity";
-import { onUpdated } from "@vue/runtime-core";
+import {reactive, toRefs} from "@vue/reactivity";
+import {onUpdated} from "@vue/runtime-core";
 
 export default {
   name: "Adressen",
@@ -133,14 +139,15 @@ export default {
   },
   data() {
     return {
+      invalid: false,
       landen: [
-        { label: "België", value: "BE" },
-        { label: "Duitsland", value: "DE" },
-        { label: "Frankrijk", value: "FR" },
-        { label: "Groot-Brittannië", value: "GB" },
-        { label: "Luxemburg", value: "LU" },
-        { label: "Nederland", value: "NL" },
-        { label: "Canada", value: "CA" },
+        {label: "België", value: "BE"},
+        {label: "Duitsland", value: "DE"},
+        {label: "Frankrijk", value: "FR"},
+        {label: "Groot-Brittannië", value: "GB"},
+        {label: "Luxemburg", value: "LU"},
+        {label: "Nederland", value: "NL"},
+        {label: "Canada", value: "CA"},
       ],
     };
   },
@@ -157,6 +164,29 @@ export default {
           this.$confirm.close();
         },
       });
+    },
+
+    isStraatIngevuld(index) {
+      if (!this.adressen[index].straat){
+        this.invalid = true;
+        return !this.adressen[index].straat;
+      } else {
+        this.invalid = false;
+        return true;
+      }
+    },
+
+    isNummerIngevuld(index) {
+      return !this.adressen[index].nummer;
+    },
+
+    isGemeenteIngevuld(index) {
+      this.invalid = true;
+      return !this.adressen[index].gemeente;
+    },
+
+    isPostcodeIngevuld(index) {
+      return !this.adressen[index].postcode;
     },
 
     zetPostadres(index) {
@@ -178,6 +208,7 @@ export default {
         : "Nieuw adres";
     },
     voegAdresToe() {
+
       let nieuwAdres = {
         land: "BE",
         postadres: false,
@@ -188,18 +219,29 @@ export default {
         postcode: "",
       };
 
-      let bestaandPostadres = false;
-      for (const adres of this.adressen) {
-        if (adres.postadres) {
-          bestaandPostadres = true;
+      if (this.adressen) {
+        let bestaandPostadres = false;
+        for (const adres of this.adressen) {
+          if (adres.postadres) {
+            bestaandPostadres = true;
+          }
         }
-      }
 
-      if (!bestaandPostadres) {
+        if (!bestaandPostadres) {
+          nieuwAdres.postadres = true;
+        }
+      } else {
         nieuwAdres.postadres = true;
+        this.adressen = [];
       }
       this.adressen.push(nieuwAdres);
     },
+  },
+  mounted() {
+    // Bij een nieuw lid gaan we onmiddellijk een adres toevoegen
+    if (!this.adressen) {
+      this.voegAdresToe();
+    }
   },
   setup(props) {
     const state = reactive({
@@ -209,8 +251,7 @@ export default {
     onUpdated(() => {
       state.adressen = props.modelValue.adressen;
     });
-
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 };
 </script>
