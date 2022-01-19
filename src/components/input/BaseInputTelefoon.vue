@@ -47,7 +47,6 @@
 import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
-  name: "BaseInput",
   props: {
     label: {
       type: String,
@@ -86,7 +85,7 @@ export default {
   methods: {
     changeValue($event) {
       this.$emit("update:modelValue", $event.target.value);
-      this.$emit("changeValue");
+      this.$emit("changeValue", $event.target.value);
     },
   },
   setup(props, { emit }) {
