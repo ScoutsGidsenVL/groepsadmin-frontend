@@ -53,7 +53,7 @@ export default {
           link: "Groepsinstellingen",
         },
         {
-          label: "Profiel",
+          label: "Mijn gegevens",
           condition: true,
           icon: "fas fa-user",
           link: "Profiel",
