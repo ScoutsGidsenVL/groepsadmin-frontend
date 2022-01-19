@@ -89,7 +89,7 @@ export default {
           }
         },
         {
-          label: "Profiel",
+          label: "Mijn gegevens",
           condition: true,
           icon: "far fa-user",
           link: "Profiel",
