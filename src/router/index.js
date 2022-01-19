@@ -8,9 +8,9 @@ import Lid from "@/views/Lid";
 import Mail from "@/views/Mail";
 import Etiketten from "@/views/Etiketten";
 import Aanvragen from "@/views/Aanvragen";
-import LidToevoegen from "@/views/LidToevoegen";
 import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
 import rechtenService from "@/services/rechten/rechtenService";
+import LidToevoegen from "@/views/LidToevoegen";
 
 const routes = [
     {
