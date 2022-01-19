@@ -5,25 +5,29 @@
         <h4 class="mt-2 lg:ml-4">{{ volledigeNaam }}</h4>
       </div>
       <div class="justify-content-end">
-        <SplitButton
-          label="Individuele steekkaart"
-          @click="gaNaarIndividueleSteekkaart"
-          :model="items"
-          style="width: auto; min-width: 285px"
-        ></SplitButton>
+        <steekkaart @click="gaNaarIndividueleSteekkaart" v-if="eigenProfiel && !nieuwLid"></steekkaart>
+        <communicatie class="ml-2" v-if="eigenProfiel && !nieuwLid" @click="gaNaarCommunicatieVoorkeuren"></communicatie>
+        <nieuw-lid class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="nieuwLidToevoegen"/>
+        <broer-zus class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="broerZusToevoegen"/>
+        <email class="ml-2" v-if="!nieuwLid"/>
+        <opslaan class="ml-2" @click="opslaan"></opslaan>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SplitButton from "primevue/splitbutton";
+
+import Opslaan from "@/components/buttons/Opslaan";
+import Steekkaart from "@/components/buttons/Steekkaart";
+import NieuwLid from "@/components/buttons/NieuwLid";
+import Communicatie from "@/components/buttons/Communicatie";
+import BroerZus from "@/components/buttons/BroerZus";
+import Email from "@/components/buttons/Email";
+import rechtenService from '@/services/rechten/rechtenService';
 
 export default {
   name: "LidBovenBalk",
-  components: {
-    SplitButton
-  },
   props: {
     lid: {
       type: Object,
@@ -31,8 +35,22 @@ export default {
     id: {
       type: String,
     },
+    eigenProfiel: {
+      type: Boolean
+    },
+    nieuwLid: {
+      type: Boolean,
+      default: false
+    }
   },
-
+  components: {
+    BroerZus,
+    Opslaan,
+    Steekkaart,
+    NieuwLid,
+    Communicatie,
+    Email
+  },
   data() {
     return {
       items: [
@@ -70,6 +88,47 @@ export default {
         params: { id: this.lid.id },
       });
     },
+    gaNaarCommunicatieVoorkeuren() {
+      this.$router.push({
+        name: "Communicatievoorkeuren",
+        params: { id: this.lid.id },
+      });
+    },
+    opslaan() {
+      this.$emit('opslaan');
+    },
+    kanNieuwLidAanmaken() {
+      return rechtenService.hasAccess("nieuw lid");
+    },
+    nieuwLidToevoegen() {
+      this.$router.push({
+        name: "lidToevoegen",
+      });
+    },
+    broerZusToevoegen() {
+      let defaultLid = {
+        vgagegevens: {
+          achternaam: this.lid.vgagegevens.achternaam
+        },
+        persoonsgegevens: {
+          verminderdlidgeld: false,
+          beperking: false,
+          geslacht: 'vrouw',
+          gsm: this.lid.persoonsgegevens.gsm
+        },
+        verbondsgegevens: {
+          lidgeldbetaald:	false
+        },
+        email: this.lid.email,
+        adressen: this.lid.adressen,
+        contacten: this.lid.contacten,
+        functies: []
+      }
+      this.$store.commit('setBroerZusLid', defaultLid);
+      this.$router.push({
+        name: "lidToevoegen",
+      });
+    }
   },
   computed: {
     volledigeNaam() {

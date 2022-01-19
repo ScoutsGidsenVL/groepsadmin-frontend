@@ -6,7 +6,7 @@
     <div class="hidden lg:block lg:ml-8">
       <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
     </div>
-    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8"></lid-boven-balk>
+    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"></lid-boven-balk>
     <div class="lg:ml-2">
       <form @submit.prevent="opslaan" autocomplete="off">
         <div class="row lg:ml-8">
@@ -36,11 +36,6 @@
             ></functies-toevoegen>
           </div>
         </div>
-        <Button
-          icon="pi pi-save"
-          class="p-button-rounded add-adres-button"
-          type="submit"
-        />
       </form>
     </div>
   </div>
@@ -60,9 +55,11 @@ import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
 import rechtenService from "@/services/rechten/rechtenService";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
+import useVuelidate from '@vuelidate/core'
 
 export default {
   name: "Lid",
+  setup: () => ({ v$: useVuelidate() }),
   components: {
     Footer,
     Functies,
@@ -148,7 +145,7 @@ export default {
       (toParams) => {
         if (toParams.id === "profiel") {
           this.getProfiel();
-        } else {
+        } else if (toParams.id) {
           this.getLid(toParams.id);
         }
       }
@@ -158,17 +155,23 @@ export default {
   mounted() {
     this.id = this.$route.params.id ? this.$route.params.id : "profiel";
     if (this.id === "profiel" && this.$store.getters.profiel) {
+      this.eigenProfiel = true;
       this.getProfiel();
     }
 
-    if (!this.lid || this.id !== "profiel" || this.changed) {
+    if (this.id && (!this.lid || this.id !== "profiel" || this.changed)) {
       this.getLid(this.id);
     }
   },
 
   methods: {
     opslaan() {
-      console.log(this.lid);
+      this.v$.$touch();
+      console.log(this.v$)
+      if (this.v$.$invalid) {
+        console.log(this.v$)
+        return
+      }
     },
 
     updateFuncties({functie, groepsnummer}) {
