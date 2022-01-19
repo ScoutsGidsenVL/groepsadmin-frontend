@@ -12,6 +12,7 @@ export default createStore({
     profiel: null,
     indexedGroepen: {},
     groepen: {},
+    broerZusLid: {},
     inactieveGroepen: {},
     groepenLaden: false,
     functiesLaden: false,
@@ -49,6 +50,9 @@ export default createStore({
     },
     setFuncties(state, functies) {
       state.functies = functies;
+    },
+    setBroerZusLid(state, lid) {
+      state.broerZusLid = lid;
     },
     setFunctiesLaden(state, functiesLaden) {
       state.functiesLaden = functiesLaden;
@@ -144,6 +148,9 @@ export default createStore({
     },
     geselecteerdeLeden(state) {
       return state.geselecteerdeLeden;
+    },
+    broerZusLid(state) {
+      return state.broerZusLid;
     },
     lidIds(state) {
       return state.lidIds;
