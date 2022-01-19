@@ -1,28 +1,39 @@
 <template>
-  <div class="p-grid row">
-    <label class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3"> {{ label }} </label>
-    <div class="col-12 col-sm-7 p-md-8">
-      <AutoComplete
-        class="adres-autocomplete d-flex custom-input-styling"
-        v-model="zoekTerm"
-        :disabled="disabled"
-        field="straat"
-        forceSelection
-        minLength="2"
-        :suggestions="gefilterdeStraten"
-        @complete="zoekStraat"
-        @itemSelect="kiesStraat"
-        @clear="verwijderStraat"
-        placeholder="Straat..."
-        inputClass="adres-autocomplete-input"
-        panelClass="adres-autocomplete-panel"
+  <div>
+    <div class="p-grid row">
+      <label class="col-12 col-sm-5 p-mb-2 p-mb-md-0 mt-3"> {{ label }} </label>
+      <div class="col-12 col-sm-7 p-md-8">
+        <AutoComplete
+          class="adres-autocomplete d-flex custom-input-styling"
+          v-model="zoekTerm"
+          :disabled="disabled"
+          field="straat"
+          forceSelection
+          minLength=2
+          :suggestions="gefilterdeStraten"
+          @complete="zoekStraat"
+          @itemSelect="kiesStraat"
+          @clear="verwijderStraat"
+          placeholder="Straat..."
+          inputClass="adres-autocomplete-input"
+          panelClass="adres-autocomplete-panel"
+          :class="v$.adres.straat.$invalid ? 'p-invalid' : ''"
+        >
+          <template #item="slotProps">
+            <div class="ml-2">
+              {{ slotProps.item }}
+            </div>
+          </template>
+        </AutoComplete>
+      </div>
+    </div>
+    <div class="row">
+      <small
+        class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
+        v-if="v$.adres.straat.$invalid"
       >
-        <template #item="slotProps">
-          <div class="ml-2">
-            {{ slotProps.item }}
-          </div>
-        </template>
-      </AutoComplete>
+        {{ v$.adres.straat.required.$message }}
+      </small>
     </div>
   </div>
 </template>
@@ -30,6 +41,8 @@
 <script>
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
+import useVuelidate from "@vuelidate/core";
+import {helpers, required} from "@vuelidate/validators";
 
 export default {
   components: {
@@ -42,6 +55,16 @@ export default {
       zoekTerm: null,
     };
   },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      adres: {
+        straat : {
+          required: helpers.withMessage('Gelieve een straat in te vullen', required)
+        }
+      },
+    }
+  },
   props: {
     label: {
       type: String,
@@ -52,6 +75,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    invalid: {
+      type: Boolean,
+      default: false,
+    },
+    errorMessage: {
+      type: String,
     },
   },
   mounted() {
