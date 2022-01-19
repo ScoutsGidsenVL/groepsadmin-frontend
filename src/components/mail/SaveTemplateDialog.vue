@@ -10,7 +10,7 @@
       class="adres-autocomplete d-flex custom-input-styling"
       v-model="zoekTerm"
       field="label"
-      minLength="2"
+      minLength=2
       :suggestions="mailSjablonen"
       @complete="zoekBestaandSjabloon"
       @itemSelect="kiesSjabloon"
