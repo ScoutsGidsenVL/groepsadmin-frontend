@@ -78,12 +78,12 @@
 <script>
 import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
-import { onUpdated } from "@vue/runtime-core";
-import { reactive, toRefs } from "@vue/reactivity";
+import {onUpdated} from "@vue/runtime-core";
+import {reactive, toRefs} from "@vue/reactivity";
 
 export default {
   name: "Contacten",
-  components: { BaseInput, BaseDropdown },
+  components: {BaseInput, BaseDropdown},
   data() {
     return {
       rollen: [
@@ -134,15 +134,24 @@ export default {
     },
 
     voegContactToe() {
-      let nieuwContact = {
-        rol: "moeder",
-        voornaam: "",
-        achternaam: "",
-        adres: this.adressen[0].id,
-        id: "" + Date.now(),
-      };
-
-      this.contacten.push(nieuwContact);
+      // Wanneer er geen adressen bestaan mag er geen contact toegevoegd kunnen worden
+      if (this.adressen && this.adressen.length > 0) {
+        let nieuwContact = {
+          rol: "moeder",
+          voornaam: "",
+          achternaam: "",
+          adres: this.adressen[0].id,
+          id: "" + Date.now(),
+        };
+        this.contacten.push(nieuwContact);
+      } else {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Contacten toevoegen",
+          detail: "Nieuwe contacten kunnen pas worden toegevoegd wanneer alle andere formuliervelden correct werden ingevuld.",
+          life: 8000,
+        });
+      }
     },
   },
   setup(props) {
@@ -171,7 +180,7 @@ export default {
       });
     });
 
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 };
 </script>
