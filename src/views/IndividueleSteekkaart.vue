@@ -3,7 +3,7 @@
     <Loader
       :showLoader="isLoadingGegevens"
     ></Loader>
-    <div class="lg:ml-4">
+    <div class="lg:ml-6">
       <indicator
         :is-loading="indicator.isLoading"
         :use-slot="indicator.useSlot"
