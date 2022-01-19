@@ -7,7 +7,7 @@
       forceSelection
       :suggestions="gefilterdeLeden"
       @complete="zoekLid"
-      minLength="2"
+      minLength=2
       @itemSelect="gaNaarLid"
       placeholder="Zoek op naam, gsm of e-mail"
       inputClass="lid-autocomplete-input"
