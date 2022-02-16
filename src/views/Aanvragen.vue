@@ -33,7 +33,7 @@
         <column field="groepsnummer" header="Groep" sortable></column>
         <column field="geboortedatum" header="Geboortedatum" sortable>
           <template #body="slotProps">
-            {{ formatDate(formatGeboorteDatum(slotProps.data.geboortedatum)) }}
+            {{ formatDate(slotProps.data.geboortedatum) }}
           </template>
         </column>
         <column header="Naam" sortable>
