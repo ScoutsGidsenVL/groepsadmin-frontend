@@ -3,6 +3,9 @@ import store from "@/store";
 export default {
   hasAccess: function(type) {
     let result = false;
+    if (!store.getters.links) {
+      return result;
+    }
     store.getters.links.forEach(link => {
       if (link.rel === type) {
         result = true;
