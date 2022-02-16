@@ -2,6 +2,7 @@
   <SideMenu />
   <confirmDialog />
   <toast position="bottom-right" />
+  <ingelogd-lid></ingelogd-lid>
   <router-view class="app-content"/>
 </template>
 
@@ -20,8 +21,10 @@
 </style>
 <script>
 import SideMenu from "@/components/global/Menu";
+import IngelogdLid from "@/components/lid/IngelogdLid";
 export default {
   components: {
+    IngelogdLid,
     SideMenu
   },
 };
