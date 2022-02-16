@@ -9,8 +9,8 @@
         <communicatie class="ml-2" v-if="eigenProfiel && !nieuwLid" @click="gaNaarCommunicatieVoorkeuren"></communicatie>
         <nieuw-lid class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="nieuwLidToevoegen"/>
         <broer-zus class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="broerZusToevoegen"/>
-        <email class="ml-2" v-if="!nieuwLid"/>
-        <opslaan class="ml-2" @click="opslaan"></opslaan>
+        <email class="ml-2" v-if="!eigenProfiel || !nieuwLid"/>
+        <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
       </div>
     </div>
   </div>
@@ -36,6 +36,9 @@ export default {
       type: String,
     },
     eigenProfiel: {
+      type: Boolean
+    },
+    changes: {
       type: Boolean
     },
     nieuwLid: {
