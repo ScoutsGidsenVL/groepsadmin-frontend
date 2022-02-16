@@ -139,6 +139,10 @@ export default {
     return apiClient().delete(baseUrl + "functie/" + id);
   },
 
+  getLedenAantallen(groep) {
+    return apiClient().get(baseUrl + "groep/" + groep + "/ledenaantallen");
+  },
+
   pasFunctieAan(id) {
     return apiClient().patch(baseUrl + "functie/" + id);
   },
