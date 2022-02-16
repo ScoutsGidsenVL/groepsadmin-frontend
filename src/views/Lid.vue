@@ -6,7 +6,8 @@
     <div class="hidden lg:block lg:ml-8">
       <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
     </div>
-    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"></lid-boven-balk>
+    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
+                    :eigenProfiel="eigenProfiel" :changes="changes"></lid-boven-balk>
     <div class="lg:ml-2">
       <form @submit.prevent="opslaan" autocomplete="off">
         <div class="row lg:ml-8">
@@ -59,7 +60,7 @@ import useVuelidate from '@vuelidate/core'
 
 export default {
   name: "Lid",
-  setup: () => ({ v$: useVuelidate() }),
+  setup: () => ({v$: useVuelidate()}),
   components: {
     Footer,
     Functies,
@@ -79,7 +80,7 @@ export default {
           label: 'lid'
         },
         {
-          label: 'profiel'
+          label: this.eigenProfiel ? 'profiel' : 'details'
         },
       ],
       aangepasteVgagegevens: false,
@@ -89,10 +90,13 @@ export default {
       aangepasteFuncties: false,
       aangepasteGroepseigenVelden: false,
       eigenProfiel: false,
+      watchable: false,
+      changes: false,
       id: "",
 
       changed: true,
       loadingLid: true,
+      gewijzigdLid: {},
       lid: {
         voornaam: "",
         achternaam: "",
@@ -111,27 +115,46 @@ export default {
   watch: {
     "lid.persoonsgegevens": {
       handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.persoonsgegevens = this.lid.persoonsgegevens;
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.vgagegevens": {
       handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.vgagegevens = this.lid.vgagegevens;
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.adressen": {
       handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.adressen = this.lid.adressen;
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.contacten": {
       handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.contacten = this.lid.contacten;
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.functies": {
       handler: function () {
-        console.log('functies aangepast');
+        if (this.watchable) {
+          this.gewijzigdLid.functies = this.lid.functies;
+          this.changes = true;
+        }
       },
       deep: true,
     },
@@ -162,16 +185,40 @@ export default {
     if (this.id && (!this.lid || this.id !== "profiel" || this.changed)) {
       this.getLid(this.id);
     }
+
+    setTimeout(() => {
+      this.watchable = true
+    }, 2000);
   },
 
   methods: {
     opslaan() {
       this.v$.$touch();
-      console.log(this.v$)
       if (this.v$.$invalid) {
-        console.log(this.v$)
-        return
+        this.changes = false;
+        this.$toast.add({
+          severity: "warn",
+          summary: "Wijzigingen",
+          detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
+          life: 3000,
+        });
+        return;
       }
+      RestService.updateLid(this.lid.id, this.gewijzigdLid)
+        .then(res => {
+          this.lid = res.data;
+          if (res.status === 200)
+          this.$toast.add({
+            severity: "success",
+            summary: "Wijzigingen",
+            detail: "Wijzigingen lid opgeslagen",
+            life: 3000,
+          });
+          this.changes = false;
+          this.sorteerFuncties();
+        }).catch(error => {
+        console.log(error);
+      })
     },
 
     updateFuncties({functie, groepsnummer}) {
@@ -203,6 +250,7 @@ export default {
       this.lid = this.$store.getters.profiel;
       this.sorteerFuncties();
       this.filterGroepsEigenVelden();
+      this.loadingLid = false;
     },
 
     getLid(id) {
@@ -212,13 +260,14 @@ export default {
         if (id === "profiel") {
           this.eigenProfiel = true;
           this.$store.commit("setProfiel", res.data);
+          this.loadingLid = false;
         }
         this.sorteerFuncties();
       });
     },
 
     filterGroepsEigenVelden() {
-      this.groepseigenVelden =  Object.fromEntries(Object.entries( this.lid.groepseigenVelden).filter(([key]) => this.lid.groepseigenVelden[key].schema.length > 0));
+      this.groepseigenVelden = Object.fromEntries(Object.entries(this.lid.groepseigenVelden).filter(([key]) => this.lid.groepseigenVelden[key].schema.length > 0));
     },
 
     sorteerFuncties() {
@@ -226,7 +275,7 @@ export default {
       let ongesorteerdeFuncties = {};
       let functies = [];
       if (this.eigenProfiel) {
-         functies = this.$store.getters.profiel.functies;
+        functies = this.$store.getters.profiel.functies;
       } else {
         functies = this.lid.functies;
       }
