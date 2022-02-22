@@ -230,3 +230,24 @@
   width: 3rem !important;
   height: 3rem !important;
 }
+
+.p-button {
+  background-color: $sgv-donkergroen !important;
+  color: white;
+  border-color: $sgv-lichtgroen !important;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-lichtgroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+}

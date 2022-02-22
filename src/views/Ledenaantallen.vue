@@ -202,7 +202,6 @@ export default {
   },
   computed: {
     getLeeftijdsAantallen() {
-      console.log(LedenAantallenService.getLedenaantalPerLeeftijd(this.ledenaantallenData));
       return LedenAantallenService.getLedenaantalPerLeeftijd(this.ledenaantallenData);
     },
 
