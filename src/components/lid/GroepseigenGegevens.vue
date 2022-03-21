@@ -72,6 +72,9 @@ export default {
       let groep = this.$store.getters.groepByNummer(groepsnummer);
       if (groep) {
         return groep.naam + " - " + groepsnummer;
+      } else {
+        groep = this.$store.getters.inactieveGroepByNummer(groepsnummer);
+        return groep.naam + " - " + groepsnummer;
       }
     },
     changeValue(veld, waarde, groepIndex) {
