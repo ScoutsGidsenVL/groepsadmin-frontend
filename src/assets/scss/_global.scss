@@ -12,7 +12,7 @@
 @import "./dashboard";
 @import "./functie";
 @import "./dialog";
-@import "filter";
+@import "./filter";
 
 .content {
   min-height: 60vh;
@@ -86,8 +86,20 @@
   margin-left: - 0.5rem !important;
 }
 
+.ml--07 {
+  margin-left: - 0.7rem !important;
+}
+
+.ml--1 {
+  margin-left: - 1rem !important;
+}
+
 .mt--05 {
   margin-top: - 0.5rem !important;
+}
+
+.mt09 {
+  margin-top: 0.9rem !important;
 }
 
 .remove-button-wrapper {
@@ -321,6 +333,8 @@ a.clean-link:hover {
 .p-breadcrumb {
   padding: 0 !important;
   border: none !important;
+  position: relative !important;
+  z-index: 998 !important;
 }
 
 .p-card .p-card-title {
@@ -344,5 +358,13 @@ a.clean-link:hover {
 
 .historiek-chart {
   width: 70px !important;
+}
+
+.bijlages {
+  width: 100px !important;
+}
+
+.pictures {
+  width: 60px !important;
 }
 
