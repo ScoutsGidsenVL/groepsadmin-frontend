@@ -117,7 +117,7 @@
   }
 }
 
-.approve-button {
+.approve-button, .p-confirm-dialog-accept {
   background-color: $sgv-donkergroen !important;
   color: white !important;
   border: 1px solid;
@@ -134,7 +134,8 @@
 }
 
 
-.reject-button {
+
+.reject-button, .p-confirm-dialog-reject {
   background-color: $sgv-rood !important;
   color: white !important;
   border: 1px solid;
@@ -231,7 +232,7 @@
   height: 3rem !important;
 }
 
-.p-button {
+.opslaan-button {
   background-color: $sgv-donkergroen !important;
   color: white;
   border-color: $sgv-lichtgroen !important;
