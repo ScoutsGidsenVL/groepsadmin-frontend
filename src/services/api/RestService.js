@@ -80,6 +80,14 @@ export default {
     return apiClient().get(baseUrl + "ledenlijst/filter/huidige");
   },
 
+  patchHuidigeFilter(filter) {
+    return apiClient().patch(baseUrl + "ledenlijst/filter/huidige", filter);
+  },
+
+  getFilters() {
+    return apiClient().get(baseUrl + "ledenlijst/filter");
+  },
+
   getFilterOpId(id) {
     return apiClient().get(baseUrl + "ledenlijst/filter/" + id);
   },
@@ -165,5 +173,17 @@ export default {
 
   updateLid(id, lid) {
     return apiClient().patch(baseUrl + "lid/" + id + "?bevestig=" + true, lid)
+  },
+
+  getCommunicatieProducten() {
+    return apiClient().get(baseUrl + "communicatieproduct")
+  },
+
+  getCommunicatieProductAbonnementen() {
+    return apiClient().get(baseUrl + "/communicatieproduct/abonnementen")
+  },
+
+  saveCommunicatieProductAbonnement(payload) {
+    return apiClient().post(baseUrl + "communicatieproduct/abonnementen", payload)
   }
 };
