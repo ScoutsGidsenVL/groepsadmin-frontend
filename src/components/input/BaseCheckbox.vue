@@ -75,7 +75,6 @@ export default {
     },
 
     showMessage() {
-      console.log("KABOEM");
     },
   },
   setup(props, { emit }) {
