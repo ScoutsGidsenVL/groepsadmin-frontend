@@ -41,7 +41,7 @@ export default {
         } else if (link === "IndividueleSteekkaart") {
           this.$router.push({name: link, params: {id: this.$store.getters.profiel.id }});
         } else {
-          this.$router.push(link);
+          this.$router.push({name: link});
         }
         this.activeMenu = this.title;
       }
