@@ -28,6 +28,11 @@
     color: $sgv-donkergroen;
   }
 }
+@media only screen and (max-width: 390px) {
+  .border-bottom-general {
+    border-bottom: 2px solid lightgray;
+  }
+}
 
 .p-dropdown:hover {
   border-color: $sgv-donkergroen !important;

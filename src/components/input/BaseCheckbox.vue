@@ -1,10 +1,10 @@
 <template>
   <div class="custom-checkbox">
     <div class="row">
-      <div class="col-9 col-sm-5 p-mb-2 p-mb-md-0">
+      <div class="col-9 p-mb-2 p-mb-md-0" v-if="label" :class="voorkeuren ? 'col-md-5' : 'col-sm-5'">
         <label> {{ label }} </label>
       </div>
-      <div class="col-2 col-sm-7">
+      <div class="col-2" :class="voorkeuren ? 'col-md-7' : 'col-sm-7'">
         <checkbox
           class="ml-1"
           v-bind="$attrs"
@@ -47,6 +47,10 @@ export default {
       default: "false",
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    voorkeuren: {
       type: Boolean,
       default: false,
     },
