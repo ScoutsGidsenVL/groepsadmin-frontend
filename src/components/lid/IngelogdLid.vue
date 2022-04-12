@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid md:w-90 d-flex justify-content-end position-absolute  mt-2 z999">
-    <label class="h-1rem">{{ getVolledigeNaam }}</label>
+  <div class="container-fluid md:w-90 d-flex justify-content-md-end position-absolute border-bottom-general mt-4 z999">
+    <label class="h-1rem float-start sm:ml-4 h-2rem ">{{ getVolledigeNaam }}</label>
     <div class="ml-4 clickable" @click="gaNaarAccount">
       <i class="fas fa-user-circle menu-icon" title="Account"/>
     </div>
@@ -25,7 +25,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   methods: {
     gaNaarAccount() {
