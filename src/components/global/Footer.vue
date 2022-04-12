@@ -282,7 +282,7 @@
           >
         </div>
         <div class="col-12 col-md-6 d-flex justify-content-md-start order-md-1">
-          © 2021 Scouts en Gidsen Vlaanderen vzw ®
+          © {{ year }} Scouts en Gidsen Vlaanderen vzw ®
         </div>
       </div>
     </div>
@@ -295,7 +295,8 @@ export default {
   data() {
     return {
       app_version: process.env.VUE_APP_VERSION,
-      publicPath: process.env.BASE_URL
+      publicPath: process.env.BASE_URL,
+      year: new Date().getFullYear(),
     };
   },
 };
