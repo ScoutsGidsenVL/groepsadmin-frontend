@@ -1,15 +1,20 @@
 <template>
   <div>
-    <Loader
-      :showLoader="isLoadingLeden"
-    ></Loader>
     <div class="container-fluid" ref="scrollComponent">
       <div class="hidden lg:block md:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
       </div>
+      <Loader
+        :showLoader="isLoadingLeden"
+      ></Loader>
       <div class="mt-8 md:ml-8">
         <div class="md:ml-6">
-          <LedenlijstFilterblok class="mt-6 mb-3" :actieveKolommen="actieveKolommen"></LedenlijstFilterblok>
+          <LedenlijstFilterblok class="mt-6 mb-3"
+                                :actieveKolommen="actieveKolommen"
+                                :filters="filters"
+                                @veranderFilter=veranderFilter
+          >
+          </LedenlijstFilterblok>
           <data-table
             ref="ledenlijst"
             :lazy="true"
@@ -23,6 +28,7 @@
             @row-select-all="selecteerAlleLeden"
             @row-unselect-all="clearAlleLeden"
             @row-select="selecteerLid"
+            @row-unselect="selecteerLid"
             @row-click="selectLid"
           >
             <template #header>
@@ -63,8 +69,8 @@
                   @click="exporteer('steekkaart')"
                 />
               </div>
-              <label class="float-left mt--1">
-                {{ totaalAantalLeden }} rijen
+              <label class="float-start mt--1">
+                {{ totaalAantalLeden }} {{totaalAantalLeden > 1 ? 'rijen' : 'rij' }}
               </label>
               <label v-if="aantalIds > 0" class="float-left mt--1"
               >&nbsp;( {{ this.aantalIds }}
@@ -145,6 +151,7 @@ import ErrorService from "@/services/api/ErrorService";
 import LedenlijstFilterblok from "@/components/filter/LedenlijstFilterblok";
 import Loader from "@/components/global/Loader";
 import Footer from "@/components/global/Footer";
+import ledenlijstFilter from "@/services/leden/ledenlijstFilter";
 
 export default {
   name: "Ledenlijst",
@@ -179,25 +186,8 @@ export default {
       aantalPerPagina: 10,
       leden: [],
       actieveKolommen: [],
+      filters: [],
       geselecteerdeLeden: [],
-      categorisedFilters: {
-        "0000": {
-          naam: "Mijn filters",
-          isHeader: true,
-          filters: [],
-        },
-        "0001": {
-          naam: "Mijn gedeelde filters",
-          isHeader: true,
-          filters: [],
-        },
-        ___Z: {
-          naam: "Standaard filters",
-          isHeader: true,
-          filters: [],
-        },
-      },
-
       deelFilter: false,
 
       canPost: false,
@@ -214,12 +204,9 @@ export default {
   },
 
   created() {
-    if (this.$store.getters.geselecteerdeLeden) {
-      this.geselecteerdeLeden = this.$store.getters.geselecteerdeLeden;
-    }
-
     this.getLeden();
     this.getHuidigeFilter();
+    this.getFilters();
     window.addEventListener("scroll", this.handleScroll);
   },
 
@@ -234,6 +221,33 @@ export default {
 
     checkLidInLijst(lid) {
       console.log(lid);
+    },
+
+    veranderFilter(filter) {
+      this.leden= [];
+      this.isLoadingLeden = true
+      if (this.huidigeFilter.id !== filter.id){
+        RestService.getFilterOpId(filter.id)
+          .then(res => {
+              if (res.status === 200) {
+                let nieuweFilter = {
+                  criteria: res.data.criteria,
+                  groepen: res.data.groepen,
+                  kolommen: res.data.kolommen,
+                  links: res.data.links,
+                  sortering: res.data.sortering,
+                  type: res.data.type
+                }
+                RestService.patchHuidigeFilter(nieuweFilter)
+                  .then(res => {
+                    this.huidigeFilter = res.data;
+                    this.offset = 0;
+                    this.getLeden();
+                    this.getKolommen();
+                  })
+              }
+          })
+      }
     },
 
     selectLid(event) {
@@ -281,10 +295,21 @@ export default {
           this.kolommen = res.data.kolommen;
           store.commit("setKolommen", res.data.kolommen);
           this.activeerKolommen();
+          this.isLoadingLeden = false;
         });
       } else {
         this.activeerKolommen();
       }
+    },
+
+    getFilters() {
+      RestService.getFilters().then(res => {
+        this.filters = ledenlijstFilter.groepeerFilters(res.data.filters)
+        console.log(this.filters)
+      }).catch(error => {
+        console.log(error)
+        console.log(" er ging iets vreselijks mis met het ophalen van de filters")
+      })
     },
 
     onColReorder() {
