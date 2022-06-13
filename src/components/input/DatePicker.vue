@@ -9,15 +9,24 @@
         id="icon"
         :showIcon="true"
         dateFormat="dd/mm/yy"
+        placeholder="../../...."
         :monthNavigator="true"
         :yearNavigator="true"
-        yearRange="1900:2040"
-        :manualInput="false"
+        :manualInput="true"
         v-bind="$attrs"
         :modelValue="new Date(modelValue)"
         :disabled="disabled"
         @input="$emit('update:modelValue', $event.target.value)"
-      />
+        :class="invalid ? 'p-invalid' : ''"
+      >
+      </Calendar>
+    </div>
+    <div class="row ml-1">
+      <small
+        class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
+        v-if="invalid"
+      >{{ errorMessage }}
+      </small>
     </div>
   </div>
 </template>
@@ -36,12 +45,19 @@ export default {
     },
     modelValue: {
       type: [Date, String],
-      default: new Date(),
+      default: new Date()
     },
     disabled: {
       type: Boolean,
       default: false,
     },
+    invalid: {
+      type: Boolean,
+      default: false
+    },
+    errorMessage: {
+      type: String
+    }
   },
 };
 </script>
