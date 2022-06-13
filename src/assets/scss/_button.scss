@@ -115,6 +115,14 @@
   &:focus {
     border: 1px solid $sgv-donkergroen !important;
   }
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-donkergroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
 }
 
 .approve-button, .p-confirm-dialog-accept {
@@ -250,5 +258,31 @@
   &:enabled:hover {
     border-color: $sgv-donkergroen !important;
     background-color: $sgv-lichtgroen;
+  }
+}
+
+.type-select-button {
+  background-color: transparent !important;
+  color: $sgv-donkergroen !important;
+  border: 1px solid;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    border-color: $sgv-donkergroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+  &.actief {
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
   }
 }

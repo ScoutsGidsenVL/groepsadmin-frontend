@@ -13,6 +13,7 @@
 @import "./functie";
 @import "./dialog";
 @import "./filter";
+@import "./text";
 
 .content {
   min-height: 60vh;
@@ -101,6 +102,10 @@
 
 .mt--05 {
   margin-top: - 0.5rem !important;
+}
+
+.mb--25 {
+  margin-bottom: -25px !important;
 }
 
 .mt09 {
@@ -265,7 +270,7 @@
 }
 
 .mt--1 {
- margin-top: -1em;
+ margin-top: -1em !important;
 }
 
 .pl-4em {
@@ -320,11 +325,6 @@ a.clean-link:hover {
   color: $sgv-lichtgroen !important;
 }
 
-.app-content {
-  position: absolute;
-}
-
-
 @media screen and (min-width: 768px) {
   .md\:w-90 {
     width: 95% !important;
@@ -373,3 +373,10 @@ a.clean-link:hover {
   width: 60px !important;
 }
 
+.icon-geig {
+  font-size: 1.5rem !important;
+}
+
+.margin-top--15 {
+  margin-top: -15px !important;
+}
