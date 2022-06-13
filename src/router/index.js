@@ -11,6 +11,8 @@ import Aanvragen from "@/views/Aanvragen";
 import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
 import rechtenService from "@/services/rechten/rechtenService";
 import LidToevoegen from "@/views/LidToevoegen";
+import InschrijvingsFormulier from "@/views/InschrijvingsFormulier";
+import InschrijvingsFormulierVerstuurd from "@/views/InschrijvingsFormulierVerstuurd";
 
 const routes = [
     {
@@ -77,6 +79,22 @@ const routes = [
         path: "/lid/:id",
         name: "Lid",
         component: Lid,
+        meta: {
+            isAuthorized: true
+        }
+    },
+    {
+        path: "/formulier/lidworden/:groep",
+        name: "LidWorden",
+        component: InschrijvingsFormulier,
+        meta: {
+            isAuthorized: true
+        }
+    },
+    {
+        path: "/formulier/lidworden/:groep/verstuurd",
+        name: "LidWordenVerstuurd",
+        component: InschrijvingsFormulierVerstuurd,
         meta: {
             isAuthorized: true
         }
