@@ -1,4 +1,5 @@
 <template>
+  <confirmDialog/>
   <div class="contacten-card mb-4">
     <card>
       <template #title>
@@ -23,7 +24,7 @@
                   class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
                   @click="
                     $event.stopPropagation();
-                    remove(index);
+                    remove($event, index);
                   "
                   title="Verwijder contact"
                 />
@@ -80,10 +81,11 @@ import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import {onUpdated} from "@vue/runtime-core";
 import {reactive, toRefs} from "@vue/reactivity";
+import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "Contacten",
-  components: {BaseInput, BaseDropdown},
+  components: {BaseInput, BaseDropdown, ConfirmDialog},
   data() {
     return {
       rollen: [
@@ -119,8 +121,9 @@ export default {
       return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
     },
 
-    remove(index) {
+    remove(event, index) {
       this.$confirm.require({
+        target: event.currentTarget,
         message: "Ben je zeker dat je dit contact wil verwijderen?",
         header: "Contact verwijderen",
         icon: "pi pi-exclamation-triangle",
