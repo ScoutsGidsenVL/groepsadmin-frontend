@@ -144,7 +144,7 @@ export default {
   },
 
   verwijderFunctie(id) {
-    return apiClient().delete(baseUrl + "functie/" + id);
+    return apiClient().delete(baseUrl + "functie/" + id + "?bevestig=" + true);
   },
 
   getLedenAantallen(groep) {
@@ -153,6 +153,10 @@ export default {
 
   pasFunctieAan(id) {
     return apiClient().patch(baseUrl + "functie/" + id);
+  },
+
+  updateGroep(groep) {
+    return apiClient().patch(baseUrl + "groep/" + groep.groepsnummer + "?bevestig=true&groepsnummer=" + groep.groepsnummer, groep);
   },
 
   getIndividueleSteekkaart(id) {
@@ -185,5 +189,13 @@ export default {
 
   saveCommunicatieProductAbonnement(payload) {
     return apiClient().post(baseUrl + "communicatieproduct/abonnementen", payload)
-  }
+  },
+
+  getGroepseigenGegevens(groepsnummer) {
+    return apiClient().get(baseUrl + "groep/groepseigengegevens/" + groepsnummer);
+  },
+
+  saveAanvraag(aanvraag) {
+    return apiClient().post(baseUrl + "lid/aanvraag", aanvraag);
+  },
 };
