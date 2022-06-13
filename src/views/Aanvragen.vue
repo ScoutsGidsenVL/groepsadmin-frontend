@@ -1,73 +1,81 @@
 <template>
-  <div class="container-fluid md:w-90">
-    <div class="hidden lg:block md:ml-8">
-      <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
-    </div>
-    <indicator
-      :is-loading="indicator.isLoading"
-      :use-slot="indicator.useSlot"
-    ></indicator>
-    <Loader
-      :showLoader="isLoadingAanvragen"
-    ></Loader>
-    <confirm-dialog :dialog-visible="confirmDialog" :header="confirmHeader" :message="confirmMessage" :type="type"
-                    @confirm="bevestig" @cancel="annuleer"></confirm-dialog>
-    <confirm-mailing :dialog-visible="confirmMailingDialog" :header="confirmMailingHeader"
-                     :message="confirmMailingMessage" @bevestigMail="bevestigMail"
-                     @bevestigGeenMail="bevestigGeenMail"></confirm-mailing>
-    <div class="ml-6">
-      <data-table :value="aanvragen" v-model:expandedRows="expandedRows" dataKey="id" responsiveLayout="scroll"
-                  class="mt-4 ml-8">
-        <template #header>
-          <div class="table-header-container d-flex">
-            <Button v-show="!openDetails" icon="pi pi-plus" label="Alles openvouwen" @click="expandAll" class="p-mr-2 approve-button"/>
-            <Button v-show="openDetails" icon="pi pi-minus" label="Alles dichtvouwen" @click="collapseAll" class="p-mr-2 approve-button"/>
-          </div>
-        </template>
-        <column :expander="true" headerStyle="width: 3rem"/>
-        <column field="aangepast" header="Aangevraagd op" sortable>
-          <template #body="slotProps">
-            {{ formatDate(slotProps.data.aangepast) }}
-          </template>
-        </column>
-        <column field="groepsnummer" header="Groep" sortable></column>
-        <column field="geboortedatum" header="Geboortedatum" sortable>
-          <template #body="slotProps">
-            {{ formatDate(slotProps.data.geboortedatum) }}
-          </template>
-        </column>
-        <column header="Naam" sortable>
-          <template #body="slotProps">
-            <span>{{ toonVolledigeNaam(slotProps.data) }}</span>
-          </template>
-        </column>
-        <template #expansion="slotProps">
-          <div class="pl-4em col-12">
-            <p class="mb-0">{{ slotProps.data.adres.straat }} {{ slotProps.data.adres.nummer }}</p>
-            <p class="mb-0">{{ slotProps.data.adres.land }} {{ slotProps.data.adres.postcode }}
-              {{ slotProps.data.adres.gemeente }}</p>
-            <p class="mb-0"><a :href="'tel:' + slotProps.data.gsmnummer"
-                               class="clickable clean-link custom-title">{{ slotProps.data.gsmnummer }}</a></p>
-            <p class="mb-0"><a :href="'mailto:' + slotProps.data.email"
-                               class="clickable clean-link custom-title">{{ slotProps.data.email }}</a></p>
-            <p class="mb-0 p-text-italic"><strong>{{ slotProps.data.opmerkingen }}</strong></p>
-            <div class="d-flex justify-content-start mt-3">
-              <Button
-                label="Afkeuren"
-                class="mr-2 reject-button"
-                title="Afkeuren"
-                @click="afkeuren(slotProps.data)"
-              />
-              <Button
-                label="Goedkeuren"
-                class="mr-2 approve-button"
-                title="Goedkeuren"
-                @click="goedkeuren(slotProps.data)"
-              />
+  <div>
+    <SideMenu/>
+    <confirmDialog/>
+    <toast position="bottom-right"/>
+    <ingelogd-lid></ingelogd-lid>
+    <div class="container-fluid md:w-90">
+      <div class="hidden lg:block md:ml-8">
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+      </div>
+      <indicator
+        :is-loading="indicator.isLoading"
+        :use-slot="indicator.useSlot"
+      ></indicator>
+      <Loader
+        :showLoader="isLoadingAanvragen"
+      ></Loader>
+      <confirm-dialog :dialog-visible="confirmDialog" :header="confirmHeader" :message="confirmMessage" :type="type"
+                      @confirm="bevestig" @cancel="annuleer"></confirm-dialog>
+      <confirm-mailing :dialog-visible="confirmMailingDialog" :header="confirmMailingHeader"
+                       :message="confirmMailingMessage" @bevestigMail="bevestigMail"
+                       @bevestigGeenMail="bevestigGeenMail"></confirm-mailing>
+      <div class="ml-6">
+        <data-table :value="aanvragen" v-model:expandedRows="expandedRows" dataKey="id" responsiveLayout="scroll"
+                    class="mt-4 ml-8">
+          <template #header>
+            <div class="table-header-container d-flex">
+              <Button v-show="!openDetails" icon="pi pi-plus" label="Alles openvouwen" @click="expandAll"
+                      class="p-mr-2 approve-button"/>
+              <Button v-show="openDetails" icon="pi pi-minus" label="Alles dichtvouwen" @click="collapseAll"
+                      class="p-mr-2 approve-button"/>
             </div>
-          </div>
-        </template>
-      </data-table>
+          </template>
+          <column :expander="true" headerStyle="width: 3rem"/>
+          <column field="aangepast" header="Aangevraagd op" sortable>
+            <template #body="slotProps">
+              {{ formatDate(slotProps.data.aangepast) }}
+            </template>
+          </column>
+          <column field="groepsnummer" header="Groep" sortable></column>
+          <column field="geboortedatum" header="Geboortedatum" sortable>
+            <template #body="slotProps">
+              {{ formatDate(slotProps.data.geboortedatum) }}
+            </template>
+          </column>
+          <column header="Naam" sortable>
+            <template #body="slotProps">
+              <span>{{ toonVolledigeNaam(slotProps.data) }}</span>
+            </template>
+          </column>
+          <template #expansion="slotProps">
+            <div class="pl-4em col-12">
+              <p class="mb-0">{{ slotProps.data.adres.straat }} {{ slotProps.data.adres.nummer }}</p>
+              <p class="mb-0">{{ slotProps.data.adres.land }} {{ slotProps.data.adres.postcode }}
+                {{ slotProps.data.adres.gemeente }}</p>
+              <p class="mb-0"><a :href="'tel:' + slotProps.data.gsmnummer"
+                                 class="clickable clean-link custom-title">{{ slotProps.data.gsmnummer }}</a></p>
+              <p class="mb-0"><a :href="'mailto:' + slotProps.data.email"
+                                 class="clickable clean-link custom-title">{{ slotProps.data.email }}</a></p>
+              <p class="mb-0 p-text-italic"><strong>{{ slotProps.data.opmerkingen }}</strong></p>
+              <div class="d-flex justify-content-start mt-3">
+                <Button
+                  label="Afkeuren"
+                  class="mr-2 reject-button"
+                  title="Afkeuren"
+                  @click="afkeuren(slotProps.data)"
+                />
+                <Button
+                  label="Goedkeuren"
+                  class="mr-2 approve-button"
+                  title="Goedkeuren"
+                  @click="goedkeuren(slotProps.data)"
+                />
+              </div>
+            </div>
+          </template>
+        </data-table>
+      </div>
     </div>
   </div>
 </template>
@@ -80,15 +88,19 @@ import ConfirmMailing from "@/components/aanvraag/ConfirmMailing";
 import Indicator from "@/components/global/Indicator";
 import Loader from "@/components/global/Loader";
 import Breadcrumb from "primevue/breadcrumb";
+import SideMenu from "@/components/global/Menu";
+import IngelogdLid from "@/components/lid/IngelogdLid";
 
 export default {
   name: "Aanvragen",
   components: {
-    ConfirmDialog,
     ConfirmMailing,
     Indicator,
     Loader,
-    Breadcrumb
+    Breadcrumb,
+    ConfirmDialog,
+    SideMenu,
+    IngelogdLid
   },
   data() {
     return {
@@ -160,7 +172,7 @@ export default {
         persoonsgegevens: aanvraag.persoonsgegevens,
         email: aanvraag.email,
         verbondsgegevens: {
-          lidgeldbetaald:	false
+          lidgeldbetaald: false
         },
         id: aanvraag.id,
         adressen: aanvraag.adressen,
