@@ -45,6 +45,7 @@
 
 <script>
 import { useModelWrapper } from "@/utils/modelWrapper";
+import Telefoonnummer from "@/services/google/Telefoonnummer";
 
 export default {
   props: {
@@ -84,8 +85,9 @@ export default {
   },
   methods: {
     changeValue($event) {
-      this.$emit("update:modelValue", $event.target.value);
-      this.$emit("changeValue", $event.target.value);
+      let phone = Telefoonnummer.formatNumber($event.target.value);
+      this.$emit("update:modelValue", phone);
+      this.$emit("changeValue", phone);
     },
   },
   setup(props, { emit }) {

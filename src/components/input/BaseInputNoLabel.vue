@@ -1,18 +1,19 @@
 <template>
-  <div class="p-grid row">
-    <div class="col-12 col-sm-2 p-md-8">
-      <inputText
-        v-bind="$attrs"
-        v-model="value"
-        :disabled="disabled"
-        :placeholder="placeholder"
-      />
-    </div>
+  <div class="col-12 col-sm-2 col-md-7 p-md-8">
+    <inputText
+      class="w-100"
+      v-bind="$attrs"
+      v-model="value"
+      :disabled="disabled"
+      :placeholder="placeholder"
+      @change="changeValue"
+      @keypress="keypress"
+    />
   </div>
 </template>
 
 <script>
-import { useModelWrapper } from "@/utils/modelWrapper";
+import {useModelWrapper} from "@/utils/modelWrapper";
 
 export default {
   name: "BaseInputNoLabel",
@@ -30,7 +31,16 @@ export default {
       default: false,
     },
   },
-  setup(props, { emit }) {
+  methods: {
+    changeValue($event) {
+      this.$emit("update:modelValue", $event.target.value);
+      this.$emit("changeValue");
+    },
+    keypress() {
+      this.$emit("keypress");
+    }
+  },
+  setup(props, {emit}) {
     return {
       value: useModelWrapper(props, emit, "modelValue"),
     };
