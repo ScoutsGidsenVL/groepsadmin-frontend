@@ -1,4 +1,6 @@
 import store from "@/store";
+let _ = require('lodash');
+
 
 export default {
   hasAccess: function(type) {
@@ -24,7 +26,9 @@ export default {
     return false;
   },
 
-
+  kanWijzigen: function (obj) {
+    return _.find(obj.links, {method: 'PATCH'}) !== undefined;
+  },
 
   canBeShowed: function (lid, type) {
     let patchObject = lid.links.find(obj => {
