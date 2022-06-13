@@ -13,11 +13,12 @@
           @complete="zoekGemeente"
           @itemSelect="kiesGemeente"
           @clear="verwijderGemeente"
+          @blur="checkValue"
           placeholder="Vul postcode in en selecteer uw gemeente..."
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
           :disabled="disabled"
-          :class="v$.adres.gemeente.$invalid ? 'p-invalid' : ''"
+          :class="(invalid || invalidData) ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -30,9 +31,9 @@
     <div class="row">
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
-        v-if="v$.adres.gemeente.$invalid"
+        v-if="invalid || invalidData"
       >
-        {{ v$.adres.gemeente.required.$message }}
+        {{ errorMessage }}
       </small>
     </div>
   </div>
@@ -41,31 +42,17 @@
 <script>
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
-import useVuelidate from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
 
 export default {
   components: {
     AutoComplete,
   },
   name: "LidZoekAutoComplete",
-  setup: () => (
-    {
-      v$: useVuelidate()
-    }),
-  validations() {
-    return {
-      adres: {
-        gemeente : {
-          required: helpers.withMessage('Gelieve een gemeente in te vullen', required)
-        }
-      },
-    }
-  },
   data() {
     return {
       gefilterdeGemeentes: null,
       zoekTerm: null,
+      invalid: false
     };
   },
   props: {
@@ -79,12 +66,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    invalid: {
+    invalidForm: {
       type: Boolean,
       default: false,
     },
     errorMessage: {
       type: String,
+      default: "Gelieve een gemeente in te vullen"
     },
   },
   mounted() {
@@ -106,6 +94,12 @@ export default {
       this.adres.bus = "";
       this.adres.nummer = "";
       this.emitter.emit("clearStraat", null);
+      this.invalid = false;
+      this.$emit("clearInvalidForm")
+    },
+
+    checkValue() {
+      this.invalid = !this.adres.postcode && !this.adres.gemeente;
     },
 
     verwijderGemeente() {
@@ -119,9 +113,11 @@ export default {
     this.$watch(
       () => this.modelValue,
       () => {
-        console.log("change")
-        this.zoekTerm =
-          this.modelValue.postcode + " " + this.modelValue.gemeente;
+        if (this.modelValue.postcode && this.modelValue.gemeente){
+          this.zoekTerm = this.modelValue.postcode + " " + this.modelValue.gemeente;
+        } else {
+          this.zoekTerm = null;
+        }
       }
     );
   },
@@ -130,6 +126,10 @@ export default {
     adres() {
       return this.modelValue;
     },
+    invalidData() {
+      return this.invalidForm;
+    }
+
   },
 };
 </script>

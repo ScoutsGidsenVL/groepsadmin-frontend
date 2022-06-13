@@ -18,7 +18,7 @@
           placeholder="Straat..."
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
-          :class="v$.adres.straat.$invalid ? 'p-invalid' : ''"
+          :class="(invalid || invalidForm) ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -31,9 +31,9 @@
     <div class="row">
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
-        v-if="checked && v$.adres.straat.$invalid"
+        v-if="invalid || invalidForm"
       >
-        {{ v$.adres.straat.required.$message }}
+        {{ errorMessage }}
       </small>
     </div>
   </div>
@@ -42,8 +42,6 @@
 <script>
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
-import useVuelidate from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
 
 export default {
   components: {
@@ -54,18 +52,8 @@ export default {
     return {
       gefilterdeStraten: null,
       zoekTerm: null,
-      checked: false
+      invalid: false
     };
-  },
-  setup: () => ({ v$: useVuelidate() }),
-  validations() {
-    return {
-      adres: {
-        straat : {
-          required: helpers.withMessage('Gelieve een straat in te vullen', required)
-        }
-      },
-    }
   },
   props: {
     label: {
@@ -78,12 +66,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    invalid: {
+    invalidForm: {
       type: Boolean,
       default: false,
     },
     errorMessage: {
       type: String,
+      default: "Gelieve een straat in te vullen"
     },
   },
   mounted() {
@@ -108,16 +97,22 @@ export default {
         }
       );
     },
+    checkValue() {
+      if ( !this.adres.straat ) {
+        this.invalid = true;
+      } else {
+        this.invalid = false;
+      }
+    },
     kiesStraat(event) {
       this.adres.straat = event.value;
+      this.invalid = false;
+      this.$emit("clearInvalidForm")
     },
     verwijderStraat() {
       this.adres.straat = "";
       this.zoekTerm = "";
     },
-    checkValue() {
-      this.checked = true
-    }
   },
   computed: {
     adres: {
