@@ -1,4 +1,4 @@
-const PhoneNumber = require( 'awesome-phonenumber' );
+const PhoneNumber = require('awesome-phonenumber');
 
 export default {
 
@@ -14,15 +14,15 @@ export default {
             value = value.replace(regex, '');
         }
 
-        let regioCode = PhoneNumber( value ).getRegionCode( );
-        let countryCode = PhoneNumber( value ).getCountryCode(value);
+        let regioCode = PhoneNumber(value).getRegionCode();
+        let countryCode = PhoneNumber(value).getCountryCode(value);
 
-        if (!countryCode || countryCode === 0){
+        if (!countryCode || countryCode === 0) {
             countryCode = this.getCountryCode(value);
         }
 
         if (!regioCode) {
-            regioCode = PhoneNumber.getRegionCodeForCountryCode( countryCode );
+            regioCode = PhoneNumber.getRegionCodeForCountryCode(countryCode);
         }
 
         let phoneNumber = value;
@@ -32,7 +32,7 @@ export default {
         }
 
         let pn = new PhoneNumber(phoneNumber, regioCode);
-        return pn.getNumber( 'input' )
+        return pn.getNumber('input')
     },
 
     validateNumber(value) {
@@ -40,15 +40,15 @@ export default {
             return true;
         }
 
-        let regioCode = PhoneNumber( value ).getRegionCode( );
-        let countryCode = PhoneNumber( value ).getCountryCode(value);
+        let regioCode = PhoneNumber(value).getRegionCode();
+        let countryCode = PhoneNumber(value).getCountryCode(value);
 
-        if (!countryCode || countryCode === 0){
+        if (!countryCode || countryCode === 0) {
             countryCode = this.getCountryCode(value);
         }
 
         if (!regioCode) {
-            regioCode = PhoneNumber.getRegionCodeForCountryCode( countryCode );
+            regioCode = PhoneNumber.getRegionCodeForCountryCode(countryCode);
         }
 
         let phoneNumber = value;
