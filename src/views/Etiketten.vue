@@ -1,204 +1,210 @@
 <template>
-  <div class="lg:ml-8">
-    <Loader :show-loader="laden"></Loader>
-    <div class="overflow-hidden  lg:ml-6">
-      <div>
-        <save-template-dialog
-          :open="openModal"
-          :sjablonen="sjablonen"
-          @closeModal="closeModal"
-          @opslaan="opslaan"
-        ></save-template-dialog>
-      </div>
-      <h4
-        class="text-align-left mt-5 pl-lg-2-5em custom-title font-weight-bold"
-      >
-        Etiketten
-      </h4>
-      <div class="pl-lg-4em mt-2">
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseDropdown
-              v-model="sjabloon"
-              :options="sjablonen"
-              label="Opgeslagen sjablonen"
-              @changeValue="selecteerSjabloon"
-            ></BaseDropdown>
-          </div>
-          <Button
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-alert float-right mr-2 position-sticky delete-button"
-            title="Verwijder huidig sjabloon"
-            v-show="
+  <div>
+    <SideMenu/>
+    <confirmDialog/>
+    <toast position="bottom-right"/>
+    <ingelogd-lid></ingelogd-lid>
+    <div class="lg:ml-8">
+      <Loader :show-loader="laden"></Loader>
+      <div class="overflow-hidden  lg:ml-6">
+        <div>
+          <save-template-dialog
+            :open="openModal"
+            :sjablonen="sjablonen"
+            @closeModal="closeModal"
+            @opslaan="opslaan"
+          ></save-template-dialog>
+        </div>
+        <h4
+          class="text-align-left mt-5 pl-lg-2-5em custom-title font-weight-bold"
+        >
+          Etiketten
+        </h4>
+        <div class="pl-lg-4em mt-2">
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseDropdown
+                v-model="sjabloon"
+                :options="sjablonen"
+                label="Opgeslagen sjablonen"
+                @changeValue="selecteerSjabloon"
+              ></BaseDropdown>
+            </div>
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-alert float-right mr-2 position-sticky delete-button"
+              title="Verwijder huidig sjabloon"
+              v-show="
               !(
                 sjabloon.naam.indexOf('deelnamebewijs') > -1 ||
                 (sjabloon.links && sjabloon.links.length === 0)
               )
             "
-            @click="remove(sjabloon)"
-          />
-        </div>
-        <div class="row mt-1">
-          <div class="col-sm-2 text-align-left">
-            <label
-              >Ontvangers:
-              <span v-if="leden.length > 0">
-                {{
-                  leden.length === 1 ? "1 lid" : leden.length + " leden"
-                }}</span
-              ><span
-                v-if="leden.length > 0"
-                @click="toonLeden"
-                class="clickable custom-title"
-              >
-                (details)</span
-              >
-              <span v-if="isLoadingLeden" class="mt-1"
-                >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
-              ></span>
-            </label>
+              @click="remove(sjabloon)"
+            />
           </div>
-          <div class="col-lg-8 text-align-left">
-            <BaseCheckboxLeft
-              label="Familie"
-              v-model="sjabloon.familie"
-            ></BaseCheckboxLeft>
+          <div class="row mt-1">
+            <div class="col-sm-2 text-align-left">
+              <label
+              >Ontvangers:
+                <span v-if="leden.length > 0">
+                {{
+                    leden.length === 1 ? "1 lid" : leden.length + " leden"
+                  }}</span
+                ><span
+                  v-if="leden.length > 0"
+                  @click="toonLeden"
+                  class="clickable custom-title"
+                >
+                (details)</span
+                >
+                <span v-if="isLoadingLeden" class="mt-1"
+                >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
+                ></span>
+              </label>
+            </div>
+            <div class="col-lg-8 text-align-left">
+              <BaseCheckboxLeft
+                label="Familie"
+                v-model="sjabloon.familie"
+              ></BaseCheckboxLeft>
+            </div>
+          </div>
+          <div class="row">
+            <div class="offset-sm-2"></div>
+            <div class="col-lg-3 text-align-left">
+              <BaseCheckboxLeft
+                label="Alle adressen"
+                v-model="sjabloon.alleAdressen"
+              ></BaseCheckboxLeft>
+            </div>
+            <div class="col-lg-7 pr-lg-5em">
+              <div class="d-flex justify-content-end">
+                <Button
+                  icon="pi pi-save"
+                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
+                  title="Bewaar huidig sjabloon"
+                  @click="openSjabloonModel"
+                />
+                <Button
+                  icon="far fa-print"
+                  title="Print etiket"
+                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
+                  @click="print"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div class="row">
-          <div class="offset-sm-2"></div>
-          <div class="col-lg-3 text-align-left">
-            <BaseCheckboxLeft
-              label="Alle adressen"
-              v-model="sjabloon.alleAdressen"
-            ></BaseCheckboxLeft>
+          <div class="col-12 pl-lg-5em pr-lg-5em mt-3">
+            <Editor
+              :init="getOptions"
+              api-key="1o4al3jtztab1wf2880j7iio0hww1b4c6ut5qjqan57p3j4f"
+              v-model="sjabloon.inhoud"
+            ></Editor>
           </div>
-          <div class="col-lg-7 pr-lg-5em">
-            <div class="d-flex justify-content-end">
-              <Button
-                icon="pi pi-save"
-                class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
-                title="Bewaar huidig sjabloon"
-                @click="openSjabloonModel"
-              />
-              <Button
-                icon="far fa-print"
-                title="Print etiket"
-                class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
-                @click="print"
-              />
+        </div>
+        <div class="pl-lg-4em mt-5">
+          <h4 class="text-align-left mt-5 custom-title font-weight-bold">
+            Etiket eigenschappen
+            <span class="help-button-wrapper small clickable" @click="openFoto"
+            >&nbsp; (klik hier voor schema)</span
+            >
+          </h4>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Grootte horizontaal"
+                v-model="sjabloon.grootte.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Grootte verticaal"
+                v-model="sjabloon.grootte.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Marge horizontaal"
+                v-model="sjabloon.marge.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Marge verticaal"
+                v-model="sjabloon.marge.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Tussenruimte horizontaal"
+                v-model="sjabloon.tussenruimte.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Tussenruimte verticaal"
+                v-model="sjabloon.tussenruimte.horizontaal"
+                type="number"
+              ></BaseInput>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <BaseInput
+                label="Blanco etiketten"
+                v-model="sjabloon.blanco"
+                type="number"
+                help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:etiketten"
+              ></BaseInput>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 pl-lg-5em pr-lg-5em mt-3">
-          <Editor
-            :init="getOptions"
-            api-key="1o4al3jtztab1wf2880j7iio0hww1b4c6ut5qjqan57p3j4f"
-            v-model="sjabloon.inhoud"
-          ></Editor>
-        </div>
-      </div>
-      <div class="pl-lg-4em mt-5">
-        <h4 class="text-align-left mt-5 custom-title font-weight-bold">
-          Etiket eigenschappen
-          <span class="help-button-wrapper small clickable" @click="openFoto"
-            >&nbsp; (klik hier voor schema)</span
-          >
-        </h4>
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Grootte horizontaal"
-              v-model="sjabloon.grootte.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Grootte verticaal"
-              v-model="sjabloon.grootte.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Marge horizontaal"
-              v-model="sjabloon.marge.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Marge verticaal"
-              v-model="sjabloon.marge.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Tussenruimte horizontaal"
-              v-model="sjabloon.tussenruimte.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Tussenruimte verticaal"
-              v-model="sjabloon.tussenruimte.horizontaal"
-              type="number"
-            ></BaseInput>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 text-align-left">
-            <BaseInput
-              label="Blanco etiketten"
-              v-model="sjabloon.blanco"
-              type="number"
-              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:etiketten"
-            ></BaseInput>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <Dialog
-        header="Ontvangers"
-        v-model:visible="openOntvangerDialog"
-        :style="{ width: '50vw', height: '30vw' }"
-        :modal="true"
-      >
-        <div class="email-leden col-xs-12">
-          <ul>
-            <li v-for="(lid, index) in leden" :key="index">
-              <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
-              <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
-              <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
+      <div>
+        <Dialog
+          header="Ontvangers"
+          v-model:visible="openOntvangerDialog"
+          :style="{ width: '50vw', height: '30vw' }"
+          :modal="true"
+        >
+          <div class="email-leden col-xs-12">
+            <ul>
+              <li v-for="(lid, index) in leden" :key="index">
+                <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
+                <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
+                <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
                 >&nbsp;{{ lid.volledigenaam }}
               </span>
-              <span
-                v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
-              >
+                <span
+                  v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
+                >
                 - geen naam beschikbaar -
               </span>
-            </li>
-          </ul>
-        </div>
-      </Dialog>
+              </li>
+            </ul>
+          </div>
+        </Dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -213,10 +219,14 @@ import RestService from "@/services/api/RestService";
 import store from "@/store";
 import Dialog from "primevue/dialog";
 import Loader from "@/components/global/Loader";
+import SideMenu from "@/components/global/Menu";
+import IngelogdLid from "@/components/lid/IngelogdLid";
+import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 
 export default {
   name: "Etiketten",
   components: {
+    ConfirmDialog,
     BaseCheckboxLeft,
     BaseInput,
     BaseDropdown,
@@ -224,6 +234,8 @@ export default {
     SaveTemplateDialog,
     Loader,
     Dialog,
+    SideMenu,
+    IngelogdLid
   },
   data() {
     return {
@@ -328,7 +340,7 @@ export default {
           volledigenaam:
             lid.waarden[
               "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-            ],
+              ],
         });
       });
       this.sorteerLeden = false;
@@ -408,7 +420,7 @@ export default {
         .then((res) => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
-            this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
+            this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
             this.sjabloon = this.sjablonen[0].value;
           });
           this.getOpgeslagenEtiketSjabloon();
@@ -571,7 +583,7 @@ export default {
       RestService.printEtiketten(0, payload)
         .then((res) => {
           let obj = {};
-          let blob = new Blob([res.data], { type: "application/pdf" });
+          let blob = new Blob([res.data], {type: "application/pdf"});
           obj.fileUrl = window.URL.createObjectURL(blob);
           obj.title = "etiketten.pdf";
           this.downloadFile(obj);
@@ -612,7 +624,7 @@ export default {
     getOpgeslagenEtiketSjabloon() {
       let sjabloon = this.$store.getters.etiketSjabloon;
       if (sjabloon) {
-        this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
+        this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
       }
     },
 
@@ -642,11 +654,11 @@ export default {
               achternaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.AchternaamColumn"
-                ],
+                  ],
               volledigenaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-                ],
+                  ],
             });
           });
           this.offset = this.leden.length;

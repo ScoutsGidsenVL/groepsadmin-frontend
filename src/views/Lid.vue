@@ -1,43 +1,49 @@
 <template>
-  <div class="container-fluid md:w-90">
-    <div class="hidden lg:block lg:ml-8">
-      <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
-    </div>
-    <Loader
-      :showLoader="laden"
-    ></Loader>
-    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
-                    :eigenProfiel="eigenProfiel" :changes="changes"></lid-boven-balk>
-    <div class="lg:ml-2">
-      <form @submit.prevent="opslaan" autocomplete="off">
-        <div class="row lg:ml-8">
-          <div class="col-12 col-lg-6 col-xl-4">
-            <persoonlijk v-model="lid"></persoonlijk>
-            <groepseigen-gegevens
-              v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
-              v-model="groepseigenVelden"
-              :title="'Groepseigen gegevens'"
-            ></groepseigen-gegevens>
-          </div>
-          <div class="col-12 col-lg-6 col-xl-4">
-            <adressen v-model="lid" :title="'Adressen'"></adressen>
-            <contacten v-model="lid" :title="'Contacten'"></contacten>
+  <div>
+    <SideMenu/>
+    <confirmDialog/>
+    <toast position="bottom-right"/>
+    <ingelogd-lid></ingelogd-lid>
+    <div class="container-fluid md:w-90">
+      <div class="hidden lg:block lg:ml-8">
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
+      </div>
+      <Loader
+        :showLoader="laden"
+      ></Loader>
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
+                      :eigenProfiel="eigenProfiel" :changes="changes"></lid-boven-balk>
+      <div class="lg:ml-2">
+        <form @submit.prevent="opslaan" autocomplete="off">
+          <div class="row lg:ml-8">
+            <div class="col-12 col-lg-6 col-xl-4">
+              <persoonlijk v-model="lid"></persoonlijk>
+              <groepseigen-gegevens
+                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                v-model="groepseigenVelden"
+                :title="'Groepseigen gegevens'"
+              ></groepseigen-gegevens>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4">
+              <adressen v-model="lid" :title="'Adressen'"></adressen>
+              <contacten v-model="lid" :title="'Contacten'"></contacten>
 
+            </div>
+            <div class="col-12 col-lg-12 col-xl-4">
+              <functies
+                v-model="gesorteerdeFuncties"
+                @updateLid="updateFuncties"
+                :lid="lid"
+              ></functies>
+              <functies-toevoegen
+                v-model="gesorteerdeFuncties"
+                :lid="lid"
+                v-if="magFunctiesToevoegen"
+              ></functies-toevoegen>
+            </div>
           </div>
-          <div class="col-12 col-lg-12 col-xl-4">
-            <functies
-              v-model="gesorteerdeFuncties"
-              @updateLid="updateFuncties"
-              :lid="lid"
-            ></functies>
-            <functies-toevoegen
-              v-model="gesorteerdeFuncties"
-              :lid="lid"
-              v-if="magFunctiesToevoegen"
-            ></functies-toevoegen>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
   <Footer/>
@@ -57,6 +63,9 @@ import Loader from "@/components/global/Loader";
 import rechtenService from "@/services/rechten/rechtenService";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import useVuelidate from '@vuelidate/core'
+import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import SideMenu from "@/components/global/Menu";
+import IngelogdLid from "@/components/lid/IngelogdLid";
 
 export default {
   name: "Lid",
@@ -70,7 +79,10 @@ export default {
     LidBovenBalk,
     Adressen,
     Loader,
-    FunctiesToevoegen
+    FunctiesToevoegen,
+    ConfirmDialog,
+    SideMenu,
+    IngelogdLid
   },
   data() {
     return {
@@ -83,12 +95,6 @@ export default {
           label: this.eigenProfiel ? 'profiel' : 'details'
         },
       ],
-      aangepasteVgagegevens: false,
-      aangepastePersoonsgegevens: false,
-      aangepasteAdressen: false,
-      aangepasteContacten: false,
-      aangepasteFuncties: false,
-      aangepasteGroepseigenVelden: false,
       eigenProfiel: false,
       watchable: false,
       changes: false,
@@ -98,8 +104,6 @@ export default {
       loadingLid: true,
       gewijzigdLid: {},
       lid: {
-        voornaam: "",
-        achternaam: "",
         email: "",
         gebruikersnaam: "",
         links: [],
@@ -159,6 +163,10 @@ export default {
       deep: true,
     },
     "lid.email": function () {
+      if (this.watchable) {
+        this.gewijzigdLid.email = this.lid.email;
+        this.changes = true;
+      }
     },
   },
 
@@ -208,12 +216,12 @@ export default {
         .then(res => {
           this.lid = res.data;
           if (res.status === 200)
-          this.$toast.add({
-            severity: "success",
-            summary: "Wijzigingen",
-            detail: "Wijzigingen lid opgeslagen",
-            life: 3000,
-          });
+            this.$toast.add({
+              severity: "success",
+              summary: "Wijzigingen",
+              detail: "Wijzigingen lid opgeslagen",
+              life: 3000,
+            });
           this.changes = false;
           this.sorteerFuncties();
         }).catch(error => {
