@@ -1,37 +1,44 @@
 <template>
-  <Loader
-    :showLoader="laden"
-  ></Loader>
-  <div class="container-fluid md:w-90 lg:ml-4 md:pl-8">
-    <div class="hidden lg:block lg:ml-8">
-      <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
-    </div>
-    <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel" :nieuwLid="true"></lid-boven-balk>
-    <div class="lg:ml-2">
-      <form @submit.prevent="opslaan" autocomplete="off">
-        <div class="row lg:ml-8">
-          <div class="col-12 col-lg-6 col-xl-4">
-            <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
-            <groepseigen-gegevens
-              v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
-              v-model="groepseigenVelden"
-              :title="'Groepseigen gegevens'"
-            ></groepseigen-gegevens>
-          </div>
-          <div class="col-12 col-lg-6 col-xl-4">
-            <adressen v-model="lid" :title="'Adressen'"></adressen>
-            <contacten v-model="lid" :title="'Contacten'"></contacten>
+  <div>
+    <SideMenu/>
+    <confirmDialog/>
+    <toast position="bottom-right"/>
+    <ingelogd-lid></ingelogd-lid>
+    <Loader
+      :showLoader="laden"
+    ></Loader>
+    <div class="container-fluid md:w-90 lg:ml-4 md:pl-8">
+      <div class="hidden lg:block lg:ml-8">
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
+      </div>
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"
+                      :nieuwLid="true"></lid-boven-balk>
+      <div class="lg:ml-2">
+        <form @submit.prevent="opslaan" autocomplete="off">
+          <div class="row lg:ml-8">
+            <div class="col-12 col-lg-6 col-xl-4">
+              <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
+              <groepseigen-gegevens
+                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                v-model="groepseigenVelden"
+                :title="'Groepseigen gegevens'"
+              ></groepseigen-gegevens>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4">
+              <adressen v-model="lid" :title="'Adressen'"></adressen>
+              <contacten v-model="lid" :title="'Contacten'"></contacten>
 
+            </div>
+            <div class="col-12 col-lg-12 col-xl-4">
+              <functies-toevoegen
+                v-model="gesorteerdeFuncties"
+                :lid="lid"
+                v-if="magFunctiesToevoegen"
+              ></functies-toevoegen>
+            </div>
           </div>
-          <div class="col-12 col-lg-12 col-xl-4">
-            <functies-toevoegen
-              v-model="gesorteerdeFuncties"
-              :lid="lid"
-              v-if="magFunctiesToevoegen"
-            ></functies-toevoegen>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
   <Footer/>
@@ -50,10 +57,13 @@ import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import RestService from "@/services/api/RestService";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
+import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import SideMenu from "@/components/global/Menu";
+import IngelogdLid from "@/components/lid/IngelogdLid";
 
 export default {
   name: "LidToevoegen",
-  setup: () => ({ v$: useVuelidate() }),
+  setup: () => ({v$: useVuelidate()}),
   components: {
     Footer,
     GroepseigenGegevens,
@@ -62,7 +72,10 @@ export default {
     LidBovenBalk,
     Adressen,
     Loader,
-    FunctiesToevoegen
+    FunctiesToevoegen,
+    ConfirmDialog,
+    SideMenu,
+    IngelogdLid
   },
   data() {
     return {
@@ -75,12 +88,8 @@ export default {
           label: 'Nieuw lid'
         },
       ],
-      aangepasteVgagegevens: false,
-      aangepastePersoonsgegevens: false,
-      aangepasteAdressen: false,
-      aangepasteContacten: false,
-      aangepasteFuncties: false,
-      aangepasteGroepseigenVelden: false,
+      watchable: false,
+      changes: false,
       eigenProfiel: false,
       type: "",
       id: "",
@@ -108,31 +117,53 @@ export default {
   watch: {
     "lid.persoonsgegevens": {
       handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.vgagegevens": {
       handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.adressen": {
       handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.contacten": {
       handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
       },
       deep: true,
     },
     "lid.functies": {
       handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
         console.log('functies aangepast');
       },
       deep: true,
     },
-    "lid.email": function () {
+    "lid.email": {
+      handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
+        console.log('functies aangepast');
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -146,6 +177,7 @@ export default {
   },
   methods: {
     opslaan() {
+      console.log(this.lid);
       this.v$.$touch();
       if (this.v$.$invalid) {
         return
@@ -190,7 +222,7 @@ export default {
     },
 
     filterGroepsEigenVelden() {
-      this.groepseigenVelden =  Object.fromEntries(Object.entries( this.lid.groepseigenVelden).filter(([key]) => this.lid.groepseigenVelden[key].schema.length > 0));
+      this.groepseigenVelden = Object.fromEntries(Object.entries(this.lid.groepseigenVelden).filter(([key]) => this.lid.groepseigenVelden[key].schema.length > 0));
     },
 
     sorteerFuncties() {
