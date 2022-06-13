@@ -8,6 +8,7 @@ export default createStore({
   state: {
     naam: "",
     gebruikersnaam: "",
+    kandidaatLid: "",
     token: "",
     profiel: null,
     indexedGroepen: {},
@@ -29,6 +30,9 @@ export default createStore({
   mutations: {
     setNaam(state, naam) {
       state.naam = naam;
+    },
+    setNaamKandidaatLid(state, naam) {
+      state.kandidaatLid = naam;
     },
     setGebruikersnaam(state, gebruikersnaam) {
       state.gebruikersnaam = gebruikersnaam;
@@ -163,6 +167,9 @@ export default createStore({
     },
     inactieveGroepen(state) {
       return state.inactieveGroepen;
+    },
+    kandidaatLid(state) {
+      return state.kandidaatLid;
     }
   },
   actions: {
