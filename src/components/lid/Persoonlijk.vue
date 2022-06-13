@@ -3,7 +3,7 @@
     <card>
       <template #title> Persoonlijk</template>
       <template #content>
-        <div class="p-fluid">
+        <div class="p-fluid mt-2">
           <BaseInput
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
@@ -19,13 +19,16 @@
             type="text"
             :disabled="!nieuwLid"
             error-message="Achternaam is verplicht"
-            :invalid="v$.lid.vgagegevens.voornaam.$invalid"
+            :invalid="v$.lid.vgagegevens.achternaam.$invalid"
             @blur="v$.lid.vgagegevens.achternaam.$commit"
           />
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
             label="Geboortedatum"
             :disabled="!nieuwLid"
+            error-message="Geboortedatum is verplicht"
+            :invalid="v$.lid.vgagegevens.geboortedatum.$invalid"
+            @blur="v$.lid.vgagegevens.achternaam.$commit"
           />
           <BaseInput
             v-model="lid.gebruikersnaam"
@@ -39,6 +42,7 @@
             label="Geslacht"
           />
           <BaseCheckbox
+            v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.beperking"
             label="Persoon met beperking"
@@ -46,6 +50,7 @@
             help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
           ></BaseCheckbox>
           <BaseCheckbox
+            v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.verminderdlidgeld"
             label="Verminderd lidgeld"
@@ -78,11 +83,32 @@
             @blur="v$.lid.persoonsgegevens.rekeningnummer.$commit"
           ></BaseInput>
           <BaseCheckbox
+            v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.verbondsgegevens.lidgeldbetaald"
             label="Lidgeld betaald aan Scouts en Gidsen Vlaanderen"
             multiple="false"
+            :disabled="true"
           ></BaseCheckbox>
+          <BaseCheckbox
+            v-if="nieuwLid"
+            type="checkbox"
+            v-model="lid.vgagegevens.verminderdlidgeld"
+            label="Verminderd lidgeld"
+            multiple="false"
+            beschrijving="We willen ieder kind de kans geven om lid te worden van scouting.
+            Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld.
+            Je betaalt dan 10 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf).
+            Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken.
+            We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info
+            <a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>."
+          ></BaseCheckbox>
+          <BaseTextArea
+            v-if="nieuwLid"
+            v-model="lid.opmerkingen"
+            label="Opmerkingen"
+            type="text"
+          />
         </div>
       </template>
     </card>
@@ -94,16 +120,23 @@ import DatePicker from "@/components/input/DatePicker";
 import BaseDropDown from "@/components/input/BaseDropdown";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import { reactive, toRefs, computed } from "@vue/reactivity";
-import { onUpdated } from "@vue/runtime-core";
-import { useVuelidate } from '@vuelidate/core'
+import {computed, reactive, toRefs} from "@vue/reactivity";
+import {onUpdated} from "@vue/runtime-core";
+import {useVuelidate} from '@vuelidate/core'
 import {email, required} from '@vuelidate/validators'
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import BaseTextArea from "@/components/input/BaseTextArea";
 
 const ibantools = require('ibantools');
 const isGeldigRekeningnummer = (value) => {
+  if (!value || value.isEmpty) {
+    return true;
+  }
   let trimmedValue = value.replace(/\s+/g, '');
+  if (trimmedValue && trimmedValue.length === 0 || !value) {
+    return true;
+  }
   return ibantools.isValidIBAN(trimmedValue);
 }
 
@@ -114,19 +147,20 @@ const isGeldigGsmNummer = (value) => {
 
 export default {
   name: "Persoonlijk",
-  components: { DatePicker, BaseInput, BaseCheckbox, BaseDropDown, BaseInputTelefoon },
+  components: {DatePicker, BaseInput, BaseCheckbox, BaseDropDown, BaseInputTelefoon, BaseTextArea},
   data() {
     return {
       geslacht: [
-        { label: "Mannelijk", value: "man" },
-        { label: "Vrouwelijk", value: "vrouw" },
-        { label: "Andere", value: "andere" },
+        {label: "Mannelijk", value: "man"},
+        {label: "Vrouwelijk", value: "vrouw"},
+        {label: "Andere", value: "andere"},
       ],
     };
   },
   methods: {
     formatNumber(value) {
-      this.lid.persoonsgegevens.gsm = Telefoonnummer.formatNumber(value)
+      console.log(value);
+      this.lid.persoonsgegevens.gsm = value;
     }
   },
   props: {
@@ -138,6 +172,19 @@ export default {
       default: false
     }
   },
+  // watch: {
+  //   "lid.vgagegevens": {
+  //     handler(oldValue, newValue) {
+  //       console.log(oldValue);
+  //       console.log(newValue);
+  //       if (this.watchable) {
+  //         this.gewijzigdLid.vgagegevens = this.lid.vgagegevens;
+  //         this.changes = true;
+  //       }
+  //     },
+  //     deep: true,
+  //   },
+  // },
   setup(props) {
     const state = reactive({
       lid: {
@@ -145,7 +192,6 @@ export default {
         gebruikersnaam: "",
         links: [],
         persoonsgegevens: {
-          geslacht: "vrouw"
         },
         vgagegevens: {
           voornaam: '',
@@ -157,7 +203,8 @@ export default {
     const rules = computed(() => ({
       lid: {
         email: {
-          email
+          email,
+          required
         },
         persoonsgegevens: {
           gsm: {
@@ -173,16 +220,19 @@ export default {
           },
           achternaam: {
             required
+          },
+          geboortedatum: {
+            required
           }
         }
       },
     }))
-    const v$ = useVuelidate(rules, state, { $rewardEarly: true });
+    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
     onUpdated(() => {
       state.lid = props.modelValue;
     });
 
-    return { ...toRefs(state), v$ };
+    return {...toRefs(state), v$};
   },
 };
 </script>
