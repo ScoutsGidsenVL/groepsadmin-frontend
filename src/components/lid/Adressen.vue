@@ -9,6 +9,7 @@
             class="p-button-rounded p-button-outlined mt-1 add-button"
             @click="voegAdresToe"
             title="Voeg adres toe"
+            v-if="!lidaanvraag"
           />
         </div>
       </template>
@@ -97,6 +98,7 @@
               type="text"
             />
             <BaseCheckbox
+              v-if="!lidaanvraag"
               label="Postadres"
               multiple="false"
               v-model="adressen[index].postadres"
@@ -136,6 +138,10 @@ export default {
       type: Object,
       default: null,
     },
+    lidaanvraag: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
