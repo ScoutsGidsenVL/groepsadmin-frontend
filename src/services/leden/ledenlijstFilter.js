@@ -269,6 +269,10 @@ export default {
         groepenCriteria.activated = false;
         returnObj.arrCriteria.push(groepenCriteria);
 
+        let groepsEigenCriteria = this.getCriteriaGroepsEigen(groepen);
+        groepsEigenCriteria.activated = false;
+        returnObj.arrCriteria.push(groepsEigenCriteria);
+
         // Geslacht
         returnObj.arrCriteria.push(this.getGeslachtMenu());
 
@@ -372,7 +376,7 @@ export default {
                     "label" : "Oudlid"
                 },
                 {
-                    "value" : null,
+                    "value" : "alles",
                     "label" : "Actief en Oudlid"
                 }
             ]
@@ -489,7 +493,6 @@ export default {
     },
 
     getCriteriaGroepen(groepenData) {
-        console.log(groepenData);
         let groepen = groepenData.filter(function (groep) {
             return 'contacten' in groep;
         });
@@ -509,9 +512,74 @@ export default {
             groepenCriteria.items.push(groep);
         });
         return groepenCriteria;
+    },
+
+
+    getCriteriaGroepsEigen(groepen) {
+        let groepenCriteria = {
+            title: "Groepseigen gegevens",
+            criteriaKey: "groepseigen",
+            multiplePossible: true,
+            itemgroups: []
+        };
+
+        _.forEach(groepen, function (value) {
+
+            if (value.groepseigenGegevens) {
+                let groep = {
+                    value: value.groepsnummer,
+                    label: value.naam + " - " + value.groepsnummer,
+                    sortering: value.groepsnummer,
+                    collapsed: true
+                };
+
+                groep.items = _.map(value.groepseigenGegevens, function(groepseigenGegeven) {
+
+                    if(groepseigenGegeven.keuzes !=null && groepseigenGegeven.type=="lijst"){
+                        return {
+                            veld: groepseigenGegeven.id,
+                            label: groepseigenGegeven.label,
+                            keuze: true,
+                            keuzes: groepseigenGegeven.keuzes,
+                            operator: 'like',
+                            operatorValues: [
+                                ['bevat', 'like'],
+                                ['is', 'equals'],
+                                ['is kleiner dan', 'less'],
+                                ['is groter dan', 'greater']
+                            ]
+
+                        }
+                    }
+                    if(groepseigenGegeven.type === "vinkje"){
+
+                        return {
+                            veld: groepseigenGegeven.id,
+                            label: groepseigenGegeven.label,
+                            vinkje: true,
+                            operator: 'equals'
+                        }
+                    }
+
+                    return {
+                        veld: groepseigenGegeven.id,
+                        label: groepseigenGegeven.label,
+                        activated: false,
+                        waard: '',
+                        operator: 'like',
+                        operatorValues: [
+                            ['bevat', 'like'],
+                            ['is', 'equals'],
+                            ['is kleiner dan', 'less'],
+                            ['is groter dan', 'greater']
+                        ]
+                    }
+                });
+
+                groepenCriteria.itemgroups.push(groep);
+            }
+        });
+
+        return groepenCriteria;
     }
-
-
-
-
 }

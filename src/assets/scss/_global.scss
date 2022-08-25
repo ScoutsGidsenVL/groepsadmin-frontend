@@ -104,6 +104,10 @@
   margin-top: - 0.5rem !important;
 }
 
+.mt--08 {
+  margin-top: - 0.8rem !important;
+}
+
 .mb--25 {
   margin-bottom: -25px !important;
 }
@@ -379,4 +383,63 @@ a.clean-link:hover {
 
 .margin-top--15 {
   margin-top: -15px !important;
+}
+
+.select-kolom-header {
+  background-color: $sgv-donkergroen;
+  color: white;
+  padding-left: 11px;
+  margin-left: -8px;
+  margin-right: -8px;
+  height: auto;
+  display: flex;
+  align-items: center;
+}
+
+.data-placeholder{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  height:14px;
+  background-color: rgba(131, 127, 127, 0.26);
+  width: 100%;
+  border-radius: 10px;
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -o-filter: blur(4px);
+  -ms-filter: blur(4px);
+}
+
+.p-column-header-content {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: start;
+}
+
+.standard-order-icon {
+  width: -webkit-fill-available;
+  .fa-caret-down {
+    float: right;
+  }
+  .fa-sort-alpha-down {
+    float: right;
+  }
+}
+
+.p-column-title {
+  min-width: fit-content;
+}
+
+.icon-large {
+  font-size: 1.15rem;
+}
+
+.icon-small {
+  font-size: 0.85rem;
+}
+
+.cut-off-text-table {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }

@@ -12,29 +12,39 @@
         <Loader
           :showLoader="isLoadingLeden"
         ></Loader>
-        <div class="mt-8 md:ml-8">
+        <div class="md:ml-8">
           <div class="md:ml-6">
             <LedenlijstFilterblok class="mt-6 mb-3"
                                   :actieveKolommen="actieveKolommen"
+                                  :nonActieveKolommen="nonActieveKolommen"
                                   :filters="filters"
                                   @veranderFilter=veranderFilter
+                                  @setActieveKolom="setActieveKolom"
+                                  @setNonActieveKolom="setNonActieveKolom"
+                                  @filterToepassen="filterToepassen"
+                                  @activateCriterium="activateCriterium"
+                                  @deactivateCriterium="deactivateCriterium"
+                                  :huidigeFilter="huidigeFilter"
             >
             </LedenlijstFilterblok>
             <data-table
               ref="ledenlijst"
               :lazy="true"
-              :autoLayout="true"
               :totalRecords="aantalLedenGeladen"
               :value="leden"
               stripedRows
+              showGridlines
               responsiveLayout="scroll"
               v-model:selection="geselecteerdeLeden"
-              columnResizeMode="fit"
               @row-select-all="selecteerAlleLeden"
               @row-unselect-all="clearAlleLeden"
               @row-select="selecteerLid"
               @row-unselect="selecteerLid"
               @row-click="selectLid"
+              @sort="addSort"
+              @colum-click="addSort"
+              sort-mode="multiple"
+              class="p-datatable-sm"
             >
               <template #header>
                 <div class="d-flex justify-content-end">
@@ -50,6 +60,7 @@
                     :disabled="geselecteerdeLeden.length === 0"
                     class="p-button-rounded p-button-alert mr-2 mail-button"
                     title="Etiketten maken"
+                    label="Etiketten"
                     @click="verstuur('etiket')"
                   />
                   <Button
@@ -94,29 +105,39 @@
               ></column>
               <column
                 v-for="kolom of actieveKolommen"
-                :field="kolom.field"
-                :header="kolom.header"
-                :key="kolom.field"
+                :field="kolom.id"
+                :header="kolom.label"
+                :key="kolom.id"
+                class="clickable cut-off-text-table"
               >
                 <template #header class="sticky-top position-sticky">
-                  <div class="custom-column">
-                    <a
-                      v-if="kolom.header === 'Lidgeld betaald aan SGV'"
-                      class="ml-1 float-right"
-                      href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:groepsinstellingen&s[]=verzekerd"
-                      target="_blank"
-                    >
-                      <i
-                        class="fa fa-question-circle resolve info-button"
-                        title="meer info"
-                        style="margin-left: 3px"
-                      ></i>
-                    </a>
+                  <div class="w-full" @click="addSort(kolom)" v-if="kolom.label !== 'Lidgeld betaald aan SGV'">
+                    <div class="standard-order-icon ml-1" v-if="checkSortering(kolom) === -1">
+                      <i class="fas fa-caret-down"></i>
+                    </div>
+                    <div class="standard-order-icon ml-1" v-else>
+                      <i class="fas fa-sort-alpha-down"
+                         :class="checkSortering(kolom) === 0 ? 'icon-large' :  checkSortering(kolom) === 2 ? 'icon-small' : ''"></i>
+                    </div>
+                    <!--                    <div class="custom-column" v-if="kolom.label === 'Lidgeld betaald aan SGV'">-->
+                    <!--                      <a-->
+                    <!--                        class="ml-1 float-right"-->
+                    <!--                        href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:groepsinstellingen&s[]=verzekerd"-->
+                    <!--                        target="_blank"-->
+                    <!--                      >-->
+                    <!--                        <i-->
+                    <!--                          class="fa fa-question-circle resolve info-button"-->
+                    <!--                          title="meer info"-->
+                    <!--                          style="margin-left: 3px"-->
+                    <!--                        ></i>-->
+                    <!--                      </a>-->
+                    <!--                    </div>-->
                   </div>
                 </template>
                 <template #body="slotProps">
+                  <div v-if="!kolom.isLoaded" class="data-placeholder"></div>
                   <div v-if="kolom.type !== 'vinkje'" class="clickable">
-                    {{ slotProps.data.waarden[kolom.field] }}
+                    {{ slotProps.data.waarden[kolom.id] }}
                   </div>
                   <div
                     v-if="kolom.type === 'vinkje'"
@@ -126,10 +147,10 @@
                       class="pi"
                       :class="{
                   'true-icon pi-check-circle': isWaardeTrue(
-                    slotProps.data.waarden[kolom.field]
+                    slotProps.data.waarden[kolom.id]
                   ),
                   'false-icon pi-times-circle': isWaardeFalse(
-                    slotProps.data.waarden[kolom.field]
+                    slotProps.data.waarden[kolom.id]
                   ),
                 }"
                     ></i>
@@ -162,6 +183,7 @@ import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import Breadcrumb from "primevue/breadcrumb";
+import ledenlijstService from "@/services/leden/ledenlijstService";
 
 export default {
   name: "Ledenlijst",
@@ -198,6 +220,7 @@ export default {
       offset: 0,
       totaalAantalLeden: 0,
       aantalPerPagina: 10,
+      huidigeFilter: {},
       leden: [],
       actieveKolommen: [],
       filters: [],
@@ -221,21 +244,116 @@ export default {
     this.getLeden();
     this.getHuidigeFilter();
     this.getFilters();
-    ledenlijstFilter.getCriteria();
+    this.criteria = ledenlijstFilter.getCriteria();
     window.addEventListener("scroll", this.handleScroll);
+    this.emitter.on('changeGeslachtCriterium', (event) => {
+      this.changeGeslachtCriterium(event.criteria, event.selectedOption);
+    })
+    this.emitter.on('changeOudLidCriterium', (event) => {
+      this.changeOudLidCriterium(event.criteria, event.selectedOption);
+    })
+    this.emitter.on('setActieveKolom', (event) => {
+      this.setActieveKolom(event.kolom);
+    })
+  },
+
+  computed: {
+    aantalLedenGeladen() {
+      return this.leden.length;
+    },
+
+    aantalIds() {
+      return this.lidIds.size;
+    },
   },
 
   methods: {
+    activateCriterium(criteriaKey) {
+      this.huidigeFilter.criteria[criteriaKey] = true;
+    },
+
+    changeGeslachtCriterium(criteria, gekozenGeslacht) {
+      this.huidigeFilter.criteria[criteria.criteriaKey] = gekozenGeslacht;
+    },
+
+    changeOudLidCriterium(criteria, keuze) {
+      if (keuze === "alles") {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = null;
+      } else {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = keuze;
+      }
+    },
+
+    deactivateCriterium(criteriaKey) {
+      if (criteriaKey === 'adresgeblokkeerd' || criteriaKey === 'emailgeblokkeerd' || criteriaKey === 'verminderdlidgeld') {
+        this.huidigeFilter.criteria[criteriaKey] = false;
+      } else if (criteriaKey === 'geslacht') {
+        this.huidigeFilter.criteria[criteriaKey] = undefined;
+      }
+    },
+
+    setNonActieveKolom() {
+      this.actieveKolommen = ledenlijstService.indexeerEnGroepeerKolommen(this.kolommen);
+      this.nonActieveKolommen = ledenlijstService.indexeerEnGroepeerNonActieveKolommen(this.kolommen);
+    },
+
+    setActieveKolom(kolom) {
+      if (kolom) {
+        let index = this.huidigeFilter.sortering.indexOf(kolom.id);
+        if (index > -1) {
+          this.huidigeFilter.sortering.splice(index, 1);
+        }
+      }
+      this.actieveKolommen = ledenlijstService.indexeerEnGroepeerKolommen(this.kolommen);
+      this.nonActieveKolommen = ledenlijstService.indexeerEnGroepeerNonActieveKolommen(this.kolommen);
+    },
+
+    checkSortering(kolom) {
+      let mapping = {
+        'be.vvksm.groepsadmin.model.column.VVKSMGroepsNamenColumn': 'be.vvksm.groepsadmin.model.column.VVKSMGroepenColumn',
+        'be.vvksm.groepsadmin.model.column.VVKSMGroepsNummersColumn': 'be.vvksm.groepsadmin.model.column.VVKSMGroepenColumn',
+        'be.vvksm.groepsadmin.model.column.LeeftijdColumn': 'be.vvksm.groepsadmin.model.column.GeboorteDatumColumn'
+      };
+
+      let kolomnaam = kolom.id;
+      if (kolom.sorteringsIndex === -1 && mapping[kolom.id] !== undefined) {
+        kolomnaam = mapping[kolom.id];
+      }
+      return this.huidigeFilter.sortering.indexOf(kolomnaam);
+    },
+
+    filterToepassen() {
+      this.isLoadingLeden = true;
+      this.offset = 0;
+      let actKolommen = [];
+      this.actieveKolommen.forEach(kolom => {
+        actKolommen.push(kolom.id);
+      })
+      this.huidigeFilter.kolommen = actKolommen;
+      RestService.patchHuidigeFilter(this.huidigeFilter)
+        .then(res => {
+          this.huidigeFilter = res.data;
+          this.leden = [];
+          this.getLeden();
+          this.getFilters();
+          ledenlijstFilter.getCriteria();
+          this.activeerKolommen();
+        })
+
+    },
+
     addSort(kolom) {
       console.log(kolom);
-    },
-
-    voegLidToeAanLijst(lid) {
-      console.log(lid);
-    },
-
-    checkLidInLijst(lid) {
-      console.log(lid);
+      console.log(this.huidigeFilter.sortering);
+      console.log(this.checkSortering(kolom));
+      if (this.checkSortering(kolom) === -1) {
+        this.huidigeFilter.sortering.unshift(kolom.id)
+        console.log(this.huidigeFilter.sortering);
+        this.huidigeFilter.sortering.splice(3);
+      }
+      kolom.sorteringsIndex = this.checkSortering(kolom);
+      console.log(this.huidigeFilter.sortering);
+      this.filterToepassen();
     },
 
     veranderFilter(filter) {
@@ -303,6 +421,7 @@ export default {
           this.isLoadingMore = false;
         });
     },
+
     getKolommen() {
       this.kolommen = store.getters.kolommen;
       if (!this.kolommen) {
@@ -323,11 +442,7 @@ export default {
         console.log(this.filters)
       }).catch(error => {
         console.log(error)
-        console.log(" er ging iets vreselijks mis met het ophalen van de filters")
       })
-    },
-
-    onColReorder() {
     },
 
     handleScroll() {
@@ -361,18 +476,8 @@ export default {
     },
 
     activeerKolommen() {
-      this.actieveKolommen = [];
-      this.huidigeFilter.kolommen.forEach((filterKolom) => {
-        this.kolommen.forEach((kolom) => {
-          if (kolom && kolom.id === filterKolom) {
-            this.actieveKolommen.push({
-              field: kolom.id,
-              header: kolom.label,
-              type: kolom.type,
-            });
-          }
-        });
-      });
+      this.actieveKolommen = ledenlijstService.activeerKolommen(this.huidigeFilter, this.kolommen);
+      this.nonActieveKolommen = ledenlijstService.indexeerEnGroepeerNonActieveKolommen(this.kolommen);
     },
 
     exporteer(type) {
@@ -495,20 +600,6 @@ export default {
 
     isWaardeFalse(value) {
       return value === '<input type="checkbox" disabled/>';
-    },
-  },
-
-  computed: {
-    gefilterdeKolommen(kolom) {
-      return kolom.activated;
-    },
-
-    aantalLedenGeladen() {
-      return this.leden.length;
-    },
-
-    aantalIds() {
-      return this.lidIds.size;
     },
   },
 };

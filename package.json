@@ -38,6 +38,7 @@
     "underscore": "^1.13.2",
     "vee-validate": "^4.5.3",
     "vue": "^3.2.20",
+    "vue-click-outside-element": "^1.0.15",
     "vue-router": "^4.0.12",
     "vue3-loading-overlay": "^0.0.1",
     "vuedraggable": "^4.1.0",
@@ -59,11 +60,11 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
+    "postcss": "^8.2.10",
     "prettier": "^2.2.1",
-    "typescript": "~3.9.3",
-    "vue-jest": "^5.0.0-0",
     "sass": "^1.32.10",
     "sass-loader": "8.0.2",
-    "postcss": "^8.2.10"
+    "typescript": "~3.9.3",
+    "vue-jest": "^5.0.0-0"
   }
 }

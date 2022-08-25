@@ -286,3 +286,64 @@
     box-shadow: 0 0 0 1px $sgv-donkergroen !important;
   }
 }
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  border-color: $sgv-donkergroen;
+  background: $sgv-lichtgroen;
+  &:hover {
+    background: $sgv-donkergroen !important;
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+    background: $sgv-donkergroen !important;
+  }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    border-color: $sgv-donkergroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+  &.p-focus {
+    box-shadow: 0 0 0 1px $sgv-lichtgroen !important;
+    background: $sgv-donkergroen !important;
+    border-color: $sgv-donkergroen !important;
+  }
+}
+
+.p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
+  background-color: $sgv-lichtgroen !important;
+}
+
+.p-radiobutton .p-radiobutton-box {
+  border-color: $sgv-donkergroen;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    border-color: $sgv-donkergroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+}
+
+.cut-off-text {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  padding-right: 35px !important;
+}

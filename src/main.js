@@ -44,6 +44,9 @@ import GoogleMaps from "@/services/google/GoogleMaps";
 import DataTable from "primevue/datatable";
 import ProgressSpinner from "primevue/progressspinner";
 import InputSwitch from 'primevue/inputswitch';
+import RadioButton from "primevue/radiobutton";
+import VueClickOutsideElement from 'vue-click-outside-element'
+
 
 library.add(fas, faUser);
 
@@ -57,6 +60,7 @@ app.use(store);
 app.use(ConfirmationService);
 app.use(Loading);
 app.use(router);
+app.use(VueClickOutsideElement);
 app.use(VueGoogleMaps, {
     load: {
         key: GoogleMaps.getKey(),
@@ -127,6 +131,21 @@ app.component("Dialog", Dialog);
 app.component("Breadcrumb", Breadcrumb);
 app.component("Menu", Menu);
 app.component("InputSwitch", InputSwitch);
+app.component("RadioButton", RadioButton);
+
+app.directive('click-outside', {
+    mounted(el, binding) {
+        el.clickOutsideEvent = function(event) {
+            if (!(el === event.target || el.contains(event.target))) {
+                binding.value(event, el);
+            }
+        };
+        document.body.addEventListener('click', el.clickOutsideEvent);
+    },
+    unmounted(el) {
+        document.body.removeEventListener('click', el.clickOutsideEvent);
+    }
+});
 
 const emitter = mitt();
 app.config.globalProperties.emitter = emitter;

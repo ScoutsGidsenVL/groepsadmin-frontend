@@ -1,9 +1,50 @@
 <template>
-  <div class="col-lg-2 ">
-    <div @click="toggleMenu = !toggleMenu" class="clickable btn-primary col-12 kolom-select text-align-left">Kolommen</div>
-    <div v-show="toggleMenu" class="position-absolute z999 bg-white col-2 mt-2 filter-border">
-      <div v-for="(item, key) in actieveKolommen" :key="key">
-        <base-checkbox :label="item.header" class="text-align-left" @check="voegKolomToe"></base-checkbox>
+  <div class="col-lg-2 mt-2" v-click-outside="close">
+    <div @click="toggleMenu = !toggleMenu" class="clickable">
+      <div class="clickable col-12 kolom-select text-align-left type-select-button">
+        Kolommen
+      </div>
+      <div class="row clickable mt--08">
+        <label class="ml-2 subtitle mt--08 clickable cut-off-text text-align-left">{{ actieveKolomNamen }}</label>
+      </div>
+    </div>
+    <div v-show="toggleMenu" class="position-absolute z999 bg-white col-2 filter-border text-align-left">
+      <draggable :list="actieveKolommen"
+                 @start="drag=true"
+                 @end="drag=false"
+                 item-key="id"
+                 handle=".handle"
+      >
+        <template #item="{ element }">
+          <div class="handle">
+            <checkbox
+              :id="element.id"
+              class="ml-1"
+              :modelValue="checkKolom(element)"
+              :binary="true"
+              @change="
+                $event.stopPropagation();
+                voegKolomToe(element);"
+            />
+            <label :for="element.id" class="ml-2">{{ element.label }}</label>
+            <i class="far fa-arrows-alt-v top-6 float-end mt-1"></i>
+          </div>
+        </template>
+      </draggable>
+      <div>
+        <div v-for="(groepering, index) in groepering" :key="index" class="mt-3">
+          <div class="select-kolom-header mb-2">{{ groepering.toUpperCase() }}</div>
+          <div v-for="(item, key) in gefilterdeNonActieve(groepering)" :key="key">
+            <checkbox
+              :id="key"
+              class="ml-1"
+              :modelValue="checkKolom(item)"
+              :binary="true"
+              @change="voegKolomToe(item)"
+            />
+            <label :for="key" class="ml-2 clickable">{{ item.label }}</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -12,29 +53,81 @@
 <script>
 
 
-import BaseCheckBoxLeft from "@/components/input/BaseCheckboxLeft";
+import ledenlijstService from "@/services/leden/ledenlijstService";
+import Draggable from 'vuedraggable'
+
 export default {
   name: "KolommenSelect",
   props: {
     actieveKolommen: {
       type: Array
+    },
+    nonActieveKolommen: {
+      type: Array
     }
   },
   components: {
-    baseCheckbox: BaseCheckBoxLeft
+    Draggable,
   },
   data() {
     return {
       toggleMenu: false,
-      geselecteerdeKolommen: null,
+      drag: false,
     }
   },
+
+  computed: {
+    actieveKolomNamen() {
+      let kolomnamen = "";
+      this.actieveKolommen.forEach(kolom => {
+        kolomnamen.length > 0 ? kolomnamen += ", " : kolomnamen += " ";
+        kolomnamen += kolom.label;
+      })
+      return kolomnamen;
+    },
+    groepering() {
+      return ledenlijstService.getGroepering(this.nonActieveKolommen);
+    },
+  },
+
   mounted() {
 
   },
-  methods: {
-    voegKolomToe() {
 
+  methods: {
+    voegKolomToe(kolom) {
+      if (kolom.activated) {
+        kolom.activated = false;
+        kolom.groepering = kolom.groeperingOrig;
+        kolom.kolomIndex = kolom.kolomIndexOrig;
+        this.$emit('setActieveKolom');
+        this.emitter.emit('setActieveKolom', {'kolom': kolom })
+
+
+      } else {
+        kolom.activated = true;
+        kolom.groeperingOrig = kolom.groepering;
+        kolom.groepering = undefined;
+        this.$emit('setNonActieveKolom');
+      }
+    },
+
+    gefilterdeNonActieve(groepering) {
+      return ledenlijstService.groeperingGefilterdeKolommen(this.nonActieveKolommen, groepering);
+    },
+
+    close() {
+      this.toggleMenu = false;
+    },
+
+    checkKolom(huidigekolom) {
+      let result = false;
+      this.actieveKolommen.forEach(kolom => {
+        if (kolom.id === huidigekolom.id) {
+          result = true;
+        }
+      })
+      return result;
     }
   }
 }
