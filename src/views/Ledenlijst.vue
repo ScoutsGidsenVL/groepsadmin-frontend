@@ -290,12 +290,16 @@ export default {
       }
     },
 
-    deactivateCriterium(criteriaKey) {
-      if (criteriaKey === 'adresgeblokkeerd' || criteriaKey === 'emailgeblokkeerd' || criteriaKey === 'verminderdlidgeld') {
-        this.huidigeFilter.criteria[criteriaKey] = false;
-      } else if (criteriaKey === 'geslacht') {
-        this.huidigeFilter.criteria[criteriaKey] = undefined;
+    deactivateCriterium(criterium) {
+      if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld') {
+        this.huidigeFilter.criteria[criterium.criteriaKey] = false;
+        console.log(this.huidigeFilter)
+      } else if (criterium.criteriaKey === 'geslacht') {
+        this.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
       }
+      let index = this.activeCriteria.indexOf(criterium);
+      this.activeCriteria.splice(index, 1);
+      criterium.activated = false;
     },
 
     setNonActieveKolom() {

@@ -111,10 +111,7 @@ export default {
     },
 
     deactivateCriterium(criterium) {
-      let index = this.activeCriteriaArray.indexOf(criterium);
-      this.activeCriteriaArray.splice(index, 1);
-      criterium.activated = false;
-      this.$emit('deactivateCriterium', criterium.criteriaKey)
+      this.$emit('deactivateCriterium', criterium)
 
     },
 
