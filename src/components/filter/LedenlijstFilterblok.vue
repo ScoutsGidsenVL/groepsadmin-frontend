@@ -52,7 +52,6 @@
 import KolommenSelect from "@/components/filter/KolommenSelect";
 import Opslaan from "@/components/buttons/Opslaan";
 import CriteriaSelect from "@/components/filter/CriteriaSelect";
-import ledenlijstFilter from "@/services/leden/ledenlijstFilter";
 import BoolFilter from "@/components/filter/BoolFilter";
 import OudLedenSelect from "@/components/filter/OudLedenSelect";
 import GeslachtSelect from "@/components/filter/GeslachtSelect";
@@ -80,6 +79,12 @@ export default {
     },
     huidigeFilter: {
       type: Object
+    },
+    activeCriteria: {
+      type: Array
+    },
+    criteria: {
+      type: Array
     }
   },
 
@@ -87,40 +92,11 @@ export default {
     return {
       filterOpslaanMode: false,
       nieuweFilternaam: '',
-      criteria: [],
-      activeCriteria: [],
     }
   },
 
   created() {
-    this.criteria = ledenlijstFilter.getCriteria();
-    if (this.huidigeFilter.criteria) {
-      for (const [key, value] of Object.entries(this.huidigeFilter.criteria)) {
-        this.criteria.arrCriteria.forEach(crit => {
-          if (crit.criteriaKey === key &&
-            (crit.criteriaKey === 'adresgeblokkeerd' ||
-              crit.criteriaKey === 'verminderdLidgeld' ||
-              crit.criteriaKey === 'emailgeblokkeerd' ||
-              crit.criteriaKey === 'geslacht' ||
-              crit.criteriaKey === 'oudleden') &&
-            value) {
-            crit.activated = true;
-            crit.value = value;
-            this.activeCriteria.push(crit);
-          }
-        })
-      }
-    }
-    // Om de vreemde constructie van deze filter op te vangen moeten we gaan checken als die bestaat in de criteria van de huidige filter
-    if (!Object.prototype.hasOwnProperty.call(this.huidigeFilter.criteria, 'oudleden')) {
-      this.criteria.arrCriteria.forEach(crit => {
-        if (crit.criteriaKey === 'oudleden') {
-          crit.activated = true;
-          crit.value = "alles";
-          this.activeCriteria.push(crit);
-        }
-      })
-    }
+
   },
 
   methods: {
@@ -131,16 +107,12 @@ export default {
       return false;
     },
     selecteerCriterium(criterium) {
-      if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd') {
-        this.$emit('activateCriterium', criterium.criteriaKey)
-      }
-      criterium.activated = true;
-      this.activeCriteria.push(criterium);
+      this.$emit('activateCriterium', criterium);
     },
 
     deactivateCriterium(criterium) {
-      let index = this.activeCriteria.indexOf(criterium);
-      this.activeCriteria.splice(index, 1);
+      let index = this.activeCriteriaArray.indexOf(criterium);
+      this.activeCriteriaArray.splice(index, 1);
       criterium.activated = false;
       this.$emit('deactivateCriterium', criterium.criteriaKey)
 
@@ -157,10 +129,6 @@ export default {
     filterToepassen() {
       this.$emit('filterToepassen');
     },
-
-    getHuidigeFilter() {
-      return this.huidigeFilter;
-    }
   },
 
   computed: {
@@ -169,7 +137,10 @@ export default {
         return !crit.activated
       });
     },
-  }
+    activeCriteriaArray() {
+      return this.activeCriteria;
+    }
+  },
 }
 </script>
 

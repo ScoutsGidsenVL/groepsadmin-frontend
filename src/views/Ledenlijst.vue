@@ -14,7 +14,7 @@
         ></Loader>
         <div class="md:ml-8">
           <div class="md:ml-6">
-            <LedenlijstFilterblok class="mt-6 mb-3"
+            <LedenlijstFilterblok class="mt-6 mb-3" v-if="!isLoadingFilters"
                                   :actieveKolommen="actieveKolommen"
                                   :nonActieveKolommen="nonActieveKolommen"
                                   :filters="filters"
@@ -25,6 +25,8 @@
                                   @activateCriterium="activateCriterium"
                                   @deactivateCriterium="deactivateCriterium"
                                   :huidigeFilter="huidigeFilter"
+                                  :criteria="criteria"
+                                  :active-criteria="activeCriteria"
             >
             </LedenlijstFilterblok>
             <data-table
@@ -226,7 +228,8 @@ export default {
       filters: [],
       geselecteerdeLeden: [],
       deelFilter: false,
-
+      criteria: [],
+      activeCriteria: [],
       canPost: false,
       canShare: false,
       isVgaOfLeiding: false,
@@ -244,7 +247,6 @@ export default {
     this.getLeden();
     this.getHuidigeFilter();
     this.getFilters();
-    this.criteria = ledenlijstFilter.getCriteria();
     window.addEventListener("scroll", this.handleScroll);
     this.emitter.on('changeGeslachtCriterium', (event) => {
       this.changeGeslachtCriterium(event.criteria, event.selectedOption);
@@ -268,8 +270,12 @@ export default {
   },
 
   methods: {
-    activateCriterium(criteriaKey) {
-      this.huidigeFilter.criteria[criteriaKey] = true;
+    activateCriterium(criterium) {
+      if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd') {
+        this.huidigeFilter.criteria[criterium.criteriaKey] = true;
+      }
+      criterium.activated = true;
+      this.activeCriteria.push(criterium);
     },
 
     changeGeslachtCriterium(criteria, gekozenGeslacht) {
@@ -463,15 +469,19 @@ export default {
     },
 
     getHuidigeFilter() {
+      this.isLoadingFilters = true;
       RestService.getHuidigeFilter()
         .then((res) => {
           this.huidigeFilter = res.data;
           this.getKolommen();
+          this.criteria = ledenlijstFilter.getCriteria();
+          this.activeCriteria = ledenlijstFilter.getActieveCriteria(this.huidigeFilter);
         })
         .catch((error) => {
           console.log(error);
         })
         .finally(() => {
+            this.isLoadingFilters = false;
         });
     },
 

@@ -1,4 +1,5 @@
 import store from "@/store";
+
 let _ = require('lodash');
 
 
@@ -124,11 +125,11 @@ export default {
 
     },
 
-    setHuidigeFilterLabel (str, huidigeFilter) {
+    setHuidigeFilterLabel(str, huidigeFilter) {
         huidigeFilter.naam = str;
     },
 
-    getLeeftijdCriterium () {
+    getLeeftijdCriterium() {
         return {
             'title': 'Leeftijd',
             'criteriaKey': 'leeftijd',
@@ -261,7 +262,7 @@ export default {
         let functies = store.getters.functies;
         let functieGroepen = this.maakFunctieGroepen(functies);
         functieGroepen.activated = false;
-        returnObj.arrCriteria .push(functieGroepen);
+        returnObj.arrCriteria.push(functieGroepen);
 
         // Groepen
         let groepen = store.getters.groepen;
@@ -343,10 +344,10 @@ export default {
 
     getGeslachtMenu() {
         let geslacht = {
-            "title" : "Geslacht",
-            "criteriaKey" : "geslacht",
-            "multiplePossible" : false,
-            "items" : [
+            "title": "Geslacht",
+            "criteriaKey": "geslacht",
+            "multiplePossible": false,
+            "items": [
                 {
                     "value": "vrouw",
                     "label": "Meisje"
@@ -367,17 +368,17 @@ export default {
 
     getOudledenMenu() {
         let oudLeden = {
-            "title" : "Oudleden",
-            "criteriaKey" : "oudleden",
-            "multiplePossible" : false,
-            "items" : [
+            "title": "Oudleden",
+            "criteriaKey": "oudleden",
+            "multiplePossible": false,
+            "items": [
                 {
-                    "value" : true,
-                    "label" : "Oudlid"
+                    "value": true,
+                    "label": "Oudlid"
                 },
                 {
-                    "value" : "alles",
-                    "label" : "Actief en Oudlid"
+                    "value": "alles",
+                    "label": "Actief en Oudlid"
                 }
             ]
         }
@@ -387,10 +388,10 @@ export default {
 
     getVerminderdLidgeldMenu() {
         let verminderdLidgeld = {
-            "title" : "Verminderd lidgeld",
-            "criteriaKey" : "verminderdLidgeld",
-            "multiplePossible" : false,
-            "items" : [
+            "title": "Verminderd lidgeld",
+            "criteriaKey": "verminderdLidgeld",
+            "multiplePossible": false,
+            "items": [
                 {
                     "value": true,
                     "label": "Ja"
@@ -403,10 +404,10 @@ export default {
 
     getEmailGeblokkeerdMenu() {
         let emailGeblokkeerd = {
-            "title" : "E-mailadres geblokkeerd",
-            "criteriaKey" : "emailgeblokkeerd",
-            "multiplePossible" : false,
-            "items" : [
+            "title": "E-mailadres geblokkeerd",
+            "criteriaKey": "emailgeblokkeerd",
+            "multiplePossible": false,
+            "items": [
                 {
                     "value": true,
                     "label": "Ja"
@@ -419,10 +420,10 @@ export default {
 
     getAdresGeblokkeerdMenu() {
         let adresGeblokkeerd = {
-            "title" : "Adres geblokkeerd",
-            "criteriaKey" : "adresgeblokkeerd",
-            "multiplePossible" : false,
-            "items" : [
+            "title": "Adres geblokkeerd",
+            "criteriaKey": "adresgeblokkeerd",
+            "multiplePossible": false,
+            "items": [
                 {
                     "value": true,
                     "label": "Ja"
@@ -433,7 +434,7 @@ export default {
         return adresGeblokkeerd;
     },
 
-    maakGroepSpecifiekeFunctieGroepen (functies) {
+    maakGroepSpecifiekeFunctieGroepen(functies) {
 
         let groepFuncties = _.filter(functies, function (f) {
             return f.type === 'groep';
@@ -533,9 +534,9 @@ export default {
                     collapsed: true
                 };
 
-                groep.items = _.map(value.groepseigenGegevens, function(groepseigenGegeven) {
+                groep.items = _.map(value.groepseigenGegevens, function (groepseigenGegeven) {
 
-                    if(groepseigenGegeven.keuzes !=null && groepseigenGegeven.type=="lijst"){
+                    if (groepseigenGegeven.keuzes != null && groepseigenGegeven.type == "lijst") {
                         return {
                             veld: groepseigenGegeven.id,
                             label: groepseigenGegeven.label,
@@ -551,7 +552,7 @@ export default {
 
                         }
                     }
-                    if(groepseigenGegeven.type === "vinkje"){
+                    if (groepseigenGegeven.type === "vinkje") {
 
                         return {
                             veld: groepseigenGegeven.id,
@@ -581,5 +582,39 @@ export default {
         });
 
         return groepenCriteria;
+    },
+
+    getActieveCriteria(huidigeFilter) {
+        let activeCriteria = [];
+        let criteria = this.getCriteria();
+        if (huidigeFilter.criteria) {
+            for (const [key, value] of Object.entries(huidigeFilter.criteria)) {
+                criteria.arrCriteria.forEach(crit => {
+                    if (crit.criteriaKey === key &&
+                        (crit.criteriaKey === 'adresgeblokkeerd' ||
+                            crit.criteriaKey === 'verminderdLidgeld' ||
+                            crit.criteriaKey === 'emailgeblokkeerd' ||
+                            crit.criteriaKey === 'geslacht' ||
+                            crit.criteriaKey === 'oudleden') &&
+                        value) {
+                        crit.activated = true;
+                        crit.value = value;
+                        activeCriteria.push(crit);
+                    }
+                })
+            }
+
+            // Om de vreemde constructie van deze filter op te vangen moeten we gaan checken als die bestaat in de criteria van de huidige filter
+            if (!Object.prototype.hasOwnProperty.call(huidigeFilter.criteria, 'oudleden')) {
+                criteria.arrCriteria.forEach(crit => {
+                    if (crit.criteriaKey === 'oudleden') {
+                        crit.activated = true;
+                        crit.value = "alles";
+                        activeCriteria.push(crit);
+                    }
+                })
+            }
+        }
+        return activeCriteria;
     }
 }

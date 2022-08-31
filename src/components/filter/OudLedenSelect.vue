@@ -53,6 +53,9 @@ export default {
   },
   mounted() {
     this.selectedOption = this.value;
+    if (this.selectedOption === undefined) {
+      this.selectedOption = true;
+    }
   },
   methods: {
     deactivateCriterium(criteria) {
