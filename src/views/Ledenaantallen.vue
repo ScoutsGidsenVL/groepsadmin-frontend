@@ -103,7 +103,7 @@
               </div>
               <div id="Huidige leidingservaring" v-if="selectedGraph === 'Huidige leidingservaring'">
                 <Chart type="doughnut" :data="getLeidingservaring.data" :options="getLeidingservaring.options"
-                       class="w-75"/>
+                       class="w-30rem"/>
               </div>
               <div id="Instroom en uitstroom per leeftijd"
                    v-if="selectedGraph === 'Instroom en uitstroom per leeftijd'">
