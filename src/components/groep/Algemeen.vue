@@ -20,7 +20,7 @@
             v-model="groep.website"
             label="Website"
             type="text"
-            :disabled="kanGroepWijzigen"
+            :disabled="!kanGroepWijzigen"
           />
           <BaseTextArea
             v-model="groep.vrijeInfo"
@@ -37,7 +37,7 @@
           <date-picker
             v-model="groep.opgericht"
             label="Oprichtingsdatum"
-            :disabled="true"
+            :disabled="!kanGroepWijzigen"
           />
           <BaseInput
             v-model="groep.rekeningnummer"
@@ -69,6 +69,18 @@
             multiple="false"
             :disabled="!kanGroepWijzigen"
           ></BaseCheckbox>
+          <div id="helpBlock" class="help-block word-break mt-2" v-show="groep['publiek-inschrijven']">
+            <p>
+              Link naar jouw inschrijvingsformulier:<br>
+              <a :href="formulierUrl" target="_blank" class="icon-small clean-link color-dark-green">{{formulierUrl}}</a>
+            </p>
+            <p>
+              Inschrijvingsformulier insluiten in jouw website:<br>
+              <code>
+                &lt;iframe height="1200" width="950" src="{{formulierUrl}}" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+              </code>
+            </p>
+          </div>
         </div>
       </template>
     </card>
@@ -105,6 +117,13 @@ export default {
     facturatieLedenCheck() {
       return !!this.groep.facturatieLeden;
     },
+    kanGroepWijzigen() {
+      return rechtenService.kanWijzigen(this.groep);
+    },
+    formulierUrl() {
+      console.log(window.location)
+      return this.baseUrl + this.groep.groepsnummer;
+    }
   },
 
   methods: {
@@ -126,13 +145,11 @@ export default {
           break;
       }
     },
-    kanGroepWijzigen() {
-      return rechtenService.kanWijzigen(this.groep);
-    },
   },
 
   setup(props) {
     const state = reactive({
+      baseUrl: window.location.origin.split('#' + window.location.pathname)[0] + '/groepsadmin/frontend/formulier/lidworden/',
       groep: {
         naam: "",
         groepsnummer: "",
