@@ -41,7 +41,7 @@ pipeline {
 
     stage('deploy') {
       steps {
-        sh 'ssh lxc-deb-rundeck.vvksm.local sudo -u rundeck /opt/deploy-ga.sh frontend ${BRANCH_NAME}'
+        sh 'ssh az-deb-mgmt sudo -u ansible /opt/deploy-ga.sh client ${BRANCH_NAME}'
       }
     }
   }
