@@ -2,9 +2,6 @@
   <div class="mb-4 lg:ml-4">
     <card>
       <template #title>
-        <Loader
-          :showLoader="laden"
-        ></Loader>
         <span>
           Groepseigen gegevens
         </span>
@@ -132,7 +129,7 @@
                       </div>
                       <div class="row">
                         <base-input-no-label v-model="element.label" placeholder="Nieuw groepseigen gegeven"
-                                             @changeValue="wijzig"></base-input-no-label>
+                                             ></base-input-no-label>
                       </div>
                       <div v-if="element.type === 'lijst'">
                         <div class="row">
@@ -187,10 +184,6 @@ import BaseTextArea from "@/components/input/BaseTextArea";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import BaseInputNoLabel from "@/components/input/BaseInputNoLabel";
 import RestService from "@/services/api/RestService";
-import store from "@/store";
-import Loader from "@/components/global/Loader";
-// import RestService from "@/services/api/RestService";
-// import store from "@/store";
 
 export default {
   name: "GroepseigenGegevens",
@@ -199,7 +192,6 @@ export default {
     BaseTextArea,
     BaseCheckbox,
     Draggable,
-    Loader
   },
   props: {
     modelValue: {
@@ -209,7 +201,6 @@ export default {
   data() {
     return {
       drag: false,
-      laden: false,
       activeIndex: null
     }
   },
@@ -242,13 +233,13 @@ export default {
         header: "Keuze verwijderen",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.laden = true;
+          this.$emit('laden');
           element.keuzes.splice(index, 1);
           RestService.updateGroep(this.groep)
             .then(res => {
               if (res.status === 200) {
-                this.laden = false
-                store.dispatch("getGroepen");
+                this.$emit('laden');
+                this.$store.dispatch("getGroepen");
                 this.$toast.add({
                   severity: "success",
                   summary: "Keuze",
@@ -277,11 +268,6 @@ export default {
       element.type = type;
     },
 
-    wijzig(value) {
-      console.log('wijzig')
-      console.log(value);
-    },
-
     voegGeigToe() {
       let newGegeven = {
         beschrijving: null,
@@ -308,38 +294,7 @@ export default {
         accept: () => {
           this.groep.groepseigenGegevens.splice(index, 1);
           if (geig.id) {
-            RestService.updateGroep(this.groep)
-              .then(res => {
-                if (res.status === 200) {
-                  // this.$emit("opslaan");
-                  this.laden = true
-                  store.dispatch("getGroepen");
-                  this.$toast.add({
-                    severity: "success",
-                    summary: "Groepseigen gegeven",
-                    detail: "Groepseigen gegeven verwijderd.",
-                    life: 3000,
-                  });
-                }
-              }).catch((error) => {
-              if (error.response.status === 404) {
-                // this.$emit("opslaan");
-                this.laden = false;
-                this.$toast.add({
-                  severity: "warn",
-                  summary: "Groepseigen gegeven",
-                  detail: "Groepseigen gegeven bestaat niet meer",
-                  life: 8000,
-                });
-              } else {
-                this.$toast.add({
-                  severity: "warn",
-                  summary: "Functie",
-                  detail: error.response.data.beschrijving,
-                  life: 8000,
-                });
-              }
-            })
+            this.$emit('updateGroep')
           } else {
             this.$toast.add({
               severity: "success",
