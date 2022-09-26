@@ -10,8 +10,8 @@
         <div class="menu">
           <div>
             <ul>
-              <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item clickable">
-                <div @click="goto(menuItem)">
+              <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item menu-item-width clickable">
+                <div @click="goto(menuItem)" class="menu-item-width">
                   <div class="menu-icon">
                     <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
                        class="menu-icon"

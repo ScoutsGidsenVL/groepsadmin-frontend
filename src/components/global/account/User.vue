@@ -1,8 +1,8 @@
 <template>
-  <div class="user-block">
+  <div class="user-block clickable">
     <span>
       <i class="fas fa-user" />
-      <span class="username">{{ naam }}</span>
+      <span class="username" @click="">{{ naam }}</span>
     </span>
   </div>
 </template>
