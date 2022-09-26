@@ -10,9 +10,19 @@
         </div>
       </template>
       <template #content>
-        <div v-if="groep.groepsleiding && groep.groepsleiding.length > 0">
-          <label class="f-500"> Groepsleiding</label>
+        <div class="ml-3" v-if="groep.groepsleiding && groep.groepsleiding.length > 0">
+          <label class="f-500 underline"> Groepsleiding</label>
+          <div v-for="(grl, key) in groep.groepsleiding" :key="key">
+            <i class="fas fa-user"></i><span class="ml-3">{{ grl.naam }}</span>
+            <br />
+            <i class="fas fa-envelope"></i
+            ><span class="ml-3"
+          ><a class="mail-link" href="mailto:{{ grl.email }}">{{
+              grl.email
+            }}</a></span>
+          </div>
         </div>
+        <br/>
         <div class="ml-3" v-if="groep.vga">
           <label class="underline">
             Verantwoordelijke Groepsadministratie</label
