@@ -4,7 +4,7 @@
 }
 
 .kolom-select {
-  height: 55px;
+  height: 42px;
 }
 
 .custom-checkbox {
@@ -21,4 +21,9 @@
 
 .groepseigengegevens label {
   margin-top: 0 !important;
+}
+
+.filter-height-select {
+  overflow-y: auto;
+  max-height: 425px;
 }

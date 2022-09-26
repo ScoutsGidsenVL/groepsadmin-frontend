@@ -88,6 +88,10 @@
   width: 100% !important;
 }
 
+.width-50 {
+  width: 50% !important;
+}
+
 .ml--05 {
   margin-left: - 0.5rem !important;
 }
@@ -443,3 +447,47 @@ a.clean-link:hover {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+.mr-7px {
+  margin-right: 7px;
+}
+
+.full-width {
+  width: -webkit-fill-available;
+}
+
+.criteria-label {
+  width: 207px !important;
+}
+
+.dropdown-height {
+  height: 25px !important;
+  .p-dropdown-label {
+    margin-top: -9px;
+  }
+}
+
+.margin-left-27px {
+  margin-left: 27px !important;
+}
+
+.datatable-component {
+  min-height: 67vh !important;
+}
+
+.vw90 {
+  width: 90vw;
+}
+
+.color-light-green {
+  color: $sgv-lichtgroen;
+}
+
+.color-dark-green {
+  color: $sgv-donkergroen;
+}
+
+.font {
+  font-family: museo_sans500, Avenir, Helvetica, Arial, sans-serif;
+}
+
