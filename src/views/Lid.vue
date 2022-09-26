@@ -12,22 +12,21 @@
         :showLoader="laden"
       ></Loader>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
-                      :eigenProfiel="eigenProfiel" :changes="changes"></lid-boven-balk>
+                      :eigenProfiel="isEigenProfiel" :changes="changes"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid"></persoonlijk>
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel"></persoonlijk>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4">
+              <adressen v-model="lid" :title="'Adressen'"></adressen>
+              <contacten v-model="lid" :title="'Contacten'"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
                 :title="'Groepseigen gegevens'"
               ></groepseigen-gegevens>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'"></adressen>
-              <contacten v-model="lid" :title="'Contacten'"></contacten>
-
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
               <functies
@@ -341,6 +340,9 @@ export default {
     },
     magFunctiesToevoegen() {
       return rechtenService.canBeShowed(this.lid, 'functies.')
+    },
+    isEigenProfiel() {
+      return this.$route.params.id === "profiel"
     }
   },
 };
