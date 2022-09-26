@@ -55,7 +55,7 @@
                     </template>
                     <p
                       v-html="groep[0].beschrijving"
-                      class="text-align-left beschrijving"
+                      class="text-align-left beschrijving font-bold"
                     ></p>
                     <DynamischVeld
                       :model-value="steekkaartWaarden"
@@ -185,6 +185,8 @@ export default {
     },
 
     changeValue(veld, waarde) {
+      console.log('changed')
+      this.changes = true;
       this.steekkaartWaarden[veld] = waarde;
       this.checkForm();
     },
@@ -241,7 +243,6 @@ export default {
               detail: "Wijzigingen opgeslagen",
               life: 3000,
             });
-            this.changes = false;
           })
           .catch((error) => {
             this.error = true;
