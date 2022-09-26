@@ -10,6 +10,7 @@
         <adressen
           v-model="geselecteerdeGroep"
           @showMarker="toonMarker"
+          :bewerkbaar="kanGroepWijzigen"
           class="mb-5"
         ></adressen>
         <google-maps
@@ -41,6 +42,9 @@ export default {
     groep: {
       type: Object,
     },
+    kanGroepWijzigen: {
+      type: Boolean
+    }
   },
   methods: {
     toonMarker(index) {
