@@ -46,6 +46,7 @@ import ProgressSpinner from "primevue/progressspinner";
 import InputSwitch from 'primevue/inputswitch';
 import RadioButton from "primevue/radiobutton";
 import VueClickOutsideElement from 'vue-click-outside-element'
+import Divider from "primevue/divider";
 
 
 library.add(fas, faUser);
@@ -132,6 +133,7 @@ app.component("Breadcrumb", Breadcrumb);
 app.component("Menu", Menu);
 app.component("InputSwitch", InputSwitch);
 app.component("RadioButton", RadioButton);
+app.component("Divider", Divider);
 
 app.directive('click-outside', {
     mounted(el, binding) {
@@ -156,6 +158,7 @@ if (window.location.pathname.startsWith("/groepsadmin/frontend/formulier/")) {
 } else {
     let initOptions = getClient();
     const keycloak = Keycloak(initOptions);
+    app.config.globalProperties.$keycloak = keycloak;
 
     keycloak.init({onLoad: initOptions.onLoad}).then((auth) => {
         if (!auth) {
