@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid md:w-90 d-flex justify-content-md-end position-absolute border-bottom-general mt-4 z999">
-    <label class="h-1rem float-start sm:ml-4 h-2rem ">{{ getVolledigeNaam }}</label>
-    <div class="ml-4 clickable" @click="gaNaarAccount">
+    <label class="h-1rem float-start sm:ml-4 h-2rem clickable" @click="gaNaarProfiel">{{ getVolledigeNaam }}</label>
+    <div class="ml-4 clickable" @click="gaNaarAccount" v-show="false">
       <i class="fas fa-user-circle menu-icon" title="Account"/>
     </div>
     <div class="ml-5 clickable" @click="logout">
@@ -36,13 +36,11 @@ export default {
         life: 8000,
       });
     },
+    gaNaarProfiel() {
+      this.$router.push({name: "Lid", params: {id: "profiel"}});
+    },
     logout() {
-      this.$toast.add({
-        severity: "warn",
-        summary: "Logout",
-        detail: "Nog niet geimplementeerd",
-        life: 8000,
-      });
+      this.$keycloak.logout();
     }
   }
 }
