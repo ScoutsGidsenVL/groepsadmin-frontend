@@ -1,27 +1,19 @@
 <template>
   <div v-if="criteria && criteria.activated" v-click-outside="close">
-    <div class="col-12 type-select-button kolom-select" @click="toggleMenu = !toggleMenu">
+    <div class="col-12 type-select-button kolom-select clickable" @click="toggleMenu = !toggleMenu">
       <div class="row mt--05">
         <div class="col-10 ">
-          <div class="text-align-left  ">
+          <div class="text-align-left d-flex">
             <div>
-              <label class="ml-2">{{ criteria.title }}</label>
+              <label>{{ criteria.title }}: </label>
             </div>
-            <div class="mt--05">
-              <label class="ml-2 subtitle mt--05">{{ label }}</label>
+            <div class="row">
+              <label class="subtitle clickable text-align-left criteria-label cut-off-text">{{ label }}</label>
             </div>
           </div>
         </div>
         <div class="col-2">
-          <Button
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-outlined p-button-danger remove-button"
-            @click="
-                                    $event.stopPropagation();
-                                    deactivateCriterium(criteria);
-                                  "
-            title="Verwijder criterium"
-          />
+          <verwijder-criteria :criteria="criteria" />
         </div>
       </div>
     </div>
@@ -35,8 +27,13 @@
 </template>
 
 <script>
+import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
+
 export default {
   name: "OudLedenSelect",
+  components: {
+    VerwijderCriteria
+  },
   props: {
     criteria: {
       type: Object

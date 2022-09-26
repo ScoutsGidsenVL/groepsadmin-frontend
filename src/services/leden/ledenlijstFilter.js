@@ -129,7 +129,31 @@ export default {
         huidigeFilter.naam = str;
     },
 
-    getLeeftijdCriterium() {
+    getIndividueleSteekkaartMenu() {
+        return {
+            "title": "Individuele steekkaart",
+            "criteriaKey": "individuelesteekkaart",
+            "multiplePossible": false,
+            "multiValues": true,
+            "operator": {
+                "label": "Aangepast ",
+                "key": "operator",
+                "values": [
+                    ["voor", "ouder"],
+                    ["na", "jonger"]
+                ]
+            }
+            ,
+            "value":
+                {
+                    "operator":
+                        "ouder"
+                }
+        }
+
+    },
+
+    getLeeftijdMenu() {
         return {
             'title': 'Leeftijd',
             'criteriaKey': 'leeftijd',
@@ -270,24 +294,24 @@ export default {
         groepenCriteria.activated = false;
         returnObj.arrCriteria.push(groepenCriteria);
 
-        let groepsEigenCriteria = this.getCriteriaGroepsEigen(groepen);
+        let geg = store.getters.profiel.groepseigenVelden;
+        let groepsEigenCriteria = this.getCriteriaGroepsEigen(geg, groepen);
         groepsEigenCriteria.activated = false;
         returnObj.arrCriteria.push(groepsEigenCriteria);
 
-        // Geslacht
         returnObj.arrCriteria.push(this.getGeslachtMenu());
 
-        // Oudleden
         returnObj.arrCriteria.push(this.getOudledenMenu());
 
-        // Verminderdlidgeld
         returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu())
 
-        // Adres geblokkeerd
         returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu())
 
-        // Mail geblokkeerd
         returnObj.arrCriteria.push(this.getEmailGeblokkeerdMenu())
+
+        returnObj.arrCriteria.push(this.getLeeftijdMenu())
+
+        returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu())
 
         return returnObj;
     },
@@ -516,105 +540,132 @@ export default {
     },
 
 
-    getCriteriaGroepsEigen(groepen) {
+    getCriteriaGroepsEigen(geg, groepen) {
+        let groepsObject = {}
         let groepenCriteria = {
             title: "Groepseigen gegevens",
             criteriaKey: "groepseigen",
             multiplePossible: true,
             itemgroups: []
         };
+        _.forEach(Object.entries(geg), function (value) {
+            _.forEach(groepen, (groep) => {
+                groepsObject = {}
+                if (groep.id === value[0]) {
+                    groepsObject.value = groep.groepsnummer;
+                    groepsObject.label = groep.naam + " - " + groep.groepsnummer;
+                    groepsObject.sortering = groep.groepsnummer;
 
-        _.forEach(groepen, function (value) {
+                    if (value[1].schema.length > 0) {
+                        groepsObject.items = _.map(value[1].schema, function (groepseigenGegeven) {
+                            if (groepseigenGegeven != null && groepseigenGegeven.type === "lijst") {
+                                return {
+                                    veld: groepseigenGegeven.id,
+                                    label: groepseigenGegeven.label,
+                                    activated: false,
+                                    waarde: '',
+                                    keuze: true,
+                                    keuzes: groepseigenGegeven.keuzes,
+                                    operator: 'like',
+                                    operatorValues: [
+                                        {label: 'bevat', value: 'like'},
+                                        {label: 'is', value: 'equals'},
+                                        {label: 'is kleiner dan', value:'less'},
+                                        {label: 'is groter dan', value:'greater'}
+                                    ]
 
-            if (value.groepseigenGegevens) {
-                let groep = {
-                    value: value.groepsnummer,
-                    label: value.naam + " - " + value.groepsnummer,
-                    sortering: value.groepsnummer,
-                    collapsed: true
-                };
+                                }
+                            }
+                            if (groepseigenGegeven.type === "vinkje") {
 
-                groep.items = _.map(value.groepseigenGegevens, function (groepseigenGegeven) {
+                                return {
+                                    activated: false,
+                                    veld: groepseigenGegeven.id,
+                                    label: groepseigenGegeven.label,
+                                    vinkje: true,
+                                    operator: 'equals',
+                                    waarde: false,
 
-                    if (groepseigenGegeven.keuzes != null && groepseigenGegeven.type == "lijst") {
-                        return {
-                            veld: groepseigenGegeven.id,
-                            label: groepseigenGegeven.label,
-                            keuze: true,
-                            keuzes: groepseigenGegeven.keuzes,
-                            operator: 'like',
-                            operatorValues: [
-                                ['bevat', 'like'],
-                                ['is', 'equals'],
-                                ['is kleiner dan', 'less'],
-                                ['is groter dan', 'greater']
-                            ]
+                                }
+                            }
 
-                        }
+                            return {
+                                veld: groepseigenGegeven.id,
+                                label: groepseigenGegeven.label,
+                                activated: false,
+                                waarde: '',
+                                operator: 'like',
+                                operatorValues: [
+                                    {label: 'bevat', value: 'like'},
+                                    {label: 'is', value: 'equals'},
+                                    {label: 'is kleiner dan', value:'less'},
+                                    {label: 'is groter dan', value:'greater'}
+                                ]
+                            }
+                        });
                     }
-                    if (groepseigenGegeven.type === "vinkje") {
-
-                        return {
-                            veld: groepseigenGegeven.id,
-                            label: groepseigenGegeven.label,
-                            vinkje: true,
-                            operator: 'equals'
-                        }
-                    }
-
-                    return {
-                        veld: groepseigenGegeven.id,
-                        label: groepseigenGegeven.label,
-                        activated: false,
-                        waard: '',
-                        operator: 'like',
-                        operatorValues: [
-                            ['bevat', 'like'],
-                            ['is', 'equals'],
-                            ['is kleiner dan', 'less'],
-                            ['is groter dan', 'greater']
-                        ]
-                    }
-                });
-
-                groepenCriteria.itemgroups.push(groep);
-            }
+                    groepenCriteria.itemgroups.push(groepsObject);
+                }
+            })
         });
-
         return groepenCriteria;
     },
 
-    getActieveCriteria(huidigeFilter) {
+    getActieveCriteria(huidigeFilter, criteria) {
         let activeCriteria = [];
-        let criteria = this.getCriteria();
         if (huidigeFilter.criteria) {
             for (const [key, value] of Object.entries(huidigeFilter.criteria)) {
                 criteria.arrCriteria.forEach(crit => {
-                    if (crit.criteriaKey === key &&
-                        (crit.criteriaKey === 'adresgeblokkeerd' ||
-                            crit.criteriaKey === 'verminderdLidgeld' ||
-                            crit.criteriaKey === 'emailgeblokkeerd' ||
-                            crit.criteriaKey === 'geslacht' ||
-                            crit.criteriaKey === 'oudleden') &&
-                        value) {
-                        crit.activated = true;
-                        crit.value = value;
-                        activeCriteria.push(crit);
-                    }
-                })
-            }
+                    if (crit.criteriaKey === key) {
+                        if ((value === true || value.length > 0) || (key === 'leeftijd' || key === 'individuelesteekkaart')) {
+                            crit.activated = true;
+                            crit.value = value;
+                            activeCriteria.push(crit);
+                        }
 
-            // Om de vreemde constructie van deze filter op te vangen moeten we gaan checken als die bestaat in de criteria van de huidige filter
-            if (!Object.prototype.hasOwnProperty.call(huidigeFilter.criteria, 'oudleden')) {
-                criteria.arrCriteria.forEach(crit => {
-                    if (crit.criteriaKey === 'oudleden') {
-                        crit.activated = true;
-                        crit.value = "alles";
-                        activeCriteria.push(crit);
+                        if (key === 'groepseigen') {
+                            crit.itemgroups.forEach((itemgroup) => {
+                                if (itemgroup.items && itemgroup.items.length > 0) {
+                                    itemgroup.items.forEach((item) => {
+                                        if (crit.value && crit.value.length > 0){
+                                            crit.value.forEach((value) => {
+                                                if (item.veld === value.veld) {
+                                                    item.activated = true;
+                                                    item.waarde = value.waarde === "true" ? true : value.waarde;
+                                                    item.operator = value.operator;
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        if (key === 'functies') {
+                            crit.itemgroups.forEach((itemgroup) => {
+                                if (itemgroup.items && itemgroup.items.length > 0) {
+                                    itemgroup.items.forEach((item) => {
+                                        item.activated = !!value.includes(item.value);
+                                    })
+                                }
+                            })
+                        }
                     }
                 })
             }
         }
+
+        // Om de vreemde constructie van deze filter op te vangen moeten we gaan checken als die bestaat in de criteria van de huidige filter
+        if (!Object.prototype.hasOwnProperty.call(huidigeFilter.criteria, 'oudleden')) {
+            criteria.arrCriteria.forEach(crit => {
+                if (crit.criteriaKey === 'oudleden') {
+                    crit.activated = true;
+                    crit.value = "alles";
+                    activeCriteria.push(crit);
+                }
+            })
+        }
+        // groepseigen gegevens controle om elk item apart te activeren en te voorzien van de juiste waarde
+
         return activeCriteria;
     }
 }

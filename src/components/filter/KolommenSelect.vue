@@ -1,14 +1,22 @@
 <template>
   <div class="col-lg-2 mt-2" v-click-outside="close">
-    <div @click="toggleMenu = !toggleMenu" class="clickable">
-      <div class="clickable col-12 kolom-select text-align-left type-select-button">
-        Kolommen
-      </div>
-      <div class="row clickable mt--08">
-        <label class="ml-2 subtitle mt--08 clickable cut-off-text text-align-left">{{ actieveKolomNamen }}</label>
+    <div @click="toggleMenu = !toggleMenu" class="clickable col-12 type-select-button kolom-select">
+      <div class="row mt--05">
+        <div class="col-10">
+          <div class="text-align-left d-flex">
+            <div>
+              Kolommen:
+            </div>
+            <div class="row">
+              <label class="subtitle clickable text-align-left criteria-label cut-off-text">{{
+                  actieveKolomNamen
+                }}</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div v-show="toggleMenu" class="position-absolute z999 bg-white col-2 filter-border text-align-left">
+    <div v-show="toggleMenu" class="position-absolute z999 bg-white col-2 filter-border text-align-left mt-1 lg:overflow-y-scroll h-50">
       <draggable :list="actieveKolommen"
                  @start="drag=true"
                  @end="drag=false"
@@ -101,7 +109,7 @@ export default {
         kolom.groepering = kolom.groeperingOrig;
         kolom.kolomIndex = kolom.kolomIndexOrig;
         this.$emit('setActieveKolom');
-        this.emitter.emit('setActieveKolom', {'kolom': kolom })
+        this.emitter.emit('setActieveKolom', {'kolom': kolom})
 
 
       } else {

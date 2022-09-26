@@ -5,7 +5,7 @@
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div>
-      <div class="container-fluid" ref="scrollComponent">
+      <div class="container-fluid datatable-component" ref="scrollComponent">
         <div class="hidden lg:block md:ml-8">
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
@@ -46,7 +46,7 @@
               @sort="addSort"
               @colum-click="addSort"
               sort-mode="multiple"
-              class="p-datatable-sm"
+              class="p-datatable-sm mt-4"
             >
               <template #header>
                 <div class="d-flex justify-content-end">
@@ -257,6 +257,30 @@ export default {
     this.emitter.on('setActieveKolom', (event) => {
       this.setActieveKolom(event.kolom);
     })
+    this.emitter.on('changeGroepCriterium', (event) => {
+      this.changeGroepCriterium(event.criteria, event.selectedOptions);
+    })
+    this.emitter.on('changeLeeftijd', (event) => {
+      this.changeLeeftijd(event.criteria, event.leeftijdOpDatum, event.jongerDan, event.ouderDan);
+    })
+    this.emitter.on('changeSteekkaartCriterium', (event) => {
+      this.changeIndividueleSteekkaart(event.criteria, event.aangepast, event.datum);
+    })
+    this.emitter.on('changeGegKeuzeCriterium', (event) => {
+      this.changeGegKeuze(event.criteria, event.veld, event.waarde, event.operator);
+    })
+    this.emitter.on('deactiveerGroepseigenGegeven', (event) => {
+      this.deactiveerGroepseigenGegeven(event.criteria, event.veld);
+    })
+    this.emitter.on('activeerAlleFuncties', (event) => {
+      this.activeerAlleFuncties(event.criteria);
+    })
+    this.emitter.on('activeerFunctie', (event) => {
+      this.activeerFunctie(event.criteria, event.functie);
+    })
+    this.emitter.on('activeerAlleGroepFuncties', (event) => {
+      this.activeerAlleGroepFuncties(event.criteria, event.groepering);
+    })
   },
 
   computed: {
@@ -275,11 +299,60 @@ export default {
         this.huidigeFilter.criteria[criterium.criteriaKey] = true;
       }
       criterium.activated = true;
-      this.activeCriteria.push(criterium);
+      this.activeCriteria.unshift(criterium);
     },
 
     changeGeslachtCriterium(criteria, gekozenGeslacht) {
       this.huidigeFilter.criteria[criteria.criteriaKey] = gekozenGeslacht;
+    },
+
+    deactiveerGroepseigenGegeven(criteria, veld) {
+      if (this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey].forEach((item, index) => {
+          if (item.veld === veld) {
+            this.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+          }
+        })
+      }
+    },
+
+    changeLeeftijd(criteria, leeftijdOpDatum, jongerDan, ouderDan) {
+      if (!this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = {};
+      }
+      this.huidigeFilter.criteria[criteria.criteriaKey].op31december = leeftijdOpDatum;
+      this.huidigeFilter.criteria[criteria.criteriaKey].jongerdan = jongerDan;
+      this.huidigeFilter.criteria[criteria.criteriaKey].ouderdan = ouderDan;
+    },
+
+    changeIndividueleSteekkaart(criteria, aangepast, datum) {
+      if (!this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = {};
+      }
+      this.huidigeFilter.criteria[criteria.criteriaKey].operator = aangepast;
+      this.huidigeFilter.criteria[criteria.criteriaKey].referentie = datum.toISOString().slice(0, 10);
+    },
+
+    changeGegKeuze(criteria, veld, waarde, operator) {
+      let gegObject = {
+        operator: operator,
+        waarde: waarde,
+        veld: veld
+      }
+      if (!this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = [];
+      } else {
+        this.huidigeFilter.criteria[criteria.criteriaKey].forEach((item, index) => {
+          if (item.veld === veld) {
+            this.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+          }
+        })
+      }
+      this.huidigeFilter.criteria[criteria.criteriaKey].push(gegObject);
+    },
+
+    changeGroepCriterium(criteria, selectedOptions) {
+      this.huidigeFilter.criteria[criteria.criteriaKey] = selectedOptions;
     },
 
     changeOudLidCriterium(criteria, keuze) {
@@ -293,9 +366,10 @@ export default {
     deactivateCriterium(criterium) {
       if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld') {
         this.huidigeFilter.criteria[criterium.criteriaKey] = false;
-        console.log(this.huidigeFilter)
-      } else if (criterium.criteriaKey === 'geslacht') {
+      } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart') {
         this.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
+      } else {
+        this.huidigeFilter.criteria[criterium.criteriaKey] = [];
       }
       let index = this.activeCriteria.indexOf(criterium);
       this.activeCriteria.splice(index, 1);
@@ -353,16 +427,11 @@ export default {
     },
 
     addSort(kolom) {
-      console.log(kolom);
-      console.log(this.huidigeFilter.sortering);
-      console.log(this.checkSortering(kolom));
       if (this.checkSortering(kolom) === -1) {
         this.huidigeFilter.sortering.unshift(kolom.id)
-        console.log(this.huidigeFilter.sortering);
         this.huidigeFilter.sortering.splice(3);
       }
       kolom.sorteringsIndex = this.checkSortering(kolom);
-      console.log(this.huidigeFilter.sortering);
       this.filterToepassen();
     },
 
@@ -391,6 +460,29 @@ export default {
             }
           })
       }
+    },
+
+    activeerAlleFuncties(criteria) {
+      console.log('activeer alle functies')
+      console.log(criteria);
+    },
+
+    activeerFunctie(criteria, functie) {
+      if (!this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = [];
+      }
+      if (this.huidigeFilter.criteria[criteria.criteriaKey].includes(functie.value)) {
+        let index = this.huidigeFilter.criteria[criteria.criteriaKey].indexOf(functie.value);
+        this.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+      } else {
+        this.huidigeFilter.criteria[criteria.criteriaKey].push(functie.value);
+      }
+    },
+
+    activeerAlleGroepFuncties(criteria, groepering) {
+      console.log('activeer alle groepsfuncties')
+      console.log(criteria);
+      console.log(groepering);
     },
 
     selectLid(event) {
@@ -449,7 +541,6 @@ export default {
     getFilters() {
       RestService.getFilters().then(res => {
         this.filters = ledenlijstFilter.groepeerFilters(res.data.filters)
-        console.log(this.filters)
       }).catch(error => {
         console.log(error)
       })
@@ -479,13 +570,13 @@ export default {
           this.huidigeFilter = res.data;
           this.getKolommen();
           this.criteria = ledenlijstFilter.getCriteria();
-          this.activeCriteria = ledenlijstFilter.getActieveCriteria(this.huidigeFilter);
+          this.activeCriteria = ledenlijstFilter.getActieveCriteria(this.huidigeFilter, this.criteria);
         })
         .catch((error) => {
           console.log(error);
         })
         .finally(() => {
-            this.isLoadingFilters = false;
+          this.isLoadingFilters = false;
         });
     },
 
