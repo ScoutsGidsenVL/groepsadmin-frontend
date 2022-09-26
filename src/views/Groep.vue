@@ -46,8 +46,8 @@
                 ></Contacten>
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
-                <Lokalen :groep="selectedGroep"></Lokalen>
-                <groepseigen-gegevens v-model="selectedGroep" @opslaan="laden = !laden"></groepseigen-gegevens>
+                <Lokalen :groep="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></Lokalen>
+                <groepseigen-gegevens v-model="selectedGroep" @opslaan="laden = !laden" @updateGroep="opslaan" @laden="changeLadenStatus"></groepseigen-gegevens>
               </div>
             </div>
           </form>
@@ -142,11 +142,13 @@ export default {
           detail: error.response.data.beschrijving,
           life: 8000,
         });
+      }) .finally(() => {
+        this.laden = false;
+        this.$store.commit("setGroepenLaden", false);
       })
     },
-
-    kanGroepWijzigen() {
-      return rechtenService.kanWijzigen(this.selectedGroep);
+    changeLadenStatus() {
+      this.laden = !this.laden;
     },
 
     veranderGroep(groep) {
@@ -195,6 +197,11 @@ export default {
 
     groepen() {
       return this.$store.getters.groepen;
+    },
+
+    kanGroepWijzigen() {
+      console.log(this.selectedGroep)
+      return rechtenService.kanWijzigen(this.selectedGroep);
     },
   },
 };
