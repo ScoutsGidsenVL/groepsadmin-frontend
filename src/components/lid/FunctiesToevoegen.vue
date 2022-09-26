@@ -82,10 +82,9 @@ export default {
         }
         return 0;
       })
-      let gefilterdeFuncties = functies.filter(obj => {
+      return functies.filter(obj => {
         return obj.type === type;
-      })
-      return gefilterdeFuncties;
+      });
     },
     functiesEnGroepen() {
       this.groepEnfuncties = [];

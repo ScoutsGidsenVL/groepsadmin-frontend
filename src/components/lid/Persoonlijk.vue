@@ -8,7 +8,7 @@
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
             type="text"
-            :disabled="!nieuwLid"
+            :disabled="!hasPermission"
             :invalid="v$.lid.vgagegevens.voornaam.$invalid"
             error-message="Voornaam is verplicht"
             @blur="v$.lid.vgagegevens.voornaam.$commit"
@@ -17,7 +17,7 @@
             v-model="lid.vgagegevens.achternaam"
             label="Achternaam"
             type="text"
-            :disabled="!nieuwLid"
+            :disabled="!hasPermission"
             error-message="Achternaam is verplicht"
             :invalid="v$.lid.vgagegevens.achternaam.$invalid"
             @blur="v$.lid.vgagegevens.achternaam.$commit"
@@ -25,13 +25,14 @@
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
             label="Geboortedatum"
-            :disabled="!nieuwLid"
+            :disabled="!hasPermission"
             error-message="Geboortedatum is verplicht"
             :invalid="v$.lid.vgagegevens.geboortedatum.$invalid"
             @blur="v$.lid.vgagegevens.achternaam.$commit"
           />
           <BaseInput
             v-model="lid.gebruikersnaam"
+            :disabled="true"
             label="Gebruikersnaam"
             type="text"
             v-if="!nieuwLid"
@@ -55,10 +56,12 @@
             v-model="lid.vgagegevens.verminderdlidgeld"
             label="Verminderd lidgeld"
             multiple="false"
+            :beschrijving="omschrijving"
             help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
           ></BaseCheckbox>
           <BaseInput
             v-model="lid.email"
+            :disabled="!eigenProfiel"
             label="Email"
             type="email"
             :invalid="v$.lid.email.$invalid"
@@ -96,12 +99,7 @@
             v-model="lid.vgagegevens.verminderdlidgeld"
             label="Verminderd lidgeld"
             multiple="false"
-            beschrijving="We willen ieder kind de kans geven om lid te worden van scouting.
-            Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld.
-            Je betaalt dan 10 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf).
-            Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken.
-            We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info
-            <a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>."
+            :beschrijving="omschrijving"
           ></BaseCheckbox>
           <BaseTextArea
             v-if="nieuwLid"
@@ -127,6 +125,7 @@ import {email, required} from '@vuelidate/validators'
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
+import rechtenService from "@/services/rechten/rechtenService";
 
 const ibantools = require('ibantools');
 const isGeldigRekeningnummer = (value) => {
@@ -155,17 +154,34 @@ export default {
         {label: "Vrouwelijk", value: "vrouw"},
         {label: "Andere", value: "andere"},
       ],
+      omschrijving: "We willen ieder kind de kans geven om lid te worden van scouting. " +
+        "Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld. " +
+        "Je betaalt dan 10 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf). " +
+        "Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken. " +
+        "We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info " +
+        "<a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>."
     };
   },
   methods: {
     formatNumber(value) {
-      console.log(value);
       this.lid.persoonsgegevens.gsm = value;
+    },
+  },
+  computed: {
+    hasPermission() {
+      if (this.lid.vgagegevens.voornaam) {
+        return rechtenService.hasPermission(this.lid, 'vgagegevens');
+      } else {
+        return this.nieuwLid;
+      }
     }
   },
   props: {
     modelValue: {
       type: Object,
+    },
+    eigenProfiel: {
+      type: Boolean
     },
     nieuwLid: {
       type: Boolean,

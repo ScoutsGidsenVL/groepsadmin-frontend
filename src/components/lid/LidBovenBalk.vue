@@ -1,9 +1,10 @@
 <template>
-  <div class="bovenbalk">
+  <div class="bovenbalk mb-4">
     <div class="d-flex justify-content-between">
       <div>
         <h4 class="mt-2 lg:ml-4">{{ volledigeNaam }}</h4>
       </div>
+      <!-- aanpassen naar hamburger menu     -->
       <div class="justify-content-end">
         <steekkaart @click="gaNaarIndividueleSteekkaart" v-if="eigenProfiel && !nieuwLid"></steekkaart>
         <communicatie class="ml-2" v-if="eigenProfiel && !nieuwLid" @click="gaNaarCommunicatieVoorkeuren"></communicatie>
@@ -12,6 +13,9 @@
         <email class="ml-2" v-if="!eigenProfiel || !nieuwLid"/>
         <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
       </div>
+    </div>
+    <div class="d-flex justify-content-start mt--1">
+      <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
     </div>
   </div>
 </template>
