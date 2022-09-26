@@ -18,7 +18,7 @@
               }}</h1>
           </div>
           <div class="row container-block sm:mt-5">
-            <div class="col-12 col-md-10">
+            <div class="col-12 col-md-9">
               <div class="row">
                 <div v-for="menuItem in dashboardItems" :key="menuItem.label" class="col-lg-5 mb-4 dashboard-block">
                   <dashboard-block :link="menuItem.link" :title="menuItem.label" :icoon="menuItem.icon"
@@ -27,11 +27,20 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-2 justify-content-start d-flex">
-              <h5 class="text-align-left"><strong>Snel naar</strong></h5>
-              <ul>
-                <!--  snel naar items nog aan te vullen  -->
-              </ul>
+            <div class="col-lg-3 mt-2">
+              <div class="justify-content-start d-flex">
+                <h5 class="text-align-left mb-4"><strong>Snel naar</strong></h5>
+              </div>
+              <div class="justify-content-start d-flex">
+                <ul style="list-style: none;" class="ml--1">
+                  <li class="text-decoration-none justify-content-start d-flex mb-3"
+                      v-for="(item, index) in snelNaarItems" :key="index">
+                    <i class="fal fa-arrow-right color-light-green"><a :href="item.url" target="_blank"
+                                                                       class="text-decoration-none"><span
+                      class="text-black font ml-2 clickable">{{ item.naam }}</span></a></i>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -49,6 +58,7 @@ import rechtenService from "@/services/rechten/rechtenService";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import RestService from "@/services/api/RestService";
 
 export default {
   name: "Dashboard",
@@ -64,6 +74,7 @@ export default {
     return {
       showLoader: false,
       gebruiker: null,
+      snelNaarItems: [],
       menuItems: [
         {
           label: "Mijn gegevens",
@@ -124,6 +135,16 @@ export default {
       ],
     }
   },
+  mounted() {
+    RestService.getWebsites()
+      .then(res => {
+        this.snelNaarItems = res.data.websites;
+      }).catch(error => {
+      console.log(error);
+      console.log('geen websites kunnen ophalen')
+    })
+  },
+
   computed: {
     dashboardItems: function () {
       return this.menuItems.filter(obj => {
@@ -132,7 +153,7 @@ export default {
     },
     naam: function () {
       return this.$store.getters.profiel.vgagegevens.voornaam;
-    }
+    },
   }
 };
 </script>
