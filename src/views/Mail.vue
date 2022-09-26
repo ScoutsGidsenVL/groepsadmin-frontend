@@ -13,7 +13,7 @@
         >
         </indicator>
       </div>
-      <div class="overflow-hidden lg:ml-6">
+      <div class="overflow-hidden lg:ml-6 p-2">
         <div>
           <save-template-dialog
             :open="openModal"
@@ -29,7 +29,7 @@
         </h4>
         <div class="pl-lg-4em mt-2">
           <div class="row">
-            <div class="col-lg-6 text-align-left mb-5">
+            <div class="col-lg-6 text-align-left">
               <BaseDropdown
                 v-model="sjabloon"
                 :options="sjablonen"
@@ -69,7 +69,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row mt-4">
             <div class="col-sm-2 text-align-left">
               <label
               >Ontvangers:
@@ -92,19 +92,14 @@
           </div>
           <div class="row">
             <div class="col-lg-8 text-align-left">
-              <BaseCheckboxLeft
-                label="Stuur naar leden"
-                v-model="sjabloon.bestemming.lid"
-              ></BaseCheckboxLeft>
+              <checkbox :binary=true v-model="sjabloon.bestemming.lid" id="alleLeden" class="mt--3p"></checkbox>
+              <label class="mt-1 ml-3" for="alleLeden">Stuur naar leden</label>
             </div>
           </div>
           <div class="row">
-            <div class="offset-sm-2"></div>
             <div class="col-lg-8 text-align-left">
-              <BaseCheckboxLeft
-                label="Stuur naar de contacten van leden"
-                v-model="sjabloon.bestemming.contacten"
-              ></BaseCheckboxLeft>
+              <checkbox :binary=true v-model="sjabloon.bestemming.contacten" id="alleContacten" class="mt--3p"></checkbox>
+              <label class="mt-1 ml-3" for="alleContacten">Stuur naar de contacten van leden</label>
             </div>
           </div>
           <div class="row">
@@ -113,7 +108,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6 text-align-left mt-5">
+            <div class="col-lg-6 text-align-left">
               <BaseInput
                 label="Onderwerp"
                 v-model="sjabloon.onderwerp"
@@ -122,47 +117,49 @@
               ></BaseInput>
             </div>
           </div>
-        </div>
-        <div class="row ml-5 mb-3">
-          <label class="col-lg-2 text-align-left mt-1"
-          >Bijlage (max. 5MB)
-            <a
-              href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
-              target="_blank"
-              class="help-button-wrapper ml-2 mt-0"
-            >
-              <i
-                class="fa fa-question-circle resolve help-button mt-0"
-                title="meer info"
-              ></i>
-            </a>
-          </label>
-          <FileUpload
-            name="bijlages[]"
-            :customUpload="true"
-            @select="selectFiles"
-            :multiple="true"
-            :maxFileSize="4999999"
-            chooseLabel="Kies bestand"
-            :showUploadButton="false"
-            :showCancelButton="false"
-            invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
-            class="ml-3 mr-lg-9"
-          />
-          <div class="col-lg-8">
-            <div class="d-flex justify-content-end">
-              <Button
-                icon="pi pi-save"
-                class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
-                title="Bewaar huidig sjabloon"
-                @click="openSjabloonModel"
-              />
-              <Button
-                icon="far fa-paper-plane"
-                title="Verstuur e-mail"
-                class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
-                @click="send"
-              />
+          <div class="row mb-3">
+            <label class="col-lg-2 text-align-left mt-1"
+            >Bijlage (max. 5MB)
+              <a
+                href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
+                target="_blank"
+                class="help-button-wrapper ml-2 mt-0"
+              >
+                <i
+                  class="fa fa-question-circle resolve help-button mt-0"
+                  title="meer info"
+                ></i>
+              </a>
+            </label>
+            <p class="d-flex justify-content-start">Voeg meerdere bestanden toe door deze gezamenlijk te selecteren.</p>
+            <FileUpload
+              name="bijlages[]"
+              :customUpload="true"
+              @select="selectFiles"
+              :multiple="true"
+              :maxFileSize="4999999"
+              previewWidth="50"
+              :chooseLabel="label"
+              :showUploadButton="false"
+              :showCancelButton="false"
+              invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
+              class="d-flex justify-content-start md:w-4 lg:w-2 sm:max-w-full"
+            ></FileUpload>
+            <div class="col-lg-8">
+              <div class="d-flex justify-content-end">
+                <Button
+                  icon="pi pi-save"
+                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
+                  title="Bewaar huidig sjabloon"
+                  @click="openSjabloonModel"
+                />
+                <Button
+                  icon="far fa-paper-plane"
+                  title="Verstuur e-mail"
+                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
+                  @click="send"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -222,7 +219,6 @@ import BaseDropdown from "@/components/input/BaseDropdown";
 import Editor from "@tinymce/tinymce-vue";
 import store from "../store";
 import BaseInput from "@/components/input/BaseInput";
-import BaseCheckboxLeft from "@/components/input/BaseCheckboxLeft";
 import FileUpload from "primevue/fileupload";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
 import Indicator from "@/components/global/Indicator";
@@ -237,7 +233,6 @@ export default {
   name: "Mail",
   components: {
     Footer,
-    BaseCheckboxLeft,
     BaseInput,
     BaseDropdown,
     Editor,
@@ -377,6 +372,18 @@ export default {
   computed: {
     groepenLaden() {
       return this.$store.getters.groepenLaden;
+    },
+
+    label() {
+      let label = "Bestanden kiezen"
+      //let counter = 0;
+      if (this.files.length > 0) {
+        label = ""
+        this.files.forEach((file) => {
+          label += file.name + " ";
+        })
+      }
+      return label;
     },
 
     groepen() {
