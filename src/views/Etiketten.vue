@@ -4,6 +4,7 @@
     <confirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
+    <etiket-info-dialog :dialog-visible="openEtikettenFoto" @close="sluitInfodialog"/>
     <div class="lg:ml-8">
       <Loader :show-loader="laden"></Loader>
       <div class="overflow-hidden  lg:ml-6">
@@ -63,37 +64,32 @@
                 ></span>
               </label>
             </div>
+          </div>
+          <div class="row">
             <div class="col-lg-8 text-align-left">
-              <BaseCheckboxLeft
-                label="Familie"
-                v-model="sjabloon.familie"
-              ></BaseCheckboxLeft>
+              <checkbox :binary=true v-model="sjabloon.familie" id="familie" class="mt--3p"></checkbox>
+              <label class="mt-1 ml-3" for="familie">Familie</label>
             </div>
           </div>
           <div class="row">
-            <div class="offset-sm-2"></div>
-            <div class="col-lg-3 text-align-left">
-              <BaseCheckboxLeft
-                label="Alle adressen"
-                v-model="sjabloon.alleAdressen"
-              ></BaseCheckboxLeft>
+            <div class="col-lg-8 text-align-left">
+              <checkbox :binary=true v-model="sjabloon.alleAdressen" id="alleAdressen" class="mt--3p"></checkbox>
+              <label class="mt-1 ml-3" for="alleAdressen">Alle adressen</label>
             </div>
-            <div class="col-lg-7 pr-lg-5em">
-              <div class="d-flex justify-content-end">
-                <Button
-                  icon="pi pi-save"
-                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
-                  title="Bewaar huidig sjabloon"
-                  @click="openSjabloonModel"
-                />
-                <Button
-                  icon="far fa-print"
-                  title="Print etiket"
-                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
-                  @click="print"
-                />
-              </div>
-            </div>
+          </div>
+          <div class="d-flex justify-content-end mr-7">
+            <Button
+              icon="pi pi-save"
+              class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
+              title="Bewaar huidig sjabloon"
+              @click="openSjabloonModel"
+            />
+            <Button
+              icon="far fa-print"
+              title="Print etiket"
+              class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
+              @click="print"
+            />
           </div>
         </div>
         <div class="row">
@@ -125,7 +121,7 @@
             <div class="col-lg-6 text-align-left">
               <BaseInput
                 label="Grootte verticaal"
-                v-model="sjabloon.grootte.horizontaal"
+                v-model="sjabloon.grootte.verticaal"
                 type="number"
               ></BaseInput>
             </div>
@@ -144,7 +140,7 @@
             <div class="col-lg-6 text-align-left">
               <BaseInput
                 label="Marge verticaal"
-                v-model="sjabloon.marge.horizontaal"
+                v-model="sjabloon.marge.verticaal"
                 type="number"
               ></BaseInput>
             </div>
@@ -163,7 +159,7 @@
             <div class="col-lg-6 text-align-left">
               <BaseInput
                 label="Tussenruimte verticaal"
-                v-model="sjabloon.tussenruimte.horizontaal"
+                v-model="sjabloon.tussenruimte.verticaal"
                 type="number"
               ></BaseInput>
             </div>
@@ -207,10 +203,10 @@
       </div>
     </div>
   </div>
+  <Footer/>
 </template>
 
 <script>
-import BaseCheckboxLeft from "@/components/input/BaseCheckboxLeft";
 import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import Editor from "@tinymce/tinymce-vue";
@@ -222,12 +218,15 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import EtiketInfoDialog from "@/components/dialog/EtiketInfoDialog";
+import Footer from "@/components/global/Footer";
 
 export default {
   name: "Etiketten",
   components: {
+    Footer,
+    EtiketInfoDialog,
     ConfirmDialog,
-    BaseCheckboxLeft,
     BaseInput,
     BaseDropdown,
     Editor,
@@ -434,6 +433,9 @@ export default {
             life: 8000,
           });
         });
+    },
+    sluitInfodialog() {
+      this.openEtikettenFoto = false;
     },
 
     toonLeden() {
