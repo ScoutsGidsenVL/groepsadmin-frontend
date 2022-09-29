@@ -30,6 +30,10 @@ export default {
     return _.find(obj.links, {method: 'PATCH'}) !== undefined;
   },
 
+  kanGeFunctieWijzigen: function (obj) {
+    return _.find(obj.links, {rel: 'nieuwe groepseigen functie'}) !== undefined ;
+  },
+
   canBeShowed: function (lid, type) {
     let patchObject = lid.links.find(obj => {
       return obj.method === "PATCH"
