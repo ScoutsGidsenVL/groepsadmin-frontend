@@ -60,10 +60,10 @@
               label="Adres"
               v-model="contacten[index].adres"
             />
-            <template v-for="(adres, index) in adressen" :key="index">
+            <template v-for="(adres, index2) in adressen" :key="index2">
               <base-input
                 label="Telefoon"
-                v-model="adressen[index].telefoon"
+                v-model="adressen[index2].telefoon"
                 type="text"
                 :disabled="true"
                 v-if="contacten[index] && adres.id === contacten[index].adres"
