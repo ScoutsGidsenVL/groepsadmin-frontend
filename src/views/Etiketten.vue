@@ -1,11 +1,11 @@
 <template>
   <div>
     <SideMenu/>
-    <confirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <etiket-info-dialog :dialog-visible="openEtikettenFoto" @close="sluitInfodialog"/>
     <div class="lg:ml-8">
+      <ConfirmDialog/>
       <Loader :show-loader="laden"></Loader>
       <div class="overflow-hidden  lg:ml-6">
         <div>
@@ -17,32 +17,35 @@
           ></save-template-dialog>
         </div>
         <h4
-          class="text-align-left mt-5 pl-lg-2-5em custom-title font-weight-bold"
+          class="text-align-left mt-5 ml-1 pl-lg-2-5em custom-title font-weight-bold"
         >
           Etiketten
         </h4>
         <div class="pl-lg-4em mt-2">
           <div class="row">
             <div class="col-lg-6 text-align-left">
-              <BaseDropdown
-                v-model="sjabloon"
-                :options="sjablonen"
-                label="Opgeslagen sjablonen"
-                @changeValue="selecteerSjabloon"
-              ></BaseDropdown>
+              <label>Opgeslagen sjablonen:</label>
             </div>
-            <Button
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-alert float-right mr-2 position-sticky delete-button"
-              title="Verwijder huidig sjabloon"
-              v-show="
-              !(
-                sjabloon.naam.indexOf('deelnamebewijs') > -1 ||
-                (sjabloon.links && sjabloon.links.length === 0)
-              )
-            "
-              @click="remove(sjabloon)"
-            />
+          </div>
+          <div class="row mb-4">
+            <div class="col-lg-3 text-align-left">
+              <dropdown
+                :options="gesorteerdeSjablonen(sjablonen)"
+                v-model="sjabloon"
+                optionLabel="label"
+                optionValue="value"
+                class="full-width"
+              >
+              </dropdown>
+            </div>
+            <div class="col-lg-2 text-align-left" v-if="sjabloon && (sjabloon.naam !== 'deelnamebewijs' && sjabloon.naam !== 'blanco sjabloon' && sjabloon.naam !== 'STANDAARD' && sjabloon.naam !== 'standaard formaat')">
+              <Button
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
+                title="Verwijder huidig sjabloon"
+                @click="remove"
+              />
+            </div>
           </div>
           <div class="row mt-1">
             <div class="col-sm-2 text-align-left">
@@ -180,7 +183,7 @@
         <Dialog
           header="Ontvangers"
           v-model:visible="openOntvangerDialog"
-          :style="{ width: '50vw', height: '30vw' }"
+          :style="{ width: '50vw', 'max-height': '30vw', 'min-height': 'fit-content' }"
           :modal="true"
         >
           <div class="email-leden col-xs-12">
@@ -208,7 +211,6 @@
 
 <script>
 import BaseInput from "@/components/input/BaseInput";
-import BaseDropdown from "@/components/input/BaseDropdown";
 import Editor from "@tinymce/tinymce-vue";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
 import RestService from "@/services/api/RestService";
@@ -217,24 +219,23 @@ import Dialog from "primevue/dialog";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import EtiketInfoDialog from "@/components/dialog/EtiketInfoDialog";
 import Footer from "@/components/global/Footer";
+import ConfirmDialog from 'primevue/confirmdialog';
 
 export default {
   name: "Etiketten",
   components: {
     Footer,
     EtiketInfoDialog,
-    ConfirmDialog,
     BaseInput,
-    BaseDropdown,
     Editor,
     SaveTemplateDialog,
     Loader,
     Dialog,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
+    ConfirmDialog
   },
   data() {
     return {
@@ -255,6 +256,7 @@ export default {
       totaalAantalLeden: 0,
       saved: false,
       sorteerLeden: false,
+      tempSjabloon: null,
       sjabloon: {
         naam: "",
         lidIds: [],
@@ -304,7 +306,7 @@ export default {
     };
   },
   created() {
-    this.getSjablonen();
+    this.getSjablonen(true);
 
     window.setInterval(
       function () {
@@ -414,13 +416,13 @@ export default {
   },
 
   methods: {
-    getSjablonen() {
+    getSjablonen(setDefaultSjabloon) {
+      this.laden = true;
       RestService.getSjablonen("etiket")
         .then((res) => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
             this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
-            this.sjabloon = this.sjablonen[0].value;
           });
           this.getOpgeslagenEtiketSjabloon();
         })
@@ -432,7 +434,12 @@ export default {
             detail: error,
             life: 8000,
           });
-        });
+        }).finally(() => {
+        if (setDefaultSjabloon) {
+          this.setStandaardSjabloon();
+        }
+        this.laden = false;
+      });
     },
     sluitInfodialog() {
       this.openEtikettenFoto = false;
@@ -442,9 +449,6 @@ export default {
       this.openOntvangerDialog = true;
     },
 
-    selecteerSjabloon(sjabloon) {
-      this.sjabloon = sjabloon;
-    },
     getKolommen() {
       return this.kolommen;
     },
@@ -453,14 +457,13 @@ export default {
     },
     opslaan(naam, value) {
       this.sjabloonIsValid();
-      this.laden = true;
       if (!this.error) {
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
+          this.laden = true;
           RestService.updateSjabloon("etiket", this.sjabloon.id, this.sjabloon)
             .then((res) => {
-              this.getSjablonen();
               this.sjabloon = res.data;
               this.$toast.add({
                 severity: "success",
@@ -468,27 +471,26 @@ export default {
                 detail: "Sjabloon opgeslagen",
                 life: 3000,
               });
-            })
-            .catch((error) => {
-              console.log(error);
-              this.error = true;
-              this.$toast.add({
-                severity: "error",
-                summary: "Wijzigingen",
-                detail: error.message,
-                life: 8000,
-              });
-            })
-            .finally(() => {
-              this.changes = false;
-              this.laden = false;
-              this.$store.commit("setEtiketSjabloon", null);
+            }).catch((error) => {
+            this.error = true;
+            this.$toast.add({
+              severity: "error",
+              summary: "Wijzigingen",
+              detail: error.message,
+              life: 8000,
             });
+          }).finally(() => {
+            this.changes = false;
+            this.laden = false;
+            this.$store.commit("setEtiketSjabloon", null);
+            this.getSjablonen(false);
+          });
         } else {
           this.sjabloon.naam = naam;
+          this.changes = true;
+          this.laden = true;
           RestService.saveEtiketSjabloon(this.sjabloon)
             .then((res) => {
-              this.getSjablonen();
               this.sjabloon = res.data;
               this.$toast.add({
                 severity: "success",
@@ -496,51 +498,51 @@ export default {
                 detail: "Sjabloon opgeslagen",
                 life: 3000,
               });
-            })
-            .catch((error) => {
-              console.log(error);
-              this.error = true;
-              this.$toast.add({
-                severity: "error",
-                summary: "Wijzigingen",
-                detail: error.message,
-                life: 8000,
-              });
-            })
-            .finally(() => {
-              this.changes = false;
-              this.laden = false;
-              this.$store.commit("setEtiketSjabloon", null);
+            }).catch((error) => {
+            this.error = true;
+            this.$toast.add({
+              severity: "error",
+              summary: "Wijzigingen",
+              detail: error.message,
+              life: 8000,
             });
+          }).finally(() => {
+            this.changes = false;
+            this.laden = false;
+            this.$store.commit("setEtiketSjabloon", null);
+            this.getSjablonen(false);
+          });
         }
       }
       this.closeModal();
     },
-    remove(sjabloon) {
+    remove() {
       this.$confirm.require({
         message:
           "Ben je zeker dat je sjabloon: " +
-          sjabloon.naam +
+          this.sjabloon.naam +
           " wil verwijderen?",
         header: "Sjabloon verwijderen",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          RestService.verwijderSjabloon("etiket", this.sjabloon.id)
-            .then(() => {
-              this.setStandaardSjabloon();
-              this.sjablonen.forEach((listSjabloon, index) => {
-                if (listSjabloon.label === sjabloon.naam) {
-                  this.sjablonen.splice(index, 1);
-                }
-              });
-              this.$toast.add({
-                severity: "success",
-                summary: "Sjabloon",
-                detail: "Sjabloon verwijderd.",
-                life: 3000,
-              });
-            })
-            .catch((error) => {
+          if (!this.sjabloon.id) {
+            this.verwijderStoredSjabloon(this.sjabloon.naam)
+          } else {
+            RestService.verwijderSjabloon("etiket", this.sjabloon.id)
+              .then(() => {
+                this.sjablonen.forEach((listSjabloon, index) => {
+                  if (listSjabloon.label === this.sjabloon.naam) {
+                    this.sjablonen.splice(index, 1);
+                  }
+                });
+                this.$toast.add({
+                  severity: "success",
+                  summary: "Sjabloon",
+                  detail: "Sjabloon verwijderd.",
+                  life: 3000,
+                });
+                this.setStandaardSjabloon();
+              }).catch((error) => {
               this.error = true;
               this.$toast.add({
                 severity: "error",
@@ -549,11 +551,13 @@ export default {
                 life: 8000,
               });
             });
+          }
         },
         reject: () => {
           this.$confirm.close();
         },
       });
+
     },
     print() {
       this.filterLeden();
@@ -589,13 +593,11 @@ export default {
           obj.fileUrl = window.URL.createObjectURL(blob);
           obj.title = "etiketten.pdf";
           this.downloadFile(obj);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.laden = false;
-        });
+        }).catch((error) => {
+        console.log(error);
+      }).finally(() => {
+        this.laden = false;
+      });
     },
 
     downloadFile(obj) {
@@ -612,6 +614,18 @@ export default {
       return true;
     },
 
+    gesorteerdeSjablonen(sjablonen) {
+      return sjablonen.sort(function (a,b) {
+        if (a.label < b.label) {
+          return -1;
+        }
+        if (a.label > b.label) {
+          return 1;
+        }
+        return 0;
+      })
+    },
+
     filterLeden() {
       this.lidIds = new Set();
       this.geselecteerdeLeden.forEach((lid) => {
@@ -626,8 +640,25 @@ export default {
     getOpgeslagenEtiketSjabloon() {
       let sjabloon = this.$store.getters.etiketSjabloon;
       if (sjabloon) {
+        sjabloon.id = null;
         this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
       }
+    },
+
+    verwijderStoredSjabloon(naam) {
+      this.sjablonen.forEach((sjabloon, index) => {
+        if (sjabloon.label === naam) {
+          this.sjablonen.splice(index, 1)
+        }
+      })
+      this.$store.commit("setEtiketSjabloon", null);
+      this.sjabloon = this.sjablonen[0].value;
+      this.$toast.add({
+        severity: "success",
+        summary: "Sjabloon",
+        detail: "Sjabloon verwijderd.",
+        life: 3000,
+      });
     },
 
     myUploader(event) {
@@ -636,12 +667,10 @@ export default {
     closeModal() {
       this.openModal = false;
     },
+
+    //Nog even laten staan in afwachting van bespreking
     setStandaardSjabloon() {
-      this.sjablonen.forEach((sjabloon) => {
-        if (sjabloon.label.indexOf("blanco") > -1) {
-          this.sjabloon = sjabloon.value;
-        }
-      });
+      this.sjabloon = this.gesorteerdeSjablonen(this.sjablonen)[0].value;
     },
 
     getLeden() {
