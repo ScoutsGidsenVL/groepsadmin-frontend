@@ -30,7 +30,7 @@
         ></span>
             </div>
             <div class="col-1 absolute right-0 mr-6">
-              <opslaan-met-tekst @opslaan="opslaan" v-if="kanGroepWijzigen"></opslaan-met-tekst>
+              <opslaan-met-tekst @opslaan="opslaan" v-if="kanGroepWijzigen" :changes="changes"></opslaan-met-tekst>
             </div>
           </div>
           <form @submit.prevent="opslaan" autocomplete="off">
@@ -95,7 +95,9 @@ export default {
       selectedGroep: {},
       groepenArray: [],
       contactenLaden: false,
+      magFunctiesToevoegen: false,
       changes: false,
+      watchable: false,
       laden: false,
       home: {icon: 'pi pi-home', to: '/dashboard'},
       breadcrumbItems: [
@@ -104,6 +106,86 @@ export default {
         },
       ],
     };
+  },
+
+  watch: {
+    "selectedGroep.persoonsgegevens": {
+      handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.persoonsgegevens = this.lid.persoonsgegevens;
+          this.changes = true;
+        }
+      },
+      deep: true,
+    },
+    "selectedGroep.vgagegevens": {
+      handler: function () {
+        if (this.watchable) {
+          this.gewijzigdLid.vgagegevens = this.lid.vgagegevens;
+          this.changes = true;
+        }
+      },
+      deep: true,
+    },
+    "selectedGroep.adressen": {
+      handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
+      },
+      deep: true,
+    },
+    "selectedGroep.contacten": {
+      handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
+      },
+      deep: true,
+    },
+    "selectedGroep.groepseigenFuncties": {
+      handler: function () {
+        if (this.watchable) {
+          this.changes = true;
+        }
+      },
+      deep: true,
+    },
+    "selectedGroep.email": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep.website": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep.vrijeInfo": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep.rekeningnummer": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep.facturatieLeden": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep.facturatieLeiding": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
+    "selectedGroep['publiek-inschrijven']": function () {
+      if (this.watchable) {
+        this.changes = true;
+      }
+    },
   },
 
   methods: {
@@ -144,6 +226,7 @@ export default {
         });
       }) .finally(() => {
         this.laden = false;
+        this.changes = false;
         this.$store.commit("setGroepenLaden", false);
       })
     },
@@ -152,8 +235,12 @@ export default {
     },
 
     veranderGroep(groep) {
+      this.watchable = false;
       this.selectedGroep = groep;
       this.getContacten();
+      setTimeout(() => {
+        this.watchable = true
+      },2000)
     },
     getContacten() {
       this.contactenLaden = true;
@@ -188,6 +275,9 @@ export default {
     this.selectedGroep.publiekInschrijven = this.selectedGroep[
       "publiek-inschrijven"
       ];
+    setTimeout(() => {
+      this.watchable = true
+    }, 2000);
   },
 
   computed: {
