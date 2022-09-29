@@ -57,7 +57,7 @@
             label="Verminderd lidgeld"
             multiple="false"
             :beschrijving="omschrijving"
-            help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            help-link="https://www.scoutsengidsenvlaanderen.be/leiding/ondersteuning/leiding/diversiteit/scouting-op-maat"
           ></BaseCheckbox>
           <BaseInput
             v-model="lid.email"
