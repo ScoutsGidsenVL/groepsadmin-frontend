@@ -26,6 +26,21 @@
   margin-top: 1px;
 }
 
+.verwijder-button {
+  color: red !important;
+  background: transparent !important;
+  border: 1px solid $sgv-rood !important;
+  margin-top: 2px;
+  &:hover {
+    border: 1px solid darkred !important;
+    box-shadow: 0 0 0 0.5px darkred !important;
+  }
+  &:active {
+    border: 1px solid darkred !important;
+    box-shadow: 0 0 0 0.5px darkred !important;
+  }
+}
+
 .send-button {
   width: 4rem !important;
   height: 4rem !important;
