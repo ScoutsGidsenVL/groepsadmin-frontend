@@ -5,7 +5,7 @@
         <span>
           Groepseigen functies
         </span>
-        <span v-if="kanGroepWijzigen">
+        <span v-if="kanFunctieWijzigen">
           <Button
             icon="pi pi-plus"
             class="p-button-rounded add-button mt-t float-end mr-1"
@@ -20,7 +20,7 @@
           <p class="small">Geen groepseigen functies beschikbaar voor deze groep.</p>
         </div>
         <div v-if="groep && groep.groepseigenFuncties && groep.groepseigenFuncties.length > 0">
-          <div v-for="(functie, index) in groep.groepseigenFuncties" :key="index">
+          <div v-for="(functie, index) in gesorteerdeFuncties(groep.groepseigenFuncties)" :key="index">
             <div class="row mb--25">
               <div class="col-12">
                 <BaseInputGeig
@@ -62,7 +62,7 @@ export default {
       let id = geif.id.substring(0, 11);
 
       this.$confirm.require({
-        message: "Ben je zeker dat je de functie " + ( geif.beschrijving ? geif.beschrijving : '' )   + " wil verwijderen?",
+        message: "Ben je zeker dat je de functie " + (geif.beschrijving ? geif.beschrijving : '') + " wil verwijderen?",
         header: "Functie verwijderen",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
@@ -118,12 +118,29 @@ export default {
         beschrijving: null,
         groepen: [this.groep.groepsnummer]
       };
-      this.groep.groepseigenFuncties.push(nieuweFunctie);
+      this.groep.groepseigenFuncties.unshift(nieuweFunctie);
+    },
+    gesorteerdeFuncties(functies) {
+      return functies.sort((a, b) => {
+        if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {{
+          return 0;
+        }}
+        if (a.beschrijving < b.beschrijving) {
+          return -1;
+        }
+        if (a.beschrijving > b.beschrijving) {
+          return 1;
+        }
+        return 0;
+      })
     }
   },
   computed: {
     kanGroepWijzigen() {
       return rechtenService.kanWijzigen(this.groep);
+    },
+    kanFunctieWijzigen() {
+      return rechtenService.kanGeFunctieWijzigen(this.groep);
     }
   },
   setup(props) {
