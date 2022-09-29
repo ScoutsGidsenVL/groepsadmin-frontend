@@ -98,6 +98,7 @@ export default {
       } else {
         this.error = true;
       }
+      this.zoekTerm = "";
     },
 
     checkBestaandSjabloon() {
