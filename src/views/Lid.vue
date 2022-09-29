@@ -12,7 +12,7 @@
         :showLoader="laden"
       ></Loader>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
-                      :eigenProfiel="isEigenProfiel" :changes="changes"></lid-boven-balk>
+                      :eigenProfiel="isEigenProfiel" :changes="wijzigingen"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
@@ -170,6 +170,10 @@ export default {
   },
 
   created() {
+    this.emitter.on('changeGeg', (event) => {
+      this.changes = true;
+      this.changeGeg(event.veld, event.waarde, event.groep);
+    })
     this.$watch(
       () => this.$route.params,
       (toParams) => {
@@ -200,6 +204,7 @@ export default {
 
   methods: {
     opslaan() {
+      this.loadingLid = true;
       this.v$.$touch();
       if (this.v$.$invalid) {
         this.changes = false;
@@ -225,7 +230,17 @@ export default {
           this.sorteerFuncties();
         }).catch(error => {
         console.log(error);
+      }).finally(() => {
+        this.changes = false;
+        this.loadingLid = false;
       })
+    },
+
+    changeGeg(veld, waarde, groep) {
+      if (this.gewijzigdLid && Object.keys(this.gewijzigdLid).length === 0){
+        this.gewijzigdLid.groepseigenVelden = this.lid.groepseigenVelden;
+      }
+      this.gewijzigdLid.groepseigenVelden[groep].waarden[veld] = waarde;
     },
 
     updateFuncties({functie, groepsnummer}) {
@@ -343,6 +358,9 @@ export default {
     },
     isEigenProfiel() {
       return this.$route.params.id === "profiel"
+    },
+    wijzigingen() {
+      return this.changes
     }
   },
 };
