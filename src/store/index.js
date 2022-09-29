@@ -89,10 +89,14 @@ export default createStore({
       if (etiketSjabloon) {
         state.etiketSjabloon = {};
         state.etiketSjabloon = Object.assign({}, etiketSjabloon);
-        state.etiketSjabloon.naam =
-          etiketSjabloon.naam +
-          " gewijzigd maar nog niet opgeslagen op " +
-          DateUtil.formatteerDatum(new Date());
+        if (!state.etiketSjabloon.naam.includes("gewijzigd maar nog niet opgeslagen")) {
+          state.etiketSjabloon.naam =
+              etiketSjabloon.naam +
+              " gewijzigd maar nog niet opgeslagen op " +
+              DateUtil.formatteerDatum(new Date());
+        } else {
+          state.etiketSjabloon.naam = state.etiketSjabloon.naam.substring(0 , state.etiketSjabloon.naam.length - 10) + DateUtil.formatteerDatum(new Date());
+        }
       } else {
         state.etiketSjabloon = null;
       }
@@ -177,29 +181,37 @@ export default createStore({
       let groepen = [];
       commit("setGroepenLaden", true);
       return RestService.getGroepen().then((response) => {
-        commit("setGroepen", response.data.groepen);
-        response.data.groepen.forEach((groep) => {
-          groepen[groep.id] = groep;
-        });
-        commit("setIndexedGroepen", groepen);
-        commit("setGroepenLaden", false);
+        if (response.data.groepen) {
+          commit("setGroepen", response.data.groepen);
+          response.data.groepen.forEach((groep) => {
+            groepen[groep.id] = groep;
+          });
+          commit("setIndexedGroepen", groepen);
+          commit("setGroepenLaden", false);
+        }
       });
     },
     getFuncties({ commit }) {
       commit("setFunctiesLaden", true);
       return RestService.getFuncties().then((response) => {
-        commit("setFuncties", response.data.functies);
-        commit("setFunctiesLaden", false);
+        if (response.data.functies) {
+          commit("setFuncties", response.data.functies);
+          commit("setFunctiesLaden", false);
+        }
       });
     },
     getKolommen({ commit }) {
       return RestService.getKolomType().then((response) => {
-        commit("setKolommen", response.data.kolommen);
+        if (response.data.kolommen) {
+          commit("setKolommen", response.data.kolommen);
+        }
       });
     },
     getLinks({ commit }) {
       return RestService.root().then((response) => {
-        commit("setLinks", response.data.links);
+        if (response.data.links) {
+          commit("setLinks", response.data.links);
+        }
       })
     },
     getProfiel({ commit }) {
