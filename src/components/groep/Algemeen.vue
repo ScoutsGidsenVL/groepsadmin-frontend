@@ -51,7 +51,7 @@
             label="Leiding verbeterd"
             multiple="false"
             @check="check('leidingVerbeterd')"
-            :disabled="!kanGroepWijzigen"
+            :disabled="!kanGroepWijzigen || facturatieLeidingCheck"
           ></BaseCheckbox>
           <BaseCheckbox
             v-if="groep.ledenVerbeterdTonen"
@@ -60,7 +60,7 @@
             label="Leden verbeterd"
             multiple="false"
             @check="check('ledenverbeterd')"
-            :disabled="!kanGroepWijzigen"
+            :disabled="!kanGroepWijzigen || facturatieLedenCheck"
           ></BaseCheckbox>
           <BaseCheckbox
             type="checkbox"
