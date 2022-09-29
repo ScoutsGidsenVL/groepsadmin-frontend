@@ -77,9 +77,6 @@ export default {
         return groep.naam + " - " + groepsnummer;
       }
     },
-    changeValue(veld, waarde, groepIndex) {
-      this.gegVelden[groepIndex].waarden[veld] = waarde;
-    },
     checkGroepsEigenGegevens() {
       return true;
     }
