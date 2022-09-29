@@ -108,7 +108,6 @@ export default {
       }
     },
     gesorteerdeFuncties(items) {
-      console.log(items);
       return items.sort((a, b) => {
         if (a.label < b.label) {
           return -1;
