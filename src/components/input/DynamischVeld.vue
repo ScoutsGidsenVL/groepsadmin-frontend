@@ -85,7 +85,7 @@ export default {
       return keuzes;
     },
     changeValue(veld, waarde) {
-      this.$emit("changeValue", veld, waarde, this.groepIndex);
+      this.emitter.emit("changeGeg", {'veld': veld, 'waarde':waarde, 'groep':this.groepIndex});
     },
   },
 
