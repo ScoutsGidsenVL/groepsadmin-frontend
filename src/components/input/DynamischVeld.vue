@@ -7,6 +7,7 @@
         :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
+        @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
         error-message="Gelieve dit veld in te vullen"
@@ -18,6 +19,7 @@
         :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
+        @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
       >
@@ -28,6 +30,7 @@
         :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
+        @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         :options="vulOpties(veld.keuzes)"
         class="text-align-left"
@@ -39,6 +42,7 @@
         :beschrijving="veld.beschrijving"
         :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
         :label="veld.label"
+        @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
       >

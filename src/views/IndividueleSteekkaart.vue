@@ -9,10 +9,6 @@
         :showLoader="isLoadingGegevens"
       ></Loader>
       <div class="lg:ml-6">
-        <indicator
-          :is-loading="indicator.isLoading"
-          :use-slot="indicator.useSlot"
-        ></indicator>
         <div class="p-4 lg:ml-8">
           <Button
             icon="pi pi-save"
@@ -78,7 +74,6 @@
 <script>
 import RestService from "@/services/api/RestService";
 import DynamischVeld from "@/components/input/DynamischVeld";
-import Indicator from "@/components/global/Indicator";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
@@ -87,7 +82,6 @@ import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 export default {
   name: "IndividueleSteekkaart",
   components: {
-    Indicator,
     DynamischVeld,
     Loader,
     SideMenu,
@@ -112,12 +106,6 @@ export default {
         vgagegevens: {},
         verbondsgegevens: {},
       },
-      indicator: {
-        isLoading: false,
-        canCancel: false,
-        fullPage: true,
-        useSlot: false,
-      },
       steekkaartWaarden: null,
       layout: null,
       layoutGroepen: [],
@@ -126,6 +114,10 @@ export default {
     };
   },
   mounted() {
+    this.emitter.on('changeGeg', () => {
+      console.log('changes true')
+      this.changes = true;
+    })
     this.id = this.$route.params.id;
     this.isLoadingGegevens = true;
     RestService.getIndividueleSteekkaart(this.id)
@@ -225,7 +217,7 @@ export default {
       };
       this.checkForm();
       if (!this.erZijnErrors) {
-        this.indicator.isLoading = true;
+        this.isLoadingGegevens = true;
         data.gegevens.waarden = this.steekkaartWaarden;
         RestService.saveIndividueleSteekkaart(this.id, data)
           .then((response) => {
@@ -258,7 +250,7 @@ export default {
             if (!this.error) {
               this.changes = false;
             }
-            this.indicator.isLoading = false;
+            this.isLoadingGegevens = false;
           });
       }
     },
