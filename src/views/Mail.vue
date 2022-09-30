@@ -1,18 +1,11 @@
 <template>
   <div>
     <SideMenu/>
-    <confirmDialog/>
+    <ConfirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div class="lg:ml-8">
       <Loader :show-loader="laden"></Loader>
-      <div>
-        <indicator
-          :is-loading="indicator.isLoading"
-          :use-slot="indicator.useSlot"
-        >
-        </indicator>
-      </div>
       <div class="overflow-hidden lg:ml-6 p-2">
         <div>
           <save-template-dialog
@@ -29,7 +22,7 @@
         </h4>
         <div class="pl-lg-4em mt-2">
           <div class="row">
-            <div class="col-lg-6 text-align-left">
+            <div class="col-lg-6 text-align-left mb-5">
               <BaseDropdown
                 v-model="sjabloon"
                 :options="sjablonen"
@@ -39,7 +32,7 @@
             </div>
             <Button
               icon="pi pi-trash"
-              class="p-button-rounded p-button-alert float-right mr-2 position-sticky delete-button"
+              class="p-button-rounded p-button-alert float-right mr-2 position-sticky verwijder-button mt-2"
               title="Verwijder huidig sjabloon"
               v-show="
               !(
@@ -69,7 +62,7 @@
             </div>
           </div>
 
-          <div class="row mt-4">
+          <div class="row">
             <div class="col-sm-2 text-align-left">
               <label
               >Ontvangers:
@@ -199,14 +192,14 @@
         </Dialog>
       </div>
       <div>
-        <confirm-dialog
+        <confirm
           :dialog-visible="confirmationDialog"
           :message="buildMessage()"
           @confirm="bevestigMail"
           @cancel="cancelMail"
           class="confirm-dialog"
         >
-        </confirm-dialog>
+        </confirm>
       </div>
     </div>
     <Footer/>
@@ -221,13 +214,14 @@ import store from "../store";
 import BaseInput from "@/components/input/BaseInput";
 import FileUpload from "primevue/fileupload";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
-import Indicator from "@/components/global/Indicator";
 import Dialog from "primevue/dialog";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import confirm from "@/components/dialog/ConfirmDialog";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import Footer from "@/components/global/Footer";
+import ConfirmDialog from 'primevue/confirmdialog';
+
 
 export default {
   name: "Mail",
@@ -238,12 +232,12 @@ export default {
     Editor,
     FileUpload,
     SaveTemplateDialog,
-    Indicator,
     Dialog,
     ConfirmDialog,
     Loader,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
+    confirm
   },
   data() {
     return {
@@ -251,6 +245,7 @@ export default {
       bevestig: false,
       sorteerLeden: false,
       mailVersturen: false,
+      watchable: false,
       isLoadingLeden: false,
       confirmationDialog: false,
       lidIds: new Set(),
@@ -296,13 +291,6 @@ export default {
       },
       sjablonen: [],
       menuItems: [],
-      indicator: {
-        isLoading: false,
-        canCancel: false,
-        fullPage: true,
-        useSlot: false,
-        actionText: "",
-      },
       feedback: {
         boodschap: "",
         infoLink: "",
@@ -312,6 +300,10 @@ export default {
   },
   created() {
     this.getSjablonen("creating");
+
+    setTimeout(() => {
+      this.watchable = true
+    },2000)
 
     window.setInterval(
       function () {
@@ -359,7 +351,7 @@ export default {
   watch: {
     sjabloon: {
       handler: function (oldValue, newValue) {
-        if (newValue.naam) {
+        if ((newValue.naam === oldValue.naam) && this.watchable) {
           this.changes = true;
           this.sjabloonIsValid();
           this.saved = false;
@@ -468,8 +460,8 @@ export default {
     },
     opslaan(naam, value) {
       this.sjabloonIsValid();
-      this.indicator.isLoading = true;
       if (!this.error) {
+        this.laden = true;
         if (value && value.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
@@ -495,8 +487,8 @@ export default {
               console.log(error);
             })
             .finally(() => {
+              this.laden = false;
               this.changes = false;
-              this.indicator.isLoading = false;
               this.$store.commit("setMailSjabloon", null);
             });
         } else {
@@ -524,7 +516,7 @@ export default {
             })
             .finally(() => {
               this.changes = false;
-              this.indicator.isLoading = false;
+              this.laden = false;
               this.$store.commit("setMailSjabloon", null);
             });
         }
