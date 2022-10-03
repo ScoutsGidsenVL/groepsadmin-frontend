@@ -279,6 +279,8 @@ export default {
       this.loadingLid = true
       RestService.getLid(id).then((res) => {
         this.lid = res.data;
+        this.$store.commit('setGeselecteerdeLeden', []);
+        this.$store.getters.geselecteerdeLeden.push(this.lid);
         if (id === "profiel") {
           this.eigenProfiel = true;
           this.$store.commit("setProfiel", res.data);

@@ -22,31 +22,38 @@
         </h4>
         <div class="pl-lg-4em mt-2">
           <div class="row">
-            <div class="col-lg-6 text-align-left mb-5">
-              <BaseDropdown
-                v-model="sjabloon"
-                :options="sjablonen"
-                label="Opgeslagen sjablonen"
-                @changeValue="selecteerSjabloon"
-              ></BaseDropdown>
+            <div class="col-lg-6 text-align-left">
+              <label>Opgeslagen sjablonen:</label>
             </div>
-            <Button
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-alert float-right mr-2 position-sticky verwijder-button mt-2"
-              title="Verwijder huidig sjabloon"
-              v-show="
-              !(
-                sjabloon.naam.indexOf('blanco') > -1 ||
-                (sjabloon.links && sjabloon.links.length === 0)
-              )
-            "
-              @click="remove(sjabloon)"
-            />
+          </div>
+          <div class="row mb-4">
+            <div class="col-lg-3 text-align-left">
+              <dropdown
+                :options="gesorteerdeSjablonen(sjablonen)"
+                v-model="sjabloon"
+                optionLabel="label"
+                optionValue="value"
+                class="full-width"
+              >
+              </dropdown>
+            </div>
+            <div class="col-lg-2 text-align-left" v-if="sjabloon && (sjabloon.naam !== 'blanco sjabloon' || sjabloon.links.length !== 0)">
+              <Button
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
+                title="Verwijder huidig sjabloon"
+                @click="remove"
+              />
+            </div>
           </div>
           <div class="row">
             <div class="col-lg-6 text-align-left">
+              <label>Van:</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5 width-43-pct text-align-left">
               <BaseInput
-                label="Van"
                 v-model="sjabloon.van"
                 :invalid="errors['van']"
                 error-message="Dit veld is verplicht"
@@ -55,13 +62,42 @@
           </div>
           <div class="row">
             <div class="col-lg-6 text-align-left">
+              <label>Antwoorden naar:</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5 width-43-pct text-align-left">
               <BaseInput
-                label="Antwoorden naar"
                 v-model="sjabloon.replyTo"
               ></BaseInput>
             </div>
           </div>
-
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <label>Bcc:</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5 width-43-pct text-align-left">
+              <BaseInput
+                v-model="sjabloon.bcc">
+              </BaseInput>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-align-left">
+              <label>Onderwerp:</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5 5 width-43-pct text-align-left">
+              <BaseInput
+                v-model="sjabloon.onderwerp"
+                :invalid="errors['onderwerp']"
+                error-message="Dit veld is verplicht"
+              ></BaseInput>
+            </div>
+          </div>
           <div class="row">
             <div class="col-sm-2 text-align-left">
               <label
@@ -93,21 +129,6 @@
             <div class="col-lg-8 text-align-left">
               <checkbox :binary=true v-model="sjabloon.bestemming.contacten" id="alleContacten" class="mt--3p"></checkbox>
               <label class="mt-1 ml-3" for="alleContacten">Stuur naar de contacten van leden</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <BaseInput label="Bcc" v-model="sjabloon.bcc"></BaseInput>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <BaseInput
-                label="Onderwerp"
-                v-model="sjabloon.onderwerp"
-                :invalid="errors['onderwerp']"
-                error-message="Dit veld is verplicht"
-              ></BaseInput>
             </div>
           </div>
           <div class="row mb-3">
@@ -208,7 +229,6 @@
 
 <script>
 import RestService from "@/services/api/RestService";
-import BaseDropdown from "@/components/input/BaseDropdown";
 import Editor from "@tinymce/tinymce-vue";
 import store from "../store";
 import BaseInput from "@/components/input/BaseInput";
@@ -228,7 +248,6 @@ export default {
   components: {
     Footer,
     BaseInput,
-    BaseDropdown,
     Editor,
     FileUpload,
     SaveTemplateDialog,
@@ -330,16 +349,26 @@ export default {
       this.isLoadingLeden = true;
       this.$store.getters.geselecteerdeLeden.forEach((lid) => {
         this.geselecteerdeLeden.push(lid);
-        this.leden.push({
-          voornaam:
-            lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
-          achternaam:
-            lid.waarden["be.vvksm.groepsadmin.model.column.AchternaamColumn"],
-          volledigenaam:
-            lid.waarden[
-              "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-              ],
-        });
+        if (lid.waarden) {
+
+
+          this.leden.push({
+            voornaam:
+              lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
+            achternaam:
+              lid.waarden["be.vvksm.groepsadmin.model.column.AchternaamColumn"],
+            volledigenaam:
+              lid.waarden[
+                "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
+                ],
+          });
+        } else {
+          this.leden.push({
+            voornaam: lid.vgagegevens.voornaam,
+            achternaam: lid.vgagegevens.achternaam,
+            volledigenaam: lid.vgagegevens.voornaam + " " + lid.vgagegevens.achternaam
+          })
+        }
       });
       this.filterLeden();
       this.isLoadingLeden = false;
@@ -638,6 +667,18 @@ export default {
       this.bevestig = true;
       this.sendMail();
       this.confirmationDialog = false;
+    },
+
+    gesorteerdeSjablonen(sjablonen) {
+      return sjablonen.sort(function (a,b) {
+        if (a.label < b.label) {
+          return -1;
+        }
+        if (a.label > b.label) {
+          return 1;
+        }
+        return 0;
+      })
     },
 
     sendMail() {
