@@ -92,7 +92,6 @@ export default {
     return apiClient().get(baseUrl + "ledenlijst/filter/" + id);
   },
 
-  // todo vereenvoudigen dmv een parameter icm mail
   getSjablonen(type) {
     return apiClient().get(baseUrl + "sjabloon/" + type);
   },
@@ -129,6 +128,10 @@ export default {
 
   saveEtiketSjabloon(sjabloon) {
     return apiClient().post(baseUrl + "sjabloon/etiket/dummyid", sjabloon);
+  },
+
+  saveNieuwLid(lid) {
+    return apiClient().post(baseUrl + "lid", lid + "?bevestig=" + true);
   },
 
   getKolomType() {

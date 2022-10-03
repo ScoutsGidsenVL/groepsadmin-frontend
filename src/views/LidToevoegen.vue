@@ -12,7 +12,7 @@
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
       </div>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"
-                      :nieuwLid="true"></lid-boven-balk>
+                      :nieuwLid="true" :changes="changes"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
@@ -167,21 +167,45 @@ export default {
     },
   },
   mounted() {
+    this.emitter.on('veranderFunctie', () => {
+      this.changes = true
+    })
     if (this.$store.getters.goedTeKeurenLid) {
       this.lid = this.$store.getters.goedTeKeurenLid;
-      this.$store.commit('setGoedTeKeurenLid', null)
     } else if (this.$store.getters.broerZusLid) {
       this.lid = this.$store.getters.broerZusLid;
-      this.$store.commit('setBroerZusLid', null)
     }
   },
   methods: {
     opslaan() {
-      console.log(this.lid);
       this.v$.$touch();
       if (this.v$.$invalid) {
+        this.changes = false;
+        this.$toast.add({
+          severity: "warn",
+          summary: "Wijzigingen",
+          detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
+          life: 3000,
+        });
         return
       }
+      RestService.saveNieuwLid(this.lid).then(res => {
+        if (res.status === 201) {
+          this.$toast.add({
+            severity: "success",
+            summary: "Nieuw lid",
+            detail: "Nieuw lid opgeslagen",
+            life: 3000,
+          });
+          this.changes = false;
+        }
+      }).catch(error => {
+        console.log(error);
+      }).finally(() => {
+        this.changes = false;
+      })
+      this.$store.commit('setGoedTeKeurenLid', null)
+      this.$store.commit('setBroerZusLid', null)
     },
 
     updateFuncties({functie, groepsnummer}) {

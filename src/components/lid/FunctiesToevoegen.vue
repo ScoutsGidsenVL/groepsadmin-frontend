@@ -21,7 +21,7 @@
               </div>
             </div>
             <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length > 0">
-            <div class="border mt-3 mb-2"></div>
+              <div class="border mt-3 mb-2"></div>
               <label class="mb-2"><strong>Groepseigen functies</strong></label>
               <div class="row">
                 <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
@@ -89,17 +89,19 @@ export default {
     functiesEnGroepen() {
       this.groepEnfuncties = [];
       this.$store.getters.groepen.forEach(groep => {
-        if (rechtenService.hasPermission(this.huidigLid, 'functies.' + groep.groepsnummer)) {
+        if (rechtenService.hasPermission('functies.' + groep.groepsnummer)) {
           let tempGroep = groep;
           tempGroep.functies = [];
           this.$store.getters.functies.forEach(functie => {
             let bestaandeFunctie = false;
-            this.huidigLid.functies.forEach(lidFunctie => {
-              if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id) {
-                bestaandeFunctie = true;
-              }
-            })
-            if (functie.groepen.indexOf(tempGroep.groepsnummer) != -1 && !bestaandeFunctie) {
+            if (this.huidigLid && this.huidigLid.functies) {
+              this.huidigLid.functies.forEach(lidFunctie => {
+                if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id) {
+                  bestaandeFunctie = true;
+                }
+              })
+            }
+            if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
               tempGroep.functies.push(functie);
             }
           });
@@ -111,7 +113,7 @@ export default {
       this.showFunctieToevoegen = false;
 
       this.groepEnfuncties.forEach(groep => {
-        this.showFunctieToevoegen |= rechtenService.hasPermission(this.huidigLid, 'functies.' + groep.groepsnummer);
+        this.showFunctieToevoegen |= rechtenService.hasPermission('functies.' + groep.groepsnummer);
       });
 
     },
@@ -130,23 +132,31 @@ export default {
 
       let bestaandeFunctie = false;
 
-      for (let [index, val] of this.huidigLid.functies.entries()) {
-        if (val.functie === functie.id && val.groep === groepsnummer) {
-          bestaandeFunctie = true;
-          this.huidigLid.functies.splice(index, 1);
+      if (this.huidigLid && this.huidigLid.functies) {
+        for (let [index, val] of this.huidigLid.functies.entries()) {
+          if (val.functie === functie.id && val.groep === groepsnummer) {
+            bestaandeFunctie = true;
+            this.huidigLid.functies.splice(index, 1);
+          }
         }
       }
       if (!bestaandeFunctie) {
+        if (!this.huidigLid.functies) {
+          this.huidigLid.functies = [];
+        }
         this.huidigLid.functies.push(functieInstantie);
       }
+      this.emitter.emit("veranderFunctie", null);
     },
     isSelected(functie, groepsnummer) {
       let geselecteerd = false;
-      this.huidigLid.functies.forEach(lidFunctie => {
-        if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
-          geselecteerd = true;
-        }
-      })
+      if (this.huidigLid && this.huidigLid.functies) {
+        this.huidigLid.functies.forEach(lidFunctie => {
+          if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
+            geselecteerd = true;
+          }
+        })
+      }
       return geselecteerd;
     }
   }

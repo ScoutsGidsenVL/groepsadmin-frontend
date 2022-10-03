@@ -68,12 +68,14 @@ const routes = [
             isAuthorized: rechtenService.hasAccess("aanvragen")
         }
 
-},
+    },
     {
         path: "/lid/toevoegen",
         name: "lidToevoegen",
         component: LidToevoegen,
-        meta: {isAuthorized: true}
+        meta: {
+            isAuthorized: rechtenService.hasAccess("nieuw lid")
+        }
     },
     {
         path: "/lid/:id",

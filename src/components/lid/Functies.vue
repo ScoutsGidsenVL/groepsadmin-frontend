@@ -147,7 +147,7 @@ export default {
     },
 
     lidMagFunctieStoppen(sectie) {
-      return rechtenService.hasPermission(this.lid, sectie);
+      return rechtenService.hasPermission(sectie);
     },
 
     getFunctie(functieId) {

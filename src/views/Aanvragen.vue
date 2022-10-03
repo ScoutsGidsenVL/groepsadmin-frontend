@@ -157,7 +157,6 @@ export default {
       return DateUtil.formatGeboortedatum(geboortedatum)
     },
     toonVolledigeNaam(row) {
-      console.log(row);
       return row.voornaam + " " + row.achternaam;
     },
     goedkeuren(aanvraag) {
@@ -189,7 +188,6 @@ export default {
       this.$router.push({name: "lidToevoegen"});
     },
     afkeuren(aanvraag) {
-      console.log(aanvraag);
       this.selectedAanvraag = aanvraag;
       this.type = "afkeuren";
       this.confirmDialog = true;

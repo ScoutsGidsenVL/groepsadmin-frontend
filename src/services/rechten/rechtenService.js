@@ -16,8 +16,8 @@ export default {
     return result;
   },
 
-  hasPermission: function (lid, sectie) {
-    let patchObject = lid.links.find(obj => {
+  hasPermission: function (sectie) {
+    let patchObject = store.getters.profiel.links.find(obj => {
       return obj.method === "PATCH"
     });
     if (patchObject) {

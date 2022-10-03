@@ -170,7 +170,7 @@ export default {
   computed: {
     hasPermission() {
       if (this.lid.vgagegevens.voornaam) {
-        return rechtenService.hasPermission(this.lid, 'vgagegevens');
+        return rechtenService.hasPermission('vgagegevens');
       } else {
         return this.nieuwLid;
       }

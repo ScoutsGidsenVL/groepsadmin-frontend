@@ -174,6 +174,9 @@ export default {
       this.changes = true;
       this.changeGeg(event.veld, event.waarde, event.groep);
     })
+    this.emitter.on('veranderFunctie', () => {
+      this.changes = true
+    })
     this.$watch(
       () => this.$route.params,
       (toParams) => {

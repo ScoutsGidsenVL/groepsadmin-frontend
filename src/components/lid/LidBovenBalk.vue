@@ -10,7 +10,7 @@
         <communicatie class="ml-2" v-if="eigenProfiel && !nieuwLid" @click="gaNaarCommunicatieVoorkeuren"></communicatie>
         <nieuw-lid class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="nieuwLidToevoegen"/>
         <broer-zus class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="broerZusToevoegen"/>
-        <email class="ml-2" v-if="!eigenProfiel || !nieuwLid" :lid="lid"/>
+        <email class="ml-2" v-if="!eigenProfiel && !nieuwLid" :lid="lid"/>
         <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
       </div>
     </div>
