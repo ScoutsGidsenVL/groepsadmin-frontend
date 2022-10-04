@@ -4,14 +4,22 @@
       <div>
         <h4 class="mt-2 lg:ml-4">{{ volledigeNaam }}</h4>
       </div>
-      <!-- aanpassen naar hamburger menu     -->
-      <div class="justify-content-end">
-        <steekkaart @click="gaNaarIndividueleSteekkaart" v-if="eigenProfiel && !nieuwLid"></steekkaart>
-        <communicatie class="ml-2" v-if="eigenProfiel && !nieuwLid" @click="gaNaarCommunicatieVoorkeuren"></communicatie>
-        <nieuw-lid class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="nieuwLidToevoegen"/>
-        <broer-zus class="ml-2" v-if="kanNieuwLidAanmaken && !nieuwLid" @click="broerZusToevoegen"/>
-        <email class="ml-2" v-if="!eigenProfiel && !nieuwLid" :lid="lid"/>
-        <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
+      <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-evenly mr-7 mt-4">
+          <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
+        </div>
+        <div class="top-menu d-flex justify-content-end align-content-center">
+          <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                  class="sub-menu-button menu-button p-button-rounded"/>
+          <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
+            <template #item="{item}">
+              <div @click="gaNaar(item.link)">
+                <i :class="item.icon" class="lid-menu-item mr-2"><label
+                  class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+              </div>
+            </template>
+          </Menu>
+        </div>
       </div>
     </div>
     <div class="d-flex justify-content-start mt--1">
@@ -22,13 +30,8 @@
 
 <script>
 
-import Opslaan from "@/components/buttons/Opslaan";
-import Steekkaart from "@/components/buttons/Steekkaart";
-import NieuwLid from "@/components/buttons/NieuwLid";
-import Communicatie from "@/components/buttons/Communicatie";
-import BroerZus from "@/components/buttons/BroerZus";
-import Email from "@/components/buttons/Email";
 import rechtenService from '@/services/rechten/rechtenService';
+import Opslaan from "@/components/buttons/Opslaan";
 
 export default {
   name: "LidBovenBalk",
@@ -50,68 +53,93 @@ export default {
       default: false
     }
   },
-  components: {
-    BroerZus,
-    Opslaan,
-    Steekkaart,
-    NieuwLid,
-    Communicatie,
-    Email
-  },
+  components: {Opslaan},
   data() {
     return {
-      items: [
+      menuItems: [
         {
           label: "Communicatievoorkeuren",
-          icon: "fas fa-satellite-dish",
-          command: () => {
-            this.$toast.add({
-              severity: "success",
-              summary: "Communicatievoorkeuren",
-              detail: "We gaan naar communicatievoorkeuren",
-              life: 3000,
-            });
-          },
+          condition: this.eigenProfiel && !this.nieuwLid,
+          icon: "fal fa-satellite-dish",
+          link: "Communicatievoorkeuren",
         },
         {
-          label: "Nieuw lid",
-          icon: "fas fa-user-plus",
-          command: () => {
-            this.$toast.add({
-              severity: "success",
-              summary: "Nieuw",
-              detail: "Nieuw lid toevoegen",
-              life: 3000,
-            });
-          },
+          label: "Individuele steekkaart",
+          condition: this.heeftSteekkaartleesRecht,
+          icon: "fal fa-notes-medical",
+          link: "IndividueleSteekkaart",
+        },
+        {
+          label: "Nieuw Lid",
+          condition: rechtenService.hasAccess("nieuw lid"),
+          icon: "far fa-user-plus",
+          link: "lidToevoegen",
+        },
+        {
+          label: "Broer/Zus toevoegen",
+          condition: rechtenService.hasAccess("nieuw lid"),
+          icon: "far fa-user-friends",
+          link: "broerZusToevoegen",
+        },
+        {
+          label: "Mail lid",
+          condition: rechtenService.hasAccess("aanvragen"),
+          icon: "far fa-envelope",
+          link: "Mail",
+        },
+        {
+          label: "Stop alle functies",
+          condition: this.kanAlleFunctiesStoppen || this.eigenProfiel,
+          icon: "far fa-times",
+          link: "stopAlleFuncties",
         },
       ],
     };
   },
   methods: {
-    gaNaarIndividueleSteekkaart() {
-      this.$router.push({
-        name: "IndividueleSteekkaart",
-        params: { id: this.lid.id },
-      });
+    gaNaar(link) {
+      if (link === 'profiel') {
+        this.$router.push({name: 'Profiel', params: {id: "profiel"}})
+      } else if (link === 'stopAlleFuncties') {
+        this.$emit('stopAlleFuncties');
+      } else if (link === 'lidToevoegen') {
+        this.nieuwLidToevoegen();
+      } else if (link === 'broerZusToevoegen') {
+        this.broerZusToevoegen();
+      } else {
+        this.$router.push({name: link})
+      }
     },
-    gaNaarCommunicatieVoorkeuren() {
-      this.$router.push({
-        name: "Communicatievoorkeuren",
-        params: { id: this.lid.id },
-      });
-    },
+
     opslaan() {
       this.$emit('opslaan');
     },
-    kanNieuwLidAanmaken() {
-      return rechtenService.hasAccess("nieuw lid");
+
+    toggle(event) {
+      this.$refs.menu.toggle(event);
     },
+
     nieuwLidToevoegen() {
       this.$router.push({
         name: "lidToevoegen",
       });
     },
+
+    heeftSteekkaartleesRecht() {
+      if (this.eigenProfiel && !this.nieuwLid) {
+        return true
+      }
+      setTimeout(() => {
+        return rechtenService.heeftSteekkaartLeesrecht(this.lid, 'steekkaart')
+      }, 2000);
+    },
+
+    kanAlleFunctiesStoppen() {
+      setTimeout(() => {
+        return rechtenService.kanSchrappen(this.lid)
+      }, 2000);
+    },
+
     broerZusToevoegen() {
       let defaultLid = {
         vgagegevens: {
@@ -124,7 +152,7 @@ export default {
           gsm: this.lid.persoonsgegevens.gsm
         },
         verbondsgegevens: {
-          lidgeldbetaald:	false
+          lidgeldbetaald: false
         },
         email: this.lid.email,
         adressen: this.lid.adressen,
@@ -147,6 +175,12 @@ export default {
         return " ";
       }
     },
+    filteredMenuItems() {
+      return this.menuItems.filter(obj => {
+        return obj.condition;
+      });
+    },
+
   },
 };
 </script>

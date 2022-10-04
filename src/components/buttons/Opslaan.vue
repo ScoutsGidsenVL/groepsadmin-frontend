@@ -1,5 +1,5 @@
 <template>
-  <Button icon="pi pi-save" class="p-button-rounded opslaan-knop custom-knop" @click="opslaan"/>
+  <Button icon="pi pi-save" class=" opslaan-knop" @click="opslaan" label="Opslaan"/>
 </template>
 <script>
 export default {

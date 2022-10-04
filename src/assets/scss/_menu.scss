@@ -154,6 +154,22 @@
   }
 }
 
+.lid-menu-item {
+  color: $sgv-black;
+  font-size: 1.2rem !important;
+
+  &:hover {
+    color: $sgv-lichtgroen;
+  }
+
+  .active {
+    color: $sgv-lichtgroen;
+    span {
+      color: $sgv-lichtgroen;
+    }
+  }
+}
+
 .menu-icon {
   position: absolute;
   font-weight: lighter !important;
@@ -228,5 +244,45 @@
 }
 
 .mobile-menu-button {
-  background-color: $sgv-donkergroen;
+  background-color: $sgv-donkergroen !important;
+  &:hover {
+    color: $sgv-lichtgroen !important;
+  }
+
+  .active {
+    color: $sgv-lichtgroen !important;
+
+    span {
+      color: $sgv-lichtgroen !important;
+    }
+  }
+}
+
+.sub-menu-button {
+  margin-right: -30px !important;
+  color: $sgv-donkergroen !important;
+  background-color: transparent !important;
+  &:hover {
+    color: $sgv-lichtgroen !important;
+  }
+
+  .active {
+    color: $sgv-lichtgroen !important;
+
+    span {
+      color: $sgv-lichtgroen !important;
+    }
+  }
+}
+
+.sub-menu-items {
+  border: 2px solid $sgv-lichtgroen !important;
+  width: 20rem !important;
+  ul li .p-menuitem-link{
+    font-size: 1.2em !important;
+  }
+  .p-menu-list li {
+    height: 3rem !important;
+
+  }
 }

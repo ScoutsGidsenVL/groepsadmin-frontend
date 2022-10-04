@@ -1,7 +1,7 @@
 <template>
   <div>
     <SideMenu/>
-    <confirmDialog/>
+    <ConfirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid md:w-90">
@@ -12,7 +12,8 @@
         :showLoader="laden"
       ></Loader>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
-                      :eigenProfiel="isEigenProfiel" :changes="wijzigingen"></lid-boven-balk>
+                      :eigenProfiel="isEigenProfiel" :changes="wijzigingen"
+                      @stopAlleFuncties="stopAlleFuncties"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
@@ -62,9 +63,10 @@ import Loader from "@/components/global/Loader";
 import rechtenService from "@/services/rechten/rechtenService";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import useVuelidate from '@vuelidate/core'
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
+import ConfirmDialog from "primevue/confirmdialog";
+
 
 export default {
   name: "Lid",
@@ -190,6 +192,9 @@ export default {
   },
 
   mounted() {
+    this.emitter.on('veranderFunctie', () => {
+      this.changes = true
+    })
     this.id = this.$route.params.id ? this.$route.params.id : "profiel";
     if (this.id === "profiel" && this.$store.getters.profiel) {
       this.eigenProfiel = true;
@@ -206,6 +211,36 @@ export default {
   },
 
   methods: {
+    stopAlleFuncties() {
+      this.$confirm.require({
+        message:
+          this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
+          "\n" +
+          "(De functie VGA en FV kan niet geschrapt worden. Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)\n" +
+          "\n" +
+          "Ben je zeker?",
+        header: "Alle functies stoppen",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.lid.functies.forEach(functie => {
+            if (functie.temp !== "tijdelijk" && (functie.functie !== specialeFuncties.vga && functie.functie !== specialeFuncties.fv)) {
+              let functieInstantie = {
+                functie: functie.functie,
+                groep: functie.groep,
+                einde: new Date(),
+                begin: functie.begin
+              };
+              this.gewijzigdLid.functies.push(functieInstantie);
+            }
+          })
+          this.opslaan();
+        },
+        reject: () => {
+          this.$confirm.close();
+        },
+      });
+    },
+
     opslaan() {
       this.loadingLid = true;
       this.v$.$touch();
@@ -240,7 +275,7 @@ export default {
     },
 
     changeGeg(veld, waarde, groep) {
-      if (this.gewijzigdLid && Object.keys(this.gewijzigdLid).length === 0){
+      if (this.gewijzigdLid && Object.keys(this.gewijzigdLid).length === 0) {
         this.gewijzigdLid.groepseigenVelden = this.lid.groepseigenVelden;
       }
       this.gewijzigdLid.groepseigenVelden[groep].waarden[veld] = waarde;
@@ -344,11 +379,8 @@ export default {
       )
       this.$store.commit("setGroepenLaden", false);
       this.loadingLid = false;
-    },
-
-
+    }
   },
-
   computed: {
     volledigeNaam() {
       return (
@@ -366,6 +398,25 @@ export default {
     },
     wijzigingen() {
       return this.changes
+    }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if (this.changes) {
+      this.$confirm.require({
+        message:
+          "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
+        header: "Wijzigingen",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          next();
+        },
+        reject: () => {
+          next(false);
+        },
+      });
+    } else {
+      next();
     }
   },
 };
