@@ -4,7 +4,7 @@
     <confirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90">
+    <div class="container-fluid md:w-90 min-height-67vh">
       <div class="hidden lg:block md:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 lg:ml-8"/>
       </div>
@@ -37,7 +37,7 @@
               <span class="mt-1">Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i></span></div>
           </div>
           <div>
-            <div class="col-9 pr-8 mt-8 absolute" v-if="ledenaantallenData">
+            <div class="col-9 pr-8 mt-10" v-if="ledenaantallenData">
               <div id="Ledenaantallen" class="col-2 col-md-4" v-if="selectedGraph === 'Ledenaantallen'">
                 <div class="d-flex justify-content-center" v-if="ledenaantallenData.takStatistieken.length === 0">
                   <label>Geen gegevens beschikbaar</label>
@@ -121,6 +121,7 @@
       </div>
     </div>
   </div>
+  <Footer/>
 </template>
 
 <script>
@@ -133,6 +134,7 @@ import Breadcrumb from "primevue/breadcrumb";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import Footer from "@/components/global/Footer";
 
 export default {
   name: "LedenAantallen",
@@ -143,7 +145,8 @@ export default {
     Breadcrumb,
     SideMenu,
     ConfirmDialog,
-    IngelogdLid
+    IngelogdLid,
+    Footer
   },
   data() {
     return {
