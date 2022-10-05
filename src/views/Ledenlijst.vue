@@ -5,7 +5,7 @@
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div>
-      <div class="container-fluid datatable-component" ref="scrollComponent">
+      <div class="container-fluid min-height-67vh" ref="scrollComponent">
         <div class="hidden lg:block md:ml-8">
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
@@ -49,44 +49,19 @@
               class="p-datatable-sm mt-4"
             >
               <template #header>
-                <div class="d-flex justify-content-end">
-                  <Button
-                    icon="far fa-envelope"
-                    :disabled="geselecteerdeLeden.length === 0"
-                    class="p-button-rounded p-button-alert mr-2 mail-button"
-                    title="Mail leden"
-                    @click="verstuur('mail')"
-                  />
-                  <Button
-                    icon="fas fa-tags"
-                    :disabled="geselecteerdeLeden.length === 0"
-                    class="p-button-rounded p-button-alert mr-2 mail-button"
-                    title="Etiketten maken"
-                    label="Etiketten"
-                    @click="verstuur('etiket')"
-                  />
-                  <Button
-                    icon="far fa-file-pdf"
-                    :disabled="geselecteerdeLeden.length === 0"
-                    class="p-button-rounded p-button-alert mr-2 export-button"
-                    title="Exporteer naar pdf"
-                    @click="exporteer('pdf')"
-                  />
-                  <Button
-                    icon="far fa-file-csv"
-                    :disabled="geselecteerdeLeden.length === 0"
-                    class="p-button-rounded p-button-alert mr-2 export-button"
-                    title="Exporteer naar csv"
-                    @click="exporteer('csv')"
-                  />
-                  <Button
-                    icon="far fa-file-alt"
-                    :disabled="geselecteerdeLeden.length === 0"
-                    class="p-button-rounded p-button-alert mr-2 export-button"
-                    title="Exporteer steekkaarten naar pdf"
-                    @click="exporteer('steekkaart')"
-                  />
+                <div class="top-menu d-flex justify-content-end align-content-center mt--05">
+                  <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                          class="sub-menu-button menu-button p-button-rounded mt--1"/>
+                  <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-3 width-24">
+                    <template #item="{item}">
+                      <div @click="gaNaar(item.link)">
+                        <i :class="item.icon" class="lid-menu-item mr-2"><label
+                          class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+                      </div>
+                    </template>
+                  </Menu>
                 </div>
+
                 <label class="float-start mt--1">
                   {{ totaalAantalLeden }} {{ totaalAantalLeden > 1 ? 'rijen' : 'rij' }}
                 </label>
@@ -186,6 +161,7 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import Breadcrumb from "primevue/breadcrumb";
 import ledenlijstService from "@/services/leden/ledenlijstService";
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "Ledenlijst",
@@ -240,6 +216,44 @@ export default {
         fullPage: true,
         useSlot: false,
       },
+      menuItems: [
+        {
+          label: "Exporteren naar PDF",
+          condition: true,
+          icon: "fal fa-file-pdf",
+          link: "pdf",
+        },
+        {
+          label: "Exporteren naar CSV",
+          condition: true,
+          icon: "fal fa-file-csv",
+          link: "csv",
+        },
+        {
+          label: "E-mail versturen",
+          condition: true,
+          icon: "far fa-envelope",
+          link: "email",
+        },
+        {
+          label: "Etiketten maken",
+          condition: true,
+          icon: "far fa-tags",
+          link: "etiket",
+        },
+        {
+          label: "Individuele steekkaarten naar pdf",
+          condition: this.heeftSteekkaartleesRecht,
+          icon: "fal fa-file-pdf",
+          link: "steekkaart",
+        },
+        {
+          label: "Nieuw Lid",
+          condition: rechtenService.hasAccess("nieuw lid"),
+          icon: "far fa-user-plus",
+          link: "lidToevoegen",
+        },
+      ],
     };
   },
 
@@ -291,6 +305,12 @@ export default {
     aantalIds() {
       return this.lidIds.size;
     },
+
+    filteredMenuItems() {
+      return this.menuItems.filter(obj => {
+        return obj.condition;
+      });
+    },
   },
 
   methods: {
@@ -306,6 +326,10 @@ export default {
       this.huidigeFilter.criteria[criteria.criteriaKey] = gekozenGeslacht;
     },
 
+    toggle(event) {
+      this.$refs.menu.toggle(event);
+    },
+
     deactiveerGroepseigenGegeven(criteria, veld) {
       if (this.huidigeFilter.criteria[criteria.criteriaKey]) {
         this.huidigeFilter.criteria[criteria.criteriaKey].forEach((item, index) => {
@@ -313,6 +337,20 @@ export default {
             this.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
           }
         })
+      }
+    },
+
+    heeftSteekkaartleesRecht() {
+      setTimeout(() => {
+        return rechtenService.heeftSteekkaartLeesrecht(this.$store.getters.profiel, 'steekkaart')
+      }, 2000);
+    },
+
+    gaNaar(link) {
+      if (link === 'pdf' || link === 'csv' || link === 'steekkaart') {
+        this.exporteer(link)
+      } else if (link === 'email' || link === 'etiket') {
+        this.verstuur(link)
       }
     },
 
@@ -586,72 +624,76 @@ export default {
     },
 
     exporteer(type) {
-      this.indicator.isLoading = true;
-      if (this.geselecteerdeLeden.length) {
-        this.filterLeden();
-      }
-      let ledenIds = {
-        lidIds: Array.from(this.lidIds),
-      };
+      if (this.geselecteerdeLeden.length < 1) {
+        console.log('empty leden')
+      } else {
+        this.indicator.isLoading = true;
+        if (this.geselecteerdeLeden.length) {
+          this.filterLeden();
+        }
+        let ledenIds = {
+          lidIds: Array.from(this.lidIds),
+        };
 
-      if (this.lidIds.size > 0) {
-        if (type === "csv") {
-          RestService.getLedenCsv(0, ledenIds)
-            .then((res) => {
-              let obj = {};
-              let blob = new Blob([res.data], {type: "text/csv"});
-              obj.fileUrl = window.URL.createObjectURL(blob);
-              obj.title = "ledenlijst.csv";
-              this.downloadFile(obj);
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-            .finally(() => {
-              this.indicator.isLoading = false;
-            });
-        }
-        if (type === "pdf") {
-          RestService.getLedenPdf(0, ledenIds)
-            .then((res) => {
-              if (res.data) {
+        if (this.lidIds.size > 0) {
+          if (type === "csv") {
+            RestService.getLedenCsv(0, ledenIds)
+              .then((res) => {
                 let obj = {};
-                let blob = new Blob([res.data], {type: "application/pdf"});
+                let blob = new Blob([res.data], {type: "text/csv"});
                 obj.fileUrl = window.URL.createObjectURL(blob);
-                obj.title = "ledenlijst.pdf";
+                obj.title = "ledenlijst.csv";
                 this.downloadFile(obj);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-            .finally(() => {
-              this.indicator.isLoading = false;
-            });
-        }
-        if (type === "steekkaart") {
-          RestService.getLedenSteekkaartPdf(ledenIds)
-            .then((res) => {
-              if (res.data) {
-                let obj = {};
-                let blob = new Blob([res.data], {type: "application/pdf"});
-                obj.fileUrl = window.URL.createObjectURL(blob);
-                obj.title = "steekkaarten.pdf";
-                this.downloadFile(obj);
-              }
-            })
-            .catch((error) => {
-              let result = ErrorService.handleError(error);
-              this.$toast.add({
-                severity: result.severity,
-                summary: result.summary,
-                detail: result.detail,
-                life: 8000,
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                this.indicator.isLoading = false;
               });
-            })
-            .finally(() => {
-              this.indicator.isLoading = false;
-            });
+          }
+          if (type === "pdf") {
+            RestService.getLedenPdf(0, ledenIds)
+              .then((res) => {
+                if (res.data) {
+                  let obj = {};
+                  let blob = new Blob([res.data], {type: "application/pdf"});
+                  obj.fileUrl = window.URL.createObjectURL(blob);
+                  obj.title = "ledenlijst.pdf";
+                  this.downloadFile(obj);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                this.indicator.isLoading = false;
+              });
+          }
+          if (type === "steekkaart") {
+            RestService.getLedenSteekkaartPdf(ledenIds)
+              .then((res) => {
+                if (res.data) {
+                  let obj = {};
+                  let blob = new Blob([res.data], {type: "application/pdf"});
+                  obj.fileUrl = window.URL.createObjectURL(blob);
+                  obj.title = "steekkaarten.pdf";
+                  this.downloadFile(obj);
+                }
+              })
+              .catch((error) => {
+                let result = ErrorService.handleError(error);
+                this.$toast.add({
+                  severity: result.severity,
+                  summary: result.summary,
+                  detail: result.detail,
+                  life: 8000,
+                });
+              })
+              .finally(() => {
+                this.indicator.isLoading = false;
+              });
+          }
         }
       }
     },
@@ -691,7 +733,7 @@ export default {
       this.filterLeden();
       store.commit("setGeselecteerdeLeden", this.geselecteerdeLeden);
       store.commit("setLidIds", this.lidIds);
-      if (type === "mail") {
+      if (type === "email") {
         this.$router.push({name: "Mail"});
       }
       if (type === "etiket") {
