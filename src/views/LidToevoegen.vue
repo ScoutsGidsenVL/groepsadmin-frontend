@@ -215,7 +215,7 @@ export default {
           {
             functie: functie.id,
             groep: groep.id,
-            einde: new Date(),
+            einde: new Date().toISOString().slice(0, 10),
             begin: functie.begin
           }
         ]
