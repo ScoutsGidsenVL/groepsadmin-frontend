@@ -167,7 +167,7 @@ export default {
         acceptClass: "approve-button",
         rejectClass: "reject-button",
         accept: () => {
-          this.teStoppenFunctie.einde = new Date();
+          this.teStoppenFunctie.einde = new Date().toISOString().slice(0, 10);
           this.$emit('updateLid',  {functie: this.teStoppenFunctie, groepsnummer: groepsnummer });
         },
         reject: () => {

@@ -1,5 +1,4 @@
 <template>
-  <confirmDialog/>
   <div class="contacten-card mb-4">
     <card>
       <template #title>
@@ -81,11 +80,10 @@ import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import {onUpdated} from "@vue/runtime-core";
 import {reactive, toRefs} from "@vue/reactivity";
-import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "Contacten",
-  components: {BaseInput, BaseDropdown, ConfirmDialog},
+  components: {BaseInput, BaseDropdown},
   data() {
     return {
       rollen: [
