@@ -1,9 +1,16 @@
 <template>
   <div>
     <SideMenu/>
-    <ConfirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
+    <ConfirmDialog group="lid">
+      <template #message="slotProps">
+        <div class="flex">
+          <i :class="slotProps.message.icon" style="font-size: 2rem"></i>
+          <p class="pl-2" v-html="slotProps.message.message"></p>
+        </div>
+      </template>
+    </ConfirmDialog>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block lg:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
@@ -67,7 +74,6 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
 
-
 export default {
   name: "Lid",
   setup: () => ({v$: useVuelidate()}),
@@ -81,9 +87,9 @@ export default {
     Adressen,
     Loader,
     FunctiesToevoegen,
-    ConfirmDialog,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
+    ConfirmDialog
   },
   data() {
     return {
@@ -213,11 +219,12 @@ export default {
   methods: {
     stopAlleFuncties() {
       this.$confirm.require({
+        group: 'lid',
         message:
           this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
-          "\n" +
-          "(De functie VGA en FV kan niet geschrapt worden. Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)\n" +
-          "\n" +
+          " <br/>" +
+          "(De functie VGA en FV kan niet geschrapt worden. Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
+          " <br/>" +
           "Ben je zeker?",
         header: "Alle functies stoppen",
         icon: "pi pi-exclamation-triangle",
@@ -227,9 +234,12 @@ export default {
               let functieInstantie = {
                 functie: functie.functie,
                 groep: functie.groep,
-                einde: new Date(),
+                einde: new Date().toISOString().slice(0, 10),
                 begin: functie.begin
               };
+              if (!this.gewijzigdLid.functies) {
+                this.gewijzigdLid.functies = [];
+              }
               this.gewijzigdLid.functies.push(functieInstantie);
             }
           })
@@ -288,7 +298,7 @@ export default {
           {
             functie: functie.id,
             groep: groep.id,
-            einde: new Date(),
+            einde: new Date().toISOString().slice(0, 10),
             begin: functie.begin
           }
         ]
