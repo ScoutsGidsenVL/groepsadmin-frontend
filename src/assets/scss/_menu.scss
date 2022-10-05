@@ -260,7 +260,7 @@
 
 .sub-menu-button {
   margin-right: -30px !important;
-  color: $sgv-donkergroen !important;
+  color: $sgv-black !important;
   background-color: transparent !important;
   &:hover {
     color: $sgv-lichtgroen !important;
@@ -277,7 +277,7 @@
 
 .sub-menu-items {
   border: 2px solid $sgv-lichtgroen !important;
-  width: 20rem !important;
+  width: 21rem !important;
   ul li .p-menuitem-link{
     font-size: 1.2em !important;
   }
@@ -285,4 +285,8 @@
     height: 3rem !important;
 
   }
+}
+
+.width-24 {
+  width: 24rem !important;
 }
