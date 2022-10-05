@@ -55,6 +55,7 @@
       </div>
     </div>
   </div>
+  <Footer/>
 </template>
 
 <script>
@@ -73,10 +74,12 @@ import GroepseigenGegevens from "@/components/groep/GroepseigenGegevens";
 import RestService from "@/services/api/RestService";
 import Loader from "@/components/global/Loader";
 import store from "@/store";
+import Footer from "@/components/global/Footer";
 
 export default {
   name: "Groep",
   components: {
+    Footer,
     GroepseigenGegevens,
     GroepseigenFuncties,
     BaseDropdown,
