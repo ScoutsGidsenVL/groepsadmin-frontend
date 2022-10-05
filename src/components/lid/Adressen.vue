@@ -164,7 +164,7 @@ export default {
         header: "Adres verwijderen",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.adressen.splice(1, index);
+          this.adressen.splice(index, 1);
         },
         reject: () => {
           this.$confirm.close();
