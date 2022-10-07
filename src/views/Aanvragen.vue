@@ -8,10 +8,6 @@
       <div class="hidden lg:block md:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
       </div>
-      <indicator
-        :is-loading="indicator.isLoading"
-        :use-slot="indicator.useSlot"
-      ></indicator>
       <Loader
         :showLoader="isLoadingAanvragen"
       ></Loader>
@@ -85,7 +81,6 @@ import RestService from "@/services/api/RestService";
 import DateUtil from "@/services/dates/DateUtil";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import ConfirmMailing from "@/components/aanvraag/ConfirmMailing";
-import Indicator from "@/components/global/Indicator";
 import Loader from "@/components/global/Loader";
 import Breadcrumb from "primevue/breadcrumb";
 import SideMenu from "@/components/global/Menu";
@@ -95,7 +90,6 @@ export default {
   name: "Aanvragen",
   components: {
     ConfirmMailing,
-    Indicator,
     Loader,
     Breadcrumb,
     ConfirmDialog,
@@ -122,9 +116,6 @@ export default {
       confirmMailingHeader: "",
       confirmMailingDialog: false,
       confirmMailingMessage: "",
-      indicator: {
-        isLoading: false,
-      },
       defaultLid: null,
     }
   },
@@ -214,7 +205,7 @@ export default {
       this.deleteAanvraag("afkeurenZonderMail");
     },
     deleteAanvraag(type) {
-      this.indicator.isLoading = true;
+      this.isLoadingAanvragen = true;
       this.selectedAanvraag.links.forEach(link => {
         if (link.rel === type) {
           RestService.verwijderAanvraag(link)
@@ -235,7 +226,7 @@ export default {
               });
             })
             .finally(() => {
-              this.indicator.isLoading = false;
+              this.isLoadingAanvragen = false;
             })
         }
       })

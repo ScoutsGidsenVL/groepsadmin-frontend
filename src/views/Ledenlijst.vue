@@ -2,10 +2,12 @@
   <div>
     <SideMenu/>
     <confirmDialog/>
+    <message-dialog message="Gelieve eerst leden te selecteren." header="Geen leden geselecteerd"
+                    :dialog-visible="ledenDialog" @close="close"></message-dialog>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div>
-      <div class="container-fluid min-height-67vh" ref="scrollComponent">
+      <div class="container-fluid min-height-67vh mt-7em lg:mt-0" ref="scrollComponent">
         <div class="hidden lg:block md:ml-8">
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
@@ -50,9 +52,11 @@
             >
               <template #header>
                 <div class="top-menu d-flex justify-content-end align-content-center mt--05">
-                  <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                  <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
+                          aria-controls="overlay_menu"
                           class="sub-menu-button menu-button p-button-rounded mt--1"/>
-                  <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-3 width-24">
+                  <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true"
+                        class="sub-menu-items p-3 width-24">
                     <template #item="{item}">
                       <div @click="gaNaar(item.link)">
                         <i :class="item.icon" class="lid-menu-item mr-2"><label
@@ -162,6 +166,7 @@ import IngelogdLid from "@/components/lid/IngelogdLid";
 import Breadcrumb from "primevue/breadcrumb";
 import ledenlijstService from "@/services/leden/ledenlijstService";
 import rechtenService from "@/services/rechten/rechtenService";
+import MessageDialog from "@/components/dialog/MessageDialog";
 
 export default {
   name: "Ledenlijst",
@@ -172,7 +177,8 @@ export default {
     ConfirmDialog,
     SideMenu,
     Breadcrumb,
-    IngelogdLid
+    IngelogdLid,
+    MessageDialog
   },
   data() {
     return {
@@ -186,6 +192,7 @@ export default {
       isLoadingFilters: true,
       isLoadingMore: false,
       isExporting: false,
+      ledenDialog: false,
       isFilterCollapsed: false,
       isLoadingLeden: false,
       isSavingFilters: false,
@@ -210,12 +217,6 @@ export default {
       canShare: false,
       isVgaOfLeiding: false,
       alleGeselecteerd: false,
-      indicator: {
-        isLoading: false,
-        canCancel: false,
-        fullPage: true,
-        useSlot: false,
-      },
       menuItems: [
         {
           label: "Exporteren naar PDF",
@@ -348,9 +349,19 @@ export default {
 
     gaNaar(link) {
       if (link === 'pdf' || link === 'csv' || link === 'steekkaart') {
+        if (this.geselecteerdeLeden.length < 1) {
+          this.ledenDialog = true;
+          return;
+        }
         this.exporteer(link)
       } else if (link === 'email' || link === 'etiket') {
+        if (this.geselecteerdeLeden.length < 1) {
+          this.ledenDialog = true;
+          return;
+        }
         this.verstuur(link)
+      } else {
+        this.$router.push({name: link})
       }
     },
 
@@ -428,6 +439,10 @@ export default {
       }
       this.actieveKolommen = ledenlijstService.indexeerEnGroepeerKolommen(this.kolommen);
       this.nonActieveKolommen = ledenlijstService.indexeerEnGroepeerNonActieveKolommen(this.kolommen);
+    },
+
+    close() {
+      this.ledenDialog = false;
     },
 
     checkSortering(kolom) {
@@ -624,76 +639,66 @@ export default {
     },
 
     exporteer(type) {
-      if (this.geselecteerdeLeden.length < 1) {
-        console.log('empty leden')
-      } else {
-        this.indicator.isLoading = true;
-        if (this.geselecteerdeLeden.length) {
-          this.filterLeden();
-        }
-        let ledenIds = {
-          lidIds: Array.from(this.lidIds),
-        };
+      if (this.geselecteerdeLeden.length) {
+        this.filterLeden();
+      }
+      let ledenIds = {
+        lidIds: Array.from(this.lidIds),
+      };
 
-        if (this.lidIds.size > 0) {
-          if (type === "csv") {
-            RestService.getLedenCsv(0, ledenIds)
-              .then((res) => {
+      if (this.lidIds.size > 0) {
+        this.isLoadingLeden = true;
+        if (type === "csv") {
+          RestService.getLedenCsv(0, ledenIds)
+            .then((res) => {
+              let obj = {};
+              let blob = new Blob([res.data], {type: "text/csv"});
+              obj.fileUrl = window.URL.createObjectURL(blob);
+              obj.title = "ledenlijst.csv";
+              this.downloadFile(obj);
+            }).catch((error) => {
+            console.log(error);
+          }).finally(() => {
+            this.isLoadingLeden = false;
+          });
+        }
+        if (type === "pdf") {
+          RestService.getLedenPdf(0, ledenIds)
+            .then((res) => {
+              if (res.data) {
                 let obj = {};
-                let blob = new Blob([res.data], {type: "text/csv"});
+                let blob = new Blob([res.data], {type: "application/pdf"});
                 obj.fileUrl = window.URL.createObjectURL(blob);
-                obj.title = "ledenlijst.csv";
+                obj.title = "ledenlijst.pdf";
                 this.downloadFile(obj);
-              })
-              .catch((error) => {
-                console.log(error);
-              })
-              .finally(() => {
-                this.indicator.isLoading = false;
-              });
-          }
-          if (type === "pdf") {
-            RestService.getLedenPdf(0, ledenIds)
-              .then((res) => {
-                if (res.data) {
-                  let obj = {};
-                  let blob = new Blob([res.data], {type: "application/pdf"});
-                  obj.fileUrl = window.URL.createObjectURL(blob);
-                  obj.title = "ledenlijst.pdf";
-                  this.downloadFile(obj);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              })
-              .finally(() => {
-                this.indicator.isLoading = false;
-              });
-          }
-          if (type === "steekkaart") {
-            RestService.getLedenSteekkaartPdf(ledenIds)
-              .then((res) => {
-                if (res.data) {
-                  let obj = {};
-                  let blob = new Blob([res.data], {type: "application/pdf"});
-                  obj.fileUrl = window.URL.createObjectURL(blob);
-                  obj.title = "steekkaarten.pdf";
-                  this.downloadFile(obj);
-                }
-              })
-              .catch((error) => {
-                let result = ErrorService.handleError(error);
-                this.$toast.add({
-                  severity: result.severity,
-                  summary: result.summary,
-                  detail: result.detail,
-                  life: 8000,
-                });
-              })
-              .finally(() => {
-                this.indicator.isLoading = false;
-              });
-          }
+              }
+            }).catch((error) => {
+            console.log(error);
+          }).finally(() => {
+            this.isLoadingLeden = false;
+          })
+        }
+        if (type === "steekkaart") {
+          RestService.getLedenSteekkaartPdf(ledenIds)
+            .then((res) => {
+              if (res.data) {
+                let obj = {};
+                let blob = new Blob([res.data], {type: "application/pdf"});
+                obj.fileUrl = window.URL.createObjectURL(blob);
+                obj.title = "steekkaarten.pdf";
+                this.downloadFile(obj);
+              }
+            }).catch((error) => {
+            let result = ErrorService.handleError(error);
+            this.$toast.add({
+              severity: result.severity,
+              summary: result.summary,
+              detail: result.detail,
+              life: 8000,
+            });
+          }).finally(() => {
+            this.isLoadingLeden = false;
+          })
         }
       }
     },

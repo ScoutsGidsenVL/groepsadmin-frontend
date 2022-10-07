@@ -10,7 +10,8 @@
         <div class="menu">
           <div>
             <ul>
-              <li v-for="menuItem in desktopMenuItems" :key="menuItem.label" class="menu-item menu-item-width clickable">
+              <li v-for="menuItem in desktopMenuItems" :key="menuItem.label"
+                  class="menu-item menu-item-width clickable">
                 <div @click="goto(menuItem)" class="menu-item-width">
                   <div class="menu-icon">
                     <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
@@ -24,7 +25,6 @@
                     class="menu-item-text"
                   >{{ menuItem.label }}
                   </div>
-                  <lid-zoek-auto-complete v-if="menuItem.label === 'Zoeken'"/>
                 </div>
               </li>
             </ul>
@@ -37,14 +37,14 @@
         <div class="ga-logo-mobile clickable" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
         </div>
-        <div class="d-flex mt-4">
-          <lid-zoek-auto-complete/>
-        </div>
         <div class="right-0">
           <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
                   class="mobile-menu-button menu-button p-button-rounded"/>
           <Menu id="overlay_menu" ref="menu" :model="mobileMenuItems" :popup="true" class="mobile-menu"/>
         </div>
+      </div>
+      <div class="d-flex mt-4">
+        <lid-zoek-auto-complete/>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@ export default {
           icon: "far fa-user",
           link: "Profiel",
           command: () => {
-            this.$router.push({name: 'Profiel', params: {id: "profiel"}})
+            this.$router.push({name: 'Lid', params: {id: "profiel"}})
           }
         },
         {
@@ -112,13 +112,6 @@ export default {
           label: "Help",
           condition: true,
           icon: "far fa-question",
-
-        },
-        // Zorgen dat dit altijd de laatste is
-        {
-          label: "Zoeken",
-          condition: true,
-          icon: "far fa-search",
         },
       ],
     }
@@ -155,9 +148,19 @@ export default {
       });
     },
     mobileMenuItems: function () {
-      return this.menuItems.filter(obj => {
+
+      let mobileMenuItems = this.menuItems.filter(obj => {
         return obj.label !== 'Zoeken' || rechtenService.hasAccess(obj.condition);
       })
+      mobileMenuItems.push({
+        label: "Afmelden",
+        condition: true,
+        icon: "fas fa-sign-out-alt",
+        command: () => {
+          this.$keycloak.logout()
+        }
+      })
+      return mobileMenuItems;
     },
   }
 }

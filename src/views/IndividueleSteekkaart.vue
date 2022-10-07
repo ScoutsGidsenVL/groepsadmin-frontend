@@ -1,7 +1,7 @@
 <template>
   <div>
     <SideMenu/>
-    <confirmDialog/>
+    <ConfirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div>
@@ -9,7 +9,7 @@
         :showLoader="isLoadingGegevens"
       ></Loader>
       <div class="lg:ml-6">
-        <div class="p-4 lg:ml-8">
+        <div class="p-4 lg:ml-8 mt-4 ">
           <Button
             icon="pi pi-save"
             class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
@@ -20,7 +20,7 @@
           />
           <div class="row">
             <div
-              class="pull-left d-flex flex-column float-left text-align-left ml-3"
+              class="pull-left d-flex flex-column float-left text-align-left lg:ml-3"
             >
               <h3 class="panel-title">Individuele steekkaart</h3>
               <p class="panel-subtitle">
@@ -77,7 +77,7 @@ import DynamischVeld from "@/components/input/DynamischVeld";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "IndividueleSteekkaart",

@@ -18,7 +18,7 @@
       <Loader
         :showLoader="laden"
       ></Loader>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan"
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8 lg:mt-4" @opslaan="opslaan"
                       :eigenProfiel="isEigenProfiel" :changes="wijzigingen"
                       @stopAlleFuncties="stopAlleFuncties"></lid-boven-balk>
       <div class="lg:ml-2">

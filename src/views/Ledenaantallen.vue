@@ -4,7 +4,7 @@
     <confirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90 min-height-67vh">
+    <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
       <div class="hidden lg:block md:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 lg:ml-8"/>
       </div>
