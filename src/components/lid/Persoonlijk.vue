@@ -8,7 +8,7 @@
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
             type="text"
-            :disabled="!hasPermission"
+            :disabled="!hasPermission('vgagegevens')"
             :invalid="v$.lid.vgagegevens.voornaam.$invalid"
             error-message="Voornaam is verplicht"
             @blur="v$.lid.vgagegevens.voornaam.$commit"
@@ -17,7 +17,7 @@
             v-model="lid.vgagegevens.achternaam"
             label="Achternaam"
             type="text"
-            :disabled="!hasPermission"
+            :disabled="!hasPermission('vgagegevens')"
             error-message="Achternaam is verplicht"
             :invalid="v$.lid.vgagegevens.achternaam.$invalid"
             @blur="v$.lid.vgagegevens.achternaam.$commit"
@@ -25,7 +25,7 @@
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
             label="Geboortedatum"
-            :disabled="!hasPermission"
+            :disabled="!hasPermission('vgagegevens')"
             error-message="Geboortedatum is verplicht"
             :invalid="v$.lid.vgagegevens.geboortedatum.$invalid"
             @blur="v$.lid.vgagegevens.achternaam.$commit"
@@ -43,7 +43,7 @@
             label="Geslacht"
           />
           <BaseCheckbox
-            :disabled="!hasPermission"
+            :disabled="!hasPermission('vgagegevens')"
             v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.beperking"
@@ -53,7 +53,7 @@
           ></BaseCheckbox>
           <BaseCheckbox
             v-if="!nieuwLid"
-            :disabled="!hasPermission"
+            :disabled="!hasPermission('vgagegevens')"
             type="checkbox"
             v-model="lid.vgagegevens.verminderdlidgeld"
             label="Verminderd lidgeld"
@@ -71,6 +71,7 @@
             error-message="Geen geldig emailadres"
           ></BaseInput>
           <BaseInputTelefoon
+            :disabled="!eigenProfiel || !hasPermission('email')"
             v-model="v$.lid.persoonsgegevens.gsm.$model"
             label="GSM"
             type="text"
@@ -176,15 +177,15 @@ export default {
     formatNumber(value) {
       this.lid.persoonsgegevens.gsm = value;
     },
-  },
-  computed: {
-    hasPermission() {
+    hasPermission(type) {
       if (this.lid.vgagegevens.voornaam) {
-        return rechtenService.hasPermission('vgagegevens');
+        return rechtenService.hasPermission(type);
       } else {
         return this.nieuwLid;
       }
     },
+  },
+  computed: {
     omschrijving() {
       return this.inschrijving ? this.omschrijvingNieuwLid : this.omschrijvingBestaandLid;
     }

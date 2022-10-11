@@ -30,7 +30,7 @@
               <accordionTab>
                 <template #header>
                   <div class="row custom-height w-100">
-                    <div class="col-10 handle d-flex justify-content-start cursor-move">
+                    <div class="col-10 handle d-flex justify-content-start cursor-move cut-off-text">
                       <i class="fal fa-arrows top-6 "></i>
                       <span class="ml-2">{{ geigTitel(element) }}</span>
                     </div>
@@ -281,7 +281,6 @@ export default {
       };
       this.groep.groepseigenGegevens.push(newGegeven);
       this.activeIndex = 0;
-      console.log(this.activeIndex);
     },
 
     verwijderGegeven(index) {
@@ -314,7 +313,7 @@ export default {
       if (gegeven.status === "nieuw" && (gegeven.label === "Nieuw groepseigen gegeven" || gegeven.label === "")) {
         return "Nieuw groepseigen gegeven";
       } else if (gegeven.type === 'tekst_meerdere_lijnen') {
-        return gegeven.label + " - tekst op meerdere lijnen";
+        return gegeven.label + " - Meerdere lijnen";
       } else {
         return gegeven.label + " - " + gegeven.type;
       }

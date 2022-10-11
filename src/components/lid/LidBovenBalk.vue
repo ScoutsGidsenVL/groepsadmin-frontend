@@ -2,7 +2,7 @@
   <div class="bovenbalk mb-8 mt--1">
     <div class="d-flex justify-content-between">
       <div class="lg:ml-4">
-        <h4 class="mt-4 sm:ml-4">{{ volledigeNaam }}</h4>
+        <h4 class="mt-4 sm:ml-4 lg:ml-0">{{ volledigeNaam }}</h4>
       </div>
     </div>
     <div class="d-flex justify-content-start mt--05">
