@@ -1,5 +1,5 @@
 <template>
-  <div class="lid-search mr--23px">
+  <div class="lid-search mb-1">
     <AutoComplete
       class="lid-autocomplete custom-input-styling"
       v-model="zoekTerm"

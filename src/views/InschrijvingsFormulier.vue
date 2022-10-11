@@ -18,7 +18,7 @@
       <form @submit.prevent="opslaan" autocomplete="off">
         <div class="row lg:ml-8">
           <div class="col-12 col-lg-4">
-            <persoonlijk :model-value="lid" :nieuw-lid="true" ref="pers"></persoonlijk>
+            <persoonlijk :model-value="lid" :nieuw-lid="true" ref="pers" :inschrijving="true"></persoonlijk>
           </div>
           <div class="col-12 col-lg-4">
             <div class="adressen-card mb-4">

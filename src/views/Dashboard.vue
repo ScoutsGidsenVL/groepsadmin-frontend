@@ -9,11 +9,11 @@
         <Breadcrumb class="ml-4 mt-4 md:ml-6"/>
       </div>
       <div class="custom-divider"></div>
-      <div class="lg:ml-8 lg:pl-8">
+      <div class="lg:ml-8 lg:pl-8 mt-2">
         <div class="content container lg:ml-8">
           <loader :show-loader="showLoader"></loader>
-          <div class="d-flex lg:mt-8 sm:mt-4 mt-6">
-            <h1 class="welkom-titel text-align-left md:text-center text-sm sm:text-lg md:text-3xl">Welkom {{
+          <div class="d-flex lg:mt-8 sm:mt-4 mt-8">
+            <h1 class="welkom-titel text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-2">Welkom {{
                 naam
               }}</h1>
           </div>
@@ -33,7 +33,7 @@
               </div>
               <div class="justify-content-start d-flex">
                 <ul style="list-style: none;" class="ml--1">
-                  <li class="text-decoration-none justify-content-start d-flex mb-3"
+                  <li class="text-decoration-none justify-content-start d-flex mb-3 text-align-left"
                       v-for="(item, index) in snelNaarItems" :key="index">
                     <i class="fal fa-arrow-right color-light-green"><a :href="item.url" target="_blank"
                                                                        class="text-decoration-none"><span

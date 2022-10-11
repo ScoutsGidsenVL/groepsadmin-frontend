@@ -1,5 +1,5 @@
 <template>
-  <div class="row mt-4">
+  <div class="row mt-4 z999">
     <div class="col-lg-12">
       <div class="d-flex justify-content-start">
         <dropdown @change="veranderFilter" :options="filters" option-label="label" option-group-label="label"
@@ -17,9 +17,9 @@
         <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
                 :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="ml-2 opslaan-button"
                 @click="filterOpslaanMode = !filterOpslaanMode"></Button>
-          <Button label="Filter toepassen"
-                  :icon="'fas fa-check'" class="ml-2 opslaan-knop"
-                  @click="filterToepassen"></Button>
+        <Button label="Filter toepassen"
+                :icon="'fas fa-check'" class="ml-2 opslaan-knop"
+                @click="filterToepassen"></Button>
       </div>
     </div>
   </div>
@@ -40,7 +40,9 @@
       </GroepenSelect>
       <leeftijd-select :criteria="criteria" v-if="criteria.criteriaKey === 'leeftijd'" :value="criteria.value"
                        @deactivateCriterium="deactivateCriterium"></leeftijd-select>
-      <functie-select :criteria="criteria" v-if="criteria.criteriaKey === 'functies' && (criteria.criteriaSubKey === 'verbonds' || criteria.criteriaSubKey === 'groepspecifiek')" :value="criteria.value"
+      <functie-select :criteria="criteria"
+                      v-if="criteria.criteriaKey === 'functies' && (criteria.criteriaSubKey === 'verbonds' || criteria.criteriaSubKey === 'groepspecifiek')"
+                      :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"></functie-select>
       <groepseigen-gegevens-select :criteria="criteria" v-if="criteria.criteriaKey === 'groepseigen'"
                                    :value="criteria.value"

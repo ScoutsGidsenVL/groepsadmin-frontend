@@ -4,7 +4,7 @@
     <confirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90">
+    <div class="container-fluid md:w-90 ">
       <div class="hidden lg:block md:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
       </div>
@@ -16,9 +16,12 @@
       <confirm-mailing :dialog-visible="confirmMailingDialog" :header="confirmMailingHeader"
                        :message="confirmMailingMessage" @bevestigMail="bevestigMail"
                        @bevestigGeenMail="bevestigGeenMail"></confirm-mailing>
-      <div class="ml-6">
+      <div class="lg:ml-6 md:mt-10 lg:mt-8">
+        <div class="d-flex justify-content-end">
+          <lid-zoek-auto-complete></lid-zoek-auto-complete>
+        </div>
         <data-table :value="aanvragen" v-model:expandedRows="expandedRows" dataKey="id" responsiveLayout="scroll"
-                    class="mt-4 ml-8">
+                    class="lg:ml-8">
           <template #header>
             <div class="table-header-container d-flex">
               <Button v-show="!openDetails" icon="pi pi-plus" label="Alles openvouwen" @click="expandAll"
@@ -85,10 +88,12 @@ import Loader from "@/components/global/Loader";
 import Breadcrumb from "primevue/breadcrumb";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
+import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 
 export default {
   name: "Aanvragen",
   components: {
+    LidZoekAutoComplete,
     ConfirmMailing,
     Loader,
     Breadcrumb,

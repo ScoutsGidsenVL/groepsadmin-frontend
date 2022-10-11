@@ -104,6 +104,10 @@
   margin-left: - 1rem !important;
 }
 
+.ml--2 {
+  margin-left: - 2rem !important;
+}
+
 .mt--05 {
   margin-top: - 0.5rem !important;
 }
@@ -517,3 +521,15 @@ a.clean-link:hover {
   margin-top: 7em;
 }
 
+@media screen and (max-width: 992px) {
+  .md\:mt-10 {
+    margin-top: 10rem !important;
+  }
+}
+
+
+@media screen and (max-width: 333px) {
+  .sm\:ml--2 {
+    margin-left: - 2rem !important;
+  }
+}

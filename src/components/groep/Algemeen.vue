@@ -51,6 +51,7 @@
             label="Leiding verbeterd"
             multiple="false"
             @check="check('leidingVerbeterd')"
+            :beschrijving="leidingVerbeterd"
             :disabled="!kanGroepWijzigen || facturatieLeidingCheck"
           ></BaseCheckbox>
           <BaseCheckbox
@@ -60,6 +61,7 @@
             label="Leden verbeterd"
             multiple="false"
             @check="check('ledenverbeterd')"
+            :beschrijving="ledenVerbeterd"
             :disabled="!kanGroepWijzigen || facturatieLedenCheck"
           ></BaseCheckbox>
           <BaseCheckbox
@@ -69,11 +71,13 @@
             multiple="false"
             :disabled="!kanGroepWijzigen"
           ></BaseCheckbox>
-          <div id="helpBlock" class="help-block word-break mt-2" v-show="groep['publiek-inschrijven']">
+          <div id="helpBlock" class="help-block mt-2" v-show="groep['publiek-inschrijven']">
+            <div class="cut-off-text">
             <p>
               Link naar jouw inschrijvingsformulier:<br>
               <a :href="formulierUrl" target="_blank" class="icon-small clean-link color-dark-green">{{formulierUrl}}</a>
             </p>
+            </div>
             <p>
               Inschrijvingsformulier insluiten in jouw website:<br>
               <code>
@@ -95,6 +99,7 @@ import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
   name: "Algemeen",
@@ -121,8 +126,19 @@ export default {
       return rechtenService.kanWijzigen(this.groep);
     },
     formulierUrl() {
-      console.log(window.location)
       return this.baseUrl + this.groep.groepsnummer;
+    },
+    leidingVerbeterd() {
+      if (this.facturatieLeidingCheck) {
+        return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeiding)
+      }
+      return "";
+    },
+    ledenVerbeterd() {
+      if (this.facturatieLedenCheck){
+        return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeden)
+      }
+      return "";
     }
   },
 

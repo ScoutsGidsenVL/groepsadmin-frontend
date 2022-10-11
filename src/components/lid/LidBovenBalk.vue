@@ -1,29 +1,29 @@
 <template>
-  <div class="bovenbalk mb-4">
+  <div class="bovenbalk mb-8 mt--1">
     <div class="d-flex justify-content-between">
-      <div>
-        <h4 class="mt-2 lg:ml-4">{{ volledigeNaam }}</h4>
-      </div>
-      <div class="d-flex justify-content-end">
-        <div class="d-flex justify-content-evenly mr-7 mt-4">
-          <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
-        </div>
-        <div class="top-menu d-flex justify-content-end align-content-center">
-          <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
-                  class="sub-menu-button menu-button p-button-rounded"/>
-          <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
-            <template #item="{item}">
-              <div @click="gaNaar(item.link)">
-                <i :class="item.icon" class="lid-menu-item mr-2"><label
-                  class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
-              </div>
-            </template>
-          </Menu>
-        </div>
+      <div class="lg:ml-4">
+        <h4 class="mt-4 sm:ml-4">{{ volledigeNaam }}</h4>
       </div>
     </div>
-    <div class="d-flex justify-content-start mt--1">
+    <div class="d-flex justify-content-start mt--05">
       <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-evenly mr-7">
+        <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
+      </div>
+      <div class="top-menu d-flex justify-content-end align-content-center mt--15">
+        <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                class="sub-menu-button menu-button p-button-rounded"/>
+        <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
+          <template #item="{item}">
+            <div @click="gaNaar(item.link)">
+              <i :class="item.icon" class="lid-menu-item mr-2"><label
+                class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+            </div>
+          </template>
+        </Menu>
+      </div>
     </div>
   </div>
 </template>

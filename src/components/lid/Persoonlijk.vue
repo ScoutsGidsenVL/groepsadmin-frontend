@@ -43,6 +43,7 @@
             label="Geslacht"
           />
           <BaseCheckbox
+            :disabled="!hasPermission"
             v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.beperking"
@@ -52,6 +53,7 @@
           ></BaseCheckbox>
           <BaseCheckbox
             v-if="!nieuwLid"
+            :disabled="!hasPermission"
             type="checkbox"
             v-model="lid.vgagegevens.verminderdlidgeld"
             label="Verminderd lidgeld"
@@ -154,12 +156,20 @@ export default {
         {label: "Vrouwelijk", value: "vrouw"},
         {label: "Andere", value: "andere"},
       ],
-      omschrijving: "We willen ieder kind de kans geven om lid te worden van scouting. " +
+      omschrijvingNieuwLid: "We willen ieder kind de kans geven om lid te worden van scouting. " +
         "Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld. " +
         "Je betaalt dan 10 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf). " +
         "Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken. " +
         "We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info " +
-        "<a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>."
+        "<a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>.",
+
+      omschrijvingBestaandLid: "Leden zijn niet alleen maar lid van Scouts en Gidsen Vlaanderen vzw, maar gaan ook mee op weekend, kamp, ...<br> " +
+        " Naast verminderd lidgeld, kan je daarom als groep ook beroep doen op 'Fonds op Maat': " +
+        " hiermee kan je de deelnameprijs aan activiteiten voor leden en hun gezin verlagen.<br> " +
+        " Als je <a href=\"https://www.scoutsengidsenvlaanderen.be/aanvraagformulier-voor-fonds-op-maat\" target=\"_blank\">dit formulier</a> " +
+        " invult (let op: je moet ingelogd zijn op de website), " +
+        " komt Scouts en Gidsen Vlaanderen vzw voor 1/3 tussen in de deelnameprijs.<br> " +
+        " Het formulier vul je als (groeps)leiding in, de ouders hoeven niets te doen."
     };
   },
   methods: {
@@ -174,6 +184,9 @@ export default {
       } else {
         return this.nieuwLid;
       }
+    },
+    omschrijving() {
+      return this.inschrijving ? this.omschrijvingNieuwLid : this.omschrijvingBestaandLid;
     }
   },
   props: {
@@ -186,7 +199,11 @@ export default {
     nieuwLid: {
       type: Boolean,
       default: false
-    }
+    },
+    inschrijving: {
+      type: Boolean,
+      default: false
+    },
   },
   // watch: {
   //   "lid.vgagegevens": {
@@ -207,8 +224,7 @@ export default {
         email: "",
         gebruikersnaam: "",
         links: [],
-        persoonsgegevens: {
-        },
+        persoonsgegevens: {},
         vgagegevens: {
           voornaam: '',
           achternaam: '',

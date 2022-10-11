@@ -45,18 +45,6 @@
           transition: border-bottom-width 1s;
           border-bottom: solid 1px grey;
         }
-
-        li:last-child {
-          transition: width .3s linear;
-          width: 333px;
-
-          .lid-search {
-            transition: visibility .5s cubic-bezier(1, .01, .99, .62), opacity .5s cubic-bezier(1, .01, .99, .62);
-            width: 333px;
-            visibility: visible;
-            opacity: 1;
-          }
-        }
       }
     }
   }
@@ -96,10 +84,6 @@
       border-bottom: none !important;
       .menu-icon {
         top: 11px !important;
-      }
-      .lid-search {
-        visibility: hidden;
-        opacity: 0;
       }
     }
   }
@@ -211,20 +195,7 @@
 }
 
 .lid-autocomplete-input {
-  width: 245px;
-}
-
-@media screen and (max-width: 740px) {
-  .lid-autocomplete-input {
-    width: 200px;
-  }
-}
-
-@media screen and (max-width: 435px) {
-  .lid-autocomplete-input {
-    margin-left: 50px !important;
-    width: 140px;
-  }
+  width: 298px;
 }
 
 .pi-bars {

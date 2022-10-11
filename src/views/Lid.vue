@@ -18,10 +18,13 @@
       <Loader
         :showLoader="laden"
       ></Loader>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8 lg:mt-4" @opslaan="opslaan"
+      <div class="d-flex justify-content-end lg:mt-6 md:mt-10">
+        <lid-zoek-auto-complete></lid-zoek-auto-complete>
+      </div>
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"
                       :eigenProfiel="isEigenProfiel" :changes="wijzigingen"
                       @stopAlleFuncties="stopAlleFuncties"></lid-boven-balk>
-      <div class="lg:ml-2">
+      <div class="lg:ml-2 lg:mt-6">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
@@ -73,6 +76,7 @@ import useVuelidate from '@vuelidate/core'
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
+import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 
 export default {
   name: "Lid",
@@ -89,7 +93,8 @@ export default {
     FunctiesToevoegen,
     SideMenu,
     IngelogdLid,
-    ConfirmDialog
+    ConfirmDialog,
+    LidZoekAutoComplete
   },
   data() {
     return {

@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="lg:hidden">
+    <div class="lg:hidden mb-8">
       <div class="top-menu d-flex justify-content-center align-content-center">
         <div class="ga-logo-mobile clickable" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
@@ -43,21 +43,16 @@
           <Menu id="overlay_menu" ref="menu" :model="mobileMenuItems" :popup="true" class="mobile-menu"/>
         </div>
       </div>
-      <div class="d-flex mt-4">
-        <lid-zoek-auto-complete/>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import WikiService from "@/services/wiki/WikiService";
-import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "SideMenu",
-  components: {LidZoekAutoComplete},
   data() {
     return {
       publicPath: process.env.BASE_URL,

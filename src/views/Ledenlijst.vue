@@ -49,6 +49,8 @@
               @colum-click="addSort"
               sort-mode="multiple"
               class="p-datatable-sm mt-4"
+              :scrollable="true"
+              scroll-height="600px"
             >
               <template #header>
                 <div class="top-menu d-flex justify-content-end align-content-center mt--05">
@@ -81,7 +83,7 @@
               <column
                 selectionMode="multiple"
                 :exportable="false"
-                headerStyle="width: 3em"
+                headerStyle="width: 1em"
                 @click="selecteerLid"
               ></column>
               <column

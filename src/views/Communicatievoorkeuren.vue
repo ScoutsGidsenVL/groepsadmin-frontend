@@ -26,7 +26,7 @@
               voorkeuren bij elke lid aangeven.</p>
           </div>
           <div class="col-md-12 d-flex justify-content-end justify-content-md-end">
-            <opslaan @opslaan="opslaan" class="md:mt-4 ml-8" :disabled="!changes"></opslaan>
+            <opslaan @opslaan="opslaan" class="md:mt-4 ml-8 md:mb-4" :disabled="!changes"></opslaan>
           </div>
         </div>
       </div>
