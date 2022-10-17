@@ -118,7 +118,7 @@ export default {
       this.$emit('veranderFilter', event.value.value);
     },
     filterOpslaan() {
-      return false;
+      return this.$emit('filterOpslaan');
     },
     selecteerCriterium(criterium) {
       this.$emit('activateCriterium', criterium);

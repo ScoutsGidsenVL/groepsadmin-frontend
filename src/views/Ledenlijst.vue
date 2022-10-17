@@ -8,7 +8,7 @@
     <ingelogd-lid></ingelogd-lid>
     <div>
       <div class="container-fluid min-height-67vh mt-7em lg:mt-0" ref="scrollComponent">
-        <div class="hidden lg:block md:ml-8">
+        <div class="hidden lg:block md:ml-8 w-50">
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
         <Loader
@@ -24,6 +24,7 @@
                                   @setActieveKolom="setActieveKolom"
                                   @setNonActieveKolom="setNonActieveKolom"
                                   @filterToepassen="filterToepassen"
+                                  @filterOpslaan="filterOpslaan"
                                   @activateCriterium="activateCriterium"
                                   @deactivateCriterium="deactivateCriterium"
                                   :huidigeFilter="huidigeFilter"

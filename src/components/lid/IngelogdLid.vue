@@ -1,6 +1,6 @@
 <template>
   <div class="hidden lg:block">
-    <div class="container-fluid md:w-90 position-absolute mt-4 ">
+    <div class="container-fluid md:w-90 position-absolute mt-2 ">
       <div class="d-flex justify-content-md-end z999">
         <label class="h-1rem float-start sm:ml-4 h-2rem clickable"
                @click="gaNaarProfiel">{{ getVolledigeNaam }}</label>

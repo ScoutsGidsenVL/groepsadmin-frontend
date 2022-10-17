@@ -12,13 +12,13 @@
       </template>
     </ConfirmDialog>
     <div class="container-fluid md:w-90">
-      <div class="hidden lg:block lg:ml-8">
+      <div class="hidden lg:block lg:ml-8 w-50">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
       </div>
       <Loader
         :showLoader="laden"
       ></Loader>
-      <div class="d-flex justify-content-end lg:mt-6 md:mt-10">
+      <div class="d-flex justify-content-end lg:mt-4 md:mt-10">
         <lid-zoek-auto-complete></lid-zoek-auto-complete>
       </div>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"

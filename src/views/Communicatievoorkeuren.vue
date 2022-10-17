@@ -7,7 +7,7 @@
     <div class="container-fluid md:w-90 lg:ml-6">
       <MessageDialog message="Kijk je e-mailadres na in je profielpagina, zo mis je zeker geen enkel nummer"
                      :dialog-visible="messageDialog" @close="sluiten"></MessageDialog>
-      <div class="hidden lg:block lg:ml-8">
+      <div class="hidden lg:block lg:ml-8 w-50">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
       </div>
       <Loader

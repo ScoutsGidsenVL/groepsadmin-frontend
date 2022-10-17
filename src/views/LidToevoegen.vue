@@ -9,7 +9,7 @@
     ></Loader>
     <div class="container-fluid md:w-90 lg:ml-4 md:pl-8">
       <div class="hidden lg:block lg:ml-8">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 w-50"/>
       </div>
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"
                       :nieuwLid="true" :changes="changes"></lid-boven-balk>

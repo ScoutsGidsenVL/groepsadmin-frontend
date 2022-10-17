@@ -5,7 +5,7 @@
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid">
-      <div class="hidden lg:block md:ml-8">
+      <div class="hidden lg:block md:ml-8 w-50">
         <Breadcrumb class="ml-4 mt-4 md:ml-6"/>
       </div>
       <div class="custom-divider"></div>

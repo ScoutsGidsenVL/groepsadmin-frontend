@@ -182,8 +182,7 @@ if (window.location.pathname.startsWith("/groepsadmin/frontend/formulier/")) {
                     if (refreshed) {
                         store.commit("setToken", keycloak.token);
                     }
-                })
-                .catch(() => {
+                }).catch(() => {
                     console.log("Failed to refresh token");
                 });
         }, 6000);
