@@ -12,7 +12,7 @@
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
         <Loader
-          :showLoader="isLoadingLeden"
+          :showLoader="isLoading"
         ></Loader>
         <div class="md:ml-8">
           <div class="md:ml-6">
@@ -197,7 +197,7 @@ export default {
       isExporting: false,
       ledenDialog: false,
       isFilterCollapsed: false,
-      isLoadingLeden: false,
+      isLoading: false,
       isSavingFilters: false,
       tableheaderIsSticky: true,
       hasLoadedFilters: false,
@@ -218,6 +218,7 @@ export default {
       activeCriteria: [],
       canPost: false,
       canShare: false,
+      toPdf: false,
       isVgaOfLeiding: false,
       alleGeselecteerd: false,
       menuItems: [
@@ -415,6 +416,60 @@ export default {
       }
     },
 
+    filterOpslaan(naam, delen, filterId) {
+      this.isLoading = true;
+      if (filterId) {
+        RestService.patchFilterOpId(this.huidigeFilter, filterId)
+          .then(res => {
+            if (res.status === 200) {
+              this.$toast.add({
+                severity: "success",
+                summary: "Filter",
+                detail: "Filter opgeslagen",
+                life: 3000,
+              });
+            }
+          }).catch(error => {
+          if (error.response.status === 403) {
+            this.$toast.add({
+              severity: "warn",
+              summary: error.response.data.titel,
+              detail: error.response.data.beschrijving,
+              life: 8000,
+            });
+          }
+        }).finally(() => {
+          this.isLoading = false;
+        })
+      } else {
+        this.huidigeFilter.id = null;
+        this.huidigeFilter.delen = delen;
+        this.huidigeFilter.naam = naam;
+        RestService.saveFilter(this.huidigeFilter)
+          .then(res => {
+            if (res.status === 201) {
+              this.$toast.add({
+                severity: "success",
+                summary: "Filter",
+                detail: "Filter opgeslagen.",
+                life: 3000,
+              });
+            }
+          }).catch(error => {
+          if (error.response.status === 403) {
+            this.$toast.add({
+              severity: "warn",
+              summary: error.response.data.titel,
+              detail: error.response.data.beschrijving,
+              life: 8000,
+            });
+          }
+        }).finally(() => {
+          this.isLoading = false;
+        })
+      }
+    },
+
     deactivateCriterium(criterium) {
       if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld') {
         this.huidigeFilter.criteria[criterium.criteriaKey] = false;
@@ -463,7 +518,7 @@ export default {
     },
 
     filterToepassen() {
-      this.isLoadingLeden = true;
+      this.isLoading = true;
       this.offset = 0;
       let actKolommen = [];
       this.actieveKolommen.forEach(kolom => {
@@ -493,7 +548,7 @@ export default {
 
     veranderFilter(filter) {
       this.leden = [];
-      this.isLoadingLeden = true
+      this.isLoading = true
       if (this.huidigeFilter.id !== filter.id) {
         RestService.getFilterOpId(filter.id)
           .then(res => {
@@ -552,7 +607,7 @@ export default {
 
     getLeden() {
       this.offset === 0
-        ? (this.isLoadingLeden = true)
+        ? (this.isLoading = true)
         : (this.isLoadingMore = true);
       RestService.getLeden(this.offset)
         .then((res) => {
@@ -575,7 +630,7 @@ export default {
           });
         })
         .finally(() => {
-          this.isLoadingLeden = false;
+          this.isLoading = false;
           this.isLoadingMore = false;
         });
     },
@@ -587,7 +642,7 @@ export default {
           this.kolommen = res.data.kolommen;
           store.commit("setKolommen", res.data.kolommen);
           this.activeerKolommen();
-          this.isLoadingLeden = false;
+          this.isLoading = false;
         });
       } else {
         this.activeerKolommen();
@@ -650,7 +705,7 @@ export default {
       };
 
       if (this.lidIds.size > 0) {
-        this.isLoadingLeden = true;
+        this.isLoading = true;
         if (type === "csv") {
           RestService.getLedenCsv(0, ledenIds)
             .then((res) => {
@@ -662,7 +717,7 @@ export default {
             }).catch((error) => {
             console.log(error);
           }).finally(() => {
-            this.isLoadingLeden = false;
+            this.isLoading = false;
           });
         }
         if (type === "pdf") {
@@ -678,7 +733,7 @@ export default {
             }).catch((error) => {
             console.log(error);
           }).finally(() => {
-            this.isLoadingLeden = false;
+            this.isLoading = false;
           })
         }
         if (type === "steekkaart") {
@@ -700,7 +755,7 @@ export default {
               life: 8000,
             });
           }).finally(() => {
-            this.isLoadingLeden = false;
+            this.isLoading = false;
           })
         }
       }

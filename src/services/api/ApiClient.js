@@ -23,13 +23,10 @@ export default function apiClient() {
     instance.interceptors.response.use((response) => {
         return response
     }, (error) => {
-        console.log(error.response.data.status)
-        if (error.response.data.status !== 500) {
-            return error
-        } else {
-            console.log('opgevangen error')
-            console.log(error.response.data.status !== 500);
+        if (error.response.status === 500) {
+            console.log('opgevangen error 500')
         }
+        return Promise.reject(error);
     })
     // return axios.create({
     //   withCredentials: false,

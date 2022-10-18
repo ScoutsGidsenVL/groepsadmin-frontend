@@ -84,12 +84,20 @@ export default {
     return apiClient().patch(baseUrl + "ledenlijst/filter/huidige", filter);
   },
 
+  saveFilter(filter) {
+    return apiClient().post(baseUrl + "ledenlijst/filter", filter)
+  },
+
   getFilters() {
     return apiClient().get(baseUrl + "ledenlijst/filter");
   },
 
   getFilterOpId(id) {
     return apiClient().get(baseUrl + "ledenlijst/filter/" + id);
+  },
+
+  patchFilterOpId(filter, id) {
+    return apiClient().patch(baseUrl + "ledenlijst/filter/" + id, filter);
   },
 
   getSjablonen(type) {

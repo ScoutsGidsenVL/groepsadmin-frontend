@@ -11,15 +11,45 @@
             </div>
           </template>
         </dropdown>
-        <input-text v-model="nieuweFilternaam" placeholder="Filternaam" v-if="filterOpslaanMode"
-                    class="ml-2"></input-text>
-        <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode" class="ml-2"></Opslaan>
         <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
                 :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="ml-2 opslaan-button"
                 @click="filterOpslaanMode = !filterOpslaanMode"></Button>
         <Button label="Filter toepassen"
                 :icon="'fas fa-check'" class="ml-2 opslaan-knop"
+                v-if="!filterOpslaanMode"
                 @click="filterToepassen"></Button>
+      </div>
+    </div>
+    <div class="col-lg-12 mt-2">
+      <div class="d-flex justify-content-start">
+        <AutoComplete
+          class="adres-autocomplete d-flex custom-input-styling w-25"
+          v-model="zoekTerm"
+          field="label"
+          minLength=2
+          :suggestions="geselecteerdeFilters"
+          @complete="zoekBestaandefilter"
+          @itemSelect="kiesFilter"
+          @change="checkBestaandeFilter"
+          placeholder="Naam van sjabloon"
+          inputClass="autocomplete-input"
+          panelClass="autocomplete-panel"
+          :disabled="disabled"
+          @clear="clearSelectedFilter"
+          :class="error ? 'p-invalid' : ''"
+          v-if="filterOpslaanMode"
+        >
+          <template #item="slotProps">
+            <div class="ml-2">
+              {{ slotProps.item.label }}
+            </div>
+          </template>
+        </AutoComplete>
+        <div v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode" class="ml-2 mt-1">
+          <checkbox :binary="true" id="label" class="mr-2" v-model="filterDelen"/>
+          <label class="text-align-left" for="label">Als gedeelde filter</label>
+        </div>
+        <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode" class="ml-2" :label="opslaanLabel"></Opslaan>
       </div>
     </div>
   </div>
@@ -68,6 +98,9 @@ import LeeftijdSelect from "@/components/filter/LeeftijdSelect";
 import FunctieSelect from "@/components/filter/FunctieSelect";
 import IndividueleSteekkaartSelect from "@/components/filter/IndividueleSteekkaartSelect";
 import GroepseigenGegevensSelect from "@/components/filter/GroepseigenGegevensSelect";
+import AutoComplete from "primevue/autocomplete";
+import rechtenService from "@/services/rechten/rechtenService";
+
 
 export default {
   name: "LedenlijstFilterblok",
@@ -82,7 +115,8 @@ export default {
     LeeftijdSelect,
     FunctieSelect,
     IndividueleSteekkaartSelect,
-    GroepseigenGegevensSelect
+    GroepseigenGegevensSelect,
+    AutoComplete
   },
 
   props: {
@@ -109,7 +143,13 @@ export default {
   data() {
     return {
       filterOpslaanMode: false,
+      bestaandeNaam: false,
+      filterDelen: false,
       nieuweFilternaam: '',
+      zoekTerm: '',
+      geselecteerdeFilter: null,
+      geselecteerdeFilters: [],
+
     }
   },
 
@@ -118,7 +158,7 @@ export default {
       this.$emit('veranderFilter', event.value.value);
     },
     filterOpslaan() {
-      return this.$emit('filterOpslaan');
+      return this.$emit('filterOpslaan', this.zoekTerm, this.filterDelen, (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? this.geselecteerdeFilter.value.id : null);
     },
     selecteerCriterium(criterium) {
       this.$emit('activateCriterium', criterium);
@@ -140,7 +180,63 @@ export default {
     filterToepassen() {
       this.$emit('filterToepassen');
     },
+
+    zoekBestaandefilter() {
+      this.zoekTerm.trim();
+      this.geselecteerdeFilters = [];
+      this.filters.forEach(filter => {
+        filter.items.forEach((item) => {
+          if (item.label.toLowerCase().indexOf(this.zoekTerm.toLowerCase()) > -1) {
+            this.geselecteerdeFilters.push(item);
+          }
+        });
+      });
+    },
+
+    clearSelectedFilter() {
+      this.zoekTerm = "";
+      this.geselecteerdeFilter = null;
+    },
+
+    kiesFilter(event) {
+      this.zoekTerm = event.value.label;
+      this.zoekTerm.trim();
+      this.selecteerFilter();
+      this.checkBestaandeFilter();
+    },
+
+    checkBestaandeFilter() {
+      this.bestaandeNaam = false;
+      this.filters.forEach((filter) => {
+        filter.items.forEach(item => {
+          if (item.label === this.zoekTerm) {
+            this.bestaandeNaam = true;
+          }
+        })
+      });
+      if (!this.bestaandeNaam) {
+        this.geselecteerdeFilter = null;
+      }
+    },
+
+    kanFilterDelen() {
+      setTimeout(() => {
+        return rechtenService.hasAccess("filter delen")
+      }, 2000);
+    },
+
+    selecteerFilter() {
+      this.zoekTerm.trim();
+      this.filters.forEach((filter) => {
+        filter.items.forEach(item => {
+          if (item.label === this.zoekTerm) {
+            this.geselecteerdeFilter = item;
+          }
+        })
+      });
+    },
   },
+
   created() {
     this.emitter.on('deactivateCriterium', (event) => {
       this.deactivateCriterium(event.criteria);
@@ -154,6 +250,9 @@ export default {
     },
     activeCriteriaArray() {
       return this.activeCriteria;
+    },
+    opslaanLabel() {
+      return (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? 'Overschrijven' : 'Opslaan';
     }
   },
 }

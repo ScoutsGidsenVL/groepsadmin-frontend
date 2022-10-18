@@ -64,7 +64,6 @@ export default {
     },
 
     heeftSteekkaartLeesrecht: function (lid, type) {
-        console.log('check recht')
         let result = false;
         if (lid.links) {
             lid.links.forEach(link => {
@@ -73,7 +72,6 @@ export default {
                 }
             })
         }
-        console.log(result)
         return result;
     },
 };
