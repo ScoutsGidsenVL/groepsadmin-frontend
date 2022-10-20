@@ -9,7 +9,7 @@
       <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
     </div>
     <div class="d-flex justify-content-end">
-      <div class="d-flex justify-content-evenly mr-7">
+      <div class="d-flex justify-content-evenly mr-7" v-if="kanOpslaan">
         <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
       </div>
       <div class="top-menu d-flex justify-content-end align-content-center mt--15">
@@ -56,6 +56,7 @@ export default {
   components: {Opslaan},
   data() {
     return {
+      magFunctiesVanLidStoppen: false,
       menuItems: [
         {
           label: "Communicatievoorkeuren",
@@ -65,7 +66,7 @@ export default {
         },
         {
           label: "Individuele steekkaart",
-          condition: this.heeftSteekkaartleesRecht,
+          condition: rechtenService.heeftSteekkaartLeesrecht(this.lid, "steekkaart") || this.eigenProfiel && !this.nieuwLid,
           icon: "fal fa-notes-medical",
           link: "IndividueleSteekkaart",
         },
@@ -83,13 +84,13 @@ export default {
         },
         {
           label: "Mail lid",
-          condition: rechtenService.hasAccess("aanvragen"),
+          condition: !this.eigenProfiel,
           icon: "far fa-envelope",
           link: "Mail",
         },
         {
           label: "Stop alle functies",
-          condition: this.kanAlleFunctiesStoppen || this.eigenProfiel,
+          condition: this.magFunctiesVanLidStoppen || this.eigenProfiel,
           icon: "far fa-times",
           link: "stopAlleFuncties",
         },
@@ -123,21 +124,6 @@ export default {
       this.$router.push({
         name: "lidToevoegen",
       });
-    },
-
-    heeftSteekkaartleesRecht() {
-      if (this.eigenProfiel && !this.nieuwLid) {
-        return true
-      }
-      setTimeout(() => {
-        return rechtenService.heeftSteekkaartLeesrecht(this.lid, 'steekkaart')
-      }, 2000);
-    },
-
-    kanAlleFunctiesStoppen() {
-      setTimeout(() => {
-        return rechtenService.kanSchrappen(this.lid)
-      }, 2000);
     },
 
     broerZusToevoegen() {
@@ -175,12 +161,16 @@ export default {
         return " ";
       }
     },
+
     filteredMenuItems() {
       return this.menuItems.filter(obj => {
         return obj.condition;
       });
     },
 
+    kanOpslaan() {
+      return rechtenService.kanOpslaan(this.lid);
+    },
   },
 };
 </script>

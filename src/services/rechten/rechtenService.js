@@ -65,7 +65,8 @@ export default {
 
     heeftSteekkaartLeesrecht: function (lid, type) {
         let result = false;
-        if (lid.links) {
+
+        if (lid && lid.links) {
             lid.links.forEach(link => {
                 if (link.rel === type) {
                     result = true;
@@ -74,4 +75,27 @@ export default {
         }
         return result;
     },
+
+    magAlleFunctiesStoppen(lid) {
+        if (lid && lid.functies) {
+            let patchObject = lid.links.find(obj => {
+                return obj.method === "PATCH"
+            });
+            this.lid.functies.forEach(functie => {
+                return patchObject.secties.indexOf('functies.' + functie.groep) > -1;
+            })
+        }
+    },
+
+    kanOpslaan(lid) {
+        if (lid && lid.links) {
+            let patchObject = lid.links.find(obj => {
+                return obj.method === "PATCH"
+            });
+            if (patchObject) {
+                return patchObject.secties.length > 0;
+            }
+        }
+    }
+
 };
