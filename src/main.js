@@ -160,12 +160,14 @@ if (window.location.pathname.startsWith("/groepsadmin/frontend/formulier/")) {
         if (!auth) {
             window.location.reload();
         } else {
+            store.commit("resetLeden");
             store.commit("setToken", keycloak.token);
             store.commit("setNaam", keycloak.idTokenParsed.name);
             store.commit(
                 "setGebruikersnaam",
                 keycloak.idTokenParsed.preferred_username
             );
+            store.dispatch("getLeden", 0 );
             store.dispatch("getProfiel");
             store.dispatch("getGroepen");
             store.dispatch("getFuncties");

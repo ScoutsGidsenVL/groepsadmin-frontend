@@ -25,6 +25,12 @@
         </Menu>
       </div>
     </div>
+    <div class="d-flex justify-content-start mt--15 ml-4">
+      <div class="navigate-buttons">
+        <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid" class="opslaan-button" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
+        <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button" title="volgend lid" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -112,6 +118,28 @@ export default {
       }
     },
 
+    vorigLid() {
+      let index = this.$store.getters.leden.indexOf(this.lid.id);
+      if (index === 0) {
+        index = this.$store.getters.leden.length - 1;
+      } else {
+        index -= 1;
+      }
+      this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
+    },
+
+    volgendLid() {
+      let index = this.$store.getters.leden.indexOf(this.lid.id);
+      if (index === this.$store.getters.leden.length - 1) {
+        index = 0;
+      } else {
+        index += 1;
+      }
+      this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
+    },
+
+
+
     opslaan() {
       this.$emit('opslaan');
     },
@@ -160,6 +188,10 @@ export default {
       } else {
         return " ";
       }
+    },
+
+    legeLedenLijst() {
+      return this.$store.getters.leden.length === 0
     },
 
     filteredMenuItems() {
