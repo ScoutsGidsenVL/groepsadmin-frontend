@@ -24,7 +24,7 @@
       <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"
                       :eigenProfiel="isEigenProfiel" :changes="wijzigingen"
                       @stopAlleFuncties="stopAlleFuncties"></lid-boven-balk>
-      <div class="lg:ml-2 lg:mt-6">
+      <div class="lg:ml-2 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">

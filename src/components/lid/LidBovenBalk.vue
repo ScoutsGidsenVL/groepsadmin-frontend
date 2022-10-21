@@ -25,7 +25,7 @@
         </Menu>
       </div>
     </div>
-    <div class="d-flex justify-content-start mt--15 ml-4">
+    <div class="d-flex justify-content-start mt--25 ml-4 align-content-center">
       <div class="navigate-buttons">
         <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid" class="opslaan-button" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
         <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button" title="volgend lid" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
