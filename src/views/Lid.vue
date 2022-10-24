@@ -3,7 +3,7 @@
     <SideMenu/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
-    <ConfirmDialog group="lid">
+    <ConfirmDialog>
       <template #message="slotProps">
         <div class="flex">
           <i :class="slotProps.message.icon" style="font-size: 2rem"></i>
@@ -197,6 +197,7 @@ export default {
           this.getProfiel();
         } else if (toParams.id) {
           this.getLid(toParams.id);
+          this.changes = false;
         }
       }
     );
