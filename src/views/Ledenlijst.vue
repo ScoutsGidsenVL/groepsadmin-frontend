@@ -14,8 +14,8 @@
         <Loader
           :showLoader="isLoading"
         ></Loader>
-        <div class="md:ml-8">
-          <div class="md:ml-6">
+        <div class="lg:ml-8">
+          <div class="lg:ml-6">
             <LedenlijstFilterblok class="mt-6 mb-3" v-if="!isLoadingFilters"
                                   :actieveKolommen="actieveKolommen"
                                   :nonActieveKolommen="nonActieveKolommen"

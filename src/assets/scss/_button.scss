@@ -356,11 +356,20 @@
   }
 }
 
-.cut-off-text {
+@mixin text-cut-off-setup {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+}
+
+.cut-off-text {
+  @include text-cut-off-setup;
   padding-right: 35px !important;
+}
+
+.cut-off-text-filter {
+  @include text-cut-off-setup;
+  padding-right: 55px !important;
 }
 
 .navigate-buttons {

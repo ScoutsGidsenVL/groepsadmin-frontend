@@ -5,7 +5,7 @@
         <div class="col-10 ">
           <div class="text-align-left d-flex">
             <div>
-              <label>{{ criteria.title }}</label>
+              <label class="text-nowrap">{{ criteria.title }}</label>
             </div>
           </div>
         </div>
@@ -14,7 +14,10 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-2 filter-border filter-height-select" v-if="toggleMenu">
+    <div class="position-absolute z999 bg-white col-10 col-sm-6 col-md-4 col-lg-3 col-xl-2 filter-border filter-height-select" v-if="toggleMenu">
+      <div v-if="geenGroepseigenGegevens()">
+        <label class="text-align-left">Geen groepseigengegevens</label>
+      </div>
       <div v-for="(geg, index) in gesorteerdeGroepseigenGegevens()" :key="index">
         <div v-if="geg.items && geg.items.length > 0">
           <div class="select-kolom-header mb-1 full-width d-flex align-content-start">{{ geg.label }}</div>
@@ -104,6 +107,16 @@ export default {
         }
         return 0
       });
+    },
+
+    geenGroepseigenGegevens() {
+      let result = true;
+      this.gesorteerdeGroepseigenGegevens().forEach(geg =>{
+        if (geg.items && geg.items.length > 0) {
+          result = false;
+        }
+      })
+      return result;
     },
 
     activeerGroepseigenGegeven(veld, activated) {

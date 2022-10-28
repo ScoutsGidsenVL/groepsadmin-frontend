@@ -1,30 +1,39 @@
 <template>
-  <div class="row mt-4 z999">
-    <div class="col-lg-12">
-      <div class="d-flex justify-content-start">
-        <dropdown @change="veranderFilter" :options="filters" option-label="label" option-group-label="label"
-                  scrollHeight="500px"
-                  option-group-children="items" placeholder="Huidige" class="w-25">
-          <template #optiongroup="slotProps">
-            <div class="flex align-items-center filter-item">
-              <div><strong>{{ slotProps.option.label }}</strong></div>
-            </div>
-          </template>
-        </dropdown>
-        <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
-                :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="ml-2 opslaan-button"
-                @click="filterOpslaanMode = !filterOpslaanMode"></Button>
-        <Button label="Filter toepassen"
-                :icon="'fas fa-check'" class="ml-2 opslaan-knop"
-                v-if="!filterOpslaanMode"
-                @click="filterToepassen"></Button>
+  <div class="row mt-8 z999">
+    <div class="col-12">
+      <div class="">
+        <div class="row">
+          <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
+            <dropdown @change="veranderFilter" :options="filters" option-label="label" option-group-label="label"
+                      scrollHeight="500px"
+                      option-group-children="items" placeholder="Huidige" class="col-12">
+              <template #optiongroup="slotProps">
+                <div class="flex align-items-center filter-item">
+                  <div><strong>{{ slotProps.option.label }}</strong></div>
+                </div>
+              </template>
+            </dropdown>
+          </div>
+          <div class="col-12 col-md-3 col-xl-2" :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
+            <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
+                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="lg:ml-2 opslaan-button w-100"
+                    @click="filterOpslaanMode = !filterOpslaanMode"
+            ></Button>
+          </div>
+          <div class="col-12 col-sm-6 col-md-3 col-xl-2" v-if="!filterOpslaanMode">
+            <Button label="Filter toepassen"
+                    :icon="'fas fa-check'" class="md:ml-2 opslaan-knop w-100 text-nowrap"
+                    @click="filterToepassen"></Button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-lg-12 mt-2">
-      <div class="d-flex justify-content-start">
+    <div class="row">
+      <div class="col-12 col-md-6">
         <AutoComplete
-          class="adres-autocomplete d-flex custom-input-styling w-25"
+          class="custom-input-styling col-12 mt--15 ml--07"
           v-model="zoekTerm"
+          dense
           field="label"
           minLength=2
           :suggestions="geselecteerdeFilters"
@@ -45,18 +54,23 @@
             </div>
           </template>
         </AutoComplete>
-        <div v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode" class="ml-2 mt-1">
-          <checkbox :binary="true" id="label" class="mr-2" v-model="filterDelen"/>
+        <div
+          v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode"
+          class="ml-2 md:mt-1 col-12 d-flex justify-content-start">
+          <checkbox :binary="true" id="label" class="mr-2 ml--07" v-model="filterDelen"/>
           <label class="text-align-left" for="label">Als gedeelde filter</label>
         </div>
-        <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode" class="ml-2" :label="opslaanLabel"></Opslaan>
+        <div class="col-12">
+          <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode" class="ml-2 col-12 ml--07"
+                   :label="opslaanLabel"></Opslaan>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row mt--1">
     <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
                      v-if="inActivecriteria.length > 0"></criteria-select>
-    <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-lg-2 mt-2">
+    <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3 col-xxl-2">
       <BoolFilter :activeCriteria="activeCriteria" :criteria-key="criteria.criteriaKey"
                   @deactivateCriterium="deactivateCriterium"
                   v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld' || criteria.criteriaKey === 'emailgeblokkeerd'"></BoolFilter>

@@ -8,7 +8,7 @@
               <label>{{ criteria.title }}:</label>
             </div>
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label cut-off-text">{{ label }}</label>
+              <label class="subtitle clickable text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
             </div>
           </div>
         </div>

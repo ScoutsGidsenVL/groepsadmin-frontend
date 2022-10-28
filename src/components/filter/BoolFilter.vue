@@ -8,7 +8,7 @@
               <label class="label-width">{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label cut-off-text">Ja</label>
+              <label class="subtitle clickable text-align-left criteria-label cut-off-text-filter">Ja</label>
             </div>
           </div>
         </div>

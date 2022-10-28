@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-2 filter-border" v-if="toggleMenu">
+    <div class="position-absolute z999 bg-white col-10 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
       <div class="d-flex justify-content-between ml-2 mr-7px">
         <label class="mt-2">Aangepast</label>
         <dropdown

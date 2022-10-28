@@ -8,7 +8,7 @@
               <label>{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label cut-off-text">{{ label }}</label>
+              <label class="subtitle clickable text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
             </div>
           </div>
         </div>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-12 filter-border" v-if="toggleMenu">
+    <div class="position-absolute z999 bg-white col-12 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
       <div class="d-flex align-content-start">
         <dropdown
           class="width-100"
