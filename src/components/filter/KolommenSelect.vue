@@ -109,8 +109,6 @@ export default {
         kolom.kolomIndex = kolom.kolomIndexOrig;
         this.$emit('setActieveKolom');
         this.emitter.emit('setActieveKolom', {'kolom': kolom})
-
-
       } else {
         kolom.activated = true;
         kolom.groeperingOrig = kolom.groepering;

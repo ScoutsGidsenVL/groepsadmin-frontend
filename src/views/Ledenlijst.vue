@@ -323,6 +323,11 @@ export default {
       if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd') {
         this.huidigeFilter.criteria[criterium.criteriaKey] = true;
       }
+
+      if (criterium.criteriaKey === 'functies') {
+        this.emitter.emit('activateFunctieCriterium')
+      }
+
       criterium.activated = true;
       this.activeCriteria.unshift(criterium);
     },
@@ -574,8 +579,13 @@ export default {
     },
 
     activeerAlleFuncties(criteria) {
-      console.log('activeer alle functies')
-      console.log(criteria);
+      criteria.itemgroups.forEach(group => {
+        group.items.forEach(item => {
+          if (!this.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
+            this.huidigeFilter.criteria[criteria.criteriaKey].push(item.value)
+          }
+        })
+      })
     },
 
     activeerFunctie(criteria, functie) {
@@ -591,9 +601,19 @@ export default {
     },
 
     activeerAlleGroepFuncties(criteria, groepering) {
-      console.log('activeer alle groepsfuncties')
-      console.log(criteria);
-      console.log(groepering);
+      if (!this.huidigeFilter.criteria[criteria.criteriaKey]) {
+        this.huidigeFilter.criteria[criteria.criteriaKey] = [];
+      }
+
+      criteria.itemgroups.forEach(group => {
+        if (group.label === groepering) {
+          group.items.forEach(item => {
+            if (!this.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
+              this.huidigeFilter.criteria[criteria.criteriaKey].push(item.value)
+            }
+          })
+        }
+      })
     },
 
     selectLid(event) {

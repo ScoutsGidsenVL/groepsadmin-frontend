@@ -171,17 +171,18 @@ export default {
     veranderFilter(event) {
       this.$emit('veranderFilter', event.value.value);
     },
+
     filterOpslaan() {
       this.filterOpslaanMode = false;
       return this.$emit('filterOpslaan', this.zoekTerm, this.filterDelen, (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? this.geselecteerdeFilter.value.id : null);
     },
+
     selecteerCriterium(criterium) {
       this.$emit('activateCriterium', criterium);
     },
 
     deactivateCriterium(criterium) {
       this.$emit('deactivateCriterium', criterium)
-
     },
 
     setNonActieveKolom() {

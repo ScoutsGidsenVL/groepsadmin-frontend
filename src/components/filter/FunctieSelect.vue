@@ -26,7 +26,7 @@
       <divider></divider>
       <div v-for="(item, key) in criteria.itemgroups" :key="key" class="border-white border-solid border-1">
         <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 clickable">
-          <checkbox :binary="true" :id="item.label" class="mr-2" v-model="item.activated"
+          <checkbox :binary="true" :id="item.label" class="mr-2" v-model="alles"
                     @change="activeerAlleGroepFuncties(item.label)"/>
           <label class="text-align-left vw90 clickable" @click="openSection(item.label)">{{ item.label }}</label>
           <div class="full-width d-flex justify-content-center" @click="openSection(item.label)">
@@ -55,6 +55,7 @@ export default {
   components: {
     VerwijderCriteria
   },
+
   data() {
     return {
       toggleMenu: false,
@@ -63,6 +64,13 @@ export default {
       openSections: [],
     }
   },
+
+  created() {
+    if (this.criteria.activated) {
+      this.activeerAlleFuncties();
+    }
+  },
+
   props: {
     criteria: {
       type: Array
@@ -77,6 +85,7 @@ export default {
     },
 
     allesGeselecteerd() {
+      // todo checken op aantal === aantalfuncties
       return this.criteria.activated;
     }
 
