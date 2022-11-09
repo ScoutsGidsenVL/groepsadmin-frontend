@@ -49,7 +49,7 @@
               @sort="addSort"
               @colum-click="addSort"
               sort-mode="multiple"
-              class="p-datatable-sm mt-4"
+              class="p-datatable-sm mt-4 ledentabel"
               :scrollable="true"
               scroll-height="600px"
             >
@@ -84,8 +84,9 @@
               <column
                 selectionMode="multiple"
                 :exportable="false"
-                headerStyle="width: 1em"
+                headerStyle="max-width: 38px"
                 @click="selecteerLid"
+                class="selecteerbaar"
               ></column>
               <column
                 v-for="kolom of actieveKolommen"
@@ -835,4 +836,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+
+</style>
