@@ -24,7 +24,7 @@
           <div v-for="(item, index) in geg.items" :key="index">
             <div class="d-flex align-content-start">
               <checkbox :binary="true" id="item.veld" class="mr-2" v-model="item.activated"
-                        @change="activeerGroepseigenGegeven(item.veld, item.activated)"></checkbox>
+                        @change="activeerGroepseigenGegeven(item)"></checkbox>
               <label class="text-align-left" :for="item.veld">{{ item.label }}</label>
               <div v-if="item.vinkje" class="full-width d-flex justify-content-end">
                 <checkbox :binary="true" class="ml-4" v-model="item.waarde"
@@ -119,9 +119,11 @@ export default {
       return result;
     },
 
-    activeerGroepseigenGegeven(veld, activated) {
-      if (!activated) {
-        this.emitter.emit('deactiveerGroepseigenGegeven', { 'criteria': this.criteria, 'veld': veld })
+    activeerGroepseigenGegeven(item) {
+      if (!item.activated) {
+        this.emitter.emit('deactiveerGroepseigenGegeven', { 'criteria': this.criteria, 'veld': item.veld })
+      } else if (item.waarde) {
+        this.selecteerGroepseigenGegeven(item.veld, item.waarde, item.operator);
       }
     },
 
