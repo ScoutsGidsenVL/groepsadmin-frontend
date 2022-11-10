@@ -1,6 +1,6 @@
 export default function getClient() {
   let returnClient = {
-    url: "https://login-dev.scoutsengidsenvlaanderen.be/auth",
+    url: "http://localhost:8080",
     realm: "scouts",
     clientId: null,
     onLoad: "login-required",

@@ -20,207 +20,190 @@
         >
           E-mail
         </h4>
-        <div class="pl-lg-4em mt-2">
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <label>Opgeslagen sjablonen:</label>
-            </div>
-          </div>
-          <div class="row mb-4">
-            <div class="col-lg-3 text-align-left">
-              <dropdown
-                :options="gesorteerdeSjablonen(sjablonen)"
-                v-model="sjabloon"
-                optionLabel="label"
-                optionValue="value"
-                class="full-width"
-              >
-              </dropdown>
-            </div>
-            <div class="col-lg-2 text-align-left" v-if="sjabloon && (sjabloon.naam !== 'blanco sjabloon' || sjabloon.links.length !== 0)">
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
-                title="Verwijder huidig sjabloon"
-                @click="remove"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <label>Van:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5 width-43-pct text-align-left">
+        <div class="row">
+          <div class="col-12 col-lg-4">
+            <div class="pl-lg-4em mt-2">
+              <div class="d-flex justify-content-start">
+                <label>Opgeslagen sjablonen:</label>
+              </div>
+              <div class="row">
+                <div class="col-10">
+                  <dropdown
+                    :options="gesorteerdeSjablonen(sjablonen)"
+                    v-model="sjabloon"
+                    optionLabel="label"
+                    optionValue="value"
+                    class="full-width"
+                  >
+                  </dropdown>
+                </div>
+                <div class="col-2 text-align-left"
+                     v-if="sjabloon && (sjabloon.naam !== 'blanco sjabloon' || sjabloon.links.length !== 0)">
+                  <Button
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
+                    title="Verwijder huidig sjabloon"
+                    @click="remove"
+                  />
+                </div>
+              </div>
+              <div class="d-flex justify-content-start">
+                <label>Van:</label>
+              </div>
               <BaseInput
                 v-model="sjabloon.van"
                 :invalid="errors['van']"
                 error-message="Dit veld is verplicht"
               ></BaseInput>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <label>Antwoorden naar:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5 width-43-pct text-align-left">
+              <div class="d-flex justify-content-start">
+                <label>Antwoorden naar:</label>
+              </div>
               <BaseInput
                 v-model="sjabloon.replyTo"
               ></BaseInput>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <label>Bcc:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5 width-43-pct text-align-left">
+              <div class="d-flex justify-content-start">
+                <label>Bcc:</label>
+              </div>
               <BaseInput
                 v-model="sjabloon.bcc">
               </BaseInput>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-align-left">
-              <label>Onderwerp:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5 5 width-43-pct text-align-left">
-              <BaseInput
-                v-model="sjabloon.onderwerp"
-                :invalid="errors['onderwerp']"
-                error-message="Dit veld is verplicht"
-              ></BaseInput>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-2 text-align-left">
-              <label
-              >Ontvangers:
-                <span v-if="leden.length > 0">
+              <div class="row">
+                <div class="text-align-left">
+                  <label
+                  >Ontvangers:
+                    <span v-if="leden.length > 0">
                 {{
-                    leden.length === 1 ? "1 lid" : leden.length + " leden"
-                  }}</span
-                ><span
-                  v-if="leden.length > 0"
-                  @click="toonLeden"
-                  class="clickable custom-title"
-                >
+                        leden.length === 1 ? "1 lid" : leden.length + " leden"
+                      }}</span
+                    ><span
+                      v-if="leden.length > 0"
+                      @click="toonLeden"
+                      class="clickable custom-title"
+                    >
                 (details)</span
-                >
-                <span v-if="isLoadingLeden" class="mt-1"
-                >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
-                ></span>
-              </label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-8 text-align-left">
-              <checkbox :binary=true v-model="sjabloon.bestemming.lid" id="alleLeden" class="mt--3p"></checkbox>
-              <label class="mt-1 ml-3" for="alleLeden">Stuur naar leden</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-8 text-align-left">
-              <checkbox :binary=true v-model="sjabloon.bestemming.contacten" id="alleContacten" class="mt--3p"></checkbox>
-              <label class="mt-1 ml-3" for="alleContacten">Stuur naar de contacten van leden</label>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label class="col-lg-2 text-align-left mt-1"
-            >Bijlage (max. 5MB)
-              <a
-                href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
-                target="_blank"
-                class="help-button-wrapper ml-2 mt-0"
-              >
-                <i
-                  class="fa fa-question-circle resolve help-button mt-0"
-                  title="meer info"
-                ></i>
-              </a>
-            </label>
-            <p class="d-flex justify-content-start">Voeg meerdere bestanden toe door deze gezamenlijk te selecteren.</p>
-            <FileUpload
-              name="bijlages[]"
-              :customUpload="true"
-              @select="selectFiles"
-              :multiple="true"
-              :maxFileSize="4999999"
-              previewWidth="50"
-              :chooseLabel="label"
-              :showUploadButton="false"
-              :showCancelButton="false"
-              invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
-              class="d-flex justify-content-start md:w-4 lg:w-2 sm:max-w-full"
-            ></FileUpload>
-            <div class="col-lg-8">
-              <div class="d-flex justify-content-end">
-                <Button
-                  icon="pi pi-save"
-                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
-                  title="Bewaar huidig sjabloon"
-                  @click="openSjabloonModel"
-                />
-                <Button
-                  icon="far fa-paper-plane"
-                  title="Verstuur e-mail"
-                  class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
-                  @click="send"
-                />
+                    >
+                    <span v-if="isLoadingLeden" class="mt-1"
+                    >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
+                    ></span>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 text-align-left">
+                  <checkbox :binary=true v-model="sjabloon.bestemming.lid" id="alleLeden" class="mt--3p"></checkbox>
+                  <label class="mt-1 ml-3" for="alleLeden">Stuur naar leden</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 text-align-left">
+                  <checkbox :binary=true v-model="sjabloon.bestemming.contacten" id="alleContacten"
+                            class="mt--3p"></checkbox>
+                  <label class="mt-1 ml-3" for="alleContacten">Stuur naar de contacten van leden</label>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-4 text-align-left mt-1"
+                >Bijlage (max. 5MB)
+                  <a
+                    href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
+                    target="_blank"
+                    class="help-button-wrapper ml-2 mt-0"
+                  >
+                    <i
+                      class="fa fa-question-circle resolve help-button mt-0"
+                      title="meer info"
+                    ></i>
+                  </a>
+                </label>
+                <FileUpload
+                  name="bijlages[]"
+                  :customUpload="true"
+                  @select="selectFiles"
+                  :multiple="true"
+                  :maxFileSize="4999999"
+                  previewWidth="50"
+                  :chooseLabel="label"
+                  :showUploadButton="false"
+                  :showCancelButton="false"
+                  invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
+                  class="d-flex justify-content-start md:w-4 lg:w-6 sm:max-w-full"
+                ></FileUpload>
+                <p class="d-flex justify-content-start text-align-left">Voeg meerdere bestanden toe door deze gezamenlijk te
+                  selecteren.</p>
+                <div class="col-lg-8">
+                  <div class="d-flex justify-content-start">
+                    <Button
+                      icon="pi pi-save"
+                      class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button ml-2"
+                      title="Bewaar huidig sjabloon"
+                      @click="openSjabloonModel"
+                    />
+                    <Button
+                      icon="far fa-paper-plane"
+                      title="Verstuur e-mail"
+                      class="p-button-rounded p-button-warning float-right mr-2 position-sticky send-button ml-2"
+                      @click="send"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12 pl-lg-5em pr-lg-5em">
-            <Editor
-              :init="getOptions"
-              api-key="1o4al3jtztab1wf2880j7iio0hww1b4c6ut5qjqan57p3j4f"
-              v-model="sjabloon.inhoud"
-            ></Editor>
+          <div class="col-12 col-lg-8 pl-lg-5em mt-2">
+            <div class="d-flex justify-content-start ">
+              <label>Onderwerp:</label>
+            </div>
+            <BaseInput
+              v-model="sjabloon.onderwerp"
+              :invalid="errors['onderwerp']"
+              error-message="Dit veld is verplicht"
+            ></BaseInput>
+            <div class="row">
+              <div class="col-12 pr-lg-5em">
+                <Editor
+                  :init="getOptions"
+                  api-key="1o4al3jtztab1wf2880j7iio0hww1b4c6ut5qjqan57p3j4f"
+                  v-model="sjabloon.inhoud"
+                ></Editor>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div>
-        <Dialog
-          header="Ontvangers"
-          v-model:visible="openOntvangerDialog"
-          :style="{ width: '25vw', 'max-height': '35vw' }"
-          :modal="true"
-        >
-          <div class="email-leden col-xs-12">
-            <ul>
-              <li v-for="(lid, index) in leden" :key="index">
-                <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
-                <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
-                <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
-                >&nbsp;{{ lid.volledigenaam }}
+          <div>
+            <Dialog
+              header="Ontvangers"
+              v-model:visible="openOntvangerDialog"
+              :style="{ width: '25vw', 'max-height': '35vw' }"
+              :modal="true"
+            >
+              <div class="email-leden col-xs-12">
+                <ul>
+                  <li v-for="(lid, index) in leden" :key="index">
+                    <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
+                    <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
+                    <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
+                    >&nbsp;{{ lid.volledigenaam }}
               </span>
-                <span
-                  v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
-                >
+                    <span
+                      v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
+                    >
                 - geen naam beschikbaar -
               </span>
-              </li>
-            </ul>
+                  </li>
+                </ul>
+              </div>
+            </Dialog>
           </div>
-        </Dialog>
-      </div>
-      <div>
-        <confirm
-          :dialog-visible="confirmationDialog"
-          :message="buildMessage()"
-          @confirm="bevestigMail"
-          @cancel="cancelMail"
-          class="confirm-dialog"
-        >
-        </confirm>
+          <div>
+            <confirm
+              :dialog-visible="confirmationDialog"
+              :message="buildMessage()"
+              @confirm="bevestigMail"
+              @cancel="cancelMail"
+              class="confirm-dialog"
+            >
+            </confirm>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -322,7 +305,7 @@ export default {
 
     setTimeout(() => {
       this.watchable = true
-    },2000)
+    }, 2000)
 
     window.setInterval(
       function () {
@@ -412,6 +395,8 @@ export default {
     },
     getOptions() {
       return {
+        selector: 'textarea',
+        images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
         plugins: [
           "advlist autolink lists link image charmap print preview hr anchor pagebreak",
           "searchreplace wordcount visualblocks visualchars code fullscreen",
@@ -421,7 +406,7 @@ export default {
         height: 500,
         menubar: false,
         toolbar:
-          "undo redo | bold italic underline strikethrough | fontselect |forecolor backcolor | bullist numlist | alignleft aligncenter alignright | table | code | customDrpdwn | media | preview | fullscreen",
+          "undo redo | bold italic underline strikethrough | fontselect |forecolor backcolor | bullist numlist | alignleft aligncenter alignright | table | code | customDrpdwn | image | preview | fullscreen",
         relative_urls: false,
         branding: false,
         remove_script_host: true,
@@ -670,7 +655,7 @@ export default {
     },
 
     gesorteerdeSjablonen(sjablonen) {
-      return sjablonen.sort(function (a,b) {
+      return sjablonen.sort(function (a, b) {
         if (a.label < b.label) {
           return -1;
         }

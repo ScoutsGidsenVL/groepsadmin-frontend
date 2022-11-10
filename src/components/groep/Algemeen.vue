@@ -72,10 +72,10 @@
             :disabled="!kanGroepWijzigen"
           ></BaseCheckbox>
           <div id="helpBlock" class="help-block mt-2" v-show="groep['publiek-inschrijven']">
-            <div class="cut-off-text">
+            <div>
             <p>
               Link naar jouw inschrijvingsformulier:<br>
-              <a :href="formulierUrl" target="_blank" class="icon-small clean-link color-dark-green">{{formulierUrl}}</a>
+              <a :href="formulierUrl" target="_blank" class="icon-small clean-link color-dark-green group-link">{{formulierUrl}}</a>
             </p>
             </div>
             <p>

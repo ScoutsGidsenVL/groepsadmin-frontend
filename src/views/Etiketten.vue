@@ -373,6 +373,8 @@ export default {
     },
     getOptions() {
       return {
+        selector: 'textarea',
+        images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
         plugins: [
           "advlist autolink lists link image charmap print preview hr anchor pagebreak",
           "searchreplace wordcount visualblocks visualchars code fullscreen",
@@ -382,7 +384,7 @@ export default {
         height: 500,
         menubar: false,
         toolbar:
-          "undo redo | bold italic underline strikethrough | fontselect |forecolor backcolor | bullist numlist | alignleft aligncenter alignright | table | code | customDrpdwn | media | preview | fullscreen",
+          "undo redo | bold italic underline strikethrough | fontselect |forecolor backcolor | bullist numlist | alignleft aligncenter alignright | table | code | customDrpdwn | image | preview | fullscreen",
         relative_urls: false,
         branding: false,
         remove_script_host: true,
