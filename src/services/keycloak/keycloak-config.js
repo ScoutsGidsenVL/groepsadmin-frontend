@@ -1,6 +1,6 @@
 export default function getClient() {
   let returnClient = {
-    url: "https://login.scoutsengidsenvlaanderen.be/auth",
+    url: "https://login-dev.scoutsengidsenvlaanderen.be/auth",
     realm: "scouts",
     clientId: null,
     onLoad: "login-required",
