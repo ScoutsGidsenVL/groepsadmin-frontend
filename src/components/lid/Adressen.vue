@@ -14,7 +14,7 @@
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true" :activeIndex="[0]">
+        <accordion :multiple="true">
           <accordionTab v-for="(adres, index) in adressen" :key="index">
             <template #header>
               <div class="d-flex col-12 justify-content-between">
@@ -213,8 +213,15 @@ export default {
         ? adres.straat + " " + adres.nummer + ", " + adres.gemeente
         : "Nieuw adres";
     },
-    voegAdresToe() {
 
+  },
+
+  setup(props) {
+    const state = reactive({
+      adressen: [],
+    });
+
+    const voegAdresToe = () => {
       let nieuwAdres = {
         land: "BE",
         postadres: false,
@@ -225,9 +232,9 @@ export default {
         postcode: "",
       };
 
-      if (this.adressen) {
+      if (state.adressen) {
         let bestaandPostadres = false;
-        for (const adres of this.adressen) {
+        for (const adres of state.adressen) {
           if (adres.postadres) {
             bestaandPostadres = true;
           }
@@ -238,26 +245,21 @@ export default {
         }
       } else {
         nieuwAdres.postadres = true;
-        this.adressen = [];
+        state.adressen = [];
       }
-      this.adressen.push(nieuwAdres);
-    },
-  },
-  mounted() {
-    // Bij een nieuw lid gaan we onmiddellijk een adres toevoegen
-    if (!this.adressen) {
-      this.voegAdresToe();
+      state.adressen.push(nieuwAdres);
     }
-  },
-  setup(props) {
-    const state = reactive({
-      adressen: null,
-    });
 
     onUpdated(() => {
       state.adressen = props.modelValue.adressen;
-    });
-    return {...toRefs(state)};
+      if (state.adressen && state.adressen.length === 0) {
+        voegAdresToe();
+      }
+    })
+
+
+
+    return {...toRefs(state), voegAdresToe};
   },
 };
 </script>

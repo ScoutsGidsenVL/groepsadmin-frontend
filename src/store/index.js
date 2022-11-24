@@ -240,10 +240,12 @@ export default createStore({
             RestService.getLeden(offset)
                 .then(res => {
                     res.data.leden.forEach(lid => {
-                        getters.leden.push(lid.id);
-                        offset += res.data.aantal;
-                        if (offset < res.data.totaal) {
-                            dispatch("getLeden", offset);
+                        if (!getters.leden.includes(lid.id)) {
+                            getters.leden.push(lid.id);
+                            offset += res.data.aantal;
+                            if (offset < res.data.totaal) {
+                                dispatch("getLeden", offset);
+                            }
                         }
                     })
                     console.log(getters.leden.length);

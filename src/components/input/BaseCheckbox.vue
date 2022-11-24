@@ -24,7 +24,7 @@
         </span>
       </div>
     </div>
-    <p class="beschrijving" v-html="beschrijving" v-if="beschrijving && value"></p>
+    <p class="beschrijving text-sm" v-html="beschrijving" v-if="beschrijving"></p>
   </div>
 </template>
 

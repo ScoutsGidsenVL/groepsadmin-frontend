@@ -2,7 +2,7 @@
   <div class="mb-4">
     <card>
       <template #title> Persoonlijk</template>
-      <template #content>
+        <template #content>
         <div class="p-fluid mt-2">
           <BaseInput
             v-model="lid.vgagegevens.voornaam"
@@ -63,7 +63,7 @@
           ></BaseCheckbox>
           <BaseInput
             v-model="lid.email"
-            :disabled="!eigenProfiel"
+            :disabled="!eigenProfiel && !nieuwLid"
             label="Email"
             type="email"
             :invalid="v$.lid.email.$invalid"
@@ -71,7 +71,7 @@
             error-message="Geen geldig emailadres"
           ></BaseInput>
           <BaseInputTelefoon
-            :disabled="!eigenProfiel || !hasPermission('email')"
+            :disabled="!eigenProfiel && !nieuwLid"
             v-model="v$.lid.persoonsgegevens.gsm.$model"
             label="GSM"
             type="text"
@@ -122,13 +122,13 @@ import BaseDropDown from "@/components/input/BaseDropdown";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import {computed, reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
 import {useVuelidate} from '@vuelidate/core'
 import {email, required} from '@vuelidate/validators'
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
+import {onUpdated} from "@vue/runtime-core";
 
 const ibantools = require('ibantools');
 const isGeldigRekeningnummer = (value) => {
@@ -206,33 +206,11 @@ export default {
       default: false
     },
   },
-  // watch: {
-  //   "lid.vgagegevens": {
-  //     handler(oldValue, newValue) {
-  //       console.log(oldValue);
-  //       console.log(newValue);
-  //       if (this.watchable) {
-  //         this.gewijzigdLid.vgagegevens = this.lid.vgagegevens;
-  //         this.changes = true;
-  //       }
-  //     },
-  //     deep: true,
-  //   },
-  // },
   setup(props) {
     const state = reactive({
-      lid: {
-        email: "",
-        gebruikersnaam: "",
-        links: [],
-        persoonsgegevens: {},
-        vgagegevens: {
-          voornaam: '',
-          achternaam: '',
-        },
-        verbondsgegevens: {},
-      },
+      lid: props.modelValue
     });
+
     const rules = computed(() => ({
       lid: {
         email: {
@@ -260,11 +238,12 @@ export default {
         }
       },
     }))
-    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
+
     onUpdated(() => {
       state.lid = props.modelValue;
-    });
+    })
 
+    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
     return {...toRefs(state), v$};
   },
 };

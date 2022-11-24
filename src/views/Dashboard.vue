@@ -125,13 +125,13 @@ export default {
           link: "Aanvragen",
           internal: true,
         },
-        {
-          label: "Verzekeringen",
-          condition: true,
-          icon: "far fa-umbrella",
-          link: "https://vz.scoutsengidsenvlaanderen.be",
-          internal: false,
-        },
+        // {
+        //   label: "Verzekeringen",
+        //   condition: true,
+        //   icon: "far fa-umbrella",
+        //   link: "https://vz.scoutsengidsenvlaanderen.be",
+        //   internal: false,
+        // },
       ],
     }
   },

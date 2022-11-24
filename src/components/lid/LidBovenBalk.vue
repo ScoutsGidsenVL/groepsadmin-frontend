@@ -1,15 +1,15 @@
 <template>
-  <div class="bovenbalk mb-8 mt--1">
+  <div class="bovenbalk" :class="!nieuwLid ? 'mb-8 mt--1' : ''">
     <div class="d-flex justify-content-between">
-      <div class="lg:ml-4">
+      <div class="lg:ml-4" v-if="!nieuwLid">
         <h4 class="mt-4 sm:ml-4 lg:ml-0">{{ volledigeNaam }}</h4>
       </div>
     </div>
-    <div class="d-flex justify-content-start mt--05">
+    <div class="d-flex justify-content-start mt--05" v-if="!nieuwLid">
       <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
     </div>
     <div class="d-flex justify-content-end">
-      <div class="d-flex justify-content-evenly mr-7" v-if="kanOpslaan">
+      <div class="d-flex justify-content-evenly mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
         <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
       </div>
       <div class="top-menu d-flex justify-content-end align-content-center mt--15">
@@ -25,10 +25,10 @@
         </Menu>
       </div>
     </div>
-    <div class="d-flex justify-content-start ml-4 align-content-center position-absolute" :class="kanOpslaan ? 'mt--25' : 'mt--15'">
+    <div class="d-flex justify-content-start ml-4 align-content-center position-absolute" :class="kanOpslaan ? 'mt--25' : 'mt--15'" v-if="!nieuwLid">
       <div class="navigate-buttons">
-        <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid" class="opslaan-button" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
-        <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button" title="volgend lid" :disabled="legeLedenLijst" v-if="!eigenProfiel"/>
+        <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid" class="opslaan-button" v-if="legeLedenLijst"/>
+        <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button" title="volgend lid" v-if="legeLedenLijst"/>
       </div>
     </div>
   </div>
@@ -103,6 +103,35 @@ export default {
       ],
     };
   },
+  computed: {
+    volledigeNaam() {
+      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
+        return (
+          this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam
+        );
+      } else {
+        return " ";
+      }
+    },
+
+    legeLedenLijst() {
+      return this.$store.getters.leden.length !== 0
+    },
+
+    filteredMenuItems() {
+      return this.menuItems.filter(obj => {
+        return obj.condition;
+      });
+    },
+
+    kanOpslaan() {
+      return rechtenService.kanOpslaan(this.lid);
+    },
+
+    kanNieuwLidAanmaken() {
+      return rechtenService.hasAccess("nieuw lid")
+    }
+  },
   methods: {
     gaNaar(link) {
       if (link === 'profiel') {
@@ -123,8 +152,9 @@ export default {
       if (index === 0) {
         index = this.$store.getters.leden.length - 1;
       } else {
-        index -= 1;
+        index--;
       }
+      this.$emit('disableWatchable');
       this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
     },
 
@@ -133,12 +163,11 @@ export default {
       if (index === this.$store.getters.leden.length - 1) {
         index = 0;
       } else {
-        index += 1;
+        index++;
       }
+      this.$emit('disableWatchable');
       this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
     },
-
-
 
     opslaan() {
       this.$emit('opslaan');
@@ -178,31 +207,6 @@ export default {
         name: "lidToevoegen",
       });
     }
-  },
-  computed: {
-    volledigeNaam() {
-      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
-        return (
-          this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam
-        );
-      } else {
-        return " ";
-      }
-    },
-
-    legeLedenLijst() {
-      return this.$store.getters.leden.length === 0
-    },
-
-    filteredMenuItems() {
-      return this.menuItems.filter(obj => {
-        return obj.condition;
-      });
-    },
-
-    kanOpslaan() {
-      return rechtenService.kanOpslaan(this.lid);
-    },
   },
 };
 </script>

@@ -115,7 +115,6 @@ export default {
   },
   mounted() {
     this.emitter.on('changeGeg', () => {
-      console.log('changes true')
       this.changes = true;
     })
     this.id = this.$route.params.id;

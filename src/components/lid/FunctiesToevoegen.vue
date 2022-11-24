@@ -27,7 +27,7 @@
                 <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
                      class="col-md-6">
                   <checkbox :label="functie.beschrijving" :model-value="isSelected(functie, groep.groepsnummer)"
-                            @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"></checkbox>
+                            @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"></checkbox>
                 </div>
               </div>
             </div>

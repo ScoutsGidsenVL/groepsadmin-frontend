@@ -166,19 +166,21 @@ export default {
       state.adresArray = [];
       state.contacten = props.modelValue.contacten;
       state.adressen = props.modelValue.adressen;
-      state.adressen.forEach((adres) => {
-        state.adresArray.push({
-          value: adres.id,
-          label:
-            adres.straat +
-            " " +
-            adres.nummer +
-            ", " +
-            adres.postcode +
-            " " +
-            adres.gemeente,
+      if (state.adressen && state.adressen.length > 0) {
+        state.adressen.forEach((adres) => {
+          state.adresArray.push({
+            value: adres.id,
+            label:
+              adres.straat +
+              " " +
+              adres.nummer +
+              ", " +
+              adres.postcode +
+              " " +
+              adres.gemeente,
+          });
         });
-      });
+      }
     });
 
     return {...toRefs(state)};

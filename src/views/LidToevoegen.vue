@@ -11,7 +11,7 @@
       <div class="hidden lg:block lg:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 w-50"/>
       </div>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="eigenProfiel"
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="false"
                       :nieuwLid="true" :changes="changes"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
@@ -100,6 +100,8 @@ export default {
         email: "",
         gebruikersnaam: "",
         links: [],
+        adressen: [],
+        functies: [],
         persoonsgegevens: {
           geslacht: "vrouw"
         },
@@ -161,7 +163,6 @@ export default {
         if (this.watchable) {
           this.changes = true;
         }
-        console.log('functies aangepast');
       },
       deep: true,
     },
@@ -170,11 +171,15 @@ export default {
     this.emitter.on('veranderFunctie', () => {
       this.changes = true
     })
+
     if (this.$store.getters.goedTeKeurenLid) {
       this.lid = this.$store.getters.goedTeKeurenLid;
-    } else if (this.$store.getters.broerZusLid) {
+    } else if (Object.keys(this.$store.getters.broerZusLid).length !== 0 && this.$store.getters.broerZusLid) {
       this.lid = this.$store.getters.broerZusLid;
     }
+    setTimeout(() => {
+      this.watchable = true
+    }, 1500);
   },
   methods: {
     opslaan() {
@@ -230,18 +235,6 @@ export default {
           this.lid = res.data;
           this.sorteerFuncties();
         }
-      });
-    },
-
-    getLid(id) {
-      this.loadingLid = true
-      RestService.getLid(id).then((res) => {
-        this.lid = res.data;
-        if (id === "profiel") {
-          this.eigenProfiel = true;
-          this.$store.commit("setProfiel", res.data);
-        }
-        this.sorteerFuncties();
       });
     },
 
@@ -313,6 +306,12 @@ export default {
     magFunctiesToevoegen() {
       return rechtenService.canBeShowed(this.$store.getters.profiel, 'functies.')
     }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('setGoedTeKeurenLid', null)
+    this.$store.commit('setBroerZusLid', null)
+    next();
   },
 };
 </script>

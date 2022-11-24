@@ -15,7 +15,7 @@
       </BaseInput>
       <BaseCheckbox
         v-if="veld.type === 'vinkje'"
-        v-model="waarde[veld.id]"
+        :model-value="isChecked(veld.id)"
         :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
@@ -52,11 +52,12 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/reactivity";
+import {reactive, toRefs} from "@vue/reactivity";
 import BaseInput from "@/components/input/BaseInput";
-import BaseCheckbox from "@/components/input/BaseCheckbox";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import BaseTextArea from "@/components/input/BaseTextArea";
+import BaseCheckbox from "@/components/input/BaseCheckbox";
+import mitt from "mitt";
 
 export default {
   name: "DynamischVeld",
@@ -67,9 +68,7 @@ export default {
     BaseDropdown,
   },
   props: {
-    modelValue: {
-      type: [String, Number, Boolean],
-    },
+    modelValue: {},
     veld: {
       type: Object,
     },
@@ -80,27 +79,32 @@ export default {
       type: Object,
     },
   },
-  methods: {
-    vulOpties(options) {
-      let keuzes = [];
-      options.forEach(function (optie) {
-        keuzes.push({ label: optie, value: optie });
-      });
-      return keuzes;
-    },
-    changeValue(veld, waarde) {
-      this.emitter.emit("changeGeg", {'veld': veld, 'waarde':waarde, 'groep':this.groepIndex});
-    },
-  },
 
   setup(props) {
+    const emitter = mitt();
+
     const state = reactive({
       schema: props.veld,
       waarde: props.modelValue,
+      keuzes: []
     });
 
+    const isChecked = (id) => {
+      return state.waarde[id] === "true" || state.waarde[id];
+    }
+
+    const changeValue = (veld, waarde) => {
+      emitter.emit("changeGeg", {'veld': veld, 'waarde': waarde, 'groep': props.groepIndex});
+    }
+
+    const vulOpties = (options) => {
+      options.forEach(function (optie) {
+        state.keuzes.push({label: optie, value: optie});
+      });
+    }
+
     return {
-      ...toRefs(state),
+      ...toRefs(state), isChecked, changeValue, vulOpties
     };
   },
 };

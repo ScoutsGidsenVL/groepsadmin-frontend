@@ -119,7 +119,6 @@ export default {
     this.$watch(
       () => this.modelValue,
       () => {
-        console.log("change")
         this.zoekTerm =
           this.modelValue.postcode + " " + this.modelValue.gemeente;
       }
