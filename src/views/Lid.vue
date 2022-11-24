@@ -83,12 +83,7 @@ import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import {computed, onMounted, watch} from "vue";
-import {onBeforeRouteLeave, useRoute} from 'vue-router';
-import useEmitter from "@/services/utils/useEmitter";
-import {useConfirm} from "primevue/useconfirm";
-import {useToast} from "primevue/usetoast";
-import {useStore} from 'vuex'
-
+import {onBeforeRouteLeave} from 'vue-router';
 
 export default {
   name: "Lid",
@@ -108,14 +103,13 @@ export default {
     LidZoekAutoComplete
   },
   setup() {
-    const route = useRoute();
-    const emitter = useEmitter();
-    const confirm = useConfirm();
-    const toast = useToast();
-    const store = useStore();
-
     const {
-      state
+      state,
+      store,
+      toast,
+      route,
+      emitter,
+      confirm
     } = LidService.lidSpace();
 
     //const v$ = useVuelidate(state, {$rewardEarly: true});
