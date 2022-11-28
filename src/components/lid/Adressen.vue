@@ -118,8 +118,9 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {reactive, toRefs} from "@vue/reactivity";
+import {toRefs} from "@vue/reactivity";
 import {onUpdated} from "@vue/runtime-core";
+import AdresService from "@/services/adressen/AdresService";
 
 export default {
   name: "Adressen",
@@ -143,112 +144,21 @@ export default {
       default: false,
     }
   },
-  data() {
-    return {
-      invalid: false,
-      landen: [
-        {label: "België", value: "BE"},
-        {label: "Duitsland", value: "DE"},
-        {label: "Frankrijk", value: "FR"},
-        {label: "Groot-Brittannië", value: "GB"},
-        {label: "Luxemburg", value: "LU"},
-        {label: "Nederland", value: "NL"},
-        {label: "Canada", value: "CA"},
-      ],
-    };
-  },
-  methods: {
-    remove(index) {
-      this.$confirm.require({
-        message: "Ben je zeker dat je dit adres wil verwijderen?",
-        header: "Adres verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          this.adressen.splice(index, 1);
-        },
-        reject: () => {
-          this.$confirm.close();
-        },
-      });
-    },
-
-    isStraatIngevuld(index) {
-      if (!this.adressen[index].straat){
-        this.invalid = true;
-        return !this.adressen[index].straat;
-      } else {
-        this.invalid = false;
-        return true;
-      }
-    },
-
-    isNummerIngevuld(index) {
-      return !this.adressen[index].nummer;
-    },
-
-    isGemeenteIngevuld(index) {
-      this.invalid = true;
-      return !this.adressen[index].gemeente;
-    },
-
-    isPostcodeIngevuld(index) {
-      return !this.adressen[index].postcode;
-    },
-
-    zetPostadres(index) {
-      for (const adres of this.adressen) {
-        adres.postadres = false;
-      }
-      this.adressen[index].postadres = true;
-    },
-    veranderLand(index) {
-      this.adressen[index].postcode = "";
-      this.adressen[index].gemeente = "";
-      this.adressen[index].straat = "";
-      this.adressen[index].nummer = "";
-      this.adressen[index].bus = "";
-    },
-    setHeader(adres) {
-      return adres.gemeente
-        ? adres.straat + " " + adres.nummer + ", " + adres.gemeente
-        : "Nieuw adres";
-    },
-
-  },
 
   setup(props) {
-    const state = reactive({
-      adressen: [],
-    });
-
-    const voegAdresToe = () => {
-      let nieuwAdres = {
-        land: "BE",
-        postadres: false,
-        omschrijving: "",
-        id: "tempadres" + Date.now(),
-        bus: "",
-        gemeente: "",
-        postcode: "",
-      };
-
-      if (state.adressen) {
-        let bestaandPostadres = false;
-        for (const adres of state.adressen) {
-          if (adres.postadres) {
-            bestaandPostadres = true;
-          }
-        }
-
-        if (!bestaandPostadres) {
-          nieuwAdres.postadres = true;
-        }
-      } else {
-        nieuwAdres.postadres = true;
-        state.adressen = [];
-      }
-      state.adressen.push(nieuwAdres);
-    }
+    const {
+      state,
+      remove,
+      isTelefoonnummerGeldig,
+      isStraatIngevuld,
+      isGemeenteIngevuld,
+      isNummerIngevuld,
+      voegAdresToe,
+      setHeader,
+      veranderLand,
+      zetPostadres,
+      isPostcodeIngevuld
+    } = AdresService.adresSpace(props);
 
     onUpdated(() => {
       state.adressen = props.modelValue.adressen;
@@ -257,9 +167,18 @@ export default {
       }
     })
 
-
-
-    return {...toRefs(state), voegAdresToe};
+    return {
+      ...toRefs(state),
+      voegAdresToe,
+      remove,
+      isPostcodeIngevuld,
+      isStraatIngevuld,
+      isGemeenteIngevuld,
+      isNummerIngevuld,
+      zetPostadres,
+      veranderLand,
+      isTelefoonnummerGeldig,
+      setHeader};
   },
 };
 </script>

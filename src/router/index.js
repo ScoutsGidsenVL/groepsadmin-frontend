@@ -22,7 +22,7 @@ const routes = [
         meta: {isAuthorized: true}
     },
     {
-        path: "/ledenlijst/mail",
+        path: "/email/ledenlijst",
         name: "Mail",
         component: Mail,
         meta: {
@@ -30,7 +30,7 @@ const routes = [
         }
     },
     {
-        path: "/ledenlijst/etiket",
+        path: "/etiketten",
         name: "Etiket",
         component: Etiketten,
         meta: {

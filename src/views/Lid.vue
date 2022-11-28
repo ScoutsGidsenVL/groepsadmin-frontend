@@ -16,7 +16,7 @@
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
       </div>
       <Loader
-        :showLoader="laden"
+        :showLoader="loadingLid"
       ></Loader>
       <div class="d-flex justify-content-end lg:mt-4 md:mt-10">
         <lid-zoek-auto-complete></lid-zoek-auto-complete>
@@ -25,17 +25,17 @@
                       :eigenProfiel="isEigenProfiel" :changes="changes"
                       @disableWatchable="resetWatchable"
                       @stopAlleFuncties="stopAlleFuncties"
-                      v-if="lid"
+                      v-if="lid.vgagegevens.voornaam"
       ></lid-boven-balk>
-      <div class="lg:ml-2 lg:mt-8" >
+      <div class="lg:ml-2 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid"></persoonlijk>
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'" v-if="lid"></adressen>
-              <contacten v-model="lid" :title="'Contacten'" v-if="lid"></contacten>
+              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam"></adressen>
+              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
@@ -47,12 +47,12 @@
                 v-model="gesorteerdeFuncties"
                 @updateLid="updateFuncties"
                 :lid="lid"
-                v-if="lid"
+                v-if="lid.vgagegevens.voornaam"
               ></functies>
               <functies-toevoegen
                 v-model="gesorteerdeFuncties"
                 :lid="lid"
-                v-if="magFunctiesToevoegen && lid"
+                v-if="magFunctiesToevoegen && lid.vgagegevens.voornaam"
               ></functies-toevoegen>
             </div>
           </div>
@@ -108,27 +108,98 @@ export default {
       store,
       toast,
       route,
+      router,
       emitter,
-      confirm
+      confirm,
+      v
     } = LidService.lidSpace();
 
-    //const v$ = useVuelidate(state, {$rewardEarly: true});
-
     watch(
-      () => state.lid,
+      () => state.lid.vgagegevens,
       () => {
         if (state.watchable && state.lid) {
-          state.gewijzigdLid = state.lid;
           state.changes = true;
+          state.gewijzigdLid.vgagegevens = state.lid.vgagegevens
+          console.log(state.gewijzigdLid)
         }
       },
-      {deep: true}
-    )
+      {deep: true})
+
+    watch(
+      () => state.lid.persoonsgegevens,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.persoonsgegevens = state.lid.persoonsgegevens
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.verbondsgegevens,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.verbondsgegevens = state.lid.verbondsgegevens
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.functies,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.functies = state.lid.functies
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.adressen,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.adressen = state.lid.adressen
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.contacten,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.contacten = state.lid.contacten
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.groepseigenVelden,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden
+          console.log(state.gewijzigdLid)
+        }
+      }, {deep: true})
+
+    watch(
+      () => state.lid.email,
+      () => {
+        if (state.watchable && state.lid) {
+          state.changes = true;
+          state.gewijzigdLid.email = state.lid.email
+          console.log(state.gewijzigdLid)
+        }
+      })
 
     emitter.on('changeGeg', (event) => {
       state.changes = true;
       changeGeg(event.veld, event.waarde, event.groep);
     })
+
     emitter.on('veranderFunctie', () => {
       state.changes = true
     })
@@ -136,6 +207,7 @@ export default {
     watch(
       () => route.params.id,
       async newId => {
+        state.gewijzigdLid = {};
         if (newId === "profiel") {
           await getProfiel()
         } else {
@@ -162,7 +234,6 @@ export default {
     })
 
     const resetWatchable = () => {
-      ('reset watchable')
       state.changes = false;
       state.watchable = false;
       setTimeout(() => {
@@ -206,18 +277,18 @@ export default {
 
     const opslaan = () => {
       state.loadingLid = true;
-      //v$.$touch();
-      //if (v$.$invalid) {
-      if (state.changes) {
-        state.changes = false;
-        toast.add({
-          severity: "warn",
-          summary: "Wijzigingen",
-          detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
-          life: 3000,
-        });
-        return;
-      }
+      console.log(v)
+      //v.validate();
+      // if (false) {
+      //   state.changes = false;
+      //   toast.add({
+      //     severity: "warn",
+      //     summary: "Wijzigingen",
+      //     detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
+      //     life: 3000,
+      //   });
+      //   return;
+      // }
       RestService.updateLid(state.lid.id, state.gewijzigdLid)
         .then(res => {
           state.lid = res.data;
@@ -229,9 +300,14 @@ export default {
               life: 3000,
             });
           state.changes = false;
-          state.sorteerFuncties();
+          sorteerFuncties();
         }).catch(error => {
-        console.log(error);
+        toast.add({
+          severity: "warn",
+          summary: error.response.data.titel,
+          detail: error.response.data.beschrijving,
+          life: 3000,
+        });
       }).finally(() => {
         state.changes = false;
         state.loadingLid = false;
@@ -267,7 +343,7 @@ export default {
             detail: "Functie is gestopt",
           });
           state.lid = res.data;
-          state.sorteerFuncties();
+          sorteerFuncties();
         }
       });
     }
@@ -292,7 +368,19 @@ export default {
         }
         sorteerFuncties();
         filterGroepsEigenVelden();
-      });
+      }).catch(error => {
+        if (error.response.status === 403) {
+          toast.add({
+            severity: "warn",
+            summary: error.response.data.titel,
+            detail: error.response.data.beschrijving,
+            life: 3000,
+          });
+          setTimeout(() => {
+            router.push({name: 'Ledenlijst'})
+          }, 2000)
+        }
+      })
     }
 
     const sorteerFuncties = () => {
@@ -375,15 +463,9 @@ export default {
       }
     })
 
-    const laden = computed({
-      get() {
-        return state.loadingLid;
-      }
-    })
-
     const magFunctiesToevoegen = computed({
       get() {
-        if (state.lid) {
+        if (state.lid.vgagegevens.voornaam) {
           return rechtenService.canBeShowed(state.lid, 'functies.')
         } else {
           return false;
@@ -416,7 +498,6 @@ export default {
       changeGeg,
       updateFuncties,
       volledigeNaam,
-      laden,
       magFunctiesToevoegen,
       isEigenProfiel,
       wijzigingen,

@@ -78,14 +78,28 @@
 <script>
 import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
-import {onUpdated} from "@vue/runtime-core";
 import {reactive, toRefs} from "@vue/reactivity";
+import {useConfirm} from "primevue/useconfirm";
+import {useToast} from "primevue/usetoast";
+import {onMounted} from "vue";
+import {onUpdated} from "@vue/runtime-core";
 
 export default {
   name: "Contacten",
   components: {BaseInput, BaseDropdown},
-  data() {
-    return {
+  props: {
+    title: {
+      type: String,
+    },
+    modelValue: {
+      type: Object,
+    },
+  },
+  setup(props) {
+    const confirm = useConfirm();
+    const toast = useToast();
+
+    const state = reactive({
       rollen: [
         {
           value: "moeder",
@@ -104,65 +118,53 @@ export default {
           label: "Opvoedingsverantwoordelijke",
         },
       ],
-    };
-  },
-  props: {
-    title: {
-      type: String,
-    },
-    modelValue: {
-      type: Object,
-    },
-  },
-  methods: {
-    setHeader(contact) {
-      return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
-    },
+      contacten: null,
+      adressen: null,
+      adresArray: [],
+    });
 
-    remove(event, index) {
-      this.$confirm.require({
-        target: event.currentTarget,
-        message: "Ben je zeker dat je dit contact wil verwijderen?",
-        header: "Contact verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          this.contacten.splice(index, 1);
-        },
-        reject: () => {
-          this.$confirm.close();
-        },
-      });
-    },
-
-    voegContactToe() {
+    const voegContactToe = () => {
+      console.log(state.adressen);
       // Wanneer er geen adressen bestaan mag er geen contact toegevoegd kunnen worden
-      if (this.adressen && this.adressen.length > 0) {
+      if (state.adressen && state.adressen.length > 0) {
         let nieuwContact = {
           rol: "moeder",
           voornaam: "",
           achternaam: "",
-          adres: this.adressen[0].id,
+          adres: state.adressen[0].id,
           id: "" + Date.now(),
         };
-        this.contacten.push(nieuwContact);
+        state.contacten.push(nieuwContact);
       } else {
-        this.$toast.add({
+        toast.add({
           severity: "warn",
           summary: "Contacten toevoegen",
           detail: "Nieuwe contacten kunnen pas worden toegevoegd wanneer alle andere formuliervelden correct werden ingevuld.",
           life: 8000,
         });
       }
-    },
-  },
-  setup(props) {
-    const state = reactive({
-      contacten: null,
-      adressen: null,
-      adresArray: [],
-    });
+    }
 
-    onUpdated(() => {
+    const remove = (event, index) => {
+      confirm.require({
+        target: event.currentTarget,
+        message: "Ben je zeker dat je dit contact wil verwijderen?",
+        header: "Contact verwijderen",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          state.contacten.splice(index, 1);
+        },
+        reject: () => {
+          confirm.close();
+        },
+      });
+    }
+
+    const setHeader = (contact) => {
+      return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
+    }
+
+    const resetData = () => {
       state.adresArray = [];
       state.contacten = props.modelValue.contacten;
       state.adressen = props.modelValue.adressen;
@@ -181,9 +183,17 @@ export default {
           });
         });
       }
+    }
+
+    onMounted(() => {
+      resetData();
     });
 
-    return {...toRefs(state)};
+    onUpdated(() => {
+      resetData();
+    })
+
+    return {...toRefs(state), voegContactToe, setHeader, remove, };
   },
 };
 </script>
