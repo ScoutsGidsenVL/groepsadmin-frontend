@@ -108,6 +108,11 @@ export default {
           condition: true,
           icon: "far fa-question",
         },
+        {
+          label: 'Huidige Layout',
+          condition: true,
+          icon: 'fas fa-external-link'
+        }
       ],
     }
   },
@@ -124,6 +129,15 @@ export default {
       if (menuItem.label === 'Help') {
         window.open(WikiService.getWikiUrl(), '_blank');
       }
+
+      if (menuItem.label === "Huidige Groepsadministratie") {
+        let url = window.origin = 'localhost:3000' ?  'http://localhost:8000/'
+          : window.origin = 'https://ga-staging.scoutsengidsenvlaanderen.be/' ? 'https://ga-staging.scoutsengidsenvlaanderen.be/groepsadmin/client/'
+            : 'https://groepsadmin.scoutsengidsenvlaanderen.be/groepsadmin/client/'
+
+        window.open(url);
+      }
+
       if (menuItem.link === "Profiel") {
         this.$router.push({name: "Lid", params: {id: "profiel"}});
       } else {
