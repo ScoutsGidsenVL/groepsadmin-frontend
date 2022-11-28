@@ -131,10 +131,9 @@ export default {
       }
 
       if (menuItem.label === "Huidige Groepsadministratie") {
-        let url = window.origin = 'localhost:3000' ?  'http://localhost:8000/'
-          : window.origin = 'https://ga-staging.scoutsengidsenvlaanderen.be/' ? 'https://ga-staging.scoutsengidsenvlaanderen.be/groepsadmin/client/'
-            : 'https://groepsadmin.scoutsengidsenvlaanderen.be/groepsadmin/client/'
-
+        let url = window.origin = "localhost:3000" ?  "http://localhost:8000/"
+          : window.origin = "https://ga-staging.scoutsengidsenvlaanderen.be/" ? "https://ga-staging.scoutsengidsenvlaanderen.be/groepsadmin/client/"
+            : "https://groepsadmin.scoutsengidsenvlaanderen.be/groepsadmin/client/";
         window.open(url);
       }
 
