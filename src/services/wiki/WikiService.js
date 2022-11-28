@@ -16,8 +16,17 @@ export default {
     }
 
     let res = "";
+
+    if (splitpath.length === 3) {
+      return splitpath[2];
+    }
+
     splitpath.forEach((val, key) => {
-      if (key > 0) {
+      if (val === "groepsadmin" || val === "frontend"){
+        return;
+      }
+
+      if (key > 2) {
         res += "_" + val;
       } else {
         res += val;
