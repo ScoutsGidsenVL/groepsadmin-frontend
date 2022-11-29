@@ -49,11 +49,15 @@
               v-model="contacten[index].email"
               type="text"
             />
-            <base-input
-              label="GSM"
+            <BaseInputTelefoon
               v-model="contacten[index].gsm"
+              label="GSM"
               type="text"
-            />
+              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].gsm && v.contacten.$each.$response.$errors[index].gsm.length > 0"
+              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
+                              v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
+                              v.contacten.$each.$response.$errors[index].gsm[0].$message : ''"
+            ></BaseInputTelefoon>
             <base-dropdown
               :options="adresArray"
               label="Adres"
@@ -83,10 +87,14 @@ import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import {onMounted} from "vue";
 import {onUpdated} from "@vue/runtime-core";
+import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
+import {useVuelidate} from "@vuelidate/core";
+import {helpers, required} from "@vuelidate/validators";
+import Telefoonnummer from "@/services/google/Telefoonnummer";
 
 export default {
   name: "Contacten",
-  components: {BaseInput, BaseDropdown},
+  components: {BaseInput, BaseDropdown, BaseInputTelefoon},
   props: {
     title: {
       type: String,
@@ -185,6 +193,24 @@ export default {
       }
     }
 
+    const isGeldigGsmNummer = (value) => {
+      value = Telefoonnummer.formatNumber(value);
+      return Telefoonnummer.validateNumber(value);
+    }
+
+    const rules = {
+      "contacten": {
+        $each: helpers.forEach({
+          gsm: {
+            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+          },
+        })
+      }
+    }
+
+    const v = useVuelidate(rules, state);
+
+
     onMounted(() => {
       resetData();
     });
@@ -193,7 +219,7 @@ export default {
       resetData();
     })
 
-    return {...toRefs(state), voegContactToe, setHeader, remove, };
+    return {...toRefs(state), voegContactToe, setHeader, remove, v};
   },
 };
 </script>

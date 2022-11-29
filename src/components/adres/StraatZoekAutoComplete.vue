@@ -18,7 +18,7 @@
           placeholder="Straat..."
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
-          :class="v$.adres.straat.$invalid ? 'p-invalid' : ''"
+          :class="(v$.$dirty || checked) && v$.adres.straat.$invalid ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -31,7 +31,7 @@
     <div class="row">
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
-        v-if="checked && v$.adres.straat.$invalid"
+        v-if="(v$.$dirty || checked) && v$.adres.straat.$invalid"
       >
         {{ v$.adres.straat.required.$message }}
       </small>
@@ -62,7 +62,7 @@ export default {
     return {
       adres: {
         straat : {
-          required: helpers.withMessage('Gelieve een straat in te vullen', required)
+          required: helpers.withMessage('Straat is verplicht', required)
         }
       },
     }
@@ -85,11 +85,14 @@ export default {
     errorMessage: {
       type: String,
     },
+    index: {}
   },
   mounted() {
     this.zoekTerm = this.modelValue.straat;
-    this.emitter.on("clearStraat", (value) => {
-      this.zoekTerm = value;
+    this.emitter.on("clearStraat", (event) => {
+      if (event.index === this.index) {
+        this.zoekTerm = null;
+      }
     });
   },
   created() {

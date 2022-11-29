@@ -1,7 +1,17 @@
 <template>
   <div>
     <SideMenu/>
-    <toast position="bottom-right"/>
+    <toast position="bottom-right">
+      <template #message="slotProps">
+        <div class="flex flex-column">
+          <div class="text-center">
+            <i class="pi pi-exclamation-triangle" style="font-size: 3rem" v-if="slotProps.severity === 'success'"></i>
+            <h4>{{ slotProps.message.summary }}</h4>
+            <p v-html="slotProps.message.detail"></p>
+          </div>
+        </div>
+      </template>
+    </toast>
     <ingelogd-lid></ingelogd-lid>
     <ConfirmDialog>
       <template #message="slotProps">
@@ -70,8 +80,6 @@ import Adressen from "@/components/lid/Adressen";
 import Contacten from "@/components/lid/Contacten";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Functies from "@/components/lid/Functies";
-import RestService from "@/services/api/RestService";
-import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
 import rechtenService from "@/services/rechten/rechtenService";
@@ -82,8 +90,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
-import {computed, onMounted, watch} from "vue";
-import {onBeforeRouteLeave} from 'vue-router';
+import {computed} from "vue";
 
 export default {
   name: "Lid",
@@ -106,354 +113,14 @@ export default {
     const {
       state,
       store,
-      toast,
       route,
-      router,
-      emitter,
-      confirm,
-      v
+      stopAlleFuncties,
+      opslaan,
+      resetWatchable,
+      changeGeg,
+      updateFuncties,
+
     } = LidService.lidSpace();
-
-    watch(
-      () => state.lid.vgagegevens,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.vgagegevens = state.lid.vgagegevens
-          console.log(state.gewijzigdLid)
-        }
-      },
-      {deep: true})
-
-    watch(
-      () => state.lid.persoonsgegevens,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.persoonsgegevens = state.lid.persoonsgegevens
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.verbondsgegevens,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.verbondsgegevens = state.lid.verbondsgegevens
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.functies,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.functies = state.lid.functies
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.adressen,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.adressen = state.lid.adressen
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.contacten,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.contacten = state.lid.contacten
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.groepseigenVelden,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden
-          console.log(state.gewijzigdLid)
-        }
-      }, {deep: true})
-
-    watch(
-      () => state.lid.email,
-      () => {
-        if (state.watchable && state.lid) {
-          state.changes = true;
-          state.gewijzigdLid.email = state.lid.email
-          console.log(state.gewijzigdLid)
-        }
-      })
-
-    emitter.on('changeGeg', (event) => {
-      state.changes = true;
-      changeGeg(event.veld, event.waarde, event.groep);
-    })
-
-    emitter.on('veranderFunctie', () => {
-      state.changes = true
-    })
-
-    watch(
-      () => route.params.id,
-      async newId => {
-        state.gewijzigdLid = {};
-        if (newId === "profiel") {
-          await getProfiel()
-        } else {
-          await getLid(newId)
-          state.changes = false;
-        }
-      }
-    )
-
-    onMounted(() => {
-      emitter.on('veranderFunctie', () => {
-        state.changes = true
-      })
-      state.id = route.params.id ? route.params.id : "profiel";
-      if (state.id === "profiel" && store.getters.profiel) {
-        state.eigenProfiel = true;
-        getProfiel();
-      }
-
-      if (state.id && (!state.lid || state.id !== "profiel" || state.changed)) {
-        getLid(state.id);
-      }
-      resetWatchable();
-    })
-
-    const resetWatchable = () => {
-      state.changes = false;
-      state.watchable = false;
-      setTimeout(() => {
-        state.watchable = true
-      }, 2000);
-    }
-
-    const stopAlleFuncties = () => {
-      confirm.require({
-        group: 'lid',
-        message:
-          state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
-          " <br/>" +
-          "(De functie VGA en FV kan niet geschrapt worden. Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
-          " <br/>" +
-          "Ben je zeker?",
-        header: "Alle functies stoppen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          state.lid.functies.forEach(functie => {
-            if (functie.temp !== "tijdelijk" && (functie.functie !== specialeFuncties.vga && functie.functie !== specialeFuncties.fv)) {
-              let functieInstantie = {
-                functie: functie.functie,
-                groep: functie.groep,
-                einde: new Date().toISOString().slice(0, 10),
-                begin: functie.begin
-              };
-              if (!state.gewijzigdLid.functies) {
-                state.gewijzigdLid.functies = [];
-              }
-              state.gewijzigdLid.functies.push(functieInstantie);
-            }
-          })
-          opslaan();
-        },
-        reject: () => {
-          confirm.close();
-        },
-      });
-    }
-
-    const opslaan = () => {
-      state.loadingLid = true;
-      console.log(v)
-      //v.validate();
-      // if (false) {
-      //   state.changes = false;
-      //   toast.add({
-      //     severity: "warn",
-      //     summary: "Wijzigingen",
-      //     detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
-      //     life: 3000,
-      //   });
-      //   return;
-      // }
-      RestService.updateLid(state.lid.id, state.gewijzigdLid)
-        .then(res => {
-          state.lid = res.data;
-          if (res.status === 200)
-            toast.add({
-              severity: "success",
-              summary: "Wijzigingen",
-              detail: "Wijzigingen lid opgeslagen",
-              life: 3000,
-            });
-          state.changes = false;
-          sorteerFuncties();
-        }).catch(error => {
-        toast.add({
-          severity: "warn",
-          summary: error.response.data.titel,
-          detail: error.response.data.beschrijving,
-          life: 3000,
-        });
-      }).finally(() => {
-        state.changes = false;
-        state.loadingLid = false;
-      })
-    }
-
-    const changeGeg = (veld, waarde, groep) => {
-      if (state.gewijzigdLid) {
-        state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden;
-      }
-      if (state.gewijzigdLid.groepseigenVelden[groep]) {
-        state.gewijzigdLid.groepseigenVelden[groep].waarden[veld] = waarde;
-      }
-    }
-
-    const updateFuncties = ({functie, groepsnummer}) => {
-      let groep = store.getters.groepByNummer(groepsnummer);
-      let lid = {
-        functies: [
-          {
-            functie: functie.id,
-            groep: groep.id,
-            einde: new Date().toISOString().slice(0, 10),
-            begin: functie.begin
-          }
-        ]
-      };
-      RestService.updateLid(state.lid.id, lid).then(res => {
-        if (res.status === 200) {
-          toast.add({
-            severity: "success",
-            summary: "Wijzigingen",
-            detail: "Functie is gestopt",
-          });
-          state.lid = res.data;
-          sorteerFuncties();
-        }
-      });
-    }
-
-    const getProfiel = () => {
-      state.lid = store.getters.profiel;
-      sorteerFuncties();
-      filterGroepsEigenVelden();
-      state.loadingLid = false;
-    }
-
-    const getLid = (id) => {
-      state.loadingLid = true
-      RestService.getLid(id).then((res) => {
-        state.lid = res.data;
-        store.commit('setGeselecteerdeLeden', []);
-        store.getters.geselecteerdeLeden.push(state.lid);
-        if (id === "profiel") {
-          state.eigenProfiel = true;
-          store.commit("setProfiel", res.data);
-          state.loadingLid = false;
-        }
-        sorteerFuncties();
-        filterGroepsEigenVelden();
-      }).catch(error => {
-        if (error.response.status === 403) {
-          toast.add({
-            severity: "warn",
-            summary: error.response.data.titel,
-            detail: error.response.data.beschrijving,
-            life: 3000,
-          });
-          setTimeout(() => {
-            router.push({name: 'Ledenlijst'})
-          }, 2000)
-        }
-      })
-    }
-
-    const sorteerFuncties = () => {
-      store.commit("setGroepenLaden", true);
-      let ongesorteerdeFuncties = {};
-      let functies = [];
-      if (state.eigenProfiel) {
-        functies = store.getters.profiel.functies;
-      } else {
-        functies = state.lid.functies;
-      }
-      functies.forEach((functie) => {
-        if (!(functie.groep in ongesorteerdeFuncties)) {
-          ongesorteerdeFuncties[functie.groep] = [];
-        }
-
-        const functieById = store.getters.functieById(functie.functie);
-        if (functieById) {
-          let functieObject = {
-            id: functieById.id,
-            naam: functieById.beschrijving,
-            begin: functie.begin,
-            einde: functie.einde,
-            specialeFunctie:
-              functie.functie === specialeFuncties.FV ||
-              functie.functie === specialeFuncties.VGA,
-            actief: !functie.einde,
-          };
-          ongesorteerdeFuncties[functie.groep].push(functieObject);
-          if (!ongesorteerdeFuncties[functie.groep].active) {
-            ongesorteerdeFuncties[functie.groep].active = functieObject.actief;
-          }
-        }
-      });
-
-      let inactieveGroepen = Object.entries(ongesorteerdeFuncties).filter(([key]) => !ongesorteerdeFuncties[key].active);
-      inactieveGroepen.forEach(groep => {
-        store.dispatch('addGroep', groep[0]);
-      })
-
-      state.gesorteerdeFuncties = Object.keys(ongesorteerdeFuncties).sort().reduce(
-        (obj, key) => {
-          obj[key] = ongesorteerdeFuncties[key];
-          return obj;
-        },
-        {}
-      )
-      store.commit("setGroepenLaden", false);
-      state.loadingLid = false;
-    }
-
-    const filterGroepsEigenVelden = () => {
-      state.groepseigenVelden = Object.fromEntries(Object.entries(state.lid.groepseigenVelden).filter(([key]) => state.lid.groepseigenVelden[key].schema.length > 0));
-    }
-
-    onBeforeRouteLeave((to, from, next) => {
-      if (state.changes) {
-        confirm.require({
-          message:
-            "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
-          header: "Wijzigingen",
-          icon: "pi pi-exclamation-triangle",
-          accept: () => {
-            next();
-          },
-          reject: () => {
-            next(false);
-          },
-        });
-      } else {
-        next();
-      }
-    })
 
     const volledigeNaam = computed({
       get() {
@@ -495,14 +162,14 @@ export default {
       ...toRefs(state),
       stopAlleFuncties,
       opslaan,
-      changeGeg,
-      updateFuncties,
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
       wijzigingen,
       teBekijkenLid,
-      resetWatchable
+      resetWatchable,
+      changeGeg,
+      updateFuncties,
     }
   },
 }

@@ -43,11 +43,13 @@
               @changeValue="veranderLand(index)"
             />
             <gemeente-zoek-auto-complete
+              :index="index"
               label="Woonplaats"
               v-model="adressen[index]"
               v-if="adressen[index].land === 'BE'"
             />
             <straat-zoek-auto-complete
+              :index="index"
               :disabled="!adressen[index].postcode && !adressen[index].gemeente"
               label="Straat"
               v-model="adressen[index]"
@@ -59,32 +61,40 @@
               label="Postcode"
               v-model="adressen[index].postcode"
               type="text"
-              :invalid="isPostcodeIngevuld(index)"
-              error-message="Gelieve een postcode in te vullen"
+              :invalid="v.adressen.$each.$response.$errors[index].postcode && v.adressen.$each.$response.$errors[index].postcode.length > 0"
+              :error-message="(v.adressen.$each.$response.$errors[index].postcode &&
+                              v.adressen.$each.$response.$errors[index].postcode.length > 0) ?
+                              v.adressen.$each.$response.$errors[index].postcode[0].$message : ''"
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
               label="Gemeente"
               v-model="adressen[index].gemeente"
               type="text"
-              :invalid="isGemeenteIngevuld(index)"
-              error-message="Gelieve een gemeente in te vullen"
+              :invalid="v.adressen.$each.$response.$errors[index].gemeente && v.adressen.$each.$response.$errors[index].gemeente.length > 0"
+              :error-message="(v.adressen.$each.$response.$errors[index].gemeente &&
+                              v.adressen.$each.$response.$errors[index].gemeente.length > 0) ?
+                              v.adressen.$each.$response.$errors[index].gemeente[0].$message : ''"
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
               label="Straat"
               v-model="adressen[index].straat"
               type="text"
-              :invalid="isStraatIngevuld(index)"
-              error-message="Gelieve een straat in te vullen"
+              :invalid="v.adressen.$each.$response.$errors[index].straat && v.adressen.$each.$response.$errors[index].straat.length > 0"
+              :error-message="(v.adressen.$each.$response.$errors[index].straat &&
+                              v.adressen.$each.$response.$errors[index].straat.length > 0) ?
+                              v.adressen.$each.$response.$errors[index].straat[0].$message : ''"
             />
             <BaseInput
               label="Nummer"
               v-model="adressen[index].nummer"
               :disabled="!adressen[index].straat"
               type="text"
-              :invalid="isNummerIngevuld(index)"
-              error-message="Gelieve een nummer in te vullen"
+              :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].nummer && v.adressen.$each.$response.$errors[index].nummer.length > 0"
+              :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].nummer &&
+                              v.adressen.$each.$response.$errors[index].nummer.length > 0) ?
+                              v.adressen.$each.$response.$errors[index].nummer[0].$message : ''"
             />
             <BaseInput
               label="Bus"
@@ -92,11 +102,15 @@
               :disabled="!adressen[index].straat"
               type="text"
             />
-            <BaseInput
-              label="Telefoon"
+            <BaseInputTelefoon
               v-model="adressen[index].telefoon"
+              label="Telefoon"
               type="text"
-            />
+              :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].telefoon && v.adressen.$each.$response.$errors[index].telefoon.length > 0"
+              :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].telefoon &&
+                              v.adressen.$each.$response.$errors[index].telefoon.length > 0) ?
+                              v.adressen.$each.$response.$errors[index].telefoon[0].$message : ''"
+            ></BaseInputTelefoon>
             <BaseCheckbox
               v-if="!lidaanvraag"
               label="Postadres"
@@ -121,6 +135,10 @@ import BaseCheckbox from "@/components/input/BaseCheckbox";
 import {toRefs} from "@vue/reactivity";
 import {onUpdated} from "@vue/runtime-core";
 import AdresService from "@/services/adressen/AdresService";
+import {useVuelidate} from "@vuelidate/core";
+import {helpers, required, requiredIf} from "@vuelidate/validators";
+import Telefoonnummer from "@/services/google/Telefoonnummer";
+import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 
 export default {
   name: "Adressen",
@@ -130,6 +148,7 @@ export default {
     BaseDropdown,
     GemeenteZoekAutoComplete,
     StraatZoekAutoComplete,
+    BaseInputTelefoon
   },
   props: {
     title: {
@@ -167,6 +186,38 @@ export default {
       }
     })
 
+    const isGeldigGsmNummer = (value) => {
+      value = Telefoonnummer.formatNumber(value);
+      return Telefoonnummer.validateNumber(value);
+    }
+
+    const rules = {
+      "adressen": {
+        $each: helpers.forEach({
+          land: {
+            required: helpers.withMessage('Land is verplicht', required)
+          },
+          postcode: {
+            required: helpers.withMessage('Postcode is verplicht', required)
+          },
+          gemeente: {
+            required: helpers.withMessage('Gemeente is verplicht', required)
+          },
+          straat: {
+            required: helpers.withMessage('Straat is verplicht', required)
+          },
+          nummer: {
+            required: helpers.withMessage('Nummer is verplicht', required)
+          },
+          telefoon: {
+            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+          },
+        })
+      }
+    }
+
+    const v = useVuelidate(rules, state);
+
     return {
       ...toRefs(state),
       voegAdresToe,
@@ -178,7 +229,9 @@ export default {
       zetPostadres,
       veranderLand,
       isTelefoonnummerGeldig,
-      setHeader};
+      setHeader,
+      v
+    };
   },
 };
 </script>

@@ -17,7 +17,7 @@
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
           :disabled="disabled"
-          :class="v$.adres.gemeente.$invalid ? 'p-invalid' : ''"
+          :class="(v$.$dirty && v$.adres.gemeente.$invalid) ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -30,7 +30,7 @@
     <div class="row">
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
-        v-if="v$.adres.gemeente.$invalid"
+        v-if="v$.$dirty && v$.adres.gemeente.$invalid"
       >
         {{ v$.adres.gemeente.required.$message }}
       </small>
@@ -57,7 +57,7 @@ export default {
     return {
       adres: {
         gemeente : {
-          required: helpers.withMessage('Gelieve een gemeente in te vullen', required)
+          required: helpers.withMessage('Gemeente is verplicht', required)
         }
       },
     }
@@ -86,6 +86,7 @@ export default {
     errorMessage: {
       type: String,
     },
+    index: {}
   },
   mounted() {
     this.zoekTerm =
@@ -105,7 +106,7 @@ export default {
       this.adres.straat = "";
       this.adres.bus = "";
       this.adres.nummer = "";
-      this.emitter.emit("clearStraat", null);
+      this.emitter.emit("clearStraat", { "index": this.index});
     },
 
     verwijderGemeente() {
