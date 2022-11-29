@@ -89,7 +89,7 @@ import {onMounted} from "vue";
 import {onUpdated} from "@vue/runtime-core";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import {useVuelidate} from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
+import {helpers} from "@vuelidate/validators";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 
 export default {
