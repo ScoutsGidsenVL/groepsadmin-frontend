@@ -119,6 +119,10 @@ const routes = [
         component: Communicatievoorkeuren,
         meta: {isAuthorized: true}
     },
+    {
+        path: "/groepsadmin/client/",
+        name: 'VorigeLayout'
+    }
 ];
 
 const router = createRouter({

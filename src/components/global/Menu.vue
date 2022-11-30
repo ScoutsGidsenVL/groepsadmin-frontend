@@ -109,7 +109,7 @@ export default {
           icon: "far fa-question",
         },
         {
-          label: 'Huidige Layout',
+          label: 'Vorige layout',
           condition: true,
           icon: 'fas fa-external-link'
         }
@@ -130,11 +130,13 @@ export default {
         window.open(WikiService.getWikiUrl(), '_blank');
       }
 
-      if (menuItem.label === "Huidige Groepsadministratie") {
-        let url = window.origin = "localhost:3000" ?  "http://localhost:8000/"
-          : window.origin = "https://ga-staging.scoutsengidsenvlaanderen.be/" ? "https://ga-staging.scoutsengidsenvlaanderen.be/groepsadmin/client/"
-            : "https://groepsadmin.scoutsengidsenvlaanderen.be/groepsadmin/client/";
-        window.open(url);
+      if (menuItem.label === "Vorige layout") {
+        console.log(window.origin)
+        if (window.origin === "http://localhost:3000") {
+          window.location.href = "http://localhost:8000/#/ledenlijst";
+        } else {
+          window.location.href = "/groepsadmin/client/";
+        }
       }
 
       if (menuItem.link === "Profiel") {
