@@ -9,6 +9,7 @@
             class="p-button-rounded add-button mt-1"
             @click="voegContactToe"
             title="Voeg adres toe"
+            v-if="heeftToegang('contacten')"
           />
         </div>
       </template>
@@ -91,6 +92,7 @@ import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import {useVuelidate} from "@vuelidate/core";
 import {helpers} from "@vuelidate/validators";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "Contacten",
@@ -151,6 +153,10 @@ export default {
           life: 8000,
         });
       }
+    }
+
+    const heeftToegang = (sectie) => {
+      return rechtenService.canBeShowed(props.modelValue, sectie);
     }
 
     const remove = (event, index) => {
@@ -219,7 +225,14 @@ export default {
       resetData();
     })
 
-    return {...toRefs(state), voegContactToe, setHeader, remove, v};
+    return {
+      ...toRefs(state),
+      voegContactToe,
+      heeftToegang,
+      setHeader,
+      remove,
+      v
+    };
   },
 };
 </script>

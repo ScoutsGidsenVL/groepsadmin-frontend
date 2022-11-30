@@ -15,6 +15,7 @@
           optionLabel="label"
           optionValue="value"
           @change="changeValue"
+          :disabled="disabled"
         />
       </div>
     </div>

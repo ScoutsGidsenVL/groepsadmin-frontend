@@ -1,6 +1,6 @@
 import {reactive} from "@vue/reactivity";
 import {useConfirm} from "primevue/useconfirm";
-import Telefoonnummer from "@/services/google/Telefoonnummer";
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
     adresSpace(props) {
@@ -31,24 +31,6 @@ export default {
                     confirm.close();
                 },
             });
-        }
-
-        const isNummerIngevuld = (index) => {
-            return !state.adressen[index].nummer;
-        }
-
-        const isTelefoonnummerGeldig = (index) => {
-            let nummer = Telefoonnummer.formatNumber(state.adressen[index].telefoon);
-            return Telefoonnummer.validateNumber(nummer)
-        }
-
-        const isGemeenteIngevuld = (index) => {
-            state.invalid = true;
-            return !state.adressen[index].gemeente;
-        }
-
-        const isPostcodeIngevuld = (index) => {
-            return !state.adressen[index].postcode;
         }
 
         const zetPostadres = (index) => {
@@ -101,28 +83,18 @@ export default {
             state.adressen.push(nieuwAdres);
         }
 
-        const isStraatIngevuld = (index) => {
-            if (!state.adressen[index].straat){
-                state.invalid = true;
-                return !state.adressen[index].straat;
-            } else {
-                state.invalid = false;
-                return true;
-            }
+        const heeftToegang = (sectie) => {
+            return rechtenService.canBeShowed(props.modelValue, sectie);
         }
 
         return {
             state,
             remove,
-            isTelefoonnummerGeldig,
-            isStraatIngevuld,
-            isGemeenteIngevuld,
-            isNummerIngevuld,
             voegAdresToe,
             setHeader,
             veranderLand,
             zetPostadres,
-            isPostcodeIngevuld
+            heeftToegang
         }
     }
 }

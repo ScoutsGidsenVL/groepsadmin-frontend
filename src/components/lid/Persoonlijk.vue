@@ -41,6 +41,7 @@
             v-model="lid.persoonsgegevens.geslacht"
             :options="geslacht"
             label="Geslacht"
+            :disabled="!hasPermission('persoonsgegevens')"
           />
           <BaseCheckbox
             :disabled="!hasPermission('vgagegevens')"
@@ -81,6 +82,7 @@
             @changeValue="formatNumber"
           ></BaseInputTelefoon>
           <BaseInput
+            :disabled="!hasPermission('persoonsgegevens')"
             v-model="v$.lid.persoonsgegevens.rekeningnummer.$model"
             label="Rekeningnummer"
             type="text"
@@ -179,7 +181,7 @@ export default {
     },
     hasPermission(type) {
       if (this.lid.vgagegevens.voornaam) {
-        return rechtenService.hasPermission(type);
+        return rechtenService.canBeShowed(this.lid, type);
       } else {
         return this.nieuwLid;
       }

@@ -9,7 +9,7 @@
             class="p-button-rounded p-button-outlined mt-1 add-button"
             @click="voegAdresToe"
             title="Voeg adres toe"
-            v-if="!lidaanvraag"
+            v-if="!lidaanvraag && heeftToegang('adressen')"
           />
         </div>
       </template>
@@ -168,15 +168,11 @@ export default {
     const {
       state,
       remove,
-      isTelefoonnummerGeldig,
-      isStraatIngevuld,
-      isGemeenteIngevuld,
-      isNummerIngevuld,
       voegAdresToe,
       setHeader,
       veranderLand,
       zetPostadres,
-      isPostcodeIngevuld
+      heeftToegang
     } = AdresService.adresSpace(props);
 
     onUpdated(() => {
@@ -222,15 +218,11 @@ export default {
       ...toRefs(state),
       voegAdresToe,
       remove,
-      isPostcodeIngevuld,
-      isStraatIngevuld,
-      isGemeenteIngevuld,
-      isNummerIngevuld,
       zetPostadres,
       veranderLand,
-      isTelefoonnummerGeldig,
       setHeader,
-      v
+      v,
+      heeftToegang
     };
   },
 };
