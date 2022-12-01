@@ -131,7 +131,6 @@ export default {
       }
 
       if (menuItem.label === "Vorige layout") {
-        console.log(window.origin)
         if (window.origin === "http://localhost:3000") {
           window.location.href = "http://localhost:8000/#/ledenlijst";
         } else {
