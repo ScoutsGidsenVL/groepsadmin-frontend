@@ -59,6 +59,15 @@ export default {
       activeMenu: "",
       menuItems: [
         {
+          label: "Mijn gegevens",
+          condition: true,
+          icon: "far fa-user",
+          link: "Profiel",
+          command: () => {
+            this.$router.push({name: 'Lid', params: {id: "profiel"}})
+          }
+        },
+        {
           label: "Ledenlijst",
           condition: "ledenlijst",
           icon: "far fa-users",
@@ -83,15 +92,6 @@ export default {
           link: "Groepsinstellingen",
           command: () => {
             this.$router.push({name: 'Groepsinstellingen'})
-          }
-        },
-        {
-          label: "Mijn gegevens",
-          condition: true,
-          icon: "far fa-user",
-          link: "Profiel",
-          command: () => {
-            this.$router.push({name: 'Lid', params: {id: "profiel"}})
           }
         },
         {
