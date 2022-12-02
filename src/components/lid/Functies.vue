@@ -90,20 +90,13 @@
 </template>
 
 <script>
-import DateUtil from "@/services/dates/DateUtil";
 import Indicator from "@/components/global/Indicator";
-import rechtenService from "@/services/rechten/rechtenService";
+import FunctieService from "@/services/functies/FunctieService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "Functies",
   components: {Indicator},
-  data() {
-    return {
-      historiek: false,
-      confirmDialog: false,
-      teStoppenFunctie: {}
-    }
-  },
   props: {
     modelValue: {
       type: Object, Array
@@ -112,73 +105,30 @@ export default {
       type: Object
     }
   },
-  computed: {
-    actieveGroepen() {
-      return Object.fromEntries(Object.entries(this.modelValue).filter(([key]) => this.modelValue[key].active));
-    },
-    nietActieveGroepen() {
-      return Object.fromEntries(Object.entries(this.modelValue).filter(([key]) => !this.modelValue[key].active));
-    },
-    laden() {
-      return this.$store.getters.groepenLaden || this.$store.getters.functiesLaden;
-    },
-  },
-  methods: {
-    groepsNaam(groepsnummer) {
-      let groep = this.$store.getters.groepByNummer(groepsnummer);
-      if (groep) {
-        return groep.naam + " - " + groepsnummer;
+  setup(props) {
+    const {
+      state,
+      groepsNaam,
+      inactieveGroepsNaam,
+      lidMagFunctieStoppen,
+      formatteerDatum,
+      stopFunctie,
+      actieveGroepen,
+      nietActieveGroepen,
+      laden
+    } = FunctieService.functieSpace(props);
+
+    return {
+      ...toRefs(state),
+      groepsNaam,
+      inactieveGroepsNaam,
+      lidMagFunctieStoppen,
+      formatteerDatum,
+      stopFunctie,
+      actieveGroepen,
+      nietActieveGroepen,
+      laden
       }
-    },
-
-    boodschapStoppenFunctie() {
-      let message = "";
-      if (this.teStoppenFunctie) {
-        message = "Ben je zeker dat je de functie " + this.teStoppenFunctie.naam + " wil stoppen?"
-      }
-      return message;
-    },
-
-    inactieveGroepsNaam(groepsnummer) {
-      let groep = this.$store.getters.inactieveGroepByNummer(groepsnummer);
-      if (groep) {
-        return groep.naam + " - " + groepsnummer;
-      }
-    },
-
-    lidMagFunctieStoppen(sectie) {
-      return rechtenService.hasPermission(sectie);
-    },
-
-    getFunctie(functieId) {
-      return this.$store.getters.functieById(functieId);
-    },
-    formatteerDatum(datum) {
-      return DateUtil.formatteerDatum(datum);
-    },
-    stopFunctie(functie, groepsnummer) {
-      this.teStoppenFunctie = Object.assign({}, functie);;
-      this.$confirm.require({
-        message: this.boodschapStoppenFunctie(),
-        header: "Functie stoppen",
-        icon: "pi pi-exclamation-triangle",
-        acceptIcon: "pi pi-check",
-        rejectIcon: "pi pi-times",
-        acceptClass: "approve-button",
-        rejectClass: "reject-button",
-        accept: () => {
-          this.teStoppenFunctie.einde = new Date().toISOString().slice(0, 10);
-          this.$emit('updateLid',  {functie: this.teStoppenFunctie, groepsnummer: groepsnummer });
-        },
-        reject: () => {
-          this.$confirm.close();
-        }
-
-      })
-    },
-  },
-
-};
+    }
+  }
 </script>
-
-<style scoped></style>
