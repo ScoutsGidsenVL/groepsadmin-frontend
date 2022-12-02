@@ -9,7 +9,7 @@
             class="p-button-rounded add-button mt-1"
             @click="voegContactToe"
             title="Voeg adres toe"
-            v-if="heeftToegang('contacten')"
+            v-if="heeftToegang('contacten') || lidaanvraag"
           />
         </div>
       </template>
@@ -104,6 +104,10 @@ export default {
     modelValue: {
       type: Object,
     },
+    lidaanvraag: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup(props) {
     const confirm = useConfirm();

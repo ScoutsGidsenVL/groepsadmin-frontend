@@ -1,6 +1,7 @@
 import {reactive} from "@vue/reactivity";
 import {useConfirm} from "primevue/useconfirm";
 import rechtenService from "@/services/rechten/rechtenService";
+import {onUpdated} from "@vue/runtime-core";
 
 export default {
     adresSpace(props) {
@@ -17,6 +18,10 @@ export default {
                 {label: "Nederland", value: "NL"},
                 {label: "Canada", value: "CA"},
             ],
+        })
+
+        onUpdated(() => {
+            state.adressen = props.modelValue.adressen;
         })
 
         const remove = (index) => {
@@ -54,6 +59,10 @@ export default {
                 : "Nieuw adres";
         }
 
+        const heeftToegang = (sectie) => {
+            return rechtenService.canBeShowed(props.modelValue, sectie);
+        }
+
         const voegAdresToe = () => {
             let nieuwAdres = {
                 land: "BE",
@@ -83,8 +92,8 @@ export default {
             state.adressen.push(nieuwAdres);
         }
 
-        const heeftToegang = (sectie) => {
-            return rechtenService.canBeShowed(props.modelValue, sectie);
+        if (state.adressen && state.adressen.length === 0) {
+            voegAdresToe();
         }
 
         return {

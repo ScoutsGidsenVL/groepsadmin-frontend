@@ -9,7 +9,7 @@
             class="p-button-rounded p-button-outlined mt-1 add-button"
             @click="voegAdresToe"
             title="Voeg adres toe"
-            v-if="!lidaanvraag && heeftToegang('adressen')"
+            v-if="lidaanvraag || heeftToegang('adressen')"
           />
         </div>
       </template>
@@ -133,7 +133,6 @@ import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import {toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
 import AdresService from "@/services/adressen/AdresService";
 import {useVuelidate} from "@vuelidate/core";
 import {helpers, required} from "@vuelidate/validators";
@@ -175,12 +174,7 @@ export default {
       heeftToegang
     } = AdresService.adresSpace(props);
 
-    onUpdated(() => {
-      state.adressen = props.modelValue.adressen;
-      if (state.adressen && state.adressen.length === 0) {
-        voegAdresToe();
-      }
-    })
+
 
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);

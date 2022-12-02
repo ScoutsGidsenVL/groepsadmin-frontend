@@ -263,7 +263,6 @@ export default {
         }
 
         const opslaan = () => {
-            console.log(v.value);
             v.value.$reset();
             state.loadingLid = true;
             v.value.$touch();

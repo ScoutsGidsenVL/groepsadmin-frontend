@@ -138,8 +138,6 @@ export default {
         this.$router.push({name: 'Profiel', params: {id: "profiel"}})
       } else if (link === 'stopAlleFuncties') {
         this.$emit('stopAlleFuncties');
-      } else if (link === 'lidToevoegen') {
-        this.nieuwLidToevoegen();
       } else if (link === 'broerZusToevoegen') {
         this.broerZusToevoegen();
       } else {
@@ -178,9 +176,7 @@ export default {
     },
 
     nieuwLidToevoegen() {
-      this.$router.push({
-        name: "lidToevoegen",
-      });
+
     },
 
     broerZusToevoegen() {

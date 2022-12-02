@@ -8,27 +8,24 @@
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
             type="text"
-            :disabled="!hasPermission('vgagegevens')"
-            :invalid="v$.lid.vgagegevens.voornaam.$invalid"
-            error-message="Voornaam is verplicht"
-            @blur="v$.lid.vgagegevens.voornaam.$commit"
+            :disabled="!hasPermission('vgagegevens') && !nieuwLid"
+            :invalid="v.lid.vgagegevens.voornaam.$dirty && v.lid.vgagegevens.voornaam.$invalid"
+            :error-message="v.lid.vgagegevens.voornaam.required.$message"
           />
           <BaseInput
             v-model="lid.vgagegevens.achternaam"
             label="Achternaam"
             type="text"
-            :disabled="!hasPermission('vgagegevens')"
-            error-message="Achternaam is verplicht"
-            :invalid="v$.lid.vgagegevens.achternaam.$invalid"
-            @blur="v$.lid.vgagegevens.achternaam.$commit"
+            :disabled="!hasPermission('vgagegevens') && !nieuwLid"
+            :invalid="v.lid.vgagegevens.achternaam.$dirty && v.lid.vgagegevens.achternaam.$invalid"
+            :error-message="v.lid.vgagegevens.achternaam.required.$message"
           />
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
             label="Geboortedatum"
-            :disabled="!hasPermission('vgagegevens')"
-            error-message="Geboortedatum is verplicht"
-            :invalid="v$.lid.vgagegevens.geboortedatum.$invalid"
-            @blur="v$.lid.vgagegevens.achternaam.$commit"
+            :disabled="!hasPermission('vgagegevens')  && !nieuwLid"
+            :error-message="v.lid.vgagegevens.geboortedatum.required.$message"
+            :invalid="v.lid.vgagegevens.geboortedatum.$dirty && v.lid.vgagegevens.geboortedatum.$invalid"
           />
           <BaseInput
             v-model="lid.gebruikersnaam"
@@ -41,11 +38,10 @@
             v-model="lid.persoonsgegevens.geslacht"
             :options="geslacht"
             label="Geslacht"
-            :disabled="!hasPermission('persoonsgegevens')"
+            :disabled="!hasPermission('persoonsgegevens')  && !nieuwLid"
           />
           <BaseCheckbox
-            :disabled="!hasPermission('vgagegevens')"
-            v-if="!nieuwLid"
+            :disabled="!hasPermission('vgagegevens')  && !nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.beperking"
             label="Persoon met beperking"
@@ -67,28 +63,25 @@
             :disabled="!eigenProfiel && !nieuwLid"
             label="Email"
             type="email"
-            :invalid="v$.lid.email.$invalid"
-            @blur="v$.lid.email.$commit"
-            error-message="Geen geldig emailadres"
+            :invalid="v.lid.email.$dirty && v.lid.email.$invalid"
+            :error-message="v.lid.email.$message"
           ></BaseInput>
           <BaseInputTelefoon
             :disabled="!eigenProfiel && !nieuwLid"
-            v-model="v$.lid.persoonsgegevens.gsm.$model"
+            v-model="v.lid.persoonsgegevens.gsm.$model"
             label="GSM"
             type="text"
-            :invalid="v$.lid.persoonsgegevens.gsm.$invalid"
-            @blur="v$.lid.persoonsgegevens.gsm.$commit"
+            :invalid="v.lid.persoonsgegevens.gsm.$dirty && v.lid.persoonsgegevens.gsm.$invalid"
             error-message="Geen geldig gsm nummer"
             @changeValue="formatNumber"
           ></BaseInputTelefoon>
           <BaseInput
-            :disabled="!hasPermission('persoonsgegevens')"
-            v-model="v$.lid.persoonsgegevens.rekeningnummer.$model"
+            :disabled="!hasPermission('persoonsgegevens') && !nieuwLid"
+            v-model="v.lid.persoonsgegevens.rekeningnummer.$model"
             label="Rekeningnummer"
             type="text"
-            :invalid="v$.lid.persoonsgegevens.rekeningnummer.$invalid"
+            :invalid="v.lid.persoonsgegevens.gsm.$dirty && v.lid.persoonsgegevens.gsm.$invalid"
             error-message="Geen geldig rekeningnummer"
-            @blur="v$.lid.persoonsgegevens.rekeningnummer.$commit"
           ></BaseInput>
           <BaseCheckbox
             v-if="!nieuwLid"
@@ -123,9 +116,9 @@ import DatePicker from "@/components/input/DatePicker";
 import BaseDropDown from "@/components/input/BaseDropdown";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {computed, reactive, toRefs} from "@vue/reactivity";
+import {reactive, toRefs} from "@vue/reactivity";
 import {useVuelidate} from '@vuelidate/core'
-import {email, required} from '@vuelidate/validators'
+import {email, helpers, required} from '@vuelidate/validators'
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
@@ -213,11 +206,10 @@ export default {
       lid: props.modelValue
     });
 
-    const rules = computed(() => ({
+    const rules = {
       lid: {
         email: {
-          email,
-          required
+          email: helpers.withMessage('Geen geldig emailadres', email)
         },
         persoonsgegevens: {
           gsm: {
@@ -229,24 +221,24 @@ export default {
         },
         vgagegevens: {
           voornaam: {
-            required
+            required: helpers.withMessage('Voornaam is verplicht', required)
           },
           achternaam: {
-            required
+            required: helpers.withMessage('Achternaam is verplicht', required)
           },
           geboortedatum: {
-            required
+            required: helpers.withMessage('Geboortedatum is verplicht', required)
           }
         }
       },
-    }))
+    }
 
     onUpdated(() => {
       state.lid = props.modelValue;
     })
 
-    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
-    return {...toRefs(state), v$};
+    const v = useVuelidate(rules, state);
+    return {...toRefs(state), v};
   },
 };
 </script>
