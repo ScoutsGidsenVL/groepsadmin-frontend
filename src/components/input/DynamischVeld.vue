@@ -10,7 +10,8 @@
         @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
-        error-message="Gelieve dit veld in te vullen"
+        :error-message="errors && errors[veld.id] && errors[veld.id].message ? errors[veld.id].message : null"
+        :invalid="errors && errors[veld.id] && errors[veld.id].invalid"
       >
       </BaseInput>
       <BaseCheckbox
@@ -52,12 +53,12 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
 import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import mitt from "mitt";
+import DynamischVeldService from "@/services/dynamischVeld/DynamischVeldService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "DynamischVeld",
@@ -81,27 +82,12 @@ export default {
   },
 
   setup(props) {
-    const emitter = mitt();
-
-    const state = reactive({
-      schema: props.veld,
-      waarde: props.modelValue,
-      keuzes: []
-    });
-
-    const isChecked = (id) => {
-      return state.waarde[id] === "true" || state.waarde[id];
-    }
-
-    const changeValue = (veld, waarde) => {
-      emitter.emit("changeGeg", {'veld': veld, 'waarde': waarde, 'groep': props.groepIndex});
-    }
-
-    const vulOpties = (options) => {
-      options.forEach(function (optie) {
-        state.keuzes.push({label: optie, value: optie});
-      });
-    }
+    const {
+      state,
+      isChecked,
+      changeValue,
+      vulOpties
+    } = DynamischVeldService.dynamischVeldSpace(props)
 
     return {
       ...toRefs(state), isChecked, changeValue, vulOpties
