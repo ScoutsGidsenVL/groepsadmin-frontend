@@ -75,7 +75,6 @@ import DynamischVeld from "@/components/input/DynamischVeld";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import ConfirmDialog from "primevue/confirmdialog";
 import SteekkaartService from "@/services/individueleSteekkaart/SteekkaartService";
 import {toRefs} from "@vue/reactivity";
 
@@ -85,7 +84,6 @@ export default {
     DynamischVeld,
     Loader,
     SideMenu,
-    ConfirmDialog,
     IngelogdLid
   },
   setup() {
@@ -101,25 +99,6 @@ export default {
       save,
       changeValue,
       setHeader
-    }
-  },
-
-  beforeRouteLeave(to, from, next) {
-    if (this.changes) {
-      this.$confirm.require({
-        message:
-          "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
-        header: "Wijzigingen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          next();
-        },
-        reject: () => {
-          next(false);
-        },
-      });
-    } else {
-      next();
     }
   },
 };

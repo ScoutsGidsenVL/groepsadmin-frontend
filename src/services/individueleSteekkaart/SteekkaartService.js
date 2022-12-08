@@ -1,8 +1,8 @@
-import {computed, reactive} from "@vue/reactivity";
+import {reactive} from "@vue/reactivity";
 import {onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
 import useEmitter from "@/services/utils/useEmitter";
-import {useRoute, useRouter} from "vue-router";
+import {onBeforeRouteLeave, useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {useToast} from "primevue/usetoast";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
@@ -204,6 +204,25 @@ export default {
                 }
             });
         }
+
+        onBeforeRouteLeave((to, from, next) => {
+            if (state.changes) {
+                confirm.require({
+                    message:
+                        "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
+                    header: "Wijzigingen",
+                    icon: "pi pi-exclamation-triangle",
+                    accept: () => {
+                        next();
+                    },
+                    reject: () => {
+                        next(false);
+                    },
+                });
+            } else {
+                next();
+            }
+        })
 
         return {
             state,
