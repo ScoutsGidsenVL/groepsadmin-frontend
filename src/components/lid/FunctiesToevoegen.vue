@@ -17,7 +17,8 @@
               <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'verbond')" :key="index"
                    class="col-md-6">
                 <checkbox :label="functie.beschrijving" :model-value="isSelected(functie, groep.groepsnummer)"
-                          @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"></checkbox>
+                          @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                ></checkbox>
               </div>
             </div>
             <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length > 0">
@@ -41,6 +42,7 @@
 <script>
 import rechtenService from "@/services/rechten/rechtenService";
 import BaseCheckboxLeftFunctieSelect from "@/components/input/BaseCheckboxLeftFunctieSelect";
+import moment from "moment";
 
 export default {
   name: "FunctiesToevoegen",
@@ -73,7 +75,16 @@ export default {
   },
   methods: {
     gesorteerdeFuncties(functies, type) {
-      functies.sort(function (a, b) {
+      let relevanteFuncties = [];
+      if (this.lid && this.lid.vgagegevens && this.lid.vgagegevens.geboortedatum) {
+        relevanteFuncties =  functies.filter(obj => {
+          return moment(this.lid.vgagegevens.geboortedatum).isBefore(moment(obj.uiterstegeboortedatum));
+        });
+      } else {
+        relevanteFuncties = functies;
+      }
+
+      relevanteFuncties.sort(function (a, b) {
         if (a.beschrijving < b.beschrijving) {
           return -1;
         }
@@ -82,10 +93,11 @@ export default {
         }
         return 0;
       })
-      return functies.filter(obj => {
+      return relevanteFuncties.filter(obj => {
         return obj.type === type;
       });
     },
+
     functiesEnGroepen() {
       this.groepEnfuncties = [];
       this.$store.getters.groepen.forEach(groep => {

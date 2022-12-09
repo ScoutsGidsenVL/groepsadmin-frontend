@@ -68,7 +68,7 @@ export default {
       laden,
       magFunctiesToevoegen,
       opslaan
-    } = LidToevoegenService.lidToevoegenSpave();
+    } = LidToevoegenService.lidToevoegenSpace();
 
 
 

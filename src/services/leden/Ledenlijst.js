@@ -235,6 +235,7 @@ export default {
                 RestService.patchFilterOpId(state.huidigeFilter, filterId)
                     .then(res => {
                         if (res.status === 200) {
+                            getFilters();
                             toast.add({
                                 severity: "success",
                                 summary: "Filter",
@@ -261,6 +262,7 @@ export default {
                 RestService.saveFilter(state.huidigeFilter)
                     .then(res => {
                         if (res.status === 201) {
+                            getFilters();
                             toast.add({
                                 severity: "success",
                                 summary: "Filter",
@@ -498,10 +500,13 @@ export default {
         }
 
         const getFilters = () => {
+            state.isLoadingFilters = true;
             RestService.getFilters().then(res => {
                 state.filters = ledenlijstFilter.groepeerFilters(res.data.filters)
             }).catch(error => {
                 console.log(error)
+            }).finally(() => {
+                state.isLoadingFilters = false;
             })
         }
 
@@ -677,6 +682,4 @@ export default {
             toggle
         }
     }
-
-
 }

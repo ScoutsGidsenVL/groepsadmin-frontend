@@ -160,7 +160,10 @@ export default {
     }
 
     const heeftToegang = (sectie) => {
-      return rechtenService.canBeShowed(props.modelValue, sectie);
+      if (!props.lidaanvraag) {
+        return rechtenService.canBeShowed(props.modelValue, sectie);
+      }
+      return true;
     }
 
     const remove = (event, index) => {

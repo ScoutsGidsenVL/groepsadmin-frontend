@@ -9,7 +9,7 @@ import rechtenService from "@/services/rechten/rechtenService";
 import RestService from "@/services/api/RestService";
 
 export default {
-    lidToevoegenSpave() {
+    lidToevoegenSpace() {
         const rules = {}
         const emitter = useEmitter();
         const toast = useToast();

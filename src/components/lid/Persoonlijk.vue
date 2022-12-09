@@ -173,6 +173,9 @@ export default {
       this.lid.persoonsgegevens.gsm = value;
     },
     hasPermission(type) {
+      if (this.nieuwLid) {
+        return true
+      }
       if (this.lid.vgagegevens.voornaam) {
         return rechtenService.canBeShowed(this.lid, type);
       } else {
