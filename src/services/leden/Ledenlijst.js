@@ -130,11 +130,17 @@ export default {
         emitter.on('activeerAlleFuncties', (event) => {
             activeerAlleFuncties(event.criteria);
         })
+        emitter.on('deactiveerAlleFuncties', (event) => {
+            deactiveerAlleFuncties(event.criteria);
+        })
         emitter.on('activeerFunctie', (event) => {
             activeerFunctie(event.criteria, event.functie);
         })
         emitter.on('activeerAlleGroepFuncties', (event) => {
             activeerAlleGroepFuncties(event.criteria, event.groepering);
+        })
+        emitter.on('deactiveerAlleGroepFuncties', (event) => {
+            deactiveerAlleGroepFuncties(event.criteria, event.groepering);
         })
 
         const activateCriterium = (criterium) => {
@@ -407,18 +413,37 @@ export default {
                 group.items.forEach(item => {
                     if (!state.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
                         state.huidigeFilter.criteria[criteria.criteriaKey].push(item.value)
+                        item.activated = true;
+                    }
+                })
+            })
+        }
+
+        const deactiveerAlleFuncties = (criteria) => {
+            criteria.itemgroups.forEach(group => {
+                group.items.forEach(item => {
+                    if (state.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
+                        let index = state.huidigeFilter.criteria[criteria.criteriaKey].indexOf(item.value);
+                        state.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+                        item.activated = false;
                     }
                 })
             })
         }
 
         const activeerFunctie = (criteria, functie) => {
+            console.log(criteria)
+            console.log(functie)
             if (!state.huidigeFilter.criteria[criteria.criteriaKey]) {
                 state.huidigeFilter.criteria[criteria.criteriaKey] = [];
             }
             if (state.huidigeFilter.criteria[criteria.criteriaKey].includes(functie.value)) {
                 let index = state.huidigeFilter.criteria[criteria.criteriaKey].indexOf(functie.value);
                 state.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+
+
+
+
             } else {
                 state.huidigeFilter.criteria[criteria.criteriaKey].push(functie.value);
             }
@@ -435,6 +460,21 @@ export default {
                         if (!state.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
                             state.huidigeFilter.criteria[criteria.criteriaKey].push(item.value)
                         }
+                        item.activated = true;
+                    })
+                }
+            })
+        }
+
+        const deactiveerAlleGroepFuncties = (criteria, groepering) => {
+            criteria.itemgroups.forEach(group => {
+                if (group.label === groepering) {
+                    group.items.forEach(item => {
+                        if (state.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
+                            let index = state.huidigeFilter.criteria[criteria.criteriaKey].indexOf(item.value);
+                            state.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
+                        }
+                        item.activated = false;
                     })
                 }
             })

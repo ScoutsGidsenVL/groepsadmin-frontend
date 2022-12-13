@@ -17,6 +17,10 @@ export default {
         return result;
     },
 
+    hasAccessToGroepen: function () {
+        return _.some(store.getters.groepen, 'contacten');
+    },
+
     hasPermission: function (sectie) {
         let patchObject = store.getters.profiel.links.find(obj => {
             return obj.method === "PATCH"

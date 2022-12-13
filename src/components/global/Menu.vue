@@ -153,13 +153,19 @@ export default {
   computed: {
     desktopMenuItems: function () {
       return this.menuItems.filter(obj => {
-        return obj.condition === true || rechtenService.hasAccess(obj.condition);
+        if (obj.condition === "groepen") {
+          return rechtenService.hasAccessToGroepen();
+        }
+        return obj.condition === true || rechtenService.hasPermission(obj.condition);
       });
     },
     mobileMenuItems: function () {
 
       let mobileMenuItems = this.menuItems.filter(obj => {
-        return obj.label !== 'Zoeken' || rechtenService.hasAccess(obj.condition);
+        if (obj.condition === "groepen") {
+          return rechtenService.hasAccessToGroepen();
+        }
+        return obj.label !== 'Zoeken' || rechtenService.hasPermission(obj.condition);
       })
       mobileMenuItems.push({
         label: "Afmelden",

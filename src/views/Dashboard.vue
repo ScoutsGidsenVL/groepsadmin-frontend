@@ -27,7 +27,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 mt-2">
+            <div class="col-lg-3 mt-2" v-if="snelNaarItems.length > 0">
               <div class="justify-content-start d-flex">
                 <h5 class="text-align-left mb-4"><strong>Snel naar</strong></h5>
               </div>
@@ -148,7 +148,10 @@ export default {
   computed: {
     dashboardItems: function () {
       return this.menuItems.filter(obj => {
-        return obj.condition === true || rechtenService.hasAccess(obj.condition);
+        if (obj.condition === "groepen") {
+          return rechtenService.hasAccessToGroepen();
+        }
+        return obj.condition === true || rechtenService.hasPermission(obj.condition);
       });
     },
     naam: function () {

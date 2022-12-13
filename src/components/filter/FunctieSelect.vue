@@ -17,16 +17,17 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-12 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
-         v-if="toggleMenu">
+    <div
+      class="position-absolute z999 bg-white col-12 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
+      v-if="toggleMenu">
       <div class="d-flex align-content-start pt-2">
         <checkbox :binary="true" id="label" class="mr-2" v-model="allesGeselecteerd" @change="activeerAlleFuncties"/>
         <label class="text-align-left" for="label">Selecteer alle functies</label>
       </div>
       <divider></divider>
       <div v-for="(item, key) in criteria.itemgroups" :key="key" class="border-white border-solid border-1">
-        <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 clickable">
-          <checkbox :binary="true" :id="item.label" class="mr-2" v-model="alles"
+        <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 clickable">
+          <checkbox :id="item.label" class="mr-2" v-model="selectedGroups" :value="item.label"
                     @change="activeerAlleGroepFuncties(item.label)"/>
           <label class="text-align-left vw90 clickable" @click="openSection(item.label)">{{ item.label }}</label>
           <div class="full-width d-flex justify-content-center" @click="openSection(item.label)">
@@ -36,7 +37,8 @@
           </div>
         </div>
         <div v-show="opened(item.label)">
-          <div v-for="(functie, key2) in gesorteerdeFuncties(item.items)" :key="key2" class="d-flex align-content-start mt-1 ml-1">
+          <div v-for="(functie, key2) in gesorteerdeFuncties(item.items)" :key="key2"
+               class="d-flex align-content-start mt-1 ml-1">
             <checkbox :binary="true" :id="functie.label" class="mr-2 ml-1" v-model="functie.activated"
                       @change="activeerFunctie(functie)"/>
             <label class="text-align-left" :for="item.label">{{ functie.label }}</label>
@@ -49,26 +51,13 @@
 
 <script>
 import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
+import {toRefs} from "@vue/reactivity";
+import FunctieFilterService from "@/services/leden/FunctieFilterService";
 
 export default {
   name: "FunctieSelect",
   components: {
     VerwijderCriteria
-  },
-
-  data() {
-    return {
-      toggleMenu: false,
-      alleFuncties: false,
-      selectedOption: [],
-      openSections: [],
-    }
-  },
-
-  created() {
-    if (this.criteria.activated) {
-      this.activeerAlleFuncties();
-    }
   },
 
   props: {
@@ -79,58 +68,34 @@ export default {
       type: String
     }
   },
-  computed: {
-    label() {
-      return "";
-    },
 
-    allesGeselecteerd() {
-      // todo checken op aantal === aantalfuncties
-      return this.criteria.activated;
-    }
+  setup(props) {
+    const {
+      state,
+      allesGeselecteerd,
+      label,
+      gesorteerdeFuncties,
+      opened,
+      openSection,
+      close,
+      activeerFunctie,
+      activeerAlleGroepFuncties,
+      activeerAlleFuncties
+    } = FunctieFilterService.functieFilterSpace(props);
 
-  },
-  methods: {
-    close() {
-      this.toggleMenu = false;
-    },
-    activeerAlleFuncties() {
-      this.emitter.emit('activeerAlleFuncties', {'criteria': this.criteria})
-    },
-    activeerFunctie(functie) {
-      this.emitter.emit('activeerFunctie', {'criteria': this.criteria, 'functie': functie})
-    },
-    activeerAlleGroepFuncties(groepering) {
-      this.emitter.emit('activeerAlleGroepFuncties', {'criteria': this.criteria, 'groepering': groepering})
-    },
-    opened(label) {
-      return this.openSections.includes(label);
-    },
-    openSection(label) {
-      let found = this.openSections.includes(label);
-
-      if (found) {
-        let index = this.openSections.indexOf(label);
-        this.openSections.splice(index, 1);
-      } else {
-        this.openSections.push(label);
-      }
-    },
-    gesorteerdeFuncties(items) {
-      return items.sort((a, b) => {
-        if (a.label < b.label) {
-          return -1;
-        }
-        if (a.label > b.label) {
-          return 1;
-        }
-        return 0
-      });
+    return {
+      ...toRefs(state),
+      state,
+      allesGeselecteerd,
+      label,
+      gesorteerdeFuncties,
+      opened,
+      openSection,
+      close,
+      activeerFunctie,
+      activeerAlleGroepFuncties,
+      activeerAlleFuncties
     }
   },
 }
 </script>
-
-<style scoped>
-
-</style>

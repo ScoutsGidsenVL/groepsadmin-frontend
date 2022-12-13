@@ -94,8 +94,6 @@ export default {
         crit.activated = true;
         this.setHuidigeFilterLabel('Huidige', huidigeFilter);
 
-        console.log(crit);
-
         if (!crit.multiValues && !(crit.criteriaSubKey === "verbonds" || crit.criteriaSubKey === "groepspecifiek")) {
             if (crit.multiplePossible) {
                 _.forEach(crit.items, function (value) {
