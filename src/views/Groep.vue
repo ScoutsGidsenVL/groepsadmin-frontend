@@ -61,7 +61,6 @@
 <script>
 import Algemeen from "@/components/groep/Algemeen";
 import BaseDropdown from "@/components/input/BaseDropdown";
-import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import Contacten from "@/components/groep/Contacten";
 import Lokalen from "@/components/groep/Lokalen";
 import SideMenu from "@/components/global/Menu";
@@ -69,12 +68,11 @@ import IngelogdLid from "@/components/lid/IngelogdLid";
 import GroepseigenFuncties from "@/components/groep/GroepseigenFuncties";
 import OpslaanMetTekst from "@/components/buttons/OpslaanMetTekst";
 import ConfirmDialog from "primevue/confirmdialog";
-import rechtenService from "@/services/rechten/rechtenService";
 import GroepseigenGegevens from "@/components/groep/GroepseigenGegevens";
-import RestService from "@/services/api/RestService";
 import Loader from "@/components/global/Loader";
-import store from "@/store";
 import Footer from "@/components/global/Footer";
+import GroepService from "@/services/groep/GroepService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "Groep",
@@ -93,209 +91,26 @@ export default {
     Loader
   },
 
-  data() {
+  setup() {
+    const {
+      state,
+      opslaan,
+      changeLadenStatus,
+      veranderGroep,
+      kanGroepWijzigen,
+      groepenLaden
+    } = GroepService.groepSpace();
+
     return {
-      selectedGroep: {},
-      groepenArray: [],
-      contactenLaden: false,
-      magFunctiesToevoegen: false,
-      changes: false,
-      watchable: false,
-      laden: false,
-      home: {icon: 'pi pi-home', to: '/dashboard'},
-      breadcrumbItems: [
-        {
-          label: 'groep'
-        },
-      ],
-    };
-  },
+      ...toRefs(state),
+      opslaan,
+      changeLadenStatus,
+      veranderGroep,
+      kanGroepWijzigen,
+      groepenLaden
+    }
+  }
 
-  watch: {
-    "selectedGroep.persoonsgegevens": {
-      handler: function () {
-        if (this.watchable) {
-          this.gewijzigdLid.persoonsgegevens = this.lid.persoonsgegevens;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "selectedGroep.vgagegevens": {
-      handler: function () {
-        if (this.watchable) {
-          this.gewijzigdLid.vgagegevens = this.lid.vgagegevens;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "selectedGroep.adressen": {
-      handler: function () {
-        if (this.watchable) {
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "selectedGroep.contacten": {
-      handler: function () {
-        if (this.watchable) {
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "selectedGroep.groepseigenFuncties": {
-      handler: function () {
-        if (this.watchable) {
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "selectedGroep.email": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep.website": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep.vrijeInfo": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep.rekeningnummer": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep.facturatieLeden": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep.facturatieLeiding": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-    "selectedGroep['publiek-inschrijven']": function () {
-      if (this.watchable) {
-        this.changes = true;
-      }
-    },
-  },
-
-  methods: {
-    opslaan() {
-    this.laden = true;
-      for (let i = 0; i < this.selectedGroep.groepseigenGegevens.length; i++) {
-        this.selectedGroep.groepseigenGegevens[i].sort = i;
-
-        if (this.selectedGroep.groepseigenGegevens[i].type !== 'lijst') {
-          delete this.selectedGroep.groepseigenGegevens[i].keuzes;
-        } else {
-          this.selectedGroep.groepseigenGegevens[i].keuzes.forEach((keuze, index) => {
-            if (!keuze) {
-              this.selectedGroep.groepseigenGegevens[i].keuzes.splice(index, 1);
-            }
-          })
-        }
-      }
-
-      RestService.updateGroep(this.selectedGroep)
-        .then(res => {
-          if (res.status === 200) {
-            this.laden = false
-            store.dispatch("getGroepen");
-            this.$toast.add({
-              severity: "success",
-              summary: "Wijzigingen",
-              detail: "Wijzigingen opgeslagen.",
-              life: 3000,
-            });
-          }
-        }).catch((error) => {
-        this.$toast.add({
-          severity: "warn",
-          summary: "Functie",
-          detail: error.response.data.beschrijving,
-          life: 8000,
-        });
-      }) .finally(() => {
-        this.laden = false;
-        this.changes = false;
-        this.$store.commit("setGroepenLaden", false);
-      })
-    },
-    changeLadenStatus() {
-      this.laden = !this.laden;
-    },
-
-    veranderGroep(groep) {
-      this.watchable = false;
-      this.selectedGroep = groep;
-      this.getContacten();
-      setTimeout(() => {
-        this.watchable = true
-      },2000)
-    },
-    getContacten() {
-      this.contactenLaden = true;
-      this.selectedGroep.groepsleiding = [];
-
-      if (this.selectedGroep && this.selectedGroep.contacten) {
-        this.selectedGroep.contacten.forEach((contact) => {
-          if (contact.oidFunctie === specialeFuncties.FV) {
-            this.selectedGroep.fv = contact;
-          } else if (contact.oidFunctie === specialeFuncties.VGA) {
-            this.selectedGroep.vga = contact;
-          } else {
-            this.selectedGroep.groepsleiding.push(contact);
-          }
-          this.contactenLaden = false;
-        });
-      } else {
-        this.contactenLaden = false;
-      }
-    },
-  },
-
-  mounted() {
-    this.selectedGroep = this.groepen[0];
-    this.getContacten();
-    this.groepen.forEach((groep) => {
-      this.groepenArray.push({
-        label: groep.naam + " - " + groep.id,
-        value: groep,
-      });
-    });
-    this.selectedGroep.publiekInschrijven = this.selectedGroep[
-      "publiek-inschrijven"
-      ];
-    setTimeout(() => {
-      this.watchable = true
-    }, 2000);
-  },
-
-  computed: {
-    groepenLaden() {
-      return this.$store.getters.groepenLaden;
-    },
-
-    groepen() {
-      return this.$store.getters.groepen;
-    },
-
-    kanGroepWijzigen() {
-      return rechtenService.kanWijzigen(this.selectedGroep);
-    },
-  },
 };
 </script>
 

@@ -162,8 +162,8 @@ export default {
     return apiClient().get(baseUrl + "groep/" + groep + "/ledenaantallen");
   },
 
-  pasFunctieAan(id) {
-    return apiClient().patch(baseUrl + "functie/" + id);
+  pasFunctieAan(id, functie) {
+    return apiClient().patch(baseUrl + "functie/" + id, functie);
   },
 
   updateGroep(groep) {
