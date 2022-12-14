@@ -2,10 +2,13 @@ import {reactive} from "@vue/reactivity";
 import {useConfirm} from "primevue/useconfirm";
 import rechtenService from "@/services/rechten/rechtenService";
 import {onUpdated} from "@vue/runtime-core";
+import {useStore} from "vuex";
 
 export default {
     adresSpace(props) {
         const confirm = useConfirm();
+        const store = useStore();
+        
         const state = reactive({
             adressen: props.modelValue.adressen,
             invalid: false,
@@ -60,7 +63,7 @@ export default {
         }
 
         const heeftToegang = (sectie) => {
-            return rechtenService.canBeShowed(props.modelValue, sectie);
+            return rechtenService.canBeShowed(store.getters.profiel, sectie);
         }
 
         const voegAdresToe = () => {

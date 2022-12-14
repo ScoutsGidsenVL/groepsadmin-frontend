@@ -15,11 +15,11 @@
           <div v-for="(grl, key) in groep.groepsleiding" :key="key">
             <i class="fas fa-user"></i><span class="ml-3">{{ grl.naam }}</span>
             <br />
-            <i class="fas fa-envelope"></i
-            ><span class="ml-3"
-          ><a class="mail-link" href="mailto:{{ grl.email }}">{{
+            <i class="fas fa-envelope">
+            <span class="ml-3"
+          ><a class="mail-link font font-normal" :href="'mailto:' + grl.email">{{
               grl.email
-            }}</a></span>
+            }}</a></span></i>
           </div>
         </div>
         <br/>
@@ -30,11 +30,11 @@
           <div>
             <i class="fas fa-user"></i><span class="ml-3">{{ groep.vga.naam }}</span>
             <br />
-            <i class="fas fa-envelope"></i
-            ><span class="ml-3"
-              ><a class="mail-link" href="mailto:{{ groep.vga.email }}">{{
+            <i class="fas fa-envelope">
+            <span class="ml-3"
+              ><a class="mail-link font font-normal" :href="'mailto:' + groep.vga.email">{{
                 groep.vga.email
-              }}</a></span>
+              }}</a></span></i>
           </div>
         </div>
         <br />
@@ -45,12 +45,10 @@
             ><span class="ml-3"
               >{{ groep.fv.naam }}</span>
             <br />
-            <i class="fas fa-envelope"></i
-            ><span class="ml-3"
-              ><a class="mail-link" href="mailto:{{ groep.fv.email }}">{{
+            <i class="fas fa-envelope"><span class="ml-3"
+              ><a class="mail-link font font-normal" :href="'mailto:' + groep.fv.email">{{
                 groep.fv.email
-              }}</a></span
-            >
+              }}</a></span></i>
           </div>
         </div>
       </template>

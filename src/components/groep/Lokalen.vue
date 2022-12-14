@@ -4,6 +4,13 @@
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span> Lokalen</span>
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded p-button-outlined mt-1 add-button"
+            @click="voegAdresToe"
+            title="Voeg adres toe"
+            v-if="kanGroepWijzigen"
+          />
         </div>
       </template>
       <template #content>
@@ -26,17 +33,14 @@
 <script>
 import GoogleMaps from "@/components/groep/GoogleMaps";
 import Adressen from "@/components/groep/Adressen";
+import LokalenService from "@/services/groep/LokalenService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "Lokalen",
   components: {
     Adressen,
     GoogleMaps,
-  },
-  data() {
-    return {
-      zichtbareMarker: "",
-    };
   },
   props: {
     groep: {
@@ -46,16 +50,23 @@ export default {
       type: Boolean
     }
   },
-  methods: {
-    toonMarker(index) {
-      this.zichtbareMarker = index;
-    },
-  },
-  computed: {
-    geselecteerdeGroep() {
-      return this.groep;
-    },
-  },
+  setup(props) {
+    const {
+      state,
+      toonMarker,
+      geselecteerdeGroep,
+      heeftToegang,
+      voegAdresToe
+    } = LokalenService.lokalenSpace(props);
+
+    return {
+      ...toRefs(state),
+      toonMarker,
+      geselecteerdeGroep,
+      heeftToegang,
+      voegAdresToe
+    }
+  }
 };
 </script>
 

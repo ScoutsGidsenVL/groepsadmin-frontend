@@ -54,11 +54,11 @@
 import Loader from "@/components/global/Loader";
 import DashboardBlock from "@/components/global/DashboardBlock";
 import Footer from "@/components/global/Footer";
-import rechtenService from "@/services/rechten/rechtenService";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
-import RestService from "@/services/api/RestService";
+import DashboardService from "@/services/dashboard/DashboardService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "Dashboard",
@@ -70,93 +70,19 @@ export default {
     ConfirmDialog,
     IngelogdLid
   },
-  data() {
-    return {
-      showLoader: false,
-      gebruiker: null,
-      snelNaarItems: [],
-      menuItems: [
-        {
-          label: "Mijn gegevens",
-          condition: true,
-          icon: "far fa-user",
-          link: "Profiel",
-          internal: true,
-        },
-        {
-          label: "Individuele steekkaart",
-          condition: true,
-          icon: "far fa-notes-medical",
-          link: "IndividueleSteekkaart",
-          internal: true,
-        },
-        {
-          label: "Communicatievoorkeuren",
-          condition: true,
-          icon: "far fa-satellite-dish",
-          link: "Communicatievoorkeuren",
-          internal: true,
-        },
-        {
-          label: "Leden",
-          condition: "ledenlijst",
-          icon: "far fa-users",
-          link: "Ledenlijst",
-          internal: true,
-        },
-        {
-          label: "Ledenaantallen",
-          condition: "groepen",
-          icon: "far fa-chart-area",
-          link: "Ledenaantallen",
-          internal: true,
-        },
-        {
-          label: "Groep",
-          condition: "groepen",
-          icon: "far fa-cogs",
-          link: "Groepsinstellingen",
-          internal: true,
-        },
-        {
-          label: "Lidaanvragen",
-          condition: "aanvragen",
-          icon: "far fa-address-book",
-          link: "Aanvragen",
-          internal: true,
-        },
-        // {
-        //   label: "Verzekeringen",
-        //   condition: true,
-        //   icon: "far fa-umbrella",
-        //   link: "https://vz.scoutsengidsenvlaanderen.be",
-        //   internal: false,
-        // },
-      ],
-    }
-  },
-  mounted() {
-    RestService.getWebsites()
-      .then(res => {
-        this.snelNaarItems = res.data.websites;
-      }).catch(error => {
-      console.log(error);
-      console.log('geen websites kunnen ophalen')
-    })
-  },
+  setup() {
 
-  computed: {
-    dashboardItems: function () {
-      return this.menuItems.filter(obj => {
-        if (obj.condition === "groepen") {
-          return rechtenService.hasAccessToGroepen();
-        }
-        return obj.condition === true || rechtenService.hasPermission(obj.condition);
-      });
-    },
-    naam: function () {
-      return this.$store.getters.profiel.vgagegevens.voornaam;
-    },
+    const {
+      state,
+      dashboardItems,
+      naam
+    } = DashboardService.dashboardSpace();
+
+    return {
+      ...toRefs(state),
+      dashboardItems,
+      naam
+    }
   }
 };
 </script>

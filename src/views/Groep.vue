@@ -293,7 +293,6 @@ export default {
     },
 
     kanGroepWijzigen() {
-      console.log(this.selectedGroep)
       return rechtenService.kanWijzigen(this.selectedGroep);
     },
   },
