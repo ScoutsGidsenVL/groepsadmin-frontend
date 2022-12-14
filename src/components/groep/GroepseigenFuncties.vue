@@ -39,120 +39,41 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import {toRefs} from "@vue/reactivity";
 import BaseInputGeig from "@/components/input/BaseInputGeig";
-import rechtenService from "@/services/rechten/rechtenService";
-import RestService from "@/services/api/RestService";
-import store from "@/store";
+import GroepseigenFunctieService from "@/services/groep/GroepseigenFunctieService";
 
 export default {
   name: "GroepseigenFuncties",
   components: {
     BaseInputGeig,
   },
+
   props: {
     modelValue: {
       type: Object,
     },
   },
-  methods: {
-    remove(index) {
-      let geif = this.groep.groepseigenFuncties[index];
-      let id = geif.id.substring(0, 11);
 
-      this.$confirm.require({
-        message: "Ben je zeker dat je de functie " + (geif.beschrijving ? geif.beschrijving : '') + " wil verwijderen?",
-        header: "Functie verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          if (id !== 'tempFunctie') {
-            RestService.verwijderFunctie(geif.id)
-              .then(res => {
-                if (res.status === 204) {
-                  this.groep.groepseigenFuncties.splice(index, 1);
-                  store.dispatch("getGroepen");
-                  this.$toast.add({
-                    severity: "success",
-                    summary: "Functie",
-                    detail: "Functie verwijderd.",
-                    life: 3000,
-                  });
-                }
-              }).catch((error) => {
-              if (error.response.status === 404) {
-                this.$toast.add({
-                  severity: "warn",
-                  summary: "Functie",
-                  detail: "Functie bestaat niet meer",
-                  life: 8000,
-                });
-              } else {
-                this.$toast.add({
-                  severity: "warn",
-                  summary: "Functie",
-                  detail: error.response.data.beschrijving,
-                  life: 8000,
-                });
-              }
-            })
-          } else {
-            this.groep.groepseigenFuncties.splice(index, 1);
-            this.$toast.add({
-              severity: "success",
-              summary: "Functie",
-              detail: "Functie verwijderd.",
-              life: 3000,
-            });
-          }
-        },
-        reject: () => {
-          this.$confirm.close();
-        },
-      });
-    },
-
-    voegGeifToe() {
-      let nieuweFunctie = {
-        id: 'tempFunctie' + Math.random(),
-        beschrijving: null,
-        groepen: [this.groep.groepsnummer]
-      };
-      this.groep.groepseigenFuncties.unshift(nieuweFunctie);
-    },
-    gesorteerdeFuncties(functies) {
-      return functies.sort((a, b) => {
-        if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {{
-          return 0;
-        }}
-        if (a.beschrijving < b.beschrijving) {
-          return -1;
-        }
-        if (a.beschrijving > b.beschrijving) {
-          return 1;
-        }
-        return 0;
-      })
-    }
-  },
-  computed: {
-    kanGroepWijzigen() {
-      return rechtenService.kanWijzigen(this.groep);
-    },
-    kanFunctieWijzigen() {
-      return rechtenService.kanGeFunctieWijzigen(this.groep);
-    }
-  },
   setup(props) {
-    const state = reactive({
-      groep: {},
-    });
 
-    onUpdated(() => {
-      state.groep = props.modelValue;
-    });
+    const {
+      state,
+      voegGeifToe,
+      remove,
+      gesorteerdeFuncties,
+      kanFunctieWijzigen,
+      kanGroepWijzigen
+    } = GroepseigenFunctieService.groepseigenFunctiesSpace(props)
 
-    return {...toRefs(state)};
+    return {
+      ...toRefs(state),
+      voegGeifToe,
+      remove,
+      gesorteerdeFuncties,
+      kanFunctieWijzigen,
+      kanGroepWijzigen
+    };
   }
 }
 </script>
