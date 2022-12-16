@@ -87,7 +87,7 @@ export default {
                 if (obj.condition === "groepen") {
                     return rechtenService.hasAccessToGroepen();
                 }
-                return obj.condition === true || rechtenService.hasPermission(obj.condition);
+                return obj.condition === true || rechtenService.hasPermission(obj.condition) || rechtenService.hasAccess(obj.condition);
             });
         })
 

@@ -84,6 +84,7 @@ export default {
   methods: {
     zoekGemeente() {
       RestService.zoekGemeente(this.zoekTerm).then((response) => {
+        this.gefilterdeGemeentes = [];
         this.gefilterdeGemeentes = response.data;
       });
     },

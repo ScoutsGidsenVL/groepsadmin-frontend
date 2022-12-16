@@ -156,7 +156,7 @@ export default {
         if (obj.condition === "groepen") {
           return rechtenService.hasAccessToGroepen();
         }
-        return obj.condition === true || rechtenService.hasPermission(obj.condition);
+        return obj.condition === true || rechtenService.hasPermission(obj.condition) || rechtenService.hasAccess(obj.condition);
       });
     },
     mobileMenuItems: function () {
@@ -165,7 +165,7 @@ export default {
         if (obj.condition === "groepen") {
           return rechtenService.hasAccessToGroepen();
         }
-        return obj.label !== 'Zoeken' || rechtenService.hasPermission(obj.condition);
+        return obj.label !== 'Zoeken' || rechtenService.hasPermission(obj.condition) || rechtenService.hasAccess(obj.condition);
       })
       mobileMenuItems.push({
         label: "Afmelden",

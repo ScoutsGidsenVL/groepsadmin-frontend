@@ -45,7 +45,7 @@ export default {
     },
     modelValue: {
       type: [Date, String],
-      default: new Date()
+      default: new Date(new Date().setFullYear(new Date().getFullYear() - 5))
     },
     disabled: {
       type: Boolean,

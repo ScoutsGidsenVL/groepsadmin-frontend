@@ -18,7 +18,7 @@
       <form @submit.prevent="opslaan" autocomplete="off">
         <div class="row lg:ml-8">
           <div class="col-12 col-lg-4">
-            <persoonlijk :model-value="lid" :nieuw-lid="true" ref="pers" :inschrijving="true"></persoonlijk>
+            <persoonlijk :model-value="lid" :nieuw-lid="true" :inschrijving="true"></persoonlijk>
           </div>
           <div class="col-12 col-lg-4">
             <div class="adressen-card mb-4">
@@ -40,8 +40,8 @@
                     v-model="lid.adres"
                     v-if="lid.adres.land === 'BE'"
                     @clearInvalidForm="clearInvalidForm('gemeente')"
-                    :invalidForm="invalidGemeente"
-                    error-message="Gelieve een gemeente in te vullen"
+                    :invalidForm="v.lid.adres.$dirty && v.lid.adres.gemeente.$invalid"
+                    :error-message="v.lid.adres.gemeente.required.$message"
                   />
                   <straat-zoek-auto-complete
                     :disabled="!lid.adres.postcode && !lid.adres.gemeente"
@@ -50,35 +50,31 @@
                     :value="lid.adres.straat"
                     v-if="lid.adres.land === 'BE'"
                     @clearInvalidForm="clearInvalidForm('straat')"
-                    :invalidForm="invalidStraat"
-                    error-message="Gelieve een straat in te vullen"
+                    :invalidForm="v.lid.adres.$dirty && v.lid.adres.straat.$invalid"
+                    :error-message="v.lid.adres.straat.required.$message"
                   />
                   <BaseInput
                     v-if="lid.adres && lid.adres.land !== 'BE'"
                     label="Postcode"
                     v-model="lid.adres.postcode"
                     type="text"
-                    @blur="checkPostcode"
-                    :invalid="invalidPostcode"
-                    error-message="Gelieve een postcode in te vullen"
+                    :invalid="v.lid.adres.$dirty && v.lid.adres.postcode.$invalid"
+                    :error-message="v.lid.adres.postcode.required.$message"
                   />
                   <BaseInput
                     v-if="lid.adres && lid.adres.land !== 'BE'"
                     label="Gemeente"
                     v-model="lid.adres.gemeente"
-                    type="text"
-                    @blur="checkGemeente"
-                    :invalid="invalidGemeente"
-                    error-message="Gelieve een gemeente in te vullen"
+                    :invalid="v.lid.adres.gemeente.$dirty && v.lid.adres.gemeente.$invalid"
+                    :error-message="v.lid.adres.gemeente.required.$message"
                   />
                   <BaseInput
                     v-if="lid.adres && lid.adres.land !== 'BE'"
                     label="Straat"
                     v-model="lid.adres.straat"
                     type="text"
-                    @blur="checkStraat"
-                    :invalid="invalidStraat"
-                    error-message="Gelieve een straat in te vullen"
+                    :invalid="v.lid.adres.straat.$dirty && v.lid.adres.straat.$invalid"
+                    :error-message="v.lid.adres.straat.required.$message"
                   />
                   <BaseInput
                     label="Nummer"
@@ -86,9 +82,8 @@
                     v-model="lid.adres.nummer"
                     :disabled="!lid.adres.straat"
                     type="text"
-                    @blur="checkNummer"
-                    :invalid="invalidNummer"
-                    error-message="Gelieve een nummer in te vullen"
+                    :invalid="v.lid.adres.nummer.$dirty && v.lid.adres.nummer.$invalid"
+                    :error-message="v.lid.adres.nummer.required.$message"
                   />
                   <BaseInput
                     label="Bus"
@@ -108,9 +103,9 @@
             ></groepseigen-gegevens>
           </div>
           <div class="col-12 col-lg-4">
-            <contacten v-model="lid" :title="'Contacten'" @checkValidVelden="check"></contacten>
+            <contacten v-model="lid" :title="'Contacten'"></contacten>
             <div class="d-flex justify-content-end">
-              <lid-worden :disabled="!changes || (invalidData || !isAdresValid)" @opslaan="opslaan"></lid-worden>
+              <lid-worden :disabled="!changes" @opslaan="opslaan"></lid-worden>
             </div>
           </div>
         </div>
@@ -124,56 +119,18 @@ import Persoonlijk from "@/components/lid/Persoonlijk";
 import GroepseigenGegevens from "@/components/aanvraag/GroepseigenGegevens";
 import Contacten from "@/components/aanvraag/Contacten";
 import Loader from "@/components/global/Loader";
-import RestService from "@/services/api/RestService";
 import LidWorden from "@/components/buttons/LidWorden";
-import useVuelidate from "@vuelidate/core";
 import BaseInput from "@/components/input/BaseInput";
 import GemeenteZoekAutoComplete from "@/components/aanvraag/GemeenteZoekAutoComplete";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import StraatZoekAutoComplete from "@/components/aanvraag/StraatZoekAutoComplete";
-import {computed, reactive, toRefs} from "@vue/reactivity";
-import {required} from "@vuelidate/validators";
+import {toRefs} from "@vue/reactivity";
+import InschrijvingsService from "@/services/inschrijvingsFormulier/InschrijvingsService";
 
 
 export default {
   name: "InschrijvingsFormulier",
-  setup() {
-    const state = reactive({
-      lid: {
-        adres: {
-          land: "BE",
-        },
-        email: "",
-        gebruikersnaam: "",
-        links: [],
-        persoonsgegevens: {
-          geslacht: "man"
-        },
-        vgagegevens: {},
-      },
-    });
-    const rules = computed(() => {
-      return {
-          adres: {
-            gemeente: {
-              required,
-            },
-            straat: {
-              required
-            },
-            postcode: {
-              required
-            },
-            nummer: {
-              required
-            }
-          }
-        }
-    })
-    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
-    return {...toRefs(state), v$};
 
-  },
   components: {
     Persoonlijk,
     Loader,
@@ -185,237 +142,24 @@ export default {
     GemeenteZoekAutoComplete,
     StraatZoekAutoComplete
   },
-  computed: {
-    invalidData() {
-      return this.v$.$invalid || this.$refs.pers.v$.$invalid
-    }
-  },
-  data() {
+
+  setup() {
+    const {
+      state,
+      v,
+      opslaan,
+      veranderLand,
+      clearInvalidForm,
+    } = InschrijvingsService.inschrijvingsSpace();
     return {
-      aanvraag: {
-        vgagegevens: {},
-        persoonsgegevens: {},
-      },
-      defaultLid: {
-        adres: {
-          land: "BE",
-        },
-        email: "",
-        gebruikersnaam: "",
-        links: [],
-        contacten: [],
-        persoonsgegevens: {
-          geslacht: "man"
-        },
-        vgagegevens: {
-          voornaam: "",
-          achternaam: "",
-        },
-      },
-      groepseigenVelden: {},
-      groep: null,
-      groepsnummer: null,
-      loading: false,
-      invalidGemeente: false,
-      invalidStraat: false,
-      invalidNummer: false,
-      invalidPostcode: false,
-      watchable: false,
-      changes: false,
-      landen: [
-        {label: "België", value: "BE"},
-        {label: "Duitsland", value: "DE"},
-        {label: "Frankrijk", value: "FR"},
-        {label: "Groot-Brittannië", value: "GB"},
-        {label: "Luxemburg", value: "LU"},
-        {label: "Nederland", value: "NL"},
-        {label: "Canada", value: "CA"},
-      ],
-    }
+      ...toRefs(state),
+      v,
+      opslaan,
+      veranderLand,
+      clearInvalidForm,
+    };
   },
 
-  watch: {
-    "lid.persoonsgegevens": {
-      handler() {
-        if (this.watchable) {
-          this.aanvraag.persoonsgegevens = this.lid.persoonsgegevens;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "lid.vgagegevens": {
-      handler() {
-        if (this.watchable) {
-          this.aanvraag.voornaam = this.lid.vgagegevens.voornaam;
-          this.aanvraag.achternaam = this.lid.vgagegevens.achternaam;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "lid.adres": {
-      handler: function () {
-        if (this.watchable) {
-          this.aanvraag.adres = this.lid.adres;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "lid.contacten": {
-      handler: function () {
-        if (this.watchable) {
-          this.aanvraag.contacten = this.lid.contacten;
-          this.changes = true;
-        }
-      },
-      deep: true,
-    },
-    "lid.email": {
-      handler: function () {
-        if (this.watchable) {
-          this.aanvraag.email = this.lid.email;
-          this.changes = true;
-        }
-      }
-    },
-    "lid.opmerkingen": {
-      handler: function () {
-        if (this.watchable) {
-          this.aanvraag.opmerkingen = this.lid.opmerkingen;
-          this.changes = true;
-        }
-      }
-    },
-  },
-
-  mounted() {
-    this.loading = true;
-    this.groepsnummer = this.$route.params.groep;
-    this.aanvraag.geboortedatum = new Date(2010, 10, 10);
-
-    if (this.groepsnummer) {
-      this.getGroepData();
-    }
-
-    setTimeout(() => {
-      this.lid = Object.assign({}, this.defaultLid);
-      this.voegAdresToe();
-    }, 1000);
-
-    setTimeout(() => {
-      this.watchable = true;
-      this.loading = false;
-    }, 2000);
-
-  },
-
-  methods: {
-    check() {
-      this.$refs.pers.v$.$commit();
-      this.v$.$touch();
-    },
-
-    opslaan() {
-      this.$refs.pers.v$.$commit();
-
-      this.checkStraat();
-      this.checkGemeente();
-      this.checkPostcode();
-      this.checkNummer();
-
-      this.v$.$touch();
-      if (this.v$.$invalid || this.$refs.pers.v$.$invalid || !this.isAdresValid()) {
-        this.$toast.add({
-          severity: "warn",
-          summary: "Wijzigingen",
-          detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
-          life: 3000,
-        });
-        return;
-      }
-
-      this.aanvraag.groepsEigenGegevens = this.groepseigenVelden;
-      this.aanvraag.groepsnummer = this.groepsnummer;
-      this.aanvraag.geboortedatum = new Date(this.aanvraag.geboortedatum).toISOString().slice(0, 10);
-      this.aanvraag.verminderdlidgeld = this.lid.vgagegevens.verminderdlidgeld;
-      this.aanvraag.persoonsgegevens.geslacht = this.lid.persoonsgegevens.geslacht;
-
-      console.log(this.aanvraag);
-
-      RestService.saveAanvraag(this.aanvraag)
-        .then(res => {
-          if (res.status === 204) {
-            this.$store.commit('setNaamKandidaatLid', this.aanvraag.voornaam)
-            this.$router.push({name: 'LidWordenVerstuurd', params: { groep: this.groepsnummer } })
-          }
-        })
-    },
-
-    veranderLand() {
-      this.lid.adres.postcode = "";
-      this.lid.adres.gemeente = "";
-      this.lid.adres.straat = "";
-      this.lid.adres.nummer = "";
-      this.lid.adres.bus = "";
-    },
-
-    voegAdresToe() {
-      this.lid.adres = {
-        land: "BE",
-      };
-    },
-
-    checkGemeente() {
-      this.invalidGemeente = !this.lid.adres.gemeente;
-    },
-
-    checkStraat() {
-      this.invalidStraat = !this.lid.adres.straat;
-    },
-
-    checkPostcode() {
-      this.invalidPostcode = !this.lid.adres.postcode;
-    },
-
-    checkNummer() {
-      this.invalidNummer = !this.lid.adres.nummer;
-    },
-
-    isAdresValid() {
-      return !this.invalidGemeente && !this.invalidStraat && !this.invalidNummer && !this.invalidPostcode
-    },
-
-    clearInvalidForm(type) {
-      if (type === 'gemeente') {
-        this.invalidGemeente = false;
-      } else {
-        this.invalidStraat = false;
-      }
-    },
-
-    getGroepData() {
-      RestService.getGroepOpNummer(this.groepsnummer)
-        .then(res => {
-          this.groep = res.data;
-          if (this.groep) {
-            RestService.getGroepseigenGegevens(this.groepsnummer)
-              .then(res => {
-                this.groepseigenVelden = res.data;
-              }).catch(error => {
-              this.loading = false;
-              console.log(error);
-            })
-          }
-          this.groepseigenVelden = res.data.groepseigenGegevens
-          this.loading = false;
-        }).catch(error => {
-        console.log(error);
-        this.loading = false;
-      })
-    }
-  },
 };
 </script>
 
