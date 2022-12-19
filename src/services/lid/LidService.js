@@ -62,7 +62,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.vgagegevens = state.lid.vgagegevens
-                    console.log(state.gewijzigdLid)
                 }
             },
             {deep: true})
@@ -73,7 +72,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.persoonsgegevens = state.lid.persoonsgegevens
-                    console.log(state.gewijzigdLid)
                 }
             }, {deep: true})
 
@@ -83,7 +81,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.functies = state.lid.functies
-                    console.log(state.gewijzigdLid)
                 }
             }, {deep: true})
 
@@ -93,7 +90,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.adressen = state.lid.adressen
-                    console.log(state.gewijzigdLid)
                 }
             }, {deep: true})
 
@@ -103,7 +99,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.contacten = state.lid.contacten
-                    console.log(state.gewijzigdLid)
                 }
             }, {deep: true})
 
@@ -113,7 +108,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden
-                    console.log(state.gewijzigdLid)
                 }
             }, {deep: true})
 
@@ -123,7 +117,6 @@ export default {
                 if (state.watchable && state.lid) {
                     state.changes = true;
                     state.gewijzigdLid.email = state.lid.email
-                    console.log(state.gewijzigdLid)
                 }
             })
 
@@ -225,6 +218,7 @@ export default {
         }
 
         const filterGroepsEigenVelden = () => {
+            console.log(state.lid.groepseigenVelden);
             state.groepseigenVelden = Object.fromEntries(Object.entries(state.lid.groepseigenVelden).filter(([key]) => state.lid.groepseigenVelden[key].schema.length > 0));
         }
 

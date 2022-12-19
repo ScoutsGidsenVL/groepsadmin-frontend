@@ -1,34 +1,50 @@
 <template>
-  <div class="bovenbalk" :class="!nieuwLid ? 'mb-8 mt--1' : ''">
-    <div class="d-flex justify-content-between">
-      <div class="lg:ml-4" v-if="!nieuwLid">
-        <h4 class="mt-4 sm:ml-4 lg:ml-0">{{ volledigeNaam }}</h4>
+  <div class="bovenbalk" :class="!nieuwLid ? 'mt--1' : ''">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="d-flex justify-content-between">
+          <div class="lg:ml-4" v-if="!nieuwLid">
+            <h4 class="mt-4 lg:ml-0">{{ volledigeNaam }}</h4>
+          </div>
+        </div>
+        <div class="d-flex justify-content-start mt--05" v-if="!nieuwLid">
+          <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
+        </div>
       </div>
-    </div>
-    <div class="d-flex justify-content-start mt--05" v-if="!nieuwLid">
-      <h6 class="mt-2 lg:ml-4">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</h6>
-    </div>
-    <div class="d-flex justify-content-end">
-      <div class="d-flex justify-content-evenly mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
-        <opslaan class="ml-2" :disabled="!changes" @click="opslaan"></opslaan>
-      </div>
-      <div class="top-menu d-flex justify-content-end align-content-center mt--15">
-        <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
-                class="sub-menu-button menu-button p-button-rounded"/>
-        <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
-          <template #item="{item}">
-            <div @click="gaNaar(item.link)">
-              <i :class="item.icon" class="lid-menu-item mr-2"><label
-                class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+      <div class="col-md-4">
+        <div class="row md:mt-4">
+          <div class="col-6 col-md-12">
+            <div class="d-flex sm:justify-content-start md:justify-content-end">
+              <div class="mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
+                <opslaan class="md:ml-2" :disabled="!changes" @click="opslaan"></opslaan>
+              </div>
+              <div class="top-menu d-flex justify-content-end align-content-center mt--15">
+                <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                        class="sub-menu-button menu-button p-button-rounded"/>
+                <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
+                  <template #item="{item}">
+                    <div @click="gaNaar(item.link)">
+                      <i :class="item.icon" class="lid-menu-item mr-2"><label
+                        class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+                    </div>
+                  </template>
+                </Menu>
+              </div>
             </div>
-          </template>
-        </Menu>
-      </div>
-    </div>
-    <div class="d-flex justify-content-start ml-4 align-content-center position-absolute" :class="kanOpslaan ? 'mt--25' : 'mt--15'" v-if="!nieuwLid">
-      <div class="navigate-buttons">
-        <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid" class="opslaan-button" v-if="legeLedenLijst"/>
-        <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button" title="volgend lid" v-if="legeLedenLijst"/>
+          </div>
+          <div class="col-6 col-md-12 mt--05" v-if="!nieuwLid">
+            <div class="d-flex justify-content-end">
+
+              <div class="navigate-buttons mt-2">
+                <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid"
+                        class="opslaan-button" v-if="legeLedenLijst"/>
+                <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button"
+                        title="volgend lid" v-if="legeLedenLijst"/>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -153,7 +169,7 @@ export default {
         index--;
       }
       this.$emit('disableWatchable');
-      this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
+      this.$router.push({name: "Lid", params: {id: this.$store.getters.leden[index]}})
     },
 
     volgendLid() {
@@ -164,7 +180,7 @@ export default {
         index++;
       }
       this.$emit('disableWatchable');
-      this.$router.push({ name: "Lid", params: { id: this.$store.getters.leden[index] } })
+      this.$router.push({name: "Lid", params: {id: this.$store.getters.leden[index]}})
     },
 
     opslaan() {
