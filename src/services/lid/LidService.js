@@ -149,7 +149,6 @@ export default {
                 if (id === "profiel") {
                     state.eigenProfiel = true;
                     store.commit("setProfiel", res.data);
-                    state.loadingLid = false;
                 }
                 sorteerFuncties();
                 filterGroepsEigenVelden();
@@ -165,6 +164,8 @@ export default {
                         router.push({name: 'Ledenlijst'})
                     }, 2000)
                 }
+            }).finally(() => {
+                state.loadingLid = false;
             })
         }
 
@@ -172,11 +173,8 @@ export default {
             store.commit("setGroepenLaden", true);
             let ongesorteerdeFuncties = {};
             let functies = [];
-            if (state.eigenProfiel) {
-                functies = store.getters.profiel.functies;
-            } else {
-                functies = state.lid.functies;
-            }
+            functies = state.lid.functies;
+
             functies.forEach((functie) => {
                 if (!(functie.groep in ongesorteerdeFuncties)) {
                     ongesorteerdeFuncties[functie.groep] = [];
@@ -223,7 +221,6 @@ export default {
 
         const stopAlleFuncties = () => {
             confirm.require({
-                group: 'lid',
                 message:
                     state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
                     " <br/>" +
@@ -281,7 +278,6 @@ export default {
                             life: 3000,
                         });
                     state.changes = false;
-                    sorteerFuncties();
                 }).catch(error => {
                 toast.add({
                     severity: "warn",
@@ -291,7 +287,7 @@ export default {
                 });
             }).finally(() => {
                 state.changes = false;
-                state.loadingLid = false;
+                getLid(state.lid.id);
             })
         }
 
