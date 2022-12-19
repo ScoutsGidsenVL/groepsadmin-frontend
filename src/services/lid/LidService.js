@@ -218,7 +218,6 @@ export default {
         }
 
         const filterGroepsEigenVelden = () => {
-            console.log(state.lid.groepseigenVelden);
             state.groepseigenVelden = Object.fromEntries(Object.entries(state.lid.groepseigenVelden).filter(([key]) => state.lid.groepseigenVelden[key].schema.length > 0));
         }
 
@@ -400,7 +399,8 @@ export default {
             v,
             opslaan,
             stopAlleFuncties,
-            updateFuncties
+            updateFuncties,
+            resetWatchable
         }
     }
 
