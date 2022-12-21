@@ -11,7 +11,7 @@
       <div class="hidden lg:block lg:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 w-50"/>
       </div>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-8" @opslaan="opslaan" :eigenProfiel="false"
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 md:mt-10" @opslaan="opslaan" :eigenProfiel="false"
                       :nieuwLid="true" :changes="changes"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
@@ -25,7 +25,7 @@
               ></groepseigen-gegevens>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
+              <adressen v-model="lid" :title="'Adressen'"></adressen>
               <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
 
             </div>
@@ -53,7 +53,7 @@ import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import Adressen from "@/components/lid/Adressen";
 import Loader from "@/components/global/Loader";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import ConfirmDialog from "primevue/confirmdialog";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import LidToevoegenService from "@/services/lid/LidToevoegenService";

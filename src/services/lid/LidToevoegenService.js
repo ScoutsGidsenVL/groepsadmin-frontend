@@ -1,12 +1,14 @@
 import {reactive} from "@vue/reactivity";
 import {watch, onMounted} from "vue";
 import {useVuelidate} from "@vuelidate/core";
-import {onBeforeRouteLeave} from "vue-router";
+import {onBeforeRouteLeave, useRouter} from "vue-router";
 import useEmitter from "@/services/utils/useEmitter";
 import {useToast} from "primevue/usetoast";
 import {useStore} from "vuex";
 import rechtenService from "@/services/rechten/rechtenService";
 import RestService from "@/services/api/RestService";
+let _ = require('lodash');
+
 
 export default {
     lidToevoegenSpace() {
@@ -14,6 +16,7 @@ export default {
         const emitter = useEmitter();
         const toast = useToast();
         const store = useStore();
+        const router = useRouter();
 
         const state = reactive({
             home: {icon: 'pi pi-home', to: '/dashboard'},
@@ -70,6 +73,12 @@ export default {
             } else if (store.getters.broerZusLid && Object.keys(store.getters.broerZusLid).length !== 0) {
                 state.lid = store.getters.broerZusLid;
             }
+
+            if (state.lid.adressen.length > 0) {
+                state.lid.adressen[0].postadres = true;
+            }
+
+
             setTimeout(() => {
                 state.watchable = true
             }, 1500);
@@ -141,6 +150,45 @@ export default {
         // }
 
         const opslaan = () => {
+            state.loadingLid = true;
+
+            let counter = 0;
+            _.forEach(state.lid.adressen, function (adres) {
+                counter++;
+                _.forEach(state.lid.contacten, function (contact) {
+                    if (adres.straat === contact.adres.straat &&
+                        adres.nummer === contact.adres.nummer &&
+                        adres.postcode === contact.adres.postcode &&
+                        adres.gemeente === contact.adres.gemeente ) {
+                        adres.id = 'tempadres_' + counter;
+                        contact.adres = adres.id;
+                        contact.id = 'tempcontact_' + counter
+                    } else if (adres.id === contact.adres){
+                        adres.id = 'tempadres_' + counter;
+                        contact.adres = adres.id;
+                    }
+                })
+            })
+
+            _.forEach(state.lid.adressen, function (adres) {
+                if (adres.id.length > 28) {
+                    adres.id = 'tempadres';
+                }
+            })
+
+            _.forEach(state.lid.contacten, function (contact) {
+                if (contact.id.length > 28) {
+                    contact.id = 'tempcontact';
+                    contact.adressen = null;
+                }
+            })
+
+            if (!state.lid.vgagegevens.beperking) {
+                state.lid.vgagegevens.beperking = false;
+            }
+
+            state.lid.verbondsgegevens = null;
+
             v.value.$touch();
             if (v.value.$invalid) {
                 state.changes = false;
@@ -150,8 +198,21 @@ export default {
                     detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
                     life: 3000,
                 });
-                return
+                state.loadingLid = false;
+                return;
             }
+
+            if (!state.lid.functies || (state.lid.functies && state.lid.functies.length === 0)) {
+                toast.add({
+                    severity: "warn",
+                    summary: "Wijzigingen",
+                    detail: "Kan nog niet opslaan. Je moet een functie toekennen.",
+                    life: 3000,
+                });
+                state.loadingLid = false;
+                return;
+            }
+
             RestService.saveNieuwLid(state.lid).then(res => {
                 if (res.status === 201) {
                     toast.add({
@@ -161,11 +222,24 @@ export default {
                         life: 3000,
                     });
                     state.changes = false;
+                    RestService.verwijderAanvraag(state.lid.id).then(res => {
+                        if (res.status === 200){
+                            router.push({name: "Lid", params: { id: res.data.id }});
+                        }
+                    }).finally(() => {
+                        router.push({name: "Lid", params: {id: res.data.id}});
+                    });
                 }
             }).catch(error => {
-                console.log(error);
+                toast.add({
+                    severity: "warn",
+                    summary: error.response.data.titel,
+                    detail: error.response.data.beschrijving,
+                    life: 3000,
+                });
             }).finally(() => {
                 state.changes = false;
+                state.loadingLid = false;
             })
             store.commit('setGoedTeKeurenLid', null)
             store.commit('setBroerZusLid', null)
