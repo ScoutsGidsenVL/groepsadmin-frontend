@@ -49,7 +49,6 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted geslacht')
     if (this.value) {
       this.selectedOption = this.value;
     } else {

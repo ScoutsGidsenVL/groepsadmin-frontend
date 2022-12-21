@@ -138,7 +138,6 @@ export default {
     });
 
     const voegContactToe = () => {
-      console.log(state.adressen);
       // Wanneer er geen adressen bestaan mag er geen contact toegevoegd kunnen worden
       if (state.adressen && state.adressen.length > 0) {
         let nieuwContact = {

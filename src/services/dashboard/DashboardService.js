@@ -122,7 +122,6 @@ export default {
                 } else if (link === "IndividueleSteekkaart") {
                     router.push({name: link, params: {id: this.$store.getters.profiel.id }});
                 } else {
-                    console.log(link)
                     router.push({name: link});
                 }
                 this.activeMenu = this.title;

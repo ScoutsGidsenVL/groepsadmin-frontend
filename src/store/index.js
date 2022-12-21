@@ -248,7 +248,6 @@ export default createStore({
                             }
                         }
                     })
-                    console.log(getters.leden.length);
                 })
         }
     },

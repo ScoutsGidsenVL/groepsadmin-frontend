@@ -95,7 +95,6 @@ export default {
     },
   },
   mounted() {
-    console.log('mounted leeftijd')
     this.criteria.leeftijdOpDatum.values.forEach((value) => {
       this.leeftijdOpDatumOptions.push({label: value[0], value: value[1]})
     })

@@ -74,7 +74,6 @@ export default {
         }
 
         const actieveGroepen = computed(() => {
-            console.log(props.modelValue);
             return Object.fromEntries(Object.entries(props.modelValue).filter(([key]) => props.modelValue[key].active));
         })
 

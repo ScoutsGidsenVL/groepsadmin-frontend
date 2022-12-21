@@ -102,9 +102,7 @@ export default {
     activeerKolom(kolommen, geselecteerdeKolom) {
         kolommen.forEach((kolom) => {
             if (kolom.id === geselecteerdeKolom.id) {
-                console.log(kolom);
                 kolom.isLoaded = true;
-                console.log(kolom);
             }
         })
     }

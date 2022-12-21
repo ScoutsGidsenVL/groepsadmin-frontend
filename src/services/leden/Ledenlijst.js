@@ -432,8 +432,6 @@ export default {
         }
 
         const activeerFunctie = (criteria, functie) => {
-            console.log(criteria)
-            console.log(functie)
             if (!state.huidigeFilter.criteria[criteria.criteriaKey]) {
                 state.huidigeFilter.criteria[criteria.criteriaKey] = [];
             }

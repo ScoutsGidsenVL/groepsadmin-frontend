@@ -188,7 +188,6 @@ export default {
         }
 
         const kanGroepWijzigen = computed(() => {
-            console.log(rechtenService.kanWijzigen(state.selectedGroep));
             return rechtenService.kanWijzigen(state.selectedGroep);
         })
 

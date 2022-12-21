@@ -702,7 +702,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
           this.error = true;
           this.$toast.add({
             severity: "error",

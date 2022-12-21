@@ -206,8 +206,6 @@ export default {
   },
   methods: {
     formatNumber(index, value) {
-      console.log(index)
-      console.log(value)
       this.contacten[index].gsm = Telefoonnummer.formatNumber(value)
     },
 

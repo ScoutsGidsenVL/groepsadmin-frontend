@@ -162,7 +162,6 @@ export default {
             }]
         };
         _.forEach(this.sortedKeys(ledenaantallenData.ledenPerLeeftijd), function (keySoort, index) {
-            console.log(keySoort)
             let values = _.fill(new Array(alleJarenUniek.length), 0);
             _.forEach(ledenaantallenData.ledenPerLeeftijd[keySoort], function (valueAantal, keyJaar) {
                 values[alleJarenUniek.indexOf(keyJaar)] = valueAantal;
