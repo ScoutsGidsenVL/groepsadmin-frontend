@@ -3,7 +3,6 @@ import apiConfig from "@/services/api/ApiConfig";
 import apiClientCsv from "@/services/api/ApiClientCsv";
 import apiClientPdf from "@/services/api/ApiClientPdf";
 import apiClientMail from "@/services/api/ApiClientMail";
-import axios from "axios";
 
 const backendUrl = apiConfig().host;
 let baseUrl = "";
@@ -139,7 +138,7 @@ export default {
   },
 
   saveNieuwLid(lid) {
-    return apiClient().post(baseUrl + "lid", lid + "?bevestig=" + true);
+    return apiClient().post(baseUrl + "lid?bevestig=" + true, lid);
   },
 
   getKolomType() {
@@ -178,8 +177,8 @@ export default {
     return apiClient().patch(baseUrl + "lid/" + id + "/steekkaart", gegevens);
   },
 
-  verwijderAanvraag(link) {
-    return axios.delete(link.href);
+  verwijderAanvraag(id) {
+    return apiClient().delete(baseUrl + "lid/aanvraag/" + id + "?aanvaard=ja");
   },
 
   root() {
