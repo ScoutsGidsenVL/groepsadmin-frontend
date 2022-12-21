@@ -146,11 +146,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     // Als gebruiker geen toegang heeft dan redirecten naar dashboard
-    console.log(to.meta.requiresAuth);
-    console.log(to.meta.hasAccessTo);
-    console.log(rechtenService.hasAccessToGroepen())
-    console.log(rechtenService.hasPermission(to.meta.hasAccessTo))
-
     if (to.meta.requiresAuth) {
         if (to.meta.hasAccessTo === 'groepen' && rechtenService.hasAccessToGroepen()) {
             next();
