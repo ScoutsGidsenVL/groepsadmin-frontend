@@ -19,14 +19,17 @@ const routes = [
         path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
-        meta: {isAuthorized: true}
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/email/ledenlijst",
         name: "Mail",
         component: Mail,
         meta: {
-            isAuthorized: rechtenService.hasAccess("ledenlijst")
+            requiresAuth: true,
+            hasAccessTo: "ledenlijst"
         }
     },
     {
@@ -34,7 +37,8 @@ const routes = [
         name: "Etiket",
         component: Etiketten,
         meta: {
-            isAuthorized: rechtenService.hasAccess("ledenlijst")
+            requiresAuth: true,
+            hasAccessTo: "ledenlijst"
         }
     },
     {
@@ -42,22 +46,26 @@ const routes = [
         name: "Ledenlijst",
         component: Ledenlijst,
         meta: {
-            isAuthorized: rechtenService.hasAccess("ledenlijst")
+            requiresAuth: true,
+            hasAccessTo: "ledenlijst"
         }
     },
     {
         path: "/ledenaantallen",
         name: "Ledenaantallen",
         component: Ledenaantallen,
-        meta: {isAuthorized: true}
+        meta: {
+            requiresAuth: true,
+            hasAccessTo: "groepen"
+        }
     },
     {
         path: "/groepsinstellingen",
         name: "Groepsinstellingen",
         component: Groep,
         meta: {
-            isAuthorized: rechtenService.hasAccess("groepen")
-
+            requiresAuth: true,
+            hasAccessTo: "groepen"
         }
     },
     {
@@ -65,7 +73,9 @@ const routes = [
         name: "Aanvragen",
         component: Aanvragen,
         meta: {
-            isAuthorized: rechtenService.hasAccess("aanvragen")
+            requiresAuth: true,
+            hasAccessTo: "aanvragen"
+
         }
 
     },
@@ -74,7 +84,8 @@ const routes = [
         name: "lidToevoegen",
         component: LidToevoegen,
         meta: {
-            isAuthorized: rechtenService.hasAccess("nieuw lid")
+            requiresAuth: true,
+            hasAccessTo: "nieuw lid"
         }
     },
     {
@@ -82,7 +93,7 @@ const routes = [
         name: "Lid",
         component: Lid,
         meta: {
-            isAuthorized: true
+            requiresAuth: false
         }
     },
     {
@@ -90,7 +101,7 @@ const routes = [
         name: "LidWorden",
         component: InschrijvingsFormulier,
         meta: {
-            isAuthorized: true
+            requiresAuth: false
         }
     },
     {
@@ -98,7 +109,7 @@ const routes = [
         name: "LidWordenVerstuurd",
         component: InschrijvingsFormulierVerstuurd,
         meta: {
-            isAuthorized: true
+            requiresAuth: false
         }
     },
     {
@@ -111,13 +122,15 @@ const routes = [
         path: "/lid/individuelesteekkaart/:id",
         name: "IndividueleSteekkaart",
         component: IndividueleSteekkaart,
-        meta: {isAuthorized: true}
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/lid/communicatievoorkeuren",
         name: "Communicatievoorkeuren",
         component: Communicatievoorkeuren,
-        meta: {isAuthorized: true}
+        meta: {requiresAuth: false}
     },
     {
         path: "/groepsadmin/client/",
@@ -133,10 +146,21 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     // Als gebruiker geen toegang heeft dan redirecten naar dashboard
-    if (!to.meta.isAuthorized) {
-        next({
-            name: "Dashboard",
-        })
+    console.log(to.meta.requiresAuth);
+    console.log(to.meta.hasAccessTo);
+    console.log(rechtenService.hasAccessToGroepen())
+    console.log(rechtenService.hasPermission(to.meta.hasAccessTo))
+
+    if (to.meta.requiresAuth) {
+        if (to.meta.hasAccessTo === 'groepen' && rechtenService.hasAccessToGroepen()) {
+            next();
+        } else if (to.meta.hasAccessTo !== 'groepen' && rechtenService.hasAccess(to.meta.hasAccessTo)) {
+            next();
+        } else {
+            next({
+                name: "Dashboard",
+            })
+        }
     } else {
         next()
     }
