@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import DashboardService from "@/services/dashboard/DashboardService";
+
 export default {
   name: "DashboardBlock",
   props: {
@@ -30,22 +32,14 @@ export default {
       type: Boolean
     }
   },
-  methods: {
-    goto(link) {
-      top.window.onbeforeunload = null;
-      if (!this.internal) {
-        window.location.href = link;
-      } else {
-        if (link === "Profiel") {
-          this.$router.push({name: "Lid", params: {id: "profiel"}});
-        } else if (link === "IndividueleSteekkaart") {
-          this.$router.push({name: link, params: {id: this.$store.getters.profiel.id }});
-        } else {
-          this.$router.push({name: link});
-        }
-        this.activeMenu = this.title;
-      }
-    },
+  setup(props) {
+    const {
+      goto
+    } = DashboardService.dashBoardBlockSpace(props);
+
+    return {
+      goto
+    }
   }
 }
 </script>

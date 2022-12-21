@@ -3,6 +3,7 @@ import {computed, onMounted} from "vue";
 import RestService from "@/services/api/RestService";
 import rechtenService from "@/services/rechten/rechtenService";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 export default {
 
@@ -92,7 +93,11 @@ export default {
         })
 
         const naam = computed(() => {
-            return store.getters.profiel.vgagegevens.voornaam;
+            if (store.getters.profiel) {
+                return store.getters.profiel.vgagegevens.voornaam;
+            } else {
+                return "";
+            }
         })
 
 
@@ -101,6 +106,31 @@ export default {
             dashboardItems,
             naam
         }
-    }
+    },
 
+    dashBoardBlockSpace(props) {
+
+        const router = useRouter();
+
+        const goto = (link) => {
+            top.window.onbeforeunload = null;
+            if (!props.internal) {
+                window.location.href = link;
+            } else {
+                if (link === "Profiel") {
+                    router.push({name: "Lid", params: {id: "profiel"}});
+                } else if (link === "IndividueleSteekkaart") {
+                    router.push({name: link, params: {id: this.$store.getters.profiel.id }});
+                } else {
+                    console.log(link)
+                    router.push({name: link});
+                }
+                this.activeMenu = this.title;
+            }
+        }
+
+        return {
+            goto
+        }
+    }
 }
