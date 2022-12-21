@@ -300,7 +300,7 @@ export default {
             }
         }
 
-        emitter.on('changeGeg', (event) => {
+        emitter.on("changeGeg", (event) => {
             state.changes = true;
             changeGeg(event.veld, event.waarde, event.groep);
         })

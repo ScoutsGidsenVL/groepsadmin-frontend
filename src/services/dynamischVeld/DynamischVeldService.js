@@ -1,10 +1,10 @@
-import mitt from "mitt";
 import {reactive} from "@vue/reactivity";
+import useEmitter from "@/services/utils/useEmitter";
 
 export default {
 
     dynamischVeldSpace(props) {
-        const emitter = mitt();
+        const emitter = useEmitter()
 
         const state = reactive({
             schema: props.veld,

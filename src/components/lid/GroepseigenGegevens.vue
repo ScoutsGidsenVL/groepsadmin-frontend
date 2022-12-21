@@ -23,7 +23,6 @@
               :veld="gegVelden[index].schema"
               :model-value="gegVelden[index].waarden"
               :groepIndex="index"
-              @changeValue="changeValue"
               class="groepseigengegevens"
             ></dynamisch-veld>
           </accordionTab>
@@ -51,6 +50,7 @@ export default {
       type: Object, Array
     },
   },
+
   computed: {
     groepenLaden() {
       return this.$store.getters.groepenLaden;
@@ -81,6 +81,11 @@ export default {
         }
       }
     },
+    changeValue(event) {
+      console.log(event);
+
+    },
+
     checkGroepsEigenGegevens() {
       return true;
     }

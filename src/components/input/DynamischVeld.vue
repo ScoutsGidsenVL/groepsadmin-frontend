@@ -4,7 +4,7 @@
       <BaseInput
         v-if="veld.type === 'tekst'"
         v-model="waarde[veld.id]"
-        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
         @keyup="changeValue(veld.id, waarde[veld.id])"
@@ -17,7 +17,7 @@
       <BaseCheckbox
         v-if="veld.type === 'vinkje'"
         :model-value="isChecked(veld.id)"
-        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
         @keyup="changeValue(veld.id, waarde[veld.id])"
@@ -28,7 +28,7 @@
       <BaseDropdown
         v-if="veld.type === 'lijst'"
         v-model="waarde[veld.id]"
-        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
         :label="veld.label"
         :beschrijving="veld.beschrijving"
         @keyup="changeValue(veld.id, waarde[veld.id])"
@@ -41,7 +41,7 @@
         v-if="veld.type === 'tekst_meerdere_lijnen'"
         v-model="waarde[veld.id]"
         :beschrijving="veld.beschrijving"
-        :disabled="!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen"
+        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
         :label="veld.label"
         @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
@@ -79,6 +79,14 @@ export default {
     errors: {
       type: Object,
     },
+    steekkaart: {
+      default: false,
+      type: Boolean
+    },
+    eigenProfiel: {
+      default: false,
+      type: Boolean
+    }
   },
 
   setup(props) {
