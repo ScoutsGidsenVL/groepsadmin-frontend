@@ -124,20 +124,26 @@ export default {
       defaultLid: null,
     }
   },
+
   created() {
-    this.isLoadingAanvragen = true;
-    RestService.getAanvragen()
-      .then(res => {
-        this.aanvragen = res.data.aanvragen;
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(() => {
-        this.isLoadingAanvragen = false;
-      })
+    this.getAanvragen();
   },
+
   methods: {
+    getAanvragen() {
+      this.isLoadingAanvragen = true;
+      RestService.getAanvragen()
+        .then(res => {
+          this.aanvragen = res.data.aanvragen;
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .finally(() => {
+          this.isLoadingAanvragen = false;
+        })
+    },
+
     collapseAll() {
       this.expandedRows = null;
       this.openDetails = false;
@@ -204,37 +210,36 @@ export default {
       this.selectedAanvraag = null;
     },
     bevestigMail() {
-      this.deleteAanvraag("afkeurenMetMail");
+      this.deleteAanvraag(true);
     },
     bevestigGeenMail() {
-      this.deleteAanvraag("afkeurenZonderMail");
+      this.deleteAanvraag(false);
     },
-    deleteAanvraag(type) {
+    deleteAanvraag(mail) {
       this.isLoadingAanvragen = true;
-      this.selectedAanvraag.links.forEach(link => {
-        if (link.rel === type) {
-          RestService.verwijderAanvraag(link)
-            .then(() => {
-              this.$toast.add({
-                severity: "success",
-                summary: "Wijzigingen",
-                detail: "Lidaanvraag is verwijderd",
-                life: 3000,
-              });
-            })
-            .catch(error => {
-              this.$toast.add({
-                severity: "error",
-                summary: "Wijzigingen",
-                detail: error.message,
-                life: 8000,
-              });
-            })
-            .finally(() => {
-              this.isLoadingAanvragen = false;
-            })
-        }
-      })
+      RestService.verwijderAanvraag(this.selectedAanvraag.id, mail)
+        .then(() => {
+          this.confirmDialog = false;
+          this.confirmMailingDialog = false;
+          this.getAanvragen();
+          this.$toast.add({
+            severity: "success",
+            summary: "Wijzigingen",
+            detail: "Lidaanvraag is verwijderd",
+            life: 3000,
+          });
+        })
+        .catch(error => {
+          this.$toast.add({
+            severity: "error",
+            summary: "Wijzigingen",
+            detail: error.message,
+            life: 8000,
+          });
+        })
+        .finally(() => {
+          this.isLoadingAanvragen = false;
+        })
     }
   }
 }

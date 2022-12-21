@@ -181,6 +181,10 @@ export default {
     return apiClient().delete(baseUrl + "lid/aanvraag/" + id + "?aanvaard=ja");
   },
 
+  verwijderAanvraagMail(id, mail) {
+    return apiClient().delete(baseUrl + "lid/aanvraag/" + id + "?aanvaard=nee&sendMail = " + mail);
+  },
+
   root() {
     return apiClient().get(baseUrl);
   },

@@ -9,22 +9,19 @@
     <div class="confirmation-content">
       <span v-html="message"></span>
     </div>
-    <div>
-
-    </div>
     <template #footer>
       <Button
         label="Nee"
         icon="pi pi-check"
         @click="annuleer"
-        class="p-button-text cancel-button"
+        class="p-button-text reject-button"
         autofocus
       />
       <Button
         label="Ja"
         icon="pi pi-times"
         @click="bevestig"
-        class="p-button-text accept-button"
+        class="p-button-text approve-button"
       />
     </template>
   </Dialog>
