@@ -74,7 +74,11 @@ export default {
         return groep.naam + " - " + groepsnummer;
       } else {
         groep = this.$store.getters.inactieveGroepByNummer(groepsnummer);
-        return groep.naam + " - " + groepsnummer;
+        if (groep) {
+          return groep.naam + " - " + groepsnummer;
+        } else {
+          return groepsnummer
+        }
       }
     },
     checkGroepsEigenGegevens() {
