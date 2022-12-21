@@ -22,13 +22,15 @@ export default {
     },
 
     hasPermission: function (sectie) {
-        let patchObject = store.getters.profiel.links.find(obj => {
-            return obj.method === "PATCH"
-        });
-        if (patchObject) {
-            return patchObject.secties.includes(sectie);
+        if (store.getters.profiel) {
+            let patchObject = store.getters.profiel.links.find(obj => {
+                return obj.method === "PATCH"
+            });
+            if (patchObject) {
+                return patchObject.secties.includes(sectie);
+            }
+            return false;
         }
-        return false;
     },
 
     kanWijzigen: function (obj) {
