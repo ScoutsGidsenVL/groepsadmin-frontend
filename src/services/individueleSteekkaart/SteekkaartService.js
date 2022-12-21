@@ -1,20 +1,20 @@
 import {reactive} from "@vue/reactivity";
 import {onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
-import useEmitter from "@/services/utils/useEmitter";
 import {onBeforeRouteLeave, useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {useToast} from "primevue/usetoast";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import {useConfirm} from "primevue/useconfirm";
 
 export default {
 
     steekkaartSpace() {
-        const emitter = useEmitter();
         const route = useRoute();
         const store = useStore();
         const toast = useToast();
         const router = useRouter();
+        const confirm = useConfirm();
 
         const state = reactive({
             id: "",
@@ -41,16 +41,13 @@ export default {
         })
 
         onMounted(() => {
-            emitter.on('changeGeg', () => {
-                state.changes = true;
-            })
             state.id = route.params.id;
             state.isLoadingGegevens = true;
             RestService.getIndividueleSteekkaart(state.id)
                 .then((response) => {
                     state.steekkaartWaarden = response.data.gegevens.waarden;
                     state.layout = response.data.gegevens.schema;
-                    if (state.id === store.getters.profiel.id) {
+                    if (state.id === store.getters.profiel.id || state.id === "profiel" ) {
                         state.eigenProfiel = true;
                     }
                     sorteer();
@@ -61,7 +58,6 @@ export default {
                     state.isLoadingGegevens = false;
                 })
                 .catch(error => {
-                    console.log(error);
                     if (error.response.status === 403) {
                         toast.add({
                             severity: "error",

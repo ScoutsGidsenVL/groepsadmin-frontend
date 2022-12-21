@@ -57,6 +57,8 @@
                       :veld="groep"
                       :errors="errors"
                       @changeValue="changeValue"
+                      :steekkaart="true"
+                      :eigenProfiel="eigenProfiel"
                       class="text-align-left"
                     ></DynamischVeld>
                   </accordionTab>
@@ -77,6 +79,7 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import SteekkaartService from "@/services/individueleSteekkaart/SteekkaartService";
 import {toRefs} from "@vue/reactivity";
+import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "IndividueleSteekkaart",
@@ -84,7 +87,8 @@ export default {
     DynamischVeld,
     Loader,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
+    ConfirmDialog,
   },
   setup() {
     const {
