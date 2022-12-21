@@ -1,5 +1,5 @@
 <template>
-  <div class="bovenbalk" :class="!nieuwLid ? 'mt--1' : ''">
+  <div class="bovenbalk" :class="!nieuwLid ? 'mt--1' : 'mb-4'">
     <div class="row">
       <div class="col-md-8">
         <div class="d-flex justify-content-between">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="row md:mt-4">
+        <div class="row mt-4">
           <div class="col-6 col-md-12">
             <div class="d-flex sm:justify-content-start md:justify-content-end">
               <div class="mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
