@@ -211,6 +211,11 @@ export default {
                 },
                 {}
             )
+
+            Object.values(state.gesorteerdeFuncties).sort((functies) => {
+                functies.sort((a, b) => (b.begin.localeCompare(a.begin)))
+            })
+
             store.commit("setGroepenLaden", false);
             state.loadingLid = false;
         }
