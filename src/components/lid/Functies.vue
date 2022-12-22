@@ -22,7 +22,7 @@
                   <div class="justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}</label>
                     <Button
-                      v-if="lidMagFunctieStoppen('functies.' + nummer)"
+                      v-if="lidMagFunctieStoppen('functies.' + nummer) && !functie.specialeFunctie"
                       icon="pi pi-trash"
                       class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1 mt-2"
                       @click="

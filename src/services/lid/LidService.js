@@ -314,6 +314,11 @@ export default {
             state.changes = true
         })
 
+        emitter.on("updateLid", (event) => {
+            console.log(event);
+            //Todo lid updaten na stopzetten functie
+        })
+
         const updateFuncties = ({functie, groepsnummer}) => {
             let groep = store.getters.groepByNummer(groepsnummer);
             let lid = {
