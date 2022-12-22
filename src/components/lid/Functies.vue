@@ -52,7 +52,7 @@
                 </div>
                 <div class="flex-row">
                   <div class="justify-content-start">
-                    <label class="ml-4 font-bold">{{
+                    <label class="ml-4 font-bold overflow-wrap-text">{{
                         functie.naam
                       }}</label>
                   </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="flex-row">
                   <div class="justify-content-start">
-                    <label class="ml-4 font-bold">{{
+                    <label class="ml-4 font-bold overflow-wrap-text">{{
                         functie.naam
                       }}</label>
                   </div>

@@ -16,8 +16,11 @@
             <div class="row">
               <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'verbond')" :key="index"
                    class="col-md-6">
-                <checkbox :label="functie.beschrijving" :model-value="isSelected(functie, groep.groepsnummer)"
-                          @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                <checkbox
+                  :label="functie.beschrijving"
+                  :model-value="isSelected(functie, groep.groepsnummer)"
+                  @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                  :functies="true"
                 ></checkbox>
               </div>
             </div>
@@ -27,8 +30,12 @@
               <div class="row">
                 <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
                      class="col-md-6">
-                  <checkbox :label="functie.beschrijving" :model-value="isSelected(functie, groep.groepsnummer)"
-                            @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"></checkbox>
+                  <checkbox
+                    :label="functie.beschrijving"
+                    :model-value="isSelected(functie, groep.groepsnummer)"
+                    @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                    :functies="true"
+                  ></checkbox>
                 </div>
               </div>
             </div>
