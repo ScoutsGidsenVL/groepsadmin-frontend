@@ -1,5 +1,5 @@
 <template>
-  <div class="groepseigen-gegeven-card mb-4" v-if="checkGroepsEigenGegevens(gegVelden)">
+  <div class="groepseigen-gegeven-card mb-4">
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
@@ -11,7 +11,7 @@
       </template>
       <template #content>
         <accordion :multiple="true" v-if="!groepenLaden">
-          <accordionTab v-for="(geg, index) in gefilterdeVelden" :key="index">
+          <accordionTab v-for="(geg, index) in groepseigenVelden" :key="index">
             <template #header>
               <div class="d-flex col-12 justify-content-between">
                 <span>
@@ -20,8 +20,8 @@
               </div>
             </template>
             <dynamisch-veld
-              :veld="gegVelden[index].schema"
-              :model-value="gegVelden[index].waarden"
+              :veld="groepseigenVelden[index].schema"
+              :model-value="groepseigenVelden[index].waarden"
               :groepIndex="index"
               class="groepseigengegevens"
             ></dynamisch-veld>
@@ -35,6 +35,8 @@
 <script>
 import DynamischVeld from "@/components/input/DynamischVeld";
 import Indicator from "@/components/global/Indicator";
+import GroepseigenGegevensService from "@/services/groepseigengegevens/GroepseigenGegevensService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "GroepseigenGegevens",
@@ -51,45 +53,21 @@ export default {
     },
   },
 
-  computed: {
-    groepenLaden() {
-      return this.$store.getters.groepenLaden;
-    },
-    gegVelden() {
-      return this.modelValue;
-    },
-    gefilterdeVelden() {
-      return this.modelValue;
-    },
-    groepen() {
-      return this.$store.getters.indexedGroepen;
-    },
+  setup (props) {
+    const {
+      state,
+      groepNaam,
+      groepenLaden,
+      groepen
+    } = GroepseigenGegevensService.groepsEigenGegevensSpace(props);
 
-  },
-
-  methods: {
-    groepNaam(groepsnummer) {
-      let groep = this.$store.getters.groepByNummer(groepsnummer);
-      if (groep) {
-        return groep.naam + " - " + groepsnummer;
-      } else {
-        groep = this.$store.getters.inactieveGroepByNummer(groepsnummer);
-        if (groep) {
-          return groep.naam + " - " + groepsnummer;
-        } else {
-          return groepsnummer
-        }
-      }
-    },
-    changeValue(event) {
-      console.log(event);
-
-    },
-
-    checkGroepsEigenGegevens() {
-      return true;
+    return {
+      ...toRefs(state),
+      groepNaam,
+      groepenLaden,
+      groepen
     }
-  },
+  }
 };
 </script>
 

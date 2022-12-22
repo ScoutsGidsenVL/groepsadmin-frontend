@@ -13,7 +13,8 @@ export default {
         });
 
         const isChecked = (id) => {
-            return state.waarde[id] === "true" || state.waarde[id];
+            console.log(state.waarde[id])
+            return state.waarde[id] === "true";
         }
 
         const changeValue = (veld, waarde) => {

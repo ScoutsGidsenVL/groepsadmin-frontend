@@ -14,17 +14,21 @@
         :invalid="errors && errors[veld.id] && errors[veld.id].invalid"
       >
       </BaseInput>
-      <BaseCheckbox
-        v-if="veld.type === 'vinkje'"
-        :model-value="isChecked(veld.id)"
-        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
-        :label="veld.label"
-        :beschrijving="veld.beschrijving"
-        @keyup="changeValue(veld.id, waarde[veld.id])"
-        @changeValue="changeValue(veld.id, waarde[veld.id])"
-        class="text-align-left"
-      >
-      </BaseCheckbox>
+      <div v-if="veld.type === 'vinkje'" class="d-flex justify-content-between mb-2">
+        <label class="text-align-left clickable" :for="veld.id">{{ veld.label }}</label>
+        <checkbox
+          true-value="true"
+          false-value="false"
+          :binary="true"
+          :input-id="veld.id"
+          class="mr-2"
+          v-model="waarde[veld.id]"
+          :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
+          @keyup="changeValue(veld.id, waarde[veld.id])"
+          @change="changeValue(veld.id, waarde[veld.id])"
+        >
+        </checkbox>
+      </div>
       <BaseDropdown
         v-if="veld.type === 'lijst'"
         v-model="waarde[veld.id]"
