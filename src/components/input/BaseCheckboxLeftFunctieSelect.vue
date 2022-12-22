@@ -11,7 +11,7 @@
         />
       </div>
       <div class="flex-1 mt-1">
-        <label class="p-col-4 p-mb-2 p-mb-md-0 ml-2 checkbox-label"> {{ label }} </label>
+        <label class="p-col-4 p-mb-2 p-mb-md-0 ml-2 checkbox-label overflow-wrap-text" :class="functies ? 'font15' : ''"> {{ label }} </label>
       </div>
     </div>
   </div>
@@ -56,6 +56,10 @@ export default {
     errorMessage: {
       type: String,
     },
+    functies: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     check() {
