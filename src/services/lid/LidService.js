@@ -315,11 +315,11 @@ export default {
         })
 
         emitter.on("updateLid", (event) => {
-            console.log(event);
-            //Todo lid updaten na stopzetten functie
+            updateFuncties(event.functie, event.groepsnummer);
         })
 
-        const updateFuncties = ({functie, groepsnummer}) => {
+        const updateFuncties = (functie, groepsnummer) => {
+            state.loadingLid = true;
             let groep = store.getters.groepByNummer(groepsnummer);
             let lid = {
                 functies: [
@@ -341,7 +341,16 @@ export default {
                     state.lid = res.data;
                     sorteerFuncties();
                 }
-            });
+            }).catch((error) => {
+                toast.add({
+                    severity: "warn",
+                    summary: error.response.data.titel,
+                    detail: error.response.data.beschrijving,
+                    life: 8000,
+                })
+            }).finally(() => {
+                state.loadingLid = false;
+            })
         }
 
         onMounted(() => {

@@ -55,7 +55,6 @@
             <div class="col-12 col-lg-12 col-xl-4">
               <functies
                 v-model="gesorteerdeFuncties"
-                @updateLid="updateFuncties"
                 :lid="lid"
                 v-if="lid.vgagegevens.voornaam"
               ></functies>
