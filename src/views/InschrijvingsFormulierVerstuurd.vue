@@ -27,42 +27,21 @@
 
 <script>
 
-import RestService from "@/services/api/RestService";
+import InschrijvingVerstuurdService from "@/services/inschrijvingsFormulier/InschrijvingVerstuurdService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "InschrijvingsFormulier",
-  data() {
+
+  setup() {
+    const {
+      state
+    } = InschrijvingVerstuurdService.inschrijvingVerstuurdSpace();
+
     return {
-      groep: null,
-      groepsnummer: '',
-      voornaam: '',
-    }
-  },
-
-  mounted() {
-    this.groepsnummer = this.$route.params.groep;
-    if (this.groepsnummer) {
-      this.getGroepData();
-    }
-    this.voornaam = this.$store.getters.kandidaatLid;
-  },
-
-  methods: {
-    getGroepData() {
-      RestService.getGroepOpNummer(this.groepsnummer)
-        .then(res => {
-          this.groep = res.data;
-        }).catch(error => {
-        this.$toast.add({
-          severity: "error",
-          summary: "Groep ophalen",
-          detail: error.message,
-          life: 8000,
-        });
-      })
+      ...toRefs(state)
     }
   }
-
 };
 </script>
 
