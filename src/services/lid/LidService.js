@@ -218,6 +218,7 @@ export default {
 
             store.commit("setGroepenLaden", false);
             state.loadingLid = false;
+            resetWatchable();
         }
 
         const filterGroepsEigenVelden = () => {
@@ -310,7 +311,8 @@ export default {
             changeGeg(event.veld, event.waarde, event.groep);
         })
 
-        emitter.on('veranderFunctie', () => {
+        emitter.on('veranderFunctie', (data) => {
+            state.lid.functies = data.functies
             state.changes = true
         })
 
@@ -354,9 +356,6 @@ export default {
         }
 
         onMounted(() => {
-            emitter.on('veranderFunctie', () => {
-                state.changes = true
-            })
             state.id = route.params.id ? route.params.id : "profiel";
             if (state.id === "profiel" && store.getters.profiel) {
                 state.eigenProfiel = true;
