@@ -47,7 +47,7 @@
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
                 <Lokalen :groep="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></Lokalen>
-                <groepseigen-gegevens v-model="selectedGroep" @opslaan="laden = !laden" @updateGroep="opslaan" @laden="changeLadenStatus"></groepseigen-gegevens>
+                <groepseigen-gegevens v-model="selectedGroep"></groepseigen-gegevens>
               </div>
             </div>
           </form>

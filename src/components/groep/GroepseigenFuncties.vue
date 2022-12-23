@@ -56,7 +56,6 @@ export default {
   },
 
   setup(props) {
-
     const {
       state,
       voegGeifToe,

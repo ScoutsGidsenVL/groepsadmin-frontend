@@ -5,12 +5,14 @@ import {useStore} from "vuex";
 import {useToast} from "primevue/usetoast";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
+import useEmitter from "@/services/utils/useEmitter";
 
 export default {
 
     groepSpace() {
         const store = useStore();
         const toast = useToast();
+        const emitter = useEmitter();
 
         const state = reactive({
             selectedGroep: {},
@@ -211,6 +213,15 @@ export default {
                 state.watchable = true
             }, 2000);
         })
+
+        emitter.on('laden', () => {
+            changeLadenStatus()
+        });
+
+        emitter.on('updateGroep', () => {
+            opslaan();
+        } )
+
 
         return {
             state,

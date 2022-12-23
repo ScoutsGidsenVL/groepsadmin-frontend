@@ -19,6 +19,7 @@
              v-if="groep && groep.groepseigenGegevens && groep.groepseigenGegevens.length === 0">
           <p class="small">Geen groepseigen gegevens beschikbaar voor deze groep.</p>
         </div>
+        <div v-if="groep && groep.groepseigenGegevens">
         <draggable :list="groep.groepseigenGegevens"
                    @start="drag=true"
                    @end="drag=false"
@@ -170,20 +171,19 @@
             </accordion>
           </template>
         </draggable>
+        </div>
       </template>
     </card>
   </div>
 </template>
 
 <script>
-import rechtenService from "@/services/rechten/rechtenService";
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
 import Draggable from 'vuedraggable'
 import BaseTextArea from "@/components/input/BaseTextArea";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import BaseInputNoLabel from "@/components/input/BaseInputNoLabel";
-import RestService from "@/services/api/RestService";
+import GroepseigenGegevensService from "@/services/groepseigengegevens/GroepseigenGegevensService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "GroepseigenGegevens",
@@ -193,142 +193,36 @@ export default {
     BaseCheckbox,
     Draggable,
   },
+
   props: {
     modelValue: {
       type: Object,
     },
   },
-  data() {
-    return {
-      drag: false,
-      activeIndex: null
-    }
-  },
 
-  computed: {
-    kanGroepWijzigen() {
-      return rechtenService.kanWijzigen(this.groep);
-    },
-
-  },
-  methods: {
-    veranderKeuze(index, element) {
-      let currentItem = element.keuzes[index];
-      let lastItem = element.keuzes.slice(-1);
-
-      if (lastItem.toString() !== '') {
-        element.keuzes.push('');
-        lastItem = element.keuzes.slice(-1)
-      }
-
-      if (currentItem === '' && (index === (element.keuzes.length - 2))
-        && lastItem.toString() === '') {
-        element.keuzes.splice(-1, 1)
-      }
-    },
-
-    wisKeuze(index, element) {
-      this.$confirm.require({
-        message: "Ben je zeker dat je " + (element.keuzes[index]) + " wil verwijderen?",
-        header: "Keuze verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          this.$emit('laden');
-          element.keuzes.splice(index, 1);
-          RestService.updateGroep(this.groep)
-            .then(res => {
-              if (res.status === 200) {
-                this.$emit('laden');
-                this.$store.dispatch("getGroepen");
-                this.$toast.add({
-                  severity: "success",
-                  summary: "Keuze",
-                  detail: "Keuze verwijderd.",
-                  life: 3000,
-                });
-              }
-            }).catch((error) => {
-            this.laden = false;
-            this.$toast.add({
-              severity: "warn",
-              summary: "Functie",
-              detail: error.response.data.beschrijving,
-              life: 8000,
-            });
-          })
-        },
-        reject: () => {
-          this.$confirm.close();
-        },
-      })
-    },
-
-
-    setType(element, type) {
-      element.type = type;
-    },
-
-    voegGeigToe() {
-      let newGegeven = {
-        beschrijving: null,
-        kanLeidingWijzigen: false,
-        kanLidWijzigen: false,
-        sort: this.groep.groepseigenGegevens.length,
-        type: 'tekst',
-        status: "nieuw",
-        label: "",
-        keuzes: ['']
-      };
-      this.groep.groepseigenGegevens.push(newGegeven);
-      this.activeIndex = 0;
-    },
-
-    verwijderGegeven(index) {
-      let geig = this.groep.groepseigenGegevens[index];
-
-      this.$confirm.require({
-        message: "Ben je zeker dat je " + (geig.label ? geig.label : '') + " wil verwijderen?",
-        header: "Gegeven verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          this.groep.groepseigenGegevens.splice(index, 1);
-          if (geig.id) {
-            this.$emit('updateGroep')
-          } else {
-            this.$toast.add({
-              severity: "success",
-              summary: "Groepseigen gegeven",
-              detail: "Groepseigen gegeven verwijderd.",
-              life: 3000,
-            });
-          }
-        },
-        reject: () => {
-          this.$confirm.close();
-        },
-      });
-    },
-
-    geigTitel(gegeven) {
-      if (gegeven.status === "nieuw" && (gegeven.label === "Nieuw groepseigen gegeven" || gegeven.label === "")) {
-        return "Nieuw groepseigen gegeven";
-      } else if (gegeven.type === 'tekst_meerdere_lijnen') {
-        return gegeven.label + " - Meerdere lijnen";
-      } else {
-        return gegeven.label + " - " + gegeven.type;
-      }
-    }
-  },
   setup(props) {
-    const state = reactive({
-      groep: {},
-    });
+    const {
+      state,
+      kanGroepWijzigen,
+      geigTitel,
+      verwijderGegeven,
+      voegGeigToe,
+      setType,
+      veranderKeuze,
+      wisKeuze
+    } = GroepseigenGegevensService.groepSpace(props)
 
-    onUpdated(() => {
-      state.groep = props.modelValue;
-    });
 
-    return {...toRefs(state)};
+    return {
+      ...toRefs(state),
+      kanGroepWijzigen,
+      geigTitel,
+      verwijderGegeven,
+      voegGeigToe,
+      setType,
+      veranderKeuze,
+      wisKeuze
+    };
   }
 };
 </script>

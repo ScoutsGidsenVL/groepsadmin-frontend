@@ -59,7 +59,7 @@ export default {
       groepNaam,
       groepenLaden,
       groepen
-    } = GroepseigenGegevensService.groepsEigenGegevensSpace(props);
+    } = GroepseigenGegevensService.lidSpace(props);
 
     return {
       ...toRefs(state),
