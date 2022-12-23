@@ -132,7 +132,7 @@ export default {
           label: "Opvoedingsverantwoordelijke",
         },
       ],
-      contacten: null,
+      contacten: [],
       adressen: null,
       adresArray: [],
     });
@@ -188,6 +188,9 @@ export default {
       state.adresArray = [];
       state.contacten = props.modelValue.contacten;
       state.adressen = props.modelValue.adressen;
+      if (!state.contacten) {
+        state.contacten = [];
+      }
       if (state.adressen && state.adressen.length > 0) {
         state.adressen.forEach((adres) => {
           state.adresArray.push({

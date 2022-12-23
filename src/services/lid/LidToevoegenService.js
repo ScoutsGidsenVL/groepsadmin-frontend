@@ -1,5 +1,5 @@
 import {reactive} from "@vue/reactivity";
-import {watch, onMounted} from "vue";
+import {onMounted, watch} from "vue";
 import {useVuelidate} from "@vuelidate/core";
 import {onBeforeRouteLeave, useRouter} from "vue-router";
 import useEmitter from "@/services/utils/useEmitter";
@@ -7,6 +7,7 @@ import {useToast} from "primevue/usetoast";
 import {useStore} from "vuex";
 import rechtenService from "@/services/rechten/rechtenService";
 import RestService from "@/services/api/RestService";
+
 let _ = require('lodash');
 
 
@@ -63,7 +64,7 @@ export default {
             },
             {deep: true})
 
-        onMounted(() =>  {
+        onMounted(() => {
             emitter.on('veranderFunctie', () => {
                 state.changes = true
             })
@@ -159,11 +160,11 @@ export default {
                     if (adres.straat === contact.adres.straat &&
                         adres.nummer === contact.adres.nummer &&
                         adres.postcode === contact.adres.postcode &&
-                        adres.gemeente === contact.adres.gemeente ) {
+                        adres.gemeente === contact.adres.gemeente) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
                         contact.id = 'tempcontact_' + counter
-                    } else if (adres.id === contact.adres){
+                    } else if (adres.id === contact.adres) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
                     }
@@ -187,9 +188,18 @@ export default {
                 state.lid.vgagegevens.beperking = false;
             }
 
+            if (!state.lid.vgagegevens.verminderdlidgeld) {
+                state.lid.vgagegevens.verminderdlidgeld = false;
+            }
+
+            if (state.lid.vgagegevens.geboortedatum) {
+                state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
+            }
+
             state.lid.verbondsgegevens = null;
 
             v.value.$touch();
+
             if (v.value.$invalid) {
                 state.changes = false;
                 toast.add({
@@ -222,13 +232,17 @@ export default {
                         life: 3000,
                     });
                     state.changes = false;
-                    RestService.verwijderAanvraag(state.lid.id).then(res => {
-                        if (res.status === 200){
-                            router.push({name: "Lid", params: { id: res.data.id }});
-                        }
-                    }).finally(() => {
+                    if (state.lid.id) {
+                        RestService.verwijderAanvraag(state.lid.id).then(res => {
+                            if (res.status === 200) {
+                                router.push({name: "Lid", params: {id: res.data.id}});
+                            }
+                        }).finally(() => {
+                            router.push({name: "Lid", params: {id: res.data.id}});
+                        });
+                    } else {
                         router.push({name: "Lid", params: {id: res.data.id}});
-                    });
+                    }
                 }
             }).catch(error => {
                 toast.add({
