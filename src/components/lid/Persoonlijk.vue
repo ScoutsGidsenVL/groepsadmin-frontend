@@ -124,6 +124,7 @@ import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
 import {onUpdated} from "@vue/runtime-core";
+import DateUtil from "@/services/dates/DateUtil";
 
 const ibantools = require('ibantools');
 const isGeldigRekeningnummer = (value) => {
@@ -176,7 +177,7 @@ export default {
       if (this.nieuwLid) {
         return true
       }
-      if (this.lid.vgagegevens.voornaam) {
+      if (this.lid.vgagegevens.voornaam || this.lid.vgagegevens.achternaam) {
         return rechtenService.canBeShowed(this.lid, type);
       } else {
         return this.nieuwLid;
@@ -186,6 +187,9 @@ export default {
   computed: {
     omschrijving() {
       return this.inschrijving ? this.omschrijvingNieuwLid : this.omschrijvingBestaandLid;
+    },
+    formattedDate() {
+      return DateUtil.formatGeboortedatum(this.lid.vgagegevens.geboortedatum);
     }
   },
   props: {

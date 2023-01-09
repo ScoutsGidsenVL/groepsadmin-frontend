@@ -35,17 +35,17 @@
                       :eigenProfiel="isEigenProfiel" :changes="changes"
                       @disableWatchable="resetWatchable"
                       @stopAlleFuncties="stopAlleFuncties"
-                      v-if="lid.vgagegevens.voornaam"
+                      v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
       ></lid-boven-balk>
       <div class="lg:ml-2 mt-8 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam"></persoonlijk>
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam"></adressen>
-              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam"></contacten>
+              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
@@ -56,12 +56,12 @@
               <functies
                 v-model="gesorteerdeFuncties"
                 :lid="lid"
-                v-if="lid.vgagegevens.voornaam"
+                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
               ></functies>
               <functies-toevoegen
                 v-model="gesorteerdeFuncties"
                 :lid="lid"
-                v-if="magFunctiesToevoegen && lid.vgagegevens.voornaam"
+                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
               ></functies-toevoegen>
             </div>
           </div>
