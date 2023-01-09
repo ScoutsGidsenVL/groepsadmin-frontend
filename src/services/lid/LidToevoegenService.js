@@ -184,18 +184,6 @@ export default {
                 }
             })
 
-            if (!state.lid.vgagegevens.beperking) {
-                state.lid.vgagegevens.beperking = false;
-            }
-
-            if (!state.lid.vgagegevens.verminderdlidgeld) {
-                state.lid.vgagegevens.verminderdlidgeld = false;
-            }
-
-            if (state.lid.vgagegevens.geboortedatum) {
-                state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
-            }
-
             state.lid.verbondsgegevens = null;
 
             v.value.$touch();
@@ -221,6 +209,20 @@ export default {
                 });
                 state.loadingLid = false;
                 return;
+            }
+
+            if (state.lid.vgagegevens.geboortedatum) {
+                let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                geboortedatum.setHours(2);
+                state.lid.vgagegevens.geboortedatum = new Date(geboortedatum).toISOString().slice(0, 10);
+            }
+
+            if (!state.lid.vgagegevens.beperking) {
+                state.lid.vgagegevens.beperking = false;
+            }
+
+            if (!state.lid.vgagegevens.verminderdlidgeld) {
+                state.lid.vgagegevens.verminderdlidgeld = false;
             }
 
             RestService.saveNieuwLid(state.lid).then(res => {

@@ -3,6 +3,7 @@
     <label for="icon" class="col-12 col-sm-5 p-mb-2 p-mb-md-0 sm:mt-3">
       {{ label }}
     </label>
+
     <div class="col-12 col-sm-7 p-md-8">
       <Calendar
         autocomplete="off"
@@ -10,13 +11,10 @@
         :showIcon="true"
         dateFormat="dd/mm/yy"
         placeholder="../../...."
-        :monthNavigator="true"
-        :yearNavigator="true"
-        :manualInput="true"
+        :manualInput=true
         v-bind="$attrs"
-        :modelValue="new Date(modelValue)"
+        :modelValue="modelValue"
         :disabled="disabled"
-        @input="$emit('update:modelValue', $event.target.value)"
         :class="invalid ? 'p-invalid' : ''"
       >
       </Calendar>

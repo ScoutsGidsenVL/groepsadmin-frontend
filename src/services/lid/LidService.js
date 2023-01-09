@@ -152,6 +152,7 @@ export default {
                 }
                 sorteerFuncties();
                 filterGroepsEigenVelden();
+                state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
             }).catch(error => {
                 if (error.response.status === 403) {
                     toast.add({
@@ -273,6 +274,11 @@ export default {
               });
               return;
             }
+
+            let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+            geboortedatum.setHours(2);
+            state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
+
             RestService.updateLid(state.lid.id, state.gewijzigdLid)
                 .then(res => {
                     state.lid = res.data;
