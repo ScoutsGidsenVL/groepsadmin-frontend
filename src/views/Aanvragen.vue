@@ -14,8 +14,8 @@
       <confirm-dialog :dialog-visible="confirmDialog" :header="confirmHeader" :message="confirmMessage" :type="type"
                       @confirm="bevestig" @cancel="annuleer"></confirm-dialog>
       <confirm-mailing :dialog-visible="confirmMailingDialog" :header="confirmMailingHeader"
-                       :message="confirmMailingMessage" @bevestigMail="bevestigMail"
-                       @bevestigGeenMail="bevestigGeenMail"></confirm-mailing>
+                       :message="confirmMailingMessage" @bevestigMail="bevestigMail(true)"
+                       @bevestigGeenMail="bevestigMail(false)"></confirm-mailing>
       <div class="lg:ml-6 md:mt-10 lg:mt-8">
         <div class="d-flex justify-content-end">
           <lid-zoek-auto-complete></lid-zoek-auto-complete>
@@ -148,19 +148,24 @@ export default {
       this.expandedRows = null;
       this.openDetails = false;
     },
+
     expandAll() {
       this.expandedRows = this.aanvragen.filter(a => a.id);
       this.openDetails = true;
     },
+
     formatDate(date) {
       return DateUtil.formatteerDatum(date);
     },
+
     formatGeboorteDatum(geboortedatum) {
       return DateUtil.formatGeboortedatum(geboortedatum)
     },
+
     toonVolledigeNaam(row) {
       return row.voornaam + " " + row.achternaam;
     },
+
     goedkeuren(aanvraag) {
       this.$store.commit("setGoedTeKeurenLid", null)
       this.defaultLid = {
@@ -189,6 +194,7 @@ export default {
       this.$store.commit("setGoedTeKeurenLid", this.defaultLid);
       this.$router.push({name: "lidToevoegen"});
     },
+
     afkeuren(aanvraag) {
       this.selectedAanvraag = aanvraag;
       this.type = "afkeuren";
@@ -196,6 +202,7 @@ export default {
       this.confirmHeader = "Afkeuren aanvraag";
       this.confirmMessage = "Ben je zeker dat je deze aanvraag wil afkeuren?";
     },
+
     bevestig(type) {
       if (type === "afkeuren") {
         this.confirmMailingHeader = "Lidaanvraag verwijderen";
@@ -203,21 +210,21 @@ export default {
         this.confirmMailingMessage = "Wil je deze persoon mailen via <strong>" + this.selectedAanvraag.email + "</strong>?";
       }
     },
+
     annuleer() {
       this.confirmDialog = false;
       this.confirmHeader = "";
       this.confirmMessage = "";
       this.selectedAanvraag = null;
     },
-    bevestigMail() {
-      this.deleteAanvraag(true);
+
+    bevestigMail(mail) {
+      this.deleteAanvraag(mail);
     },
-    bevestigGeenMail() {
-      this.deleteAanvraag(false);
-    },
+
     deleteAanvraag(mail) {
       this.isLoadingAanvragen = true;
-      RestService.verwijderAanvraag(this.selectedAanvraag.id, mail)
+      RestService.verwijderAanvraagMail(this.selectedAanvraag.id, mail)
         .then(() => {
           this.confirmDialog = false;
           this.confirmMailingDialog = false;

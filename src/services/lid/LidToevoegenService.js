@@ -65,8 +65,9 @@ export default {
             {deep: true})
 
         onMounted(() => {
-            emitter.on('veranderFunctie', () => {
-                state.changes = true
+            emitter.on('veranderFunctie', (event) => {
+                state.lid.functies = event.functies;
+                state.changes = true;
             })
 
             if (store.getters.goedTeKeurenLid) {
@@ -153,6 +154,8 @@ export default {
         const opslaan = () => {
             state.loadingLid = true;
 
+            console.log(state.lid.functies)
+
             let counter = 0;
             _.forEach(state.lid.adressen, function (adres) {
                 counter++;
@@ -235,8 +238,8 @@ export default {
                     });
                     state.changes = false;
                     if (state.lid.id) {
-                        RestService.verwijderAanvraag(state.lid.id).then(res => {
-                            if (res.status === 200) {
+                        RestService.verwijderAanvraag(state.lid.id).then(result => {
+                            if (result.status === 200) {
                                 router.push({name: "Lid", params: {id: res.data.id}});
                             }
                         }).finally(() => {
