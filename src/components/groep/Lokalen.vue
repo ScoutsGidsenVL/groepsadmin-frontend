@@ -3,7 +3,7 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> Lokalen</span>
+          <span class="font22">Lokalen</span>
           <Button
             icon="pi pi-plus"
             class="p-button-rounded p-button-outlined mt-1 add-button"

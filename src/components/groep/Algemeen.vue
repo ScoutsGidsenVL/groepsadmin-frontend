@@ -1,7 +1,11 @@
 <template>
   <div class="mb-4">
     <card>
-      <template #title> Algemeen</template>
+      <template #title>
+        <span class="font22">
+          Algemeen
+        </span>
+      </template>
       <template #content>
         <div class="p-fluid">
           <BaseInput
@@ -73,15 +77,16 @@
           ></BaseCheckbox>
           <div id="helpBlock" class="help-block mt-2" v-show="groep['publiek-inschrijven']">
             <div>
-            <p>
-              Link naar jouw inschrijvingsformulier:<br>
-              <a :href="formulierUrl" target="_blank" class="icon-small clean-link color-dark-green group-link">{{formulierUrl}}</a>
-            </p>
+              <p>
+                Link naar jouw inschrijvingsformulier:<br>
+                <a :href="formulierUrl" target="_blank"
+                   class="icon-small clean-link color-dark-green group-link">{{ formulierUrl }}</a>
+              </p>
             </div>
             <p>
               Inschrijvingsformulier insluiten in jouw website:<br>
               <code>
-                &lt;iframe height="1200" width="950" src="{{formulierUrl}}" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+                &lt;iframe height="1200" width="950" src="{{ formulierUrl }}" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
               </code>
             </p>
           </div>
@@ -92,8 +97,8 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/reactivity";
-import { onUpdated } from "@vue/runtime-core";
+import {reactive, toRefs} from "@vue/reactivity";
+import {onUpdated} from "@vue/runtime-core";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
@@ -135,7 +140,7 @@ export default {
       return "";
     },
     ledenVerbeterd() {
-      if (this.facturatieLedenCheck){
+      if (this.facturatieLedenCheck) {
         return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeden)
       }
       return "";
@@ -187,7 +192,7 @@ export default {
       state.groep = props.modelValue;
     });
 
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 };
 </script>

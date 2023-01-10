@@ -2,7 +2,7 @@
   <div class="mb-4 lg:ml-4">
     <card>
       <template #title>
-        <span>
+        <span class="font18">
           Groepseigen gegevens
         </span>
         <span v-if="kanGroepWijzigen">
@@ -31,9 +31,9 @@
               <accordionTab>
                 <template #header>
                   <div class="row custom-height w-100">
-                    <div class="col-10 handle d-flex justify-content-start cursor-move cut-off-text">
+                    <div class="col-10 handle d-flex justify-content-start cursor-move">
                       <i class="fal fa-arrows top-6 "></i>
-                      <span class="ml-2">{{ geigTitel(element) }}</span>
+                      <span class="ml-2 mt-3p font15 cut-off-text-table">{{ geigTitel(element) }}</span>
                     </div>
                     <div class="col-2 d-flex justify-content-end">
                       <Button

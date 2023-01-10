@@ -2,7 +2,7 @@
   <div class="mb-4">
     <card>
       <template #title>
-        <span>
+        <span class="font18">
           Groepseigen functies
         </span>
         <span v-if="kanFunctieWijzigen">

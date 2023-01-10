@@ -3,7 +3,7 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> Functies toevoegen</span>
+          <span class="font18"> Functies toevoegen</span>
         </div>
         <div :class="laden ? 'functies-loader' : ''">
           <Indicator :is-loading="laden" :full-page="false" :height=55 :width=55></Indicator>

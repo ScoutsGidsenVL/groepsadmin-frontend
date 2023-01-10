@@ -3,7 +3,7 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> Functies </span>
+          <span class="font22"> Functies </span>
         </div>
         <div class="d-flex col-12">
           <InputSwitch v-model="historiek"/>

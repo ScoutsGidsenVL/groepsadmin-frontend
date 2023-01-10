@@ -3,7 +3,7 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span> {{ title }}</span>
+          <span class="font18"> {{ title }}</span>
           <div :class="groepenLaden ? 'functies-loader' : ''">
             <Indicator :is-loading="groepenLaden" :full-page="false" :height=55 :width=55></Indicator>
           </div>

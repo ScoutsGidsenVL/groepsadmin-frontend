@@ -1,8 +1,12 @@
 <template>
   <div class="mb-4">
     <card>
-      <template #title> Persoonlijk</template>
-        <template #content>
+      <template #title>
+        <span class="font22">
+          Persoonlijk
+        </span>
+      </template>
+      <template #content>
         <div class="p-fluid mt-2">
           <BaseInput
             v-model="lid.vgagegevens.voornaam"

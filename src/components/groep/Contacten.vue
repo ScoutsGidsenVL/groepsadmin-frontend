@@ -3,7 +3,7 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span>Contact</span
+          <span class="font22">Contact</span
           ><span class="small mt-1" v-if="contactenImporteren"
             >Contacten laden &nbsp;<i class="fas fa-spinner fa-spin"></i
           ></span>
