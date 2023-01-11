@@ -83,6 +83,11 @@ export default {
                 }
             }
 
+            // Conversie om datum correct door te sturen
+            let opgerichtDatum = new Date(state.selectedGroep.opgericht);
+            opgerichtDatum.setHours(2);
+            state.selectedGroep.opgericht = opgerichtDatum.toISOString().slice(0, 10);
+
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
@@ -183,6 +188,7 @@ export default {
         const veranderGroep = (groep) => {
             state.watchable = false;
             state.selectedGroep = groep;
+            state.selectedGroep.opgericht = new Date(groep.opgericht);
             getContacten();
             setTimeout(() => {
                 state.watchable = true
