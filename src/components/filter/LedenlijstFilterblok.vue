@@ -70,7 +70,7 @@
   <div class="row mt--1">
     <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
                      v-if="inActivecriteria.length > 0"></criteria-select>
-    <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3 col-xxl-2">
+    <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
       <BoolFilter :activeCriteria="activeCriteria" :criteria-key="criteria.criteriaKey"
                   @deactivateCriterium="deactivateCriterium"
                   v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld' || criteria.criteriaKey === 'emailgeblokkeerd'"></BoolFilter>

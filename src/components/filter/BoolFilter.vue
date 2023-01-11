@@ -5,10 +5,10 @@
         <div class="col-10 ">
           <div class="text-align-left d-flex">
             <div>
-              <label class="label-width">{{ criteria.title }}: </label>
+              <label class="label-width cursor-pointer">{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label cut-off-text-filter">Ja</label>
+              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">Ja</label>
             </div>
           </div>
         </div>

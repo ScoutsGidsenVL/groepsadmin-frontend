@@ -10,10 +10,10 @@
       </div>
       <div class="custom-divider"></div>
       <div class="lg:ml-8 lg:pl-8 mt-2">
-        <div class="content container lg:ml-8">
+        <div class="relative container lg:ml-8">
           <loader :show-loader="showLoader"></loader>
           <div class="d-flex lg:mt-8 sm:mt-4 mt-8">
-            <h1 class="welkom-titel text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-2">Welkom {{
+            <h1 class="text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-2 font-bold">Welkom {{
                 naam
               }}</h1>
           </div>
@@ -37,7 +37,7 @@
                       v-for="(item, index) in snelNaarItems" :key="index">
                     <i class="fal fa-arrow-right color-light-green"><a :href="item.url" target="_blank"
                                                                        class="text-decoration-none"><span
-                      class="text-black font ml-2 clickable">{{ item.naam }}</span></a></i>
+                      class="text-black font ml-2 pointer">{{ item.naam }}</span></a></i>
                   </li>
                 </ul>
               </div>

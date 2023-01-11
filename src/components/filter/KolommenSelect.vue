@@ -1,12 +1,12 @@
 <template>
-  <div class="col-12 col-sm-6 col-lg-3 col-xl-2" v-click-outside="close">
-    <div @click="toggleMenu = !toggleMenu" class="clickable col-12 type-select-button kolom-select">
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3" v-click-outside="close">
+    <div @click="toggleMenu = !toggleMenu" class="pointer col-12 type-select-button kolom-select">
       <div class="row mt--05">
         <div class="col-12">
           <div class="text-align-left d-flex cut-off-text-filter">
             Kolommen:
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label ">{{
+              <label class="subtitle pointer text-align-left criteria-label ">{{
                   actieveKolomNamen
                 }}</label>
             </div>
@@ -49,7 +49,7 @@
               :binary="true"
               @change="voegKolomToe(item)"
             />
-            <label :for="key" class="ml-2 clickable">{{ item.label }}</label>
+            <label :for="key" class="ml-2 pointer">{{ item.label }}</label>
           </div>
         </div>
       </div>

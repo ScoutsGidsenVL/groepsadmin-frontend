@@ -1,5 +1,5 @@
 <template>
-  <div class="wiki-block clickable">
+  <div class="wiki-block pointer">
     <a @click="goto" target="_blank">
       <i class="fas fa-question" />
       <span class="help">Help</span>

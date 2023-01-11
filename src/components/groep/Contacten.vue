@@ -11,7 +11,7 @@
       </template>
       <template #content>
         <div class="ml-3" v-if="groep.groepsleiding && groep.groepsleiding.length > 0">
-          <label class="f-500 underline"> Groepsleiding</label>
+          <label class="f-500 text-decoration-underline"> Groepsleiding</label>
           <div v-for="(grl, key) in groep.groepsleiding" :key="key">
             <i class="fas fa-user"></i><span class="ml-3">{{ grl.naam }}</span>
             <br />
@@ -24,7 +24,7 @@
         </div>
         <br/>
         <div class="ml-3" v-if="groep.vga">
-          <label class="underline">
+          <label class="text-decoration-underline">
             Verantwoordelijke Groepsadministratie</label
           >
           <div>
@@ -39,7 +39,7 @@
         </div>
         <br />
         <div class="ml-3" v-if="groep.fv">
-          <label class="underline"> Financieel Verantwoordelijke</label>
+          <label class="text-decoration-underline"> Financieel Verantwoordelijke</label>
           <div>
             <i class="fas fa-user"></i
             ><span class="ml-3"

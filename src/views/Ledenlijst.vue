@@ -54,7 +54,7 @@
               scroll-height="600px"
             >
               <template #header>
-                <div class="top-menu d-flex justify-content-end align-content-center mt--05">
+                <div class="relative mb-6 d-flex justify-content-end align-content-center mt--05">
                   <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
                           aria-controls="overlay_menu"
                           class="sub-menu-button menu-button p-button-rounded mt--1"/>
@@ -63,7 +63,7 @@
                     <template #item="{item}">
                       <div @click="gaNaar(item.link)">
                         <i :class="item.icon" class="lid-menu-item mr-2"><label
-                          class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+                          class="pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
                       </div>
                     </template>
                   </Menu>
@@ -93,7 +93,7 @@
                 :field="kolom.id"
                 :header="kolom.label"
                 :key="kolom.id"
-                class="clickable cut-off-text-table"
+                class="pointer cut-off-text-table"
               >
                 <template #header class="sticky-top position-sticky">
                   <div class="w-full" @click="addSort(kolom)" v-if="kolom.label !== 'Lidgeld betaald aan SGV'">
@@ -121,12 +121,12 @@
                 </template>
                 <template #body="slotProps">
                   <div v-if="!kolom.isLoaded" class="data-placeholder"></div>
-                  <div v-if="kolom.type !== 'vinkje'" class="clickable">
+                  <div v-if="kolom.type !== 'vinkje'" class="pointer">
                     {{ slotProps.data.waarden[kolom.id] }}
                   </div>
                   <div
                     v-if="kolom.type === 'vinkje'"
-                    class="table-checkbox clickable"
+                    class="table-checkbox pointer"
                   >
                     <i
                       class="pi"

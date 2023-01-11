@@ -2,16 +2,6 @@
   margin-right: 20px;
 }
 
-.welkom-titel {
-  font-size: 4em;
-  font-weight: bold;
-}
-
-.content {
-  position: relative;
-}
-
-
 .custom-block {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.02), 0 4px 20px 0 rgba(0, 0, 0, 0.1);
   border: solid 1px #e5e4e4;
@@ -24,12 +14,6 @@
       color: $sgv-lichtgroen;
     }
   }
-}
-
-.block-label {
-  text-align: left;
-  font-size: 1.3rem;
-  font-weight: bold;
 }
 
 .menu-icon-block {

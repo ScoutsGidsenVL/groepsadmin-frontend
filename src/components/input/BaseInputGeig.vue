@@ -19,7 +19,7 @@
         <Button
           v-if="!disabled"
           icon="pi pi-trash"
-          class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
+          class="p-button-rounded p-button-outlined p-button-danger float-end mr-1"
           @click="
                     $event.stopPropagation();
                     remove(index);

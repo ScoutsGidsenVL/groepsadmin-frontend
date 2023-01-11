@@ -272,7 +272,7 @@
           <small class="ml-3">Versie: {{ app_version || "0" }}</small>
         </div>
       </div>
-      <div class="footer-bottom-legal small text-white row">
+      <div class="ml-0 small text-white row">
         <div class="col-12 col-md-6 d-flex justify-content-md-end order-md-2">
           <a
             class="clean-link text-white"

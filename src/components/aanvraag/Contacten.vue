@@ -26,7 +26,7 @@
                 <span>{{ setHeader(contact) }}</span>
                 <Button
                   icon="pi pi-trash"
-                  class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
+                  class="p-button-rounded p-button-outlined p-button-danger mr-1"
                   @click="
                     $event.stopPropagation();
                     remove(index);

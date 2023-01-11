@@ -53,9 +53,9 @@
               <p class="mb-0">{{ slotProps.data.adres.land }} {{ slotProps.data.adres.postcode }}
                 {{ slotProps.data.adres.gemeente }}</p>
               <p class="mb-0"><a :href="'tel:' + slotProps.data.gsmnummer"
-                                 class="clickable clean-link custom-title">{{ slotProps.data.gsmnummer }}</a></p>
+                                 class="pointer clean-link custom-title">{{ slotProps.data.gsmnummer }}</a></p>
               <p class="mb-0"><a :href="'mailto:' + slotProps.data.email"
-                                 class="clickable clean-link custom-title">{{ slotProps.data.email }}</a></p>
+                                 class="pointer clean-link custom-title">{{ slotProps.data.email }}</a></p>
               <p class="mb-0 p-text-italic"><strong>{{ slotProps.data.opmerkingen }}</strong></p>
               <div class="d-flex justify-content-start mt-3">
                 <Button

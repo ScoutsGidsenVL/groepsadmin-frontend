@@ -1,6 +1,6 @@
 <template>
   <div v-if="criteria && criteria.activated" v-click-outside="close">
-    <div class="col-12 type-select-button kolom-select clickable" @click="toggleMenu = !toggleMenu">
+    <div class="col-12 type-select-button kolom-select pointer" @click="toggleMenu = !toggleMenu">
       <div class="row mt--05">
         <div class="col-10 ">
           <div class="text-align-left d-flex">
@@ -8,7 +8,7 @@
               <label>{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle clickable text-align-left criteria-label cut-off-text">{{ label }}</label>
+              <label class="subtitle pointer text-align-left criteria-label cut-off-text">{{ label }}</label>
             </div>
           </div>
         </div>

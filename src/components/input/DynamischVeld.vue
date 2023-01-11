@@ -15,7 +15,7 @@
       >
       </BaseInput>
       <div v-if="veld.type === 'vinkje'" class="d-flex justify-content-between mb-2">
-        <label class="text-align-left clickable" :for="veld.id">{{ veld.label }}</label>
+        <label class="text-align-left pointer" :for="veld.id">{{ veld.label }}</label>
         <checkbox
           true-value="true"
           false-value="false"
@@ -60,7 +60,6 @@
 import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import BaseTextArea from "@/components/input/BaseTextArea";
-import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DynamischVeldService from "@/services/dynamischVeld/DynamischVeldService";
 import {toRefs} from "@vue/reactivity";
 
@@ -69,7 +68,6 @@ export default {
   components: {
     BaseTextArea,
     BaseInput,
-    BaseCheckbox,
     BaseDropdown,
   },
   props: {

@@ -18,7 +18,7 @@
               <div class="mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
                 <opslaan class="md:ml-2" :disabled="!changes" @click="opslaan"></opslaan>
               </div>
-              <div class="top-menu d-flex justify-content-end align-content-center mt--15">
+              <div class="mb-6 relative d-flex justify-content-end align-content-center mt--15">
                 <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
                         aria-controls="overlay_menu"
                         class="sub-menu-button menu-button p-button-rounded"/>
@@ -26,7 +26,7 @@
                   <template #item="{item}">
                     <div @click="gaNaar(item.link)">
                       <i :class="item.icon" class="lid-menu-item mr-2"><label
-                        class="clickable lid-menu-item font ml-2">{{ item.label }}</label></i>
+                        class="pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
                     </div>
                   </template>
                 </Menu>

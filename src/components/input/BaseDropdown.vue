@@ -9,7 +9,7 @@
       </label>
       <div class="col-12 col-sm-7 p-md-8" :class="!label ? 'ml-4' : ''">
         <dropdown
-          class="width-100"
+          class="w-100"
           :options="options"
           :modelValue="value"
           optionLabel="label"

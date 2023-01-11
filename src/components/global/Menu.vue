@@ -2,7 +2,7 @@
   <div class="sidemenu">
     <div class="hidden lg:block desktop-menu">
       <div class="header_logo_inner">
-        <div class="ga-logo clickable" @click="goToDashBoard">
+        <div class="ga-logo pointer" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo"/>
         </div>
       </div>
@@ -11,7 +11,7 @@
           <div>
             <ul>
               <li v-for="menuItem in desktopMenuItems" :key="menuItem.label"
-                  class="menu-item menu-item-width clickable">
+                  class="menu-item menu-item-width pointer">
                 <div @click="goto(menuItem)" class="menu-item-width">
                   <div class="menu-icon">
                     <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
@@ -22,7 +22,7 @@
                   <div
                     v-if="menuItem.label !== 'Zoeken'"
                     :class="[activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
-                    class="menu-item-text"
+                    class="text-align-left ml-6"
                   >{{ menuItem.label }}
                   </div>
                 </div>
@@ -33,8 +33,8 @@
       </div>
     </div>
     <div class="lg:hidden mb-8">
-      <div class="top-menu d-flex justify-content-center align-content-center">
-        <div class="ga-logo-mobile clickable" @click="goToDashBoard">
+      <div class="mb-6 relative d-flex justify-content-center align-content-center">
+        <div class="ga-logo-mobile pointer" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
         </div>
         <div class="right-0">

@@ -2,12 +2,12 @@
   <div class="hidden lg:block">
     <div class="container-fluid md:w-90 position-absolute mt-2 ">
       <div class="d-flex justify-content-md-end z999">
-        <label class="h-1rem float-start sm:ml-4 h-2rem clickable"
+        <label class="h-1rem float-start sm:ml-4 h-2rem pointer"
                @click="gaNaarProfiel">{{ getVolledigeNaam }}</label>
-        <div class="ml-4 clickable" @click="gaNaarAccount" v-show="false">
+        <div class="ml-4 pointer" @click="gaNaarAccount" v-show="false">
           <i class="fas fa-user-circle menu-icon" title="Account"/>
         </div>
-        <div class="ml-5 clickable mr--23px" @click="logout">
+        <div class="ml-5 pointer mr--23px" @click="logout">
           <i class="fas fa-sign-out-alt menu-icon " title="Uitloggen"/>
         </div>
       </div>

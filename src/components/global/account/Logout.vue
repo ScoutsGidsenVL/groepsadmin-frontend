@@ -1,8 +1,8 @@
 <template>
-  <div class="logout-block clickable" @click="logout">
+  <div class="logout-block pointer" @click="logout">
     <span>
       <i class="fas fa-sign-out-alt" />
-      <span class="logout">Afmelden</span>
+      <span class="bottom-0">Afmelden</span>
     </span>
   </div>
 </template>

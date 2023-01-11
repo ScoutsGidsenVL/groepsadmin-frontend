@@ -100,6 +100,7 @@
   margin-left: - 0.7rem !important;
 }
 
+
 .ml--1 {
   margin-left: - 1rem !important;
 }
@@ -114,6 +115,10 @@
 
 .mt--08 {
   margin-top: - 0.8rem !important;
+}
+
+.mt-07 {
+  margin-top: 0.7rem !important;
 }
 
 .mb--25 {
@@ -136,18 +141,6 @@
   height: 30px !important;
 }
 
-.mr-05 {
-  margin-right: 0.5rem !important;
-}
-
-.ml-4em {
-  margin-left: 4em !important;
-}
-
-.clickable {
-  cursor: pointer;
-}
-
 .custom-input-styling {
   .p-inputtext:enabled:focus {
     box-shadow: 0 0 0 0.2rem transparent !important;
@@ -156,10 +149,6 @@
   .p-inputtext:enabled:hover {
     border-color: $sgv-donkergroen !important;
   }
-}
-
-.underline {
-  text-decoration: underline;
 }
 
 .mail-link {
@@ -568,5 +557,13 @@ a.clean-link:hover {
 
 .font22 {
   font-size: 22px !important;
+}
+
+.donkergroen {
+  color: $sgv-donkergroen;
+}
+
+.mt-12 {
+  margin-top: 1.2rem !important;
 }
 

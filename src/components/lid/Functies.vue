@@ -43,7 +43,7 @@
             </div>
             <div v-for="(functie, index) in functies" :key="index">
               <div v-show="!functie.actief && historiek" class="functie-wrapper"
-                   :class="!functie.actief ? 'inactive-function' : ''">
+                   :class="!functie.actief ? 'opacity-50' : ''">
                 <div class="flex-row">
                   <div class="justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}&nbsp;</label>
@@ -65,7 +65,7 @@
         <div v-if="historiek && !laden">
           <accordion :multiple="true">
             <accordionTab v-for="(functies, index) in nietActieveGroepen" :key="index" :header="inactieveGroepsNaam(index)">
-              <div v-for="(functie, index) in functies" :key="index" class="inactive-function">
+              <div v-for="(functie, index) in functies" :key="index" class="opacity-50">
                 <div class="flex-row">
                   <div class="justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}&nbsp;</label>
