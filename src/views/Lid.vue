@@ -81,7 +81,6 @@ import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Functies from "@/components/lid/Functies";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
-import rechtenService from "@/services/rechten/rechtenService";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
@@ -89,7 +88,6 @@ import ConfirmDialog from "primevue/confirmdialog";
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
-import {computed} from "vue";
 
 export default {
   name: "Lid",
@@ -111,51 +109,19 @@ export default {
   setup() {
     const {
       state,
-      store,
-      route,
       stopAlleFuncties,
       opslaan,
       resetWatchable,
       changeGeg,
       updateFuncties,
-
+      volledigeNaam,
+      magFunctiesToevoegen,
+      isEigenProfiel,
+      wijzigingen,
+      teBekijkenLid,
     } = LidService.lidSpace();
 
-    const volledigeNaam = computed({
-      get() {
-        return (
-          state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam
-        );
-      }
-    })
 
-    const magFunctiesToevoegen = computed({
-      get() {
-        if (state.lid.vgagegevens.voornaam) {
-          return rechtenService.canBeShowed(state.lid, 'functies.')
-        } else {
-          return false;
-        }
-      }
-    })
-
-    const isEigenProfiel = computed({
-      get() {
-        return route.params.id === "profiel" || store.getters.profiel.id === route.params.id
-      }
-    })
-
-    const wijzigingen = computed({
-      get() {
-        return state.changes
-      }
-    })
-
-    const teBekijkenLid = computed({
-      get() {
-        return state.lid
-      }
-    })
 
     return {
       ...toRefs(state),

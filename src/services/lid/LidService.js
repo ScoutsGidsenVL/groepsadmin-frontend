@@ -5,11 +5,10 @@ import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import {useStore} from "vuex";
 import {useVuelidate} from "@vuelidate/core";
-import {onMounted, watch} from "vue";
+import {computed, onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
-
-let _ = require('lodash');
+import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
 
@@ -401,26 +400,56 @@ export default {
             }
         })
 
-        const v = useVuelidate(rules, state  );
+        const volledigeNaam = computed({
+            get() {
+                return (
+                    state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam
+                );
+            }
+        })
 
-        const compare = (obj1, obj2) => {
-            return _.isEqual(obj1, obj2)
-        }
+        const magFunctiesToevoegen = computed({
+            get() {
+                if (state.lid.vgagegevens.voornaam) {
+                    return rechtenService.canBeShowed(state.lid, 'functies.')
+                } else {
+                    return false;
+                }
+            }
+        })
+
+        const isEigenProfiel = computed({
+            get() {
+                return route.params.id === "profiel" || store.getters.profiel.id === route.params.id
+            }
+        })
+
+        const wijzigingen = computed({
+            get() {
+                return state.changes
+            }
+        })
+
+        const teBekijkenLid = computed({
+            get() {
+                return state.lid
+            }
+        })
+
+        const v = useVuelidate(rules, state  );
 
         return {
             state,
-            route,
-            router,
-            emitter,
-            confirm,
-            toast,
-            store,
-            compare,
             v,
             opslaan,
             stopAlleFuncties,
             updateFuncties,
-            resetWatchable
+            resetWatchable,
+            volledigeNaam,
+            magFunctiesToevoegen,
+            isEigenProfiel,
+            wijzigingen,
+            teBekijkenLid
         }
     }
 
