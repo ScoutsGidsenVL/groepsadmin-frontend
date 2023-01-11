@@ -230,8 +230,9 @@
   }
   .p-menu-list li {
     height: 4rem !important;
-
   }
+
+  height: min-content !important;
 }
 
 .width-24 {

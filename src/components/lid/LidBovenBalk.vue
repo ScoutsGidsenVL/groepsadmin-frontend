@@ -24,7 +24,7 @@
                         class="sub-menu-button menu-button p-button-rounded"/>
                 <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4">
                   <template #item="{item}">
-                    <div @click="gaNaar(item.link)">
+                    <div @click="gaNaar(item.link)" v-if="heeftToegang(item.label)">
                       <i :class="item.icon" class="lid-menu-item mr-2"><label
                         class="pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
                     </div>
@@ -78,7 +78,7 @@ export default {
   components: {Opslaan},
   data() {
     return {
-      magFunctiesVanLidStoppen: false,
+      filteredMenuItems: [],
       menuItems: [
         {
           label: "Communicatievoorkeuren",
@@ -119,6 +119,15 @@ export default {
       ],
     };
   },
+
+  created() {
+    this.filterMenuItems();
+  },
+
+  updated() {
+    this.filterMenuItems();
+  },
+
   computed: {
     volledigeNaam() {
       if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
@@ -132,12 +141,6 @@ export default {
 
     legeLedenLijst() {
       return this.$store.getters.leden.length !== 0
-    },
-
-    filteredMenuItems() {
-      return this.menuItems.filter(obj => {
-        return obj.condition;
-      });
     },
 
     kanOpslaan() {
@@ -183,16 +186,31 @@ export default {
       this.$router.push({name: "Lid", params: {id: this.$store.getters.leden[index]}})
     },
 
+    heeftToegang(label) {
+      switch(label) {
+        case "Communicatievoorkeuren":
+          return this.eigenProfiel && !this.nieuwLid;
+        case "Individuele steekkaart":
+          return rechtenService.heeftSteekkaartLeesrecht(this.lid, "steekkaart") || this.eigenProfiel && !this.nieuwLid;
+        case "Nieuw Lid":
+          return rechtenService.hasAccess("nieuw lid");
+        case "Broer/Zus toevoegen":
+          return rechtenService.hasAccess("nieuw lid");
+        case "Mail lid":
+          return !this.eigenProfiel;
+        case "Stop alle functies":
+          return rechtenService.magAlleFunctiesStoppen(this.lid) || this.eigenProfiel;
+        default:
+          return false;
+      }
+    },
+
     opslaan() {
       this.$emit('opslaan');
     },
 
     toggle(event) {
       this.$refs.menu.toggle(event);
-    },
-
-    nieuwLidToevoegen() {
-
     },
 
     broerZusToevoegen() {
@@ -218,7 +236,18 @@ export default {
       this.$router.push({
         name: "lidToevoegen",
       });
-    }
+    },
+
+    filterMenuItems() {
+      this.filteredMenuItems = [];
+      this.menuItems.forEach(item => {
+        if (this.heeftToegang(item.label)) {
+          this.filteredMenuItems.push(item);
+        }
+      })
+    },
+
+
   },
 };
 </script>

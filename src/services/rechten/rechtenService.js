@@ -83,14 +83,19 @@ export default {
     },
 
     magAlleFunctiesStoppen(lid) {
+        let result = false;
         if (lid && lid.functies) {
             let patchObject = lid.links.find(obj => {
                 return obj.method === "PATCH"
             });
-            this.lid.functies.forEach(functie => {
-                return patchObject.secties.indexOf('functies.' + functie.groep) > -1;
+            lid.functies.forEach(functie => {
+                if (!result) {
+                    result = patchObject.secties.indexOf('functies.' + functie.groep) > -1;
+                }
             })
+            return result;
         }
+
     },
 
     kanOpslaan(lid) {
