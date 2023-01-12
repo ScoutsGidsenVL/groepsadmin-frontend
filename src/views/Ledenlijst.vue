@@ -63,7 +63,7 @@
                     <template #item="{item}">
                       <div @click="gaNaar(item.link)">
                         <i :class="item.icon" class="lid-menu-item mr-2"><label
-                          class="pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
+                          class="cursor-pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
                       </div>
                     </template>
                   </Menu>
@@ -93,7 +93,7 @@
                 :field="kolom.id"
                 :header="kolom.label"
                 :key="kolom.id"
-                class="pointer cut-off-text-table"
+                class="cursor-pointer cut-off-text-table"
               >
                 <template #header class="sticky-top position-sticky">
                   <div class="w-full" @click="addSort(kolom)" v-if="kolom.label !== 'Lidgeld betaald aan SGV'">
@@ -121,12 +121,12 @@
                 </template>
                 <template #body="slotProps">
                   <div v-if="!kolom.isLoaded" class="data-placeholder"></div>
-                  <div v-if="kolom.type !== 'vinkje'" class="pointer">
+                  <div v-if="kolom.type !== 'vinkje'" class="cursor-pointer">
                     {{ slotProps.data.waarden[kolom.id] }}
                   </div>
                   <div
                     v-if="kolom.type === 'vinkje'"
-                    class="table-checkbox pointer"
+                    class="table-checkbox cursor-pointer"
                   >
                     <i
                       class="pi"

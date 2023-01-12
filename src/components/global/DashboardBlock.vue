@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-block pointer" v-if="visible" @click="goto(link)">
+  <div class="custom-block cursor-pointer" v-if="visible" @click="goto(link)">
     <div class="text-align-left text-xl pl-3 pt-3 cut-off-text">
       <label>{{ title }}</label>
     </div>

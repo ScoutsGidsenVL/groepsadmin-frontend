@@ -26,7 +26,7 @@
                   <template #item="{item}">
                     <div @click="gaNaar(item.link)" v-if="heeftToegang(item.label)">
                       <i :class="item.icon" class="lid-menu-item mr-2"><label
-                        class="pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
+                        class="cursor-pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
                     </div>
                   </template>
                 </Menu>

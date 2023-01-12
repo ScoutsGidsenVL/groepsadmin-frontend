@@ -78,7 +78,7 @@
                     ><span
                       v-if="leden.length > 0"
                       @click="toonLeden"
-                      class="pointer custom-title"
+                      class="cursor-pointer custom-title"
                     >
                 (details)</span
                     >
@@ -633,7 +633,7 @@ export default {
         "<br/>" +
         this.feedback.vraag +
         "<br/>" +
-        '<a class="pointer custom-title mt-4" href=' +
+        '<a class="cursor-pointer custom-title mt-4" href=' +
         this.feedback.infoLink +
         ' target="_blank">Meer info...</a> '
       );

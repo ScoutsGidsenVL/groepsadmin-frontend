@@ -58,7 +58,7 @@
           <div class="md:hidden ml--05">
             <div class="col-12 col-md-1 col-xs-1 d-flex justify-content-start">
               <a
-                :href="product.link" target="_blank" class="pointer donkergroen" v-if="product.link">
+                :href="product.link" target="_blank" class="cursor-pointer donkergroen" v-if="product.link">
                 meer info
               </a>
             </div>
@@ -96,7 +96,7 @@
           <div class="col-md-1 col-xs-1 mt-4 d-md-flex justify-content-start hidden">
             <div class="mt-12">
               <a
-                :href="product.link" target="_blank" class="pointer donkergroen" v-if="product.link">
+                :href="product.link" target="_blank" class="cursor-pointer donkergroen" v-if="product.link">
                 <i class="fa fa-question-circle resolve" title="meer info"></i>
               </a>
             </div>
@@ -115,7 +115,7 @@
           <div class="md:hidden ml--05">
             <div class="col-12 col-md-1 col-xs-1 d-flex justify-content-start">
               <a
-                :href="product.link" target="_blank" class="pointer donkergroen" v-if="product.link">
+                :href="product.link" target="_blank" class="cursor-pointer donkergroen" v-if="product.link">
                 meer info
               </a>
             </div>
@@ -153,7 +153,7 @@
           <div class="col-md-1 col-xs-1 mt-4 d-md-flex justify-content-start hidden">
             <div class="mt-12">
               <a
-                :href="product.link" target="_blank" class="pointer donkergroen" v-if="product.link">
+                :href="product.link" target="_blank" class="cursor-pointer donkergroen" v-if="product.link">
                 <i class="fa fa-question-circle resolve" title="meer info"></i>
               </a>
             </div>
@@ -177,7 +177,7 @@
           <div class="col-12 col-md-1 col-xs-1 d-flex justify-content-start md:hidden">
             <a
               href="https://www.scoutsengidsenvlaanderen.be/tijdschriften/krak-boem" target="_blank"
-              class="pointer donkergroen">
+              class="cursor-pointer donkergroen">
               Meer info
             </a>
           </div>
@@ -216,7 +216,7 @@
           <div class="mt-07">
             <a
               href="https://www.scoutsengidsenvlaanderen.be/tijdschriften/krak-boem" target="_blank"
-              class="pointer donkergroen">
+              class="cursor-pointer donkergroen">
               <i class="fa fa-question-circle resolve" title="meer info"></i>
             </a>
           </div>
@@ -264,7 +264,7 @@
               </div>
               <div class="col-md-1 col-xs-1 mt15">
                 <a
-                  href="{{product.link}}" target="_blank" class="pointer donkergroen" v-if="product.link">
+                  href="{{product.link}}" target="_blank" class="cursor-pointer donkergroen" v-if="product.link">
                   <i class="fa fa-question-circle resolve" title="meer info"></i>
                 </a>
               </div>

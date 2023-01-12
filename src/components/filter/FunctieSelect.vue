@@ -1,14 +1,14 @@
 <template>
   <div v-if="criteria && criteria.activated" v-click-outside="close">
-    <div class="col-12 type-select-button kolom-select pointer" @click="toggleMenu = !toggleMenu">
+    <div class="col-12 type-select-button kolom-select cursor-pointer" @click="toggleMenu = !toggleMenu">
       <div class="row mt--05">
         <div class="col-10 ">
           <div class="text-align-left d-flex">
             <div>
-              <label class="pointer">{{ criteria.title }} </label>
+              <label class="cursor-pointer">{{ criteria.title }} </label>
             </div>
             <div class="row">
-              <label class="subtitle pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
+              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
             </div>
           </div>
         </div>
@@ -26,10 +26,10 @@
       </div>
       <divider></divider>
       <div v-for="(item, key) in criteria.itemgroups" :key="key" class="border-white border-solid border-1">
-        <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 pointer">
+        <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 cursor-pointer">
           <checkbox :id="item.label" class="mr-2" v-model="selectedGroups" :value="item.label"
                     @change="activeerAlleGroepFuncties(item.label)"/>
-          <label class="text-align-left vw90 pointer" @click="openSection(item.label)">{{ item.label }}</label>
+          <label class="text-align-left vw90 cursor-pointer" @click="openSection(item.label)">{{ item.label }}</label>
           <div class="full-width d-flex justify-content-center" @click="openSection(item.label)">
             <i :class="opened(item.label) ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
                class="text-white "

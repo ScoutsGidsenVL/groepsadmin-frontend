@@ -58,7 +58,7 @@
                 ><span
                   v-if="leden.length > 0"
                   @click="toonLeden"
-                  class="pointer custom-title"
+                  class="cursor-pointer custom-title"
                 >
                 (details)</span
                 >
@@ -107,7 +107,7 @@
         <div class="pl-lg-4em mt-5">
           <h4 class="text-align-left mt-5 custom-title font-weight-bold">
             Etiket eigenschappen
-            <span class="help-button-wrapper small pointer" @click="openFoto"
+            <span class="help-button-wrapper small cursor-pointer" @click="openFoto"
             >&nbsp; (klik hier voor schema)</span
             >
           </h4>

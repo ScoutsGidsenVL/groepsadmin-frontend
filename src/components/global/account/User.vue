@@ -1,5 +1,5 @@
 <template>
-  <div class="user-block pointer">
+  <div class="user-block cursor-pointer">
     <span>
       <i class="fas fa-user" />
       <span class="username" @click="">{{ naam }}</span>

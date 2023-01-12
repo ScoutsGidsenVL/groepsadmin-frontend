@@ -15,7 +15,7 @@
       >
       </BaseInput>
       <div v-if="veld.type === 'vinkje'" class="d-flex justify-content-between mb-2">
-        <label class="text-align-left pointer" :for="veld.id">{{ veld.label }}</label>
+        <label class="text-align-left cursor-pointer" :for="veld.id">{{ veld.label }}</label>
         <checkbox
           true-value="true"
           false-value="false"

@@ -8,7 +8,7 @@
               <label>{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
+              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
             </div>
           </div>
         </div>

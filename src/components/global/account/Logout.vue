@@ -1,5 +1,5 @@
 <template>
-  <div class="logout-block pointer" @click="logout">
+  <div class="logout-block cursor-pointer" @click="logout">
     <span>
       <i class="fas fa-sign-out-alt" />
       <span class="bottom-0">Afmelden</span>

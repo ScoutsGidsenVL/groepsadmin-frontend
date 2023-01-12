@@ -2,7 +2,7 @@
   <div class="sidemenu">
     <div class="hidden lg:block desktop-menu">
       <div class="header_logo_inner">
-        <div class="ga-logo pointer" @click="goToDashBoard">
+        <div class="ga-logo cursor-pointer" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo"/>
         </div>
       </div>
@@ -11,7 +11,7 @@
           <div>
             <ul>
               <li v-for="menuItem in desktopMenuItems" :key="menuItem.label"
-                  class="menu-item menu-item-width pointer">
+                  class="menu-item menu-item-width cursor-pointer">
                 <div @click="goto(menuItem)" class="menu-item-width">
                   <div class="menu-icon">
                     <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
@@ -34,7 +34,7 @@
     </div>
     <div class="lg:hidden mb-8">
       <div class="mb-6 relative d-flex justify-content-center align-content-center">
-        <div class="ga-logo-mobile pointer" @click="goToDashBoard">
+        <div class="ga-logo-mobile cursor-pointer" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
         </div>
         <div class="right-0">

@@ -37,7 +37,7 @@
                       v-for="(item, index) in snelNaarItems" :key="index">
                     <i class="fal fa-arrow-right color-light-green"><a :href="item.url" target="_blank"
                                                                        class="text-decoration-none"><span
-                      class="text-black font ml-2 pointer">{{ item.naam }}</span></a></i>
+                      class="text-black font ml-2 cursor-pointer">{{ item.naam }}</span></a></i>
                   </li>
                 </ul>
               </div>
