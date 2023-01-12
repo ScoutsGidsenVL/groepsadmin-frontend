@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-1">
     <SideMenu/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
@@ -34,7 +34,7 @@
                 v-model="sjabloon"
                 optionLabel="label"
                 optionValue="value"
-                class="full-width"
+                class="full-width sjabloon-dropdown"
               >
               </dropdown>
             </div>

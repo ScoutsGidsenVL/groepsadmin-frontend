@@ -459,7 +459,20 @@ a.clean-link:hover {
 }
 
 .full-width {
-  width: -webkit-fill-available;
+  width: -webkit-fill-available !important;
+}
+
+.sjabloon-dropdown {
+  min-width: 315px !important;
+}
+
+.sjabloon-mail-dropdown {
+  min-width: 265px !important;
+}
+
+.bestandsnaam {
+  max-width: 190px !important;
+  min-width: 190px !important;
 }
 
 .criteria-label {
