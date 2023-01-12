@@ -49,6 +49,10 @@
               label="E-mail"
               v-model="contacten[index].email"
               type="text"
+              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].email && v.contacten.$each.$response.$errors[index].email.length > 0"
+              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
+                              v.contacten.$each.$response.$errors[index].email.length > 0) ?
+                              v.contacten.$each.$response.$errors[index].email[0].$message : ''"
             />
             <BaseInputTelefoon
               v-model="contacten[index].gsm"
@@ -90,7 +94,7 @@ import {onMounted} from "vue";
 import {onUpdated} from "@vue/runtime-core";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import {useVuelidate} from "@vuelidate/core";
-import {helpers} from "@vuelidate/validators";
+import {email, helpers} from "@vuelidate/validators";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import rechtenService from "@/services/rechten/rechtenService";
 
@@ -219,6 +223,9 @@ export default {
           gsm: {
             isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
           },
+          email: {
+            email: helpers.withMessage("Geen geldig emailadres", email)
+          }
         })
       }
     }
