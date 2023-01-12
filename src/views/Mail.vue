@@ -26,18 +26,18 @@
               <div class="d-flex justify-content-start">
                 <label>Opgeslagen sjablonen:</label>
               </div>
-              <div class="row">
-                <div class="col-10">
+              <div class="d-flex justify-content-start">
+                <div>
                   <dropdown
                     :options="gesorteerdeSjablonen(sjablonen)"
                     v-model="sjabloon"
                     optionLabel="label"
                     optionValue="value"
-                    class="full-width"
+                    class="sjabloon-mail-dropdown"
                   >
                   </dropdown>
                 </div>
-                <div class="col-2 text-align-left"
+                <div class="ml-2 text-align-left"
                      v-if="sjabloon && (sjabloon.naam !== 'blanco sjabloon' || sjabloon.links.length !== 0)">
                   <Button
                     icon="pi pi-trash"
@@ -122,14 +122,25 @@
                   :multiple="true"
                   :maxFileSize="4999999"
                   previewWidth="50"
-                  :chooseLabel="label"
+                  chooseLabel="Bestanden kiezen"
                   :showUploadButton="false"
                   :showCancelButton="false"
-                  invalidFileSizeMessage="Bestandsgrootte mag niet groter zijn dan 5MB"
                   class="d-flex justify-content-start md:w-4 lg:w-6 sm:max-w-full"
                 ></FileUpload>
-                <p class="d-flex justify-content-start text-align-left">Voeg meerdere bestanden toe door deze gezamenlijk te
-                  selecteren.</p>
+                <div v-for="(file, index) in files" :key="index" class="text-align-left">
+                  <div class="d-flex justify-content-start">
+                    <div class="cut-off-text bestandsnaam">{{ file.name }}</div>
+                    <Button
+                      icon="pi pi-trash"
+                      class="p-button-rounded p-button-text p-button-danger mt--05"
+                      @click="
+                                    $event.stopPropagation();
+                                    removeFile(index);
+                                  "
+                      title="Verwijder bestand"
+                    />
+                  </div>
+                </div>
                 <div class="col-lg-8">
                   <div class="d-flex justify-content-start">
                     <Button
@@ -378,18 +389,6 @@ export default {
       return this.$store.getters.groepenLaden;
     },
 
-    label() {
-      let label = "Bestanden kiezen"
-      //let counter = 0;
-      if (this.files.length > 0) {
-        label = ""
-        this.files.forEach((file) => {
-          label += file.name + " ";
-        })
-      }
-      return label;
-    },
-
     groepen() {
       return this.$store.getters.groepen;
     },
@@ -437,6 +436,10 @@ export default {
   },
 
   methods: {
+    removeFile(index) {
+      this.files.splice(index, 1);
+    },
+
     getSjablonen(lifecycle) {
       RestService.getSjablonen("mail")
         .then((res) => {
@@ -705,6 +708,7 @@ export default {
         .then((res) => {
           this.changes = false;
           this.bevestig = false;
+          // todo dialog met resultaat
           console.log("mail was sent TO list", res);
         })
         .catch((error) => {
@@ -745,6 +749,7 @@ export default {
 
     selectFiles(event) {
       this.files = event.files;
+      console.log(this.files.length)
     },
 
     closeModal() {
