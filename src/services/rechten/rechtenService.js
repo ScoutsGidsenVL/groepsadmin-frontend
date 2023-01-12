@@ -88,11 +88,13 @@ export default {
             let patchObject = lid.links.find(obj => {
                 return obj.method === "PATCH"
             });
-            lid.functies.forEach(functie => {
-                if (!result) {
-                    result = patchObject.secties.indexOf('functies.' + functie.groep) > -1;
-                }
-            })
+            if (patchObject) {
+                lid.functies.forEach(functie => {
+                    if (!result) {
+                        result = patchObject.secties.indexOf('functies.' + functie.groep) > -1;
+                    }
+                })
+            }
             return result;
         }
 
