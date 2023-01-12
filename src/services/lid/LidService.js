@@ -265,18 +265,20 @@ export default {
             if (v.value.$invalid) {
                 state.loadingLid = false;
                 state.changes = false;
-              toast.add({
-                severity: "warn",
-                summary: "Wijzigingen",
-                detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier. </br> Kijk zeker ook adressen en contacten na.",
-                life: 3000,
-              });
-              return;
+                toast.add({
+                    severity: "warn",
+                    summary: "Wijzigingen",
+                    detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier. </br> Kijk zeker ook adressen en contacten na.",
+                    life: 3000,
+                });
+                return;
             }
 
-            let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
-            geboortedatum.setHours(2);
-            state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
+            if (state.gewijzigdLid.vgagegevens) {
+                let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                geboortedatum.setHours(2);
+                state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
+            }
 
             RestService.updateLid(state.lid.id, state.gewijzigdLid)
                 .then(res => {
@@ -436,7 +438,7 @@ export default {
             }
         })
 
-        const v = useVuelidate(rules, state  );
+        const v = useVuelidate(rules, state);
 
         return {
             state,
