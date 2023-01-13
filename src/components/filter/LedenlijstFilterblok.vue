@@ -6,6 +6,7 @@
           <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
             <dropdown @change="veranderFilter" :options="filters" option-label="label" option-group-label="label"
                       scrollHeight="500px"
+                      input-class="filter-select"
                       option-group-children="items" placeholder="Huidige" class="col-12">
               <template #optiongroup="slotProps">
                 <div class="flex align-items-center filter-item">
