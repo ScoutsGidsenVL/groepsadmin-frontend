@@ -602,11 +602,7 @@ export default {
           RestService.verwijderSjabloon("mail", this.sjabloon.id)
             .then(() => {
               this.setStandaardSjabloon();
-              this.sjablonen.forEach((listSjabloon, index) => {
-                if (listSjabloon.label === sjabloon.naam) {
-                  this.sjablonen.splice(index, 1);
-                }
-              });
+              this.getSjablonen("update");
               this.$toast.add({
                 severity: "success",
                 summary: "Sjabloon",
