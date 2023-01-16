@@ -41,16 +41,18 @@
               label="Land"
               v-model="adressen[index].land"
               @changeValue="veranderLand(index)"
+              :disabled="!heeftToegang('adressen')"
             />
             <gemeente-zoek-auto-complete
               :index="index"
               label="Woonplaats"
               v-model="adressen[index]"
               v-if="adressen[index].land === 'BE'"
+              :disabled="!heeftToegang('adressen')"
             />
             <straat-zoek-auto-complete
               :index="index"
-              :disabled="!adressen[index].postcode && !adressen[index].gemeente"
+              :disabled="(!adressen[index].postcode && !adressen[index].gemeente) || !heeftToegang('adressen')"
               label="Straat"
               v-model="adressen[index]"
               :value="adressen[index].straat"
@@ -58,6 +60,7 @@
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
+              :disabled="!heeftToegang('adressen')"
               label="Postcode"
               v-model="adressen[index].postcode"
               type="text"
@@ -71,6 +74,7 @@
               label="Gemeente"
               v-model="adressen[index].gemeente"
               type="text"
+              :disabled="!heeftToegang('adressen')"
               :invalid="v.adressen.$each.$response.$errors[index].gemeente && v.adressen.$each.$response.$errors[index].gemeente.length > 0"
               :error-message="(v.adressen.$each.$response.$errors[index].gemeente &&
                               v.adressen.$each.$response.$errors[index].gemeente.length > 0) ?
@@ -80,6 +84,7 @@
               v-if="adressen[index] && adressen[index].land !== 'BE'"
               label="Straat"
               v-model="adressen[index].straat"
+              :disabled="!heeftToegang('adressen')"
               type="text"
               :invalid="v.adressen.$each.$response.$errors[index].straat && v.adressen.$each.$response.$errors[index].straat.length > 0"
               :error-message="(v.adressen.$each.$response.$errors[index].straat &&
@@ -89,7 +94,7 @@
             <BaseInput
               label="Nummer"
               v-model="adressen[index].nummer"
-              :disabled="!adressen[index].straat"
+              :disabled="!adressen[index].straat || !heeftToegang('adressen')"
               type="text"
               :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].nummer && v.adressen.$each.$response.$errors[index].nummer.length > 0"
               :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].nummer &&
@@ -99,12 +104,13 @@
             <BaseInput
               label="Bus"
               v-model="adressen[index].bus"
-              :disabled="!adressen[index].straat"
+              :disabled="!adressen[index].straat || !heeftToegang('adressen')"
               type="text"
             />
             <BaseInputTelefoon
               v-model="adressen[index].telefoon"
               label="Telefoon"
+              :disabled="!heeftToegang('adressen')"
               type="text"
               :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].telefoon && v.adressen.$each.$response.$errors[index].telefoon.length > 0"
               :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].telefoon &&
@@ -117,7 +123,7 @@
               multiple="false"
               v-model="adressen[index].postadres"
               @change="zetPostadres(index)"
-              :disabled="adressen[index].postadres"
+              :disabled="adressen[index].postadres || !heeftToegang('adressen')"
             />
           </accordionTab>
         </accordion>
@@ -173,8 +179,6 @@ export default {
       zetPostadres,
       heeftToegang
     } = AdresService.adresSpace(props);
-
-
 
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);

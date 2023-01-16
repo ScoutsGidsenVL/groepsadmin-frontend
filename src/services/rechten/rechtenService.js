@@ -42,6 +42,7 @@ export default {
     },
 
     canBeShowed: function (lid, type) {
+        console.log(lid)
         let patchObject = lid.links.find(obj => {
             return obj.method === "PATCH"
         });
