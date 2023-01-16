@@ -190,6 +190,7 @@ export default {
 
     onUpdated(() => {
       state.groep = props.modelValue;
+      state.groep.opgericht = new Date(props.modelValue.opgericht);
     });
 
     return {...toRefs(state)};
