@@ -54,8 +54,7 @@
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
               <functies
-                v-model="gesorteerdeFuncties"
-                :lid="lid"
+                v-model="lid"
                 v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
               ></functies>
               <functies-toevoegen
