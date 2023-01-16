@@ -4,6 +4,7 @@ import moment from "moment";
 import rechtenService from "@/services/rechten/rechtenService";
 import {useStore} from "vuex";
 import useEmitter from "@/services/utils/useEmitter";
+import {onUpdated} from "@vue/runtime-core";
 
 export default {
 
@@ -12,11 +13,15 @@ export default {
         const emitter = useEmitter();
 
         const state = reactive({
+            huidigLid: props.modelValue,
             laden: false,
             functiesEnGroepenGeladen: false,
             showFunctieToevoegen: false,
             groepEnfuncties: [],
-            huidigLid: props.lid
+        })
+
+        onUpdated(() => {
+            state.huidigLid = props.modelValue;
         })
 
         const gesorteerdeFuncties = (functies, type) => {
@@ -38,6 +43,7 @@ export default {
                 }
                 return 0;
             })
+
             return relevanteFuncties.filter(obj => {
                 return obj.type === type;
             });
@@ -72,7 +78,6 @@ export default {
             state.groepEnfuncties.forEach(groep => {
                 state.showFunctieToevoegen |= rechtenService.hasPermission('functies.' + groep.groepsnummer);
             });
-
         }
 
         const groepsNaam = (index) => {

@@ -13,7 +13,7 @@
         <accordion :multiple="true">
           <accordionTab v-for="(groep, index) in groepEnfuncties" :key="index"
                         :header="groep.naam + ' - ' + groep.groepsnummer">
-            <div class="row">
+            <div class="row" v-if="gesorteerdeFuncties(groep.functies, 'verbond')">
               <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'verbond')" :key="index"
                    class="col-md-6">
                 <checkbox
@@ -60,9 +60,6 @@ export default {
     modelValue: {
       type: Object, Array
     },
-    lid: {
-      type: Object
-    }
   },
   setup(props) {
     const {
