@@ -1,5 +1,5 @@
 <template>
-  <div class="row mt-8 z999">
+  <div class="row mt-3 z999">
     <div class="col-12">
       <div class="">
         <div class="row">
@@ -68,7 +68,7 @@
       </div>
     </div>
   </div>
-  <div class="row mt--1">
+  <div class="row mt--3">
     <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
                      v-if="inActivecriteria.length > 0"></criteria-select>
     <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
