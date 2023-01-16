@@ -15,10 +15,10 @@
         <div class="row mt-4">
           <div class="col-6 col-md-12">
             <div class="d-flex sm:justify-content-start md:justify-content-end">
-              <div class="mr-7" v-if="kanOpslaan || kanNieuwLidAanmaken">
+              <div :class="!nieuwLid ? 'mr-7' : ''" v-if="kanOpslaan || kanNieuwLidAanmaken">
                 <opslaan class="md:ml-2" :disabled="!changes" @click="opslaan"></opslaan>
               </div>
-              <div class="mb-6 relative d-flex justify-content-end align-content-center mt--15">
+              <div class="mb-6 relative d-flex justify-content-end align-content-center mt--15" v-if="!nieuwLid">
                 <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
                         aria-controls="overlay_menu"
                         class="sub-menu-button menu-button p-button-rounded"/>
