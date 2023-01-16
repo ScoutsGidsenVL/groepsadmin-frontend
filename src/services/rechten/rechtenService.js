@@ -42,16 +42,17 @@ export default {
     },
 
     canBeShowed: function (lid, type) {
-        console.log(lid)
-        let patchObject = lid.links.find(obj => {
-            return obj.method === "PATCH"
-        });
-        if (patchObject) {
-            return patchObject.secties.find(element => {
-                if (element.includes(type)) {
-                    return true;
-                }
+        if (lid.links) {
+            let patchObject = lid.links.find(obj => {
+                return obj.method === "PATCH"
             });
+            if (patchObject) {
+                return patchObject.secties.find(element => {
+                    if (element.includes(type)) {
+                        return true;
+                    }
+                });
+            }
         }
         return false;
     },
@@ -85,7 +86,7 @@ export default {
 
     magAlleFunctiesStoppen(lid) {
         let result = false;
-        if (lid && lid.functies) {
+        if (lid && lid.functies && lid.links) {
             let patchObject = lid.links.find(obj => {
                 return obj.method === "PATCH"
             });
