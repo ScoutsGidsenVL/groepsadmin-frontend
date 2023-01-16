@@ -132,11 +132,16 @@ export default {
             }
         )
 
+        const setGeboorteDatum = () => {
+            state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+        }
+
         const getProfiel = () => {
             state.lid = store.getters.profiel;
             sorteerFuncties();
             filterGroepsEigenVelden();
             state.loadingLid = false;
+            setGeboorteDatum();
         }
 
         const getLid = (id) => {
@@ -151,7 +156,7 @@ export default {
                 }
                 sorteerFuncties();
                 filterGroepsEigenVelden();
-                state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                setGeboorteDatum();
             }).catch(error => {
                 if (error.response.status === 403) {
                     toast.add({
