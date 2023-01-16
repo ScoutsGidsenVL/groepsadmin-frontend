@@ -31,8 +31,7 @@
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
               <functies-toevoegen
-                v-model="gesorteerdeFuncties"
-                :lid="lid"
+                v-model="lid"
                 v-if="magFunctiesToevoegen"
               ></functies-toevoegen>
             </div>
