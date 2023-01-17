@@ -3,8 +3,14 @@
     <card>
       <template #title>
         <div class="d-flex col-12 justify-content-between">
-          <span class="font18"> {{ title }}</span>
-
+          <span class="font22"> {{ title }}</span>
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded p-button-outlined mt-1 add-button"
+            @click="voegAdresToe"
+            title="Voeg adres toe"
+            v-if="bewerkbaar"
+          />
         </div>
       </template>
       <template #content>
@@ -163,7 +169,6 @@ export default {
       zetPostadres,
       heeftToegang
     } = AdresService.adresSpace(props);
-
 
 
     const isGeldigGsmNummer = (value) => {
