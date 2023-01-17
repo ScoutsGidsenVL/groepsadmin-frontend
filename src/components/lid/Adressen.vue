@@ -25,7 +25,7 @@
                   title="postadres"
                 ></i>
                 <Button
-                  v-if="!adressen[index].postadres"
+                  v-if="!adressen[index].postadres && heeftToegang('adressen')"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
                   @click="
