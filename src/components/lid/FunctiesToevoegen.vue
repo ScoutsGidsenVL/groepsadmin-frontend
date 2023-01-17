@@ -58,7 +58,7 @@ export default {
   },
   props: {
     modelValue: {
-      type: Object, Array
+      type: Object
     },
   },
   setup(props) {
