@@ -52,6 +52,7 @@ export default {
             huidigeFilter: {},
             leden: [],
             actieveKolommen: [],
+            nonActieveKolommen: [],
             filters: [],
             geselecteerdeLeden: [],
             deelFilter: false,
