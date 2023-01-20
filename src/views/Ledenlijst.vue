@@ -12,7 +12,7 @@
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
         <Loader
-          :showLoader="isLoading"
+          :showLoader="isLoading" :title="loadingText"
         ></Loader>
         <div class="lg:ml-8" >
           <div class="lg:ml-6">
@@ -40,8 +40,8 @@
               stripedRows
               showGridlines
               responsiveLayout="scroll"
-              v-model:selection="geselecteerdeLeden"
-              @row-select-all="selecteerAlleLeden"
+              v-model:selection="uniekeLeden"
+              @row-select-all="selecteerAlleLeden(0)"
               @row-unselect-all="clearAlleLeden"
               @row-select="selecteerLid"
               @row-unselect="selecteerLid"
@@ -223,7 +223,7 @@ export default {
         }
         if (aantalLedenGeladen.value < state.totaalAantalLeden) {
           state.offset = state.leden.length;
-          getLeden();
+          getLeden(state.offset);
         }
       }
     }

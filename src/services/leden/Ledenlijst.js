@@ -37,6 +37,7 @@ export default {
             isLoadingMore: false,
             isExporting: false,
             ledenDialog: false,
+            loadingText: "",
             isFilterCollapsed: false,
             isLoading: false,
             isSavingFilters: false,
@@ -55,6 +56,7 @@ export default {
             nonActieveKolommen: [],
             filters: [],
             geselecteerdeLeden: [],
+            uniekeLeden: [],
             deelFilter: false,
             criteria: [],
             activeCriteria: [],
@@ -173,13 +175,13 @@ export default {
 
         const gaNaar = (link) => {
             if (link === 'pdf' || link === 'csv' || link === 'steekkaart') {
-                if (state.geselecteerdeLeden.length < 1) {
+                if (state.uniekeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
                 }
                 exporteer(link)
             } else if (link === 'email' || link === 'etiket') {
-                if (state.geselecteerdeLeden.length < 1) {
+                if (state.uniekeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
                 }
@@ -238,6 +240,7 @@ export default {
 
         const filterOpslaan = (naam, delen, filterId) => {
             state.isLoading = true;
+            state.loadingText = "Filter opslaan"
             if (filterId) {
                 RestService.patchFilterOpId(state.huidigeFilter, filterId)
                     .then(res => {
@@ -351,7 +354,7 @@ export default {
                 .then(res => {
                     state.huidigeFilter = res.data;
                     state.leden = [];
-                    getLeden();
+                    getLeden(state.offset);
                     getFilters();
                     ledenlijstFilter.getCriteria();
                     activeerKolommen();
@@ -359,7 +362,7 @@ export default {
 
         }
 
-        const aantalLedenGeladen = computed(() =>  {
+        const aantalLedenGeladen = computed(() => {
             return state.leden.length;
         })
 
@@ -401,7 +404,7 @@ export default {
                                 .then(res => {
                                     state.huidigeFilter = res.data;
                                     state.offset = 0;
-                                    getLeden();
+                                    getLeden(state.offset);
                                     getKolommen();
                                 })
                         }
@@ -439,10 +442,6 @@ export default {
             if (state.huidigeFilter.criteria[criteria.criteriaKey].includes(functie.value)) {
                 let index = state.huidigeFilter.criteria[criteria.criteriaKey].indexOf(functie.value);
                 state.huidigeFilter.criteria[criteria.criteriaKey].splice(index, 1);
-
-
-
-
             } else {
                 state.huidigeFilter.criteria[criteria.criteriaKey].push(functie.value);
             }
@@ -494,18 +493,19 @@ export default {
             menu.value.toggle(event);
         }
 
-        const getLeden = () => {
-            state.offset === 0
+        const getLeden = (offset) => {
+            offset === 0
                 ? (state.isLoading = true)
                 : (state.isLoadingMore = true);
-            RestService.getLeden(state.offset)
+            state.loadingText = "Even wat gegevens ophalen"
+            RestService.getLeden(offset)
                 .then((res) => {
                     state.aantalLedenGeladen = res.data.aantal;
                     state.totaalAantalLeden = res.data.totaal;
                     res.data.leden.forEach((lid) => {
                         state.leden.push(lid);
                     });
-                    state.offset = state.leden.length;
+                    offset = state.leden.length;
                     filterLeden();
                 })
                 .catch((error) => {
@@ -573,7 +573,7 @@ export default {
         }
 
         const exporteer = (type) => {
-            if (state.geselecteerdeLeden.length) {
+            if (state.uniekeLeden.length) {
                 filterLeden();
             }
             let ledenIds = {
@@ -582,6 +582,7 @@ export default {
 
             if (state.lidIds.size > 0) {
                 state.isLoading = true;
+                state.loadingText = "Klein momentje"
                 if (type === "csv") {
                     RestService.getLedenCsv(0, ledenIds)
                         .then((res) => {
@@ -647,18 +648,67 @@ export default {
 
         const filterLeden = () => {
             state.lidIds = new Set();
-            state.geselecteerdeLeden.forEach((lid) => {
+            state.uniekeLeden.forEach((lid) => {
                 state.lidIds.add(lid.id);
             });
         }
 
         const aantalLedenGeselecteerd = () => {
-            return state.geselecteerdeLeden.length;
+            return state.uniekeLeden.length;
         }
 
-        const selecteerAlleLeden = () => {
-            getLeden();
+        const selecteerAlleLeden = (number) => {
+            state.isLoading = true;
+            state.loadingText = "Alle leden verzamelen, kan even duren..."
+            let offset = 0;
+            if (number) {
+                offset = number;
+            }
+            if (offset === 0) {
+                state.uniekeLeden = [];
+                state.lidIds = new Set();
+            }
+
+            RestService.getLeden(offset)
+                .then((res) => {
+                    state.aantalLedenGeladen = res.data.aantal;
+                    state.totaalAantalLeden = res.data.totaal;
+                    res.data.leden.forEach((lid) => {
+                        if (!zitInList(lid)){
+                            console.log(lid.id);
+                            state.uniekeLeden.push(lid);
+                        }
+                        state.lidIds.add(lid.id);
+                    });
+                }).catch((error) => {
+                state.error = true;
+                toast.add({
+                    severity: "error",
+                    summary: "Ophalen leden",
+                    detail: error.message,
+                    life: 8000,
+                });
+            }).finally(() => {
+                offset += 50;
+                if (state.aantalLedenGeladen === 50) {
+                    selecteerAlleLeden(offset)
+                } else {
+                    state.isLoading = false;
+                }
+            });
         }
+
+        const zitInList = (lid) => {
+            let index = -1;
+            for (let i = 0; i < state.uniekeLeden.length; i++) {
+                if (state.uniekeLeden[i].id === lid.id) {
+                    index = i;
+                    break;
+                }
+            }
+            return index >= 0;;
+        }
+
 
         const clearAlleLeden = () => {
             state.lidIds.clear();
@@ -669,8 +719,7 @@ export default {
         }
 
         const verstuur = (type) => {
-            filterLeden();
-            store.commit("setGeselecteerdeLeden", state.geselecteerdeLeden);
+            store.commit("setGeselecteerdeLeden", state.uniekeLeden);
             store.commit("setLidIds", state.lidIds);
             if (type === "email") {
                 router.push({name: "Mail"});
@@ -688,7 +737,7 @@ export default {
             return value === '<input type="checkbox" disabled/>';
         }
 
-        getLeden();
+        getLeden(state.offset);
         getHuidigeFilter();
         getFilters();
 
