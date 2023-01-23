@@ -1,9 +1,9 @@
 import {reactive} from "@vue/reactivity";
 import {onMounted} from "vue";
 import {useRoute} from "vue-router";
-import useStore from "vuex/dist/vuex.mjs";
 import RestService from "@/services/api/RestService";
 import {useToast} from "primevue/usetoast";
+import {useStore} from "vuex";
 
 export default {
 
