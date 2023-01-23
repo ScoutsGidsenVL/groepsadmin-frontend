@@ -167,7 +167,6 @@ if (window.location.pathname.startsWith("/groepsadmin/frontend/formulier/")) {
                 "setGebruikersnaam",
                 keycloak.idTokenParsed.preferred_username
             );
-            store.dispatch("getLeden", 0 );
             store.dispatch("getProfiel");
             store.dispatch("getGroepen");
             store.dispatch("getFuncties");

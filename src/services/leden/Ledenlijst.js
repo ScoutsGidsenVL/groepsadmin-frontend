@@ -33,6 +33,7 @@ export default {
                 },
             ],
             lidIds: new Set(),
+            ledenIds: new Set(),
             isLoadingFilters: true,
             isLoadingMore: false,
             isExporting: false,
@@ -504,9 +505,9 @@ export default {
                     state.totaalAantalLeden = res.data.totaal;
                     res.data.leden.forEach((lid) => {
                         state.leden.push(lid);
+                        state.ledenIds.add(lid.id);
                     });
                     state.offset = state.leden.length;
-                    filterLeden();
                 })
                 .catch((error) => {
                     console.log(error);
@@ -521,6 +522,7 @@ export default {
                 .finally(() => {
                     state.isLoading = false;
                     state.isLoadingMore = false;
+                    store.commit("setLeden", Array.from(state.ledenIds))
                 });
         }
 
@@ -688,9 +690,9 @@ export default {
                     life: 8000,
                 });
             }).finally(() => {
-                offset += 50;
+                state.offset += 50;
                 if (state.aantalLedenGeladen === 50) {
-                    selecteerAlleLeden(offset)
+                    selecteerAlleLeden(state.offset)
                 } else {
                     state.isLoading = false;
                 }
