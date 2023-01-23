@@ -175,13 +175,13 @@ export default {
 
         const gaNaar = (link) => {
             if (link === 'pdf' || link === 'csv' || link === 'steekkaart') {
-                if (state.uniekeLeden.length < 1) {
+                if (state.geselecteerdeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
                 }
                 exporteer(link)
             } else if (link === 'email' || link === 'etiket') {
-                if (state.uniekeLeden.length < 1) {
+                if (state.geselecteerdeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
                 }
@@ -354,7 +354,7 @@ export default {
                 .then(res => {
                     state.huidigeFilter = res.data;
                     state.leden = [];
-                    getLeden(state.offset);
+                    getLeden();
                     getFilters();
                     ledenlijstFilter.getCriteria();
                     activeerKolommen();
@@ -404,7 +404,7 @@ export default {
                                 .then(res => {
                                     state.huidigeFilter = res.data;
                                     state.offset = 0;
-                                    getLeden(state.offset);
+                                    getLeden();
                                     getKolommen();
                                 })
                         }
@@ -493,19 +493,19 @@ export default {
             menu.value.toggle(event);
         }
 
-        const getLeden = (offset) => {
-            offset === 0
+        const getLeden = () => {
+            state.offset === 0
                 ? (state.isLoading = true)
                 : (state.isLoadingMore = true);
             state.loadingText = "Even wat gegevens ophalen"
-            RestService.getLeden(offset)
+            RestService.getLeden(state.offset)
                 .then((res) => {
                     state.aantalLedenGeladen = res.data.aantal;
                     state.totaalAantalLeden = res.data.totaal;
                     res.data.leden.forEach((lid) => {
                         state.leden.push(lid);
                     });
-                    offset = state.leden.length;
+                    state.offset = state.leden.length;
                     filterLeden();
                 })
                 .catch((error) => {
@@ -573,7 +573,7 @@ export default {
         }
 
         const exporteer = (type) => {
-            if (state.uniekeLeden.length) {
+            if (state.geselecteerdeLeden.length) {
                 filterLeden();
             }
             let ledenIds = {
@@ -648,24 +648,26 @@ export default {
 
         const filterLeden = () => {
             state.lidIds = new Set();
-            state.uniekeLeden.forEach((lid) => {
+            state.geselecteerdeLeden.forEach((lid) => {
                 state.lidIds.add(lid.id);
             });
         }
 
         const aantalLedenGeselecteerd = () => {
-            return state.uniekeLeden.length;
+            return state.geselecteerdeLeden.length;
         }
 
         const selecteerAlleLeden = (number) => {
             state.isLoading = true;
             state.loadingText = "Alle leden verzamelen, kan even duren..."
             let offset = 0;
+
             if (number) {
                 offset = number;
             }
+
             if (offset === 0) {
-                state.uniekeLeden = [];
+                state.geselecteerdeLeden = [];
                 state.lidIds = new Set();
             }
 
@@ -674,10 +676,7 @@ export default {
                     state.aantalLedenGeladen = res.data.aantal;
                     state.totaalAantalLeden = res.data.totaal;
                     res.data.leden.forEach((lid) => {
-                        if (!zitInList(lid)){
-                            console.log(lid.id);
-                            state.uniekeLeden.push(lid);
-                        }
+                        state.geselecteerdeLeden.push(lid);
                         state.lidIds.add(lid.id);
                     });
                 }).catch((error) => {
@@ -699,14 +698,11 @@ export default {
         }
 
         const zitInList = (lid) => {
-            let index = -1;
             for (let i = 0; i < state.uniekeLeden.length; i++) {
                 if (state.uniekeLeden[i].id === lid.id) {
-                    index = i;
-                    break;
+                    return i >= 0;
                 }
             }
-            return index >= 0;;
         }
 
 
@@ -719,6 +715,13 @@ export default {
         }
 
         const verstuur = (type) => {
+            state.uniekeLeden = [];
+            state.geselecteerdeLeden.forEach(lid => {
+                if (!zitInList(lid)) {
+                    state.uniekeLeden.push(lid)
+                }
+            })
+
             store.commit("setGeselecteerdeLeden", state.uniekeLeden);
             store.commit("setLidIds", state.lidIds);
             if (type === "email") {
@@ -737,7 +740,7 @@ export default {
             return value === '<input type="checkbox" disabled/>';
         }
 
-        getLeden(state.offset);
+        getLeden();
         getHuidigeFilter();
         getFilters();
 

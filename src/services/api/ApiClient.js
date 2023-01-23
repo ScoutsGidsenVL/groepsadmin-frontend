@@ -24,14 +24,14 @@ export default function apiClient() {
         return response
     }, (error) => {
         if (error.response.status === 500) {
-            console.log('opgevangen error 500')
-        }
+            app.config.globalProperties.$toast.add({
+                severity: "error",
+                summary: "Ai, er liep iets fout met de Groepsadministratie.",
+                detail: "Laat je even aan groepsadministratie@scoutsengidsenvlaanderen.be weten wat je aan het doen was?",
+                life: 8000,
+            });        }
         return Promise.reject(error);
     })
-    // return axios.create({
-    //   withCredentials: false,
-    //   headers: headers,
-    // });
 
     return instance;
 }

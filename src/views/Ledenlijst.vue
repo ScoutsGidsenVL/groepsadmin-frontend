@@ -40,7 +40,7 @@
               stripedRows
               showGridlines
               responsiveLayout="scroll"
-              v-model:selection="uniekeLeden"
+              v-model:selection="geselecteerdeLeden"
               @row-select-all="selecteerAlleLeden(0)"
               @row-unselect-all="clearAlleLeden"
               @row-select="selecteerLid"
