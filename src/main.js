@@ -149,7 +149,7 @@ const emitter = mitt();
 app.config.globalProperties.emitter = emitter;
 
 // In het geval van het publiek formulier gaan we keycloak overslaan
-if (window.location.pathname.startsWith("/groepsadmin/frontend/formulier/")) {
+if (window.location.pathname.endsWith("/formulier/")) {
   app.mount("#app");
 } else {
     let initOptions = getClient();
