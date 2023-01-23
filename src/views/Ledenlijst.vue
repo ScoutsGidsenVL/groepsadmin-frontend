@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="scrollComponent">
     <SideMenu/>
     <confirmDialog/>
     <message-dialog message="Gelieve eerst leden te selecteren." header="Geen leden geselecteerd"
@@ -50,8 +50,6 @@
               @colum-click="addSort"
               sort-mode="multiple"
               class="p-datatable-sm mt-4 ledentabel"
-              :scrollable="true"
-              scroll-height="600px"
             >
               <template #header>
                 <div class="relative mb-6 d-flex justify-content-end align-content-center mt--05">
@@ -209,27 +207,26 @@ export default {
       getLeden,
       aantalLedenGeladen,
       menu,
-      toggle
+      toggle,
+      scrollComponent
     } = Ledenlijst.ledenlijstSpace();
 
 
     const ledenlijst = ref(null);
 
-    const handleScroll = (e) => {
-      let el = e.srcElement;
-      if ( (el.scrollTop >= (el.scrollHeight - el.clientHeight) - 100)  && !state.isLoadingMore) {
+    const handleScroll = () => {
+      let element = scrollComponent.value;
+      if (element.getBoundingClientRect().bottom < window.innerHeight && !state.isLoadingMore) {
         if (aantalLedenGeladen.value === state.totaalAantalLeden) {
-          return;
+              return;
         }
-        if (aantalLedenGeladen.value < state.totaalAantalLeden) {
-          state.offset = state.leden.length;
-          getLeden(state.offset);
-        }
+        state.offset = state.leden.length;
+        getLeden(state.offset);
       }
     }
 
     onMounted(() => {
-      ledenlijst.value.$el.children[1].addEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", handleScroll);
     })
 
     return {
@@ -260,6 +257,7 @@ export default {
       aantalLedenGeladen,
       ledenlijst,
       menu,
+      scrollComponent
     }
   },
 

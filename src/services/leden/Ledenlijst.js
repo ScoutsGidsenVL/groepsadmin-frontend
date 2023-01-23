@@ -18,6 +18,7 @@ export default {
         const store = useStore();
         const router = useRouter();
         const toast = useToast();
+        const scrollComponent = ref(null);
 
         const heeftSteekkaartleesRecht = () => {
             setTimeout(() => {
@@ -772,7 +773,8 @@ export default {
             filterOpslaan,
             getLeden,
             menu,
-            toggle
+            toggle,
+            scrollComponent
         }
     }
 }
