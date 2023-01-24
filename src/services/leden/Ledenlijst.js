@@ -691,9 +691,9 @@ export default {
                     life: 8000,
                 });
             }).finally(() => {
-                state.offset += 50;
+                offset += 50;
                 if (state.aantalLedenGeladen === 50) {
-                    selecteerAlleLeden(state.offset)
+                    selecteerAlleLeden(offset)
                 } else {
                     state.isLoading = false;
                 }

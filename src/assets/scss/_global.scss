@@ -595,3 +595,9 @@ a.clean-link:hover {
   color: $sgv_lichtgroen !important;
   position: absolute !important;
 }
+
+.ledentabel .p-datatable-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 999 !important;
+}

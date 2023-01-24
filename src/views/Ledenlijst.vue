@@ -93,7 +93,7 @@
                 :key="kolom.id"
                 class="cursor-pointer cut-off-text-table"
               >
-                <template #header class="sticky-top position-sticky">
+                <template #header class="sticky-top position-sticky sticky">
                   <div class="w-full" @click="addSort(kolom)" v-if="kolom.label !== 'Lidgeld betaald aan SGV'">
                     <div class="standard-order-icon ml-1" v-if="checkSortering(kolom) === -1">
                       <i class="fas fa-caret-down"></i>
