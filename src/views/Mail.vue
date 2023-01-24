@@ -14,6 +14,12 @@
             @closeModal="closeModal"
             @opslaan="opslaan"
           ></save-template-dialog>
+          <message-dialog
+            :dialog-visible="messageDialog"
+            header="Verstuurd"
+            :message="mailMessage"
+            @close="closeMessageDialog"
+          ></message-dialog>
         </div>
         <h4
           class="text-align-left mt-5 pl-lg-2-5em custom-title font-weight-bold"
@@ -235,11 +241,13 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import Footer from "@/components/global/Footer";
 import ConfirmDialog from 'primevue/confirmdialog';
+import MessageDialog from "@/components/dialog/MessageDialog";
 
 
 export default {
   name: "Mail",
   components: {
+    MessageDialog,
     Footer,
     BaseInput,
     Editor,
@@ -261,6 +269,8 @@ export default {
       watchable: false,
       isLoadingLeden: false,
       confirmationDialog: false,
+      messageDialog: false,
+      mailMessage: "",
       lidIds: new Set(),
       offset: 0,
       totaalAantalLeden: 0,
@@ -436,6 +446,10 @@ export default {
   },
 
   methods: {
+    closeMessageDialog() {
+      this.messageDialog = false;
+    },
+
     removeFile(index) {
       this.files.splice(index, 1);
     },
@@ -650,7 +664,6 @@ export default {
     bevestigMail() {
       this.bevestig = true;
       this.sendMail();
-      this.confirmationDialog = false;
     },
 
     gesorteerdeSjablonen(sjablonen) {
@@ -666,8 +679,10 @@ export default {
     },
 
     sendMail() {
+      this.laden = true;
       // We hebben enkel de ID's nodig om door te sturen naar de api
-
+      let ontvangenMails = 0;
+      let mislukteMails = "";
       var sjabloonObj = {
         bcc: this.sjabloon.bcc,
         replyTo: this.sjabloon.replyTo,
@@ -704,10 +719,25 @@ export default {
         .then((res) => {
           this.changes = false;
           this.bevestig = false;
-          // todo dialog met resultaat
-          console.log("mail was sent TO list", res);
+          this.confirmationDialog = false;
+          this.laden = false
+          this.messageDialog = true;
+
+          if (res.data.gelukt && res.data.gelukt.length > 0) {
+            ontvangenMails = res.data.gelukt.length;
+          }
+
+          this.mailMessage = "Jouw e-mail werd succesvol verzonden naar " + ontvangenMails + " van de " + this.lidIds.size + " ontvangers. <br>"
+          if (res.data.mislukt && res.data.mislukt.length > 0) {
+            res.data.mislukt.forEach(mailadres => {
+              mislukteMails += mailadres + "<br>"
+            })
+
+            this.mailMessage += "Volgende mail(s) konden niet bezorgd worden: <br>" + mislukteMails;
+          }
         })
         .catch((error) => {
+          this.laden = false
           this.feedback.boodschap = error.response.data.boodschap;
           this.feedback.vraag = error.response.data.vraag;
           this.feedback.infoLink = error.response.data.infoLink;
