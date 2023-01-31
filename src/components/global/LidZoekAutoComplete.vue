@@ -2,6 +2,7 @@
   <div class="lid-search mb-1">
     <AutoComplete
       class="lid-autocomplete custom-input-styling"
+      :class="sectie === 'ledenlijst' ? 'zoekbalk-styling-ledenlijst' : ''"
       v-model="zoekTerm"
       field="voornaam"
       forceSelection
@@ -28,6 +29,12 @@ import RestService from "@/services/api/RestService";
 import DateUtil from "@/services/dates/DateUtil";
 
 export default {
+  props: {
+    sectie: {
+      type: String,
+      default: ""
+    }
+  },
   components: {
     AutoComplete,
   },

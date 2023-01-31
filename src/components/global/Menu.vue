@@ -68,7 +68,7 @@ export default {
           }
         },
         {
-          label: "Leden",
+          label: "Ledenlijst",
           condition: "ledenlijst",
           icon: "far fa-users",
           link: "Ledenlijst",

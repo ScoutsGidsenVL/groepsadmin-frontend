@@ -15,6 +15,19 @@ export default {
             snelNaarItems: [],
             menuItems: [
                 {
+                    label: "Leden zoeken",
+                    condition: "ledenlijst",
+                    icon: "far fa-search",
+                    internal: true,
+                },
+                {
+                    label: "Ledenlijst",
+                    condition: "ledenlijst",
+                    icon: "far fa-users",
+                    link: "Ledenlijst",
+                    internal: true,
+                },
+                {
                     label: "Mijn gegevens",
                     condition: true,
                     icon: "far fa-user",
@@ -33,13 +46,6 @@ export default {
                     condition: true,
                     icon: "far fa-satellite-dish",
                     link: "Communicatievoorkeuren",
-                    internal: true,
-                },
-                {
-                    label: "Leden",
-                    condition: "ledenlijst",
-                    icon: "far fa-users",
-                    link: "Ledenlijst",
                     internal: true,
                 },
                 {
