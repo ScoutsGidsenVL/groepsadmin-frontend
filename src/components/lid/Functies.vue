@@ -19,12 +19,12 @@
             <div v-for="(functie, index) in functies" :key="index">
               <div v-if="functie.actief" class="functie-wrapper">
                 <div class="flex-row">
-                  <div class="justify-content-between">
+                  <div class="flex justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}</label>
                     <Button
                       v-if="lidMagFunctieStoppen('functies.' + nummer) && !functie.specialeFunctie"
                       icon="pi pi-trash"
-                      class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1 mt-2"
+                      class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
                       @click="
                         $event.stopPropagation();
                         stopFunctie(functie, nummer);
