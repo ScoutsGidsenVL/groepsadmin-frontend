@@ -265,7 +265,6 @@ export default {
       kolommenLaden: false,
       bevestig: false,
       sorteerLeden: false,
-      mailVersturen: false,
       watchable: false,
       isLoadingLeden: false,
       confirmationDialog: false,
@@ -657,12 +656,12 @@ export default {
     },
 
     send() {
-      this.filterLeden();
       this.sendMail();
     },
 
     bevestigMail() {
       this.bevestig = true;
+      this.confirmationDialog = false;
       this.sendMail();
     },
 
@@ -680,6 +679,7 @@ export default {
 
     sendMail() {
       this.laden = true;
+      this.filterLeden();
       // We hebben enkel de ID's nodig om door te sturen naar de api
       let ontvangenMails = 0;
       let mislukteMails = "";
@@ -714,7 +714,6 @@ export default {
       // sjabloon toevoegen aan multipart/form-data
       formData.append("sjabloon", sjabloon);
 
-      this.mailVersturen = true;
       RestService.verstuurMail(this.bevestig, formData)
         .then((res) => {
           this.changes = false;
@@ -727,14 +726,17 @@ export default {
             ontvangenMails = res.data.gelukt.length;
           }
 
-          this.mailMessage = "Jouw e-mail werd succesvol verzonden naar " + ontvangenMails + " van de " + this.lidIds.size + " ontvangers. <br>"
+          let failedCounter = 0;
           if (res.data.mislukt && res.data.mislukt.length > 0) {
             res.data.mislukt.forEach(mailadres => {
               mislukteMails += mailadres + "<br>"
+              failedCounter++;
             })
 
             this.mailMessage += "Volgende mail(s) konden niet bezorgd worden: <br>" + mislukteMails;
           }
+          let totalSent = ontvangenMails + failedCounter;
+          this.mailMessage = "Jouw e-mail werd succesvol verzonden naar " + ontvangenMails + " van de " + totalSent + " ontvangers. <br>"
         })
         .catch((error) => {
           this.laden = false
@@ -775,7 +777,6 @@ export default {
 
     selectFiles(event) {
       this.files = event.files;
-      console.log(this.files.length)
     },
 
     closeModal() {

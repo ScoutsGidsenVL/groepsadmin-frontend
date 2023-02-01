@@ -43,8 +43,8 @@
               v-model:selection="geselecteerdeLeden"
               @row-select-all="selecteerAlleLeden(0)"
               @row-unselect-all="clearAlleLeden"
-              @row-select="selecteerLid"
-              @row-unselect="selecteerLid"
+              @row-select.prevent.stop="selecteerLid"
+              @row-unselect.prevent.stop="selecteerLid"
               @row-click="selectLid"
               @sort="addSort"
               @colum-click="addSort"
@@ -83,7 +83,6 @@
                 selectionMode="multiple"
                 :exportable="false"
                 headerStyle="max-width: 38px"
-                @click="selecteerLid"
                 class="selecteerbaar"
               ></column>
               <column
