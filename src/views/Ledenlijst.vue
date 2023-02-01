@@ -215,7 +215,7 @@ export default {
 
     const handleScroll = () => {
       let element = scrollComponent.value;
-      if (element.getBoundingClientRect().bottom < window.innerHeight && !state.isLoadingMore) {
+      if (element && (element.getBoundingClientRect().bottom < window.innerHeight) && !state.isLoadingMore) {
         if (aantalLedenGeladen.value === state.totaalAantalLeden) {
               return;
         }
