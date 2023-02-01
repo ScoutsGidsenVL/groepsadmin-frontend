@@ -489,7 +489,7 @@ export default {
       this.openModal = !this.openModal;
     },
     opslaan(naam, value) {
-      this.sjabloonIsValid();
+     this.sjabloonIsValid();
       if (!this.error) {
         this.laden = true;
         if (value && value.value.id) {
@@ -523,6 +523,7 @@ export default {
             });
         } else {
           this.sjabloon.naam = naam;
+          this.sjabloon.id = null;
           RestService.saveSjabloon("mail", this.sjabloon)
             .then((res) => {
               this.getSjablonen("save");
