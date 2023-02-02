@@ -87,11 +87,6 @@ export default {
             () => state.lid.adressen,
             () => {
                 if (state.watchable && state.lid) {
-                    state.gewijzigdLid.adressen.forEach(adres => {
-                        if (adres.bus) {
-                            adres.bus = adres.bus.toUpperCase();
-                        }
-                    })
                     state.changes = true;
                     state.gewijzigdLid.adressen = state.lid.adressen
                 }
