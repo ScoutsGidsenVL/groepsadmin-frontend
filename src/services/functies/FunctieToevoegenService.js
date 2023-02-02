@@ -92,6 +92,8 @@ export default {
         }
 
         const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
+            console.log(functie);
+            console.log(groepsnummer);
             // state.changes = true;
             //
             // let functieInstantie = {};
