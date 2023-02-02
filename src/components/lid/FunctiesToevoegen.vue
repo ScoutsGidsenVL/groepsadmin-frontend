@@ -64,16 +64,14 @@ export default {
       state,
       gesorteerdeFuncties,
       groepsNaam,
-      voegToeOfVerwijderFunctie,
-      isSelected
+      voegToeOfVerwijderFunctie
     } = FunctieToevoegenService.functieToevoegenSpace(props);
 
     return {
       ...toRefs(state),
       gesorteerdeFuncties,
       groepsNaam,
-      voegToeOfVerwijderFunctie,
-      isSelected
+      voegToeOfVerwijderFunctie
     }
   }
 }

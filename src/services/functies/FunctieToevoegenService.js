@@ -9,8 +9,6 @@ export default {
 
     functieToevoegenSpace(props) {
         const store = useStore();
-        //const emitter = useEmitter();
-
         const state = reactive({
             huidigLid: props.modelValue,
             laden: false,
@@ -91,8 +89,6 @@ export default {
         }
 
         const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
-            console.log(functie);
-            console.log(groepsnummer);
             state.changes = true;
 
             let functieInstantie = {};
@@ -111,35 +107,12 @@ export default {
                     }
                 }
             }
-            console.log(bestaandeFunctie);
-            // if (!bestaandeFunctie) {
-            //     if (!state.huidigLid.functies) {
-            //         state.huidigLid.functies = [];
-            //     }
-            //     state.huidigLid.functies.push(functieInstantie);
-            // }
-            //
-            // emitter.emit("veranderFunctie", {functies: state.huidigLid.functies});
-        }
-
-        const isSelected = (functie, groepsnummer) => {
-            //let geselecteerd = false;
-            if (state.changes && state.huidigLid && state.huidigLid.functies) {
-                console.log('check')
-                for (let lidFunctie of state.huidigLid.functies) {
-                    if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
-                        return true;
-                    }
+            if (!bestaandeFunctie) {
+                if (!state.huidigLid.functies) {
+                    state.huidigLid.functies = [];
                 }
+                state.huidigLid.functies.push(functieInstantie);
             }
-            // if (state.huidigLid && state.huidigLid.functies) {
-            //     state.huidigLid.functies.forEach(lidFunctie => {
-            //         if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
-            //             geselecteerd = true;
-            //         }
-            //     })
-            // }
-            // return geselecteerd;
         }
 
         onMounted(() => {
@@ -151,7 +124,6 @@ export default {
             gesorteerdeFuncties,
             groepsNaam,
             voegToeOfVerwijderFunctie,
-            isSelected,
             functiesEnGroepen
         }
 
