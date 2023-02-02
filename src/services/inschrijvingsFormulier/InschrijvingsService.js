@@ -95,39 +95,40 @@ export default {
             state.loading = true;
             v.value.$touch();
             if (v.value.$invalid) {
+                state.loading = false;
                 toast.add({
                     severity: "warn",
                     summary: "Wijzigingen",
                     detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
                     life: 3000,
                 });
-                return;
+            } else {
+                state.aanvraag.groepsEigenGegevens = state.groepseigenVelden;
+                state.aanvraag.groepsnummer = state.groepsnummer;
+                state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
+                state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
+                state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
+
+
+
+                RestService.saveAanvraag(state.aanvraag)
+                    .then(res => {
+                        if (res.status === 204) {
+                            state.loading = false;
+                            store.commit('setNaamKandidaatLid', state.aanvraag.voornaam)
+                            router.push({name: 'LidWordenVerstuurd', params: {groep: state.groepsnummer}})
+                        }
+                    }).catch((error) => {
+                    toast.add({
+                        severity: "warn",
+                        summary: error.response.data.titel,
+                        detail: error.response.data.beschrijving,
+                        life: 3000,
+                    });
+                }).finally(() => {
+                    state.loading = false;
+                })
             }
-
-            state.aanvraag.groepsEigenGegevens = state.groepseigenVelden;
-            state.aanvraag.groepsnummer = state.groepsnummer;
-            state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
-            state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
-            state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
-
-
-            RestService.saveAanvraag(state.aanvraag)
-                .then(res => {
-                    if (res.status === 204) {
-                        state.loading = false;
-                        store.commit('setNaamKandidaatLid', state.aanvraag.voornaam)
-                        router.push({name: 'LidWordenVerstuurd', params: {groep: state.groepsnummer}})
-                    }
-                }).catch((error) => {
-                toast.add({
-                    severity: "warn",
-                    summary: error.response.data.titel,
-                    detail: error.response.data.beschrijving,
-                    life: 3000,
-                });
-            }).finally(() => {
-              state.loading = false;
-            })
         }
 
         const veranderLand = () => {
@@ -192,6 +193,9 @@ export default {
             () => {
                 if (state.watchable) {
                     state.aanvraag.adres = state.lid.adres;
+                    if (state.aanvraag.adres.bus) {
+                        state.aanvraag.adres.bus = state.aanvraag.adres.bus.toUpperCase();
+                    }
                     state.changes = true;
                 }
             }, {deep: true})
