@@ -100,6 +100,7 @@
               v-model="adressen[index].bus"
               :disabled="!adressen[index].straat"
               type="text"
+              @keyup="capitalize(index)"
             />
             <BaseInputTelefoon
               v-model="adressen[index].telefoon"
@@ -176,6 +177,10 @@ export default {
       return Telefoonnummer.validateNumber(value);
     }
 
+    const capitalize = (index) => {
+      state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
+    }
+
     const rules = {
       "adressen": {
         $each: helpers.forEach({
@@ -211,7 +216,8 @@ export default {
       veranderLand,
       setHeader,
       v,
-      heeftToegang
+      heeftToegang,
+      capitalize
     };
   },
 };

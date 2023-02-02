@@ -106,6 +106,7 @@
               v-model="adressen[index].bus"
               :disabled="!adressen[index].straat || !heeftToegang('adressen')"
               type="text"
+              @keyup="capitalize(index)"
             />
             <BaseInputTelefoon
               v-model="adressen[index].telefoon"
@@ -210,6 +211,10 @@ export default {
       }
     }
 
+    const capitalize = (index) => {
+      state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
+    }
+
     const v = useVuelidate(rules, state);
 
     return {
@@ -220,7 +225,8 @@ export default {
       veranderLand,
       setHeader,
       v,
-      heeftToegang
+      heeftToegang,
+      capitalize
     };
   },
 };
