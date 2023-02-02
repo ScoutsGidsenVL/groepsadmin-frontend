@@ -93,24 +93,25 @@ export default {
         const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
             console.log(functie);
             console.log(groepsnummer);
-            // state.changes = true;
-            //
-            // let functieInstantie = {};
-            // functieInstantie.functie = functie.id;
-            // functieInstantie.groep = groepsnummer;
-            // functieInstantie.begin = '2016-01-01T00:00:00.000+01:00'; // set static date
-            // functieInstantie.temp = "tijdelijk";
-            //
-            // let bestaandeFunctie = false;
-            //
-            // if (state.huidigLid && state.huidigLid.functies) {
-            //     for (let [index, val] of state.huidigLid.functies.entries()) {
-            //         if (val.functie === functie.id && val.groep === groepsnummer) {
-            //             bestaandeFunctie = true;
-            //             state.huidigLid.functies.splice(index, 1);
-            //         }
-            //     }
-            // }
+            state.changes = true;
+
+            let functieInstantie = {};
+            functieInstantie.functie = functie.id;
+            functieInstantie.groep = groepsnummer;
+            functieInstantie.begin = '2016-01-01T00:00:00.000+01:00'; // set static date
+            functieInstantie.temp = "tijdelijk";
+
+            let bestaandeFunctie = false;
+
+            if (state.huidigLid && state.huidigLid.functies) {
+                for (let [index, val] of state.huidigLid.functies.entries()) {
+                    if (val.functie === functie.id && val.groep === groepsnummer) {
+                        bestaandeFunctie = true;
+                        state.huidigLid.functies.splice(index, 1);
+                    }
+                }
+            }
+            console.log(bestaandeFunctie);
             // if (!bestaandeFunctie) {
             //     if (!state.huidigLid.functies) {
             //         state.huidigLid.functies = [];
