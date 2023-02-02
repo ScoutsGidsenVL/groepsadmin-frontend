@@ -9,19 +9,19 @@
           <Indicator :is-loading="laden" :full-page="false" :height=55 :width=55></Indicator>
         </div>
       </template>
-      <template #content>
-        <accordion :multiple="true">
+      <template #content><accordion :multiple="true">
           <accordionTab v-for="(groep, index) in groepEnfuncties" :key="index"
                         :header="groep.naam + ' - ' + groep.groepsnummer">
             <div class="row" v-if="gesorteerdeFuncties(groep.functies, 'verbond')">
               <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'verbond')" :key="index"
-                   class="col-md-6">
+                   class="col-md-6 flex justify-content-start">
                 <checkbox
-                  :label="functie.beschrijving"
-                  :model-value="isSelected(functie, groep.groepsnummer)"
-                  @changeValue="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
-                  :functies="true"
+                  v-model="geselecteerdeFuncties[groep.groepsnummer]"
+                  @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                  :value="functie.beschrijving"
+                  :input-id="functie.beschrijving"
                 ></checkbox>
+                <label class="small-text ml-2" :for="functie.beschrijving">{{functie.beschrijving}}</label>
               </div>
             </div>
             <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length > 0">
@@ -29,13 +29,14 @@
               <label class="mb-2"><strong>Groepseigen functies</strong></label>
               <div class="row">
                 <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
-                     class="col-md-6">
+                     class="col-md-6 flex justify-content-between">
                   <checkbox
-                    :label="functie.beschrijving"
-                    :model-value="isSelected(functie, groep.groepsnummer)"
+                    v-model="geselecteerdeFuncties[groep.groepsnummer]"
                     @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
-                    :functies="true"
+                    :value="functie.beschrijving"
+                    :input-id="functie.beschrijving"
                   ></checkbox>
+                  <label :for="functie.beschrijving">{{functie.beschrijving}}</label>
                 </div>
               </div>
             </div>
@@ -47,15 +48,12 @@
 </template>
 
 <script>
-import BaseCheckboxLeftFunctieSelect from "@/components/input/BaseCheckboxLeftFunctieSelect";
 import FunctieToevoegenService from "@/services/functies/FunctieToevoegenService";
 import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "FunctiesToevoegen",
-  components: {
-    'checkbox': BaseCheckboxLeftFunctieSelect
-  },
+
   props: {
     modelValue: {
       type: Object

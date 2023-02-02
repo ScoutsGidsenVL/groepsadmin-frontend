@@ -297,12 +297,14 @@ export default {
                         });
                     state.changes = false;
                 }).catch(error => {
-                toast.add({
-                    severity: "warn",
-                    summary: error.response.data.titel,
-                    detail: error.response.data.beschrijving,
-                    life: 3000,
-                });
+                    if (error) {
+                        toast.add({
+                            severity: "warn",
+                            summary: error.response.data.titel,
+                            detail: error.response.data.beschrijving,
+                            life: 3000,
+                        })
+                    };
             }).finally(() => {
                 state.changes = false;
                 getLid(state.lid.id);

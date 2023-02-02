@@ -17,11 +17,14 @@ export default {
             laden: false,
             functiesEnGroepenGeladen: false,
             showFunctieToevoegen: false,
+            changes: false,
             groepEnfuncties: [],
+            geselecteerdeFuncties: {}
         })
 
         onUpdated(() => {
             state.huidigLid = props.modelValue;
+            functiesEnGroepen();
         })
 
         const gesorteerdeFuncties = (functies, type) => {
@@ -53,6 +56,7 @@ export default {
             state.groepEnfuncties = [];
             store.getters.groepen.forEach(groep => {
                 if (rechtenService.hasPermission('functies.' + groep.groepsnummer)) {
+                    state.geselecteerdeFuncties[groep.groepsnummer] = [];
                     let tempGroep = groep;
                     tempGroep.functies = [];
                     store.getters.functies.forEach(functie => {
@@ -88,6 +92,7 @@ export default {
         }
 
         const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
+            state.changes = true;
 
             let functieInstantie = {};
             functieInstantie.functie = functie.id;
@@ -116,15 +121,23 @@ export default {
         }
 
         const isSelected = (functie, groepsnummer) => {
-            let geselecteerd = false;
-            if (state.huidigLid && state.huidigLid.functies) {
-                state.huidigLid.functies.forEach(lidFunctie => {
+            //let geselecteerd = false;
+            if (state.changes && state.huidigLid && state.huidigLid.functies) {
+                console.log('check')
+                for (let lidFunctie of state.huidigLid.functies) {
                     if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
-                        geselecteerd = true;
+                        return true;
                     }
-                })
+                }
             }
-            return geselecteerd;
+            // if (state.huidigLid && state.huidigLid.functies) {
+            //     state.huidigLid.functies.forEach(lidFunctie => {
+            //         if (functie.id === lidFunctie.functie && lidFunctie.groep === groepsnummer) {
+            //             geselecteerd = true;
+            //         }
+            //     })
+            // }
+            // return geselecteerd;
         }
 
         onMounted(() => {
@@ -136,7 +149,8 @@ export default {
             gesorteerdeFuncties,
             groepsNaam,
             voegToeOfVerwijderFunctie,
-            isSelected
+            isSelected,
+            functiesEnGroepen
         }
 
     }
