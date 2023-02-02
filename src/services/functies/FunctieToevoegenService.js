@@ -3,14 +3,13 @@ import {onMounted} from "vue";
 import moment from "moment";
 import rechtenService from "@/services/rechten/rechtenService";
 import {useStore} from "vuex";
-import useEmitter from "@/services/utils/useEmitter";
 import {onUpdated} from "@vue/runtime-core";
 
 export default {
 
     functieToevoegenSpace(props) {
         const store = useStore();
-        const emitter = useEmitter();
+        //const emitter = useEmitter();
 
         const state = reactive({
             huidigLid: props.modelValue,
