@@ -32,6 +32,9 @@
                                   :active-criteria="activeCriteria"
             >
             </LedenlijstFilterblok>
+            <div class="flex justify-content-end">
+              <lid-zoek-auto-complete></lid-zoek-auto-complete>
+            </div>
             <data-table
               ref="ledenlijst"
               :lazy="true"
@@ -165,10 +168,12 @@ import MessageDialog from "@/components/dialog/MessageDialog";
 import Ledenlijst from "@/services/leden/Ledenlijst";
 import {toRefs} from "@vue/reactivity";
 import {onMounted, ref} from 'vue'
+import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 
 export default {
   name: "Ledenlijst",
   components: {
+    LidZoekAutoComplete,
     Footer,
     Loader,
     LedenlijstFilterblok,
