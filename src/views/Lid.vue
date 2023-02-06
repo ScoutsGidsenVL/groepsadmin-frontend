@@ -82,11 +82,11 @@ import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
-import Adressen from "@/components/groep/Adressen";
 import Functies from "@/components/lid/Functies";
-import Contacten from "@/components/aanvraag/Contacten";
-import GroepseigenGegevens from "@/components/aanvraag/GroepseigenGegevens";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
+import Contacten from "@/components/lid/Contacten";
+import Adressen from "@/components/lid/Adressen";
+import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 
 export default {
   name: "Lid",
