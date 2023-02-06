@@ -53,11 +53,11 @@
               ></groepseigen-gegevens>
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
-              <functies
-                v-model="gesorteerdeFuncties"
-                :lid="lid"
-                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
-              ></functies>
+<!--              <functies-->
+<!--                v-model="gesorteerdeFuncties"-->
+<!--                :lid="lid"-->
+<!--                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
+<!--              ></functies>-->
               <functies-toevoegen
                 v-model="lid"
                 v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
@@ -75,7 +75,6 @@
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
-import Functies from "@/components/lid/Functies";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
@@ -90,7 +89,6 @@ export default {
   name: "Lid",
   components: {
     Footer,
-    Functies,
     GroepseigenGegevens,
     Persoonlijk,
     LidBovenBalk,
