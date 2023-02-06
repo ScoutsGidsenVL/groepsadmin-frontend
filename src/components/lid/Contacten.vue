@@ -20,6 +20,7 @@
               <div class="d-flex col-12 justify-content-between">
                 <span>{{ setHeader(contact) }}</span>
                 <Button
+                  v-if="heeftToegang('contacten') || lidaanvraag"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
                   @click="
@@ -34,16 +35,19 @@
               :options="rollen"
               label="Rol"
               v-model="contacten[index].rol"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             />
             <base-input
               label="Voornaam"
               v-model="contacten[index].voornaam"
               type="text"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             />
             <base-input
               label="Achternaam"
               v-model="contacten[index].achternaam"
               type="text"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             />
             <base-input
               label="E-mail"
@@ -53,6 +57,7 @@
               :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
                               v.contacten.$each.$response.$errors[index].email.length > 0) ?
                               v.contacten.$each.$response.$errors[index].email[0].$message : ''"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             />
             <BaseInputTelefoon
               v-model="contacten[index].gsm"
@@ -62,19 +67,21 @@
               :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
                               v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
                               v.contacten.$each.$response.$errors[index].gsm[0].$message : ''"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             ></BaseInputTelefoon>
             <base-dropdown
               :options="adresArray"
               label="Adres"
               v-model="contacten[index].adres"
+              :disabled="!heeftToegang('contacten') || lidaanvraag"
             />
             <template v-for="(adres, index2) in adressen" :key="index2">
               <base-input
                 label="Telefoon"
                 v-model="adressen[index2].telefoon"
                 type="text"
-                :disabled="true"
                 v-if="contacten[index] && adres.id === contacten[index].adres"
+                :disabled="!heeftToegang('contacten') || lidaanvraag"
               />
             </template>
           </accordionTab>
