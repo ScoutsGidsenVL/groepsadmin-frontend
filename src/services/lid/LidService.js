@@ -58,7 +58,7 @@ export default {
         watch(
             () => state.lid.vgagegevens,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.vgagegevens = state.lid.vgagegevens
                 }
@@ -68,7 +68,7 @@ export default {
         watch(
             () => state.lid.persoonsgegevens,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.persoonsgegevens = state.lid.persoonsgegevens
                 }
@@ -77,7 +77,7 @@ export default {
         watch(
             () => state.lid.functies,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.functies = state.lid.functies
                 }
@@ -86,7 +86,7 @@ export default {
         watch(
             () => state.lid.adressen,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.adressen = state.lid.adressen
                 }
@@ -95,7 +95,7 @@ export default {
         watch(
             () => state.lid.contacten,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.contacten = state.lid.contacten
                 }
@@ -104,7 +104,7 @@ export default {
         watch(
             () => state.lid.groepseigenVelden,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden
                 }
@@ -113,7 +113,7 @@ export default {
         watch(
             () => state.lid.email,
             () => {
-                if (state.watchable && state.lid) {
+                if (state.watchable && state.lid && !state.loadingLid) {
                     state.changes = true;
                     state.gewijzigdLid.email = state.lid.email
                 }
