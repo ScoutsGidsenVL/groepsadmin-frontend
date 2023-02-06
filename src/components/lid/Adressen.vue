@@ -100,6 +100,7 @@
               :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].nummer &&
                               v.adressen.$each.$response.$errors[index].nummer.length > 0) ?
                               v.adressen.$each.$response.$errors[index].nummer[0].$message : ''"
+              @keyup="capitalize(index)"
             />
             <BaseInput
               label="Bus"
@@ -212,7 +213,13 @@ export default {
     }
 
     const capitalize = (index) => {
-      state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
+      console.log('capital')
+      if (state.adressen[index].bus) {
+        state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
+      }
+      if (state.adressen[index].nummer) {
+        state.adressen[index].nummer = state.adressen[index].nummer.toUpperCase();
+      }
     }
 
     const v = useVuelidate(rules, state);
