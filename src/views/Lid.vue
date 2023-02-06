@@ -45,7 +45,7 @@
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
 <!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
-              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+<!--              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>-->
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
@@ -74,7 +74,6 @@
 <script>
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
-import Contacten from "@/components/lid/Contacten";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Functies from "@/components/lid/Functies";
 import Footer from "@/components/global/Footer";
@@ -93,7 +92,6 @@ export default {
     Footer,
     Functies,
     GroepseigenGegevens,
-    Contacten,
     Persoonlijk,
     LidBovenBalk,
     Loader,
