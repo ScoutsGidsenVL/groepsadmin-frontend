@@ -58,10 +58,10 @@
 <!--                :lid="lid"-->
 <!--                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
 <!--              ></functies>-->
-              <functies-toevoegen
-                v-model="lid"
-                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
-              ></functies-toevoegen>
+<!--              <functies-toevoegen-->
+<!--                v-model="lid"-->
+<!--                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"-->
+<!--              ></functies-toevoegen>-->
             </div>
           </div>
         </form>
@@ -77,7 +77,6 @@ import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
-import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
@@ -93,7 +92,6 @@ export default {
     Persoonlijk,
     LidBovenBalk,
     Loader,
-    FunctiesToevoegen,
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
