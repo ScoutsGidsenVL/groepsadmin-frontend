@@ -15,6 +15,7 @@ export default createStore({
         groepen: {},
         broerZusLid: {},
         inactieveGroepen: {},
+        losseGroepen: {},
         groepenLaden: false,
         functiesLaden: false,
         functies: [],
@@ -185,6 +186,9 @@ export default createStore({
         leden(state) {
             return state.leden;
         },
+        losseGroepen(state) {
+            return state.losseGroepen
+        }
     },
     actions: {
         getGroepen({commit}) {
@@ -230,12 +234,31 @@ export default createStore({
             })
         },
         addGroep({commit, getters}, nummer) {
-            RestService.getGroepOpNummer(nummer)
-                .then(res => {
-                    getters.inactieveGroepen[nummer] = res.data;
-                    commit("setGroepenLaden", false);
-                })
+            if (!getters.inactieveGroepen[nummer]) {
+                RestService.getGroepOpNummer(nummer)
+                    .then(res => {
+                        getters.inactieveGroepen[nummer] = res.data;
+                        commit("setGroepenLaden", false);
+                    })
+            }
         },
+        getGroepByNummer({getters}, nummer) {
+            let groep = getters.groepByNummer(nummer);
+
+            if (!groep) {
+                groep = {
+                    groepsnummer: nummer
+                }
+                if (!getters.losseGroepen[nummer]) {
+                    RestService.getGroepOpNummer(nummer).then(res => {
+                        if (res.status === 200) {
+                            getters.losseGroepen[nummer] = res.data;
+                        }
+                    })
+                }
+                return getters.losseGroepen[nummer]
+            }
+        }
     },
     modules: {},
 });

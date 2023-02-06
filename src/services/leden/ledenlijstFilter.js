@@ -27,7 +27,6 @@ export default {
         filters.forEach((filter) => {
             if (filter.delen === true) {
                 if (filter.gedeeldvanuit) {
-
                     filter.gedeeldvanuit.forEach((groep) => {
                         let filterIdArray = []
                         if (!categorisedFilters[groep]) {
@@ -42,11 +41,19 @@ export default {
                         if (!filterIdArray.includes(filter.id)) {
                             categorisedFilters[groep].filters.push(filter);
                         }
+                        let groepByNummer = {};
 
-                        let groepByNummer = store.getters.groepByNummer(groep);
-
-                        if (categorisedFilters[groepByNummer.groepsnummer]) {
-                            categorisedFilters[groepByNummer.groepsnummer]['naam'] = 'Gedeeld met ' + groepByNummer.naam + " [" + groepByNummer.groepsnummer + "]"
+                        groepByNummer = store.getters.groepByNummer(groep);
+                        if (!groepByNummer) {
+                            store.dispatch("getGroepByNummer", groep).then(res => {
+                                if (categorisedFilters[res.groepsnummer]) {
+                                    categorisedFilters[res.groepsnummer]['naam'] = 'Gedeeld met ' + res.naam + " [" + res.groepsnummer + "]"
+                                }
+                            });
+                        } else {
+                            if (categorisedFilters[groepByNummer.groepsnummer]) {
+                                categorisedFilters[groepByNummer.groepsnummer]['naam'] = 'Gedeeld met ' + groepByNummer.naam + " [" + groepByNummer.groepsnummer + "]"
+                            }
                         }
                     })
                 } else {
@@ -570,8 +577,8 @@ export default {
                                     operatorValues: [
                                         {label: 'bevat', value: 'like'},
                                         {label: 'is', value: 'equals'},
-                                        {label: 'is kleiner dan', value:'less'},
-                                        {label: 'is groter dan', value:'greater'}
+                                        {label: 'is kleiner dan', value: 'less'},
+                                        {label: 'is groter dan', value: 'greater'}
                                     ]
 
                                 }
@@ -598,8 +605,8 @@ export default {
                                 operatorValues: [
                                     {label: 'bevat', value: 'like'},
                                     {label: 'is', value: 'equals'},
-                                    {label: 'is kleiner dan', value:'less'},
-                                    {label: 'is groter dan', value:'greater'}
+                                    {label: 'is kleiner dan', value: 'less'},
+                                    {label: 'is groter dan', value: 'greater'}
                                 ]
                             }
                         });
@@ -627,7 +634,7 @@ export default {
                             crit.itemgroups.forEach((itemgroup) => {
                                 if (itemgroup.items && itemgroup.items.length > 0) {
                                     itemgroup.items.forEach((item) => {
-                                        if (crit.value && crit.value.length > 0){
+                                        if (crit.value && crit.value.length > 0) {
                                             crit.value.forEach((value) => {
                                                 if (item.veld === value.veld) {
                                                     item.activated = true;
