@@ -41,27 +41,27 @@
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-<!--              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>-->
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-<!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
-<!--              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>-->
-<!--              <groepseigen-gegevens-->
-<!--                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"-->
-<!--                v-model="groepseigenVelden"-->
-<!--                :title="'Groepseigen gegevens'"-->
-<!--              ></groepseigen-gegevens>-->
+              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+              <groepseigen-gegevens
+                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                v-model="groepseigenVelden"
+                :title="'Groepseigen gegevens'"
+              ></groepseigen-gegevens>
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
-<!--              <functies-->
-<!--                v-model="gesorteerdeFuncties"-->
-<!--                :lid="lid"-->
-<!--                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
-<!--              ></functies>-->
-<!--              <functies-toevoegen-->
-<!--                v-model="lid"-->
-<!--                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"-->
-<!--              ></functies-toevoegen>-->
+              <functies
+                v-model="gesorteerdeFuncties"
+                :lid="lid"
+                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+              ></functies>
+              <functies-toevoegen
+                v-model="lid"
+                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
+              ></functies-toevoegen>
             </div>
           </div>
         </form>
@@ -81,6 +81,12 @@ import ConfirmDialog from "primevue/confirmdialog";
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
+import Persoonlijk from "@/components/lid/Persoonlijk";
+import Adressen from "@/components/groep/Adressen";
+import Functies from "@/components/lid/Functies";
+import Contacten from "@/components/aanvraag/Contacten";
+import GroepseigenGegevens from "@/components/aanvraag/GroepseigenGegevens";
+import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 
 export default {
   name: "Lid",
@@ -91,7 +97,13 @@ export default {
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
-    LidZoekAutoComplete
+    LidZoekAutoComplete,
+    Persoonlijk,
+    Adressen,
+    Functies,
+    Contacten,
+    GroepseigenGegevens,
+    FunctiesToevoegen
   },
   setup() {
     const {
