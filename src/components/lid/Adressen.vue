@@ -213,7 +213,6 @@ export default {
     }
 
     const capitalize = (index) => {
-      console.log('capital')
       if (state.adressen[index].bus) {
         state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
       }
