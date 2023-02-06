@@ -44,7 +44,7 @@
               <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+<!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
               <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
@@ -74,7 +74,6 @@
 <script>
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
-import Adressen from "@/components/lid/Adressen";
 import Contacten from "@/components/lid/Contacten";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Functies from "@/components/lid/Functies";
@@ -97,7 +96,6 @@ export default {
     Contacten,
     Persoonlijk,
     LidBovenBalk,
-    Adressen,
     Loader,
     FunctiesToevoegen,
     SideMenu,
