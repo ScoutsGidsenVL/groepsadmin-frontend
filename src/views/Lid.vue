@@ -74,7 +74,6 @@
 <script>
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
-import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
@@ -88,7 +87,6 @@ export default {
   name: "Lid",
   components: {
     Footer,
-    GroepseigenGegevens,
     Persoonlijk,
     LidBovenBalk,
     Loader,
