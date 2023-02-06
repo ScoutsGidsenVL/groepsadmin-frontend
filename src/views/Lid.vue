@@ -46,11 +46,11 @@
             <div class="col-12 col-lg-6 col-xl-4">
 <!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
 <!--              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>-->
-              <groepseigen-gegevens
-                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
-                v-model="groepseigenVelden"
-                :title="'Groepseigen gegevens'"
-              ></groepseigen-gegevens>
+<!--              <groepseigen-gegevens-->
+<!--                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"-->
+<!--                v-model="groepseigenVelden"-->
+<!--                :title="'Groepseigen gegevens'"-->
+<!--              ></groepseigen-gegevens>-->
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
 <!--              <functies-->
