@@ -38,7 +38,6 @@
         :eigenProfiel="isEigenProfiel"
         :changes="changes"
         @opslaan="opslaan"
-        @disableWatchable="resetWatchable"
         @stopAlleFuncties="stopAlleFuncties"
       ></lid-boven-balk>
       <div class="lg:ml-2 mt-8 lg:mt-8">

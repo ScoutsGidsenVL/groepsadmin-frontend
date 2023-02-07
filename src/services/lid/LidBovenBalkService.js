@@ -1,6 +1,6 @@
 import {reactive} from "@vue/reactivity";
 import rechtenService from "@/services/rechten/rechtenService";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import useEmitter from "@/services/utils/useEmitter";
@@ -133,7 +133,6 @@ export default {
             } else {
                 index--;
             }
-            emitter.emit('disableWatchable');
             router.push({name: "Lid", params: {id: store.getters.leden[index]}})
         }
 
@@ -144,7 +143,6 @@ export default {
             } else {
                 index++;
             }
-            emitter.emit('disableWatchable');
             router.push({name: "Lid", params: {id: store.getters.leden[index]}})
         }
 
@@ -178,13 +176,16 @@ export default {
             }
         })
 
+        onMounted(() => {
+            state.lid = props.modelValue;
+            filterMenuItems();
+        })
+
         onUpdated(() => {
             state.lid = props.modelValue;
             filterMenuItems();
         })
 
-        state.lid = props.modelValue;
-        filterMenuItems();
         return {
             state,
             volledigeNaam,
