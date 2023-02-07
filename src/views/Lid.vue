@@ -31,21 +31,28 @@
       <div class="d-flex justify-content-end lg:mt-4 md:mt-10">
         <lid-zoek-auto-complete></lid-zoek-auto-complete>
       </div>
-<!--      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"-->
-<!--                      :eigenProfiel="isEigenProfiel" :changes="changes"-->
-<!--                      @disableWatchable="resetWatchable"-->
-<!--                      @stopAlleFuncties="stopAlleFuncties"-->
-<!--                      v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
-<!--      ></lid-boven-balk>-->
+      <lid-boven-balk
+        class="lg:ml-8 lg:mt-4"
+        v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+        v-model="lid"
+        :eigenProfiel="isEigenProfiel"
+        :changes="changes"
+        @opslaan="opslaan"
+        @disableWatchable="resetWatchable"
+        @stopAlleFuncties="stopAlleFuncties"
+      ></lid-boven-balk>
       <div class="lg:ml-2 mt-8 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel"
+                           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
-              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+              <adressen v-model="lid" :title="'Adressen'"
+                        v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+              <contacten v-model="lid" :title="'Contacten'"
+                         v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
@@ -86,6 +93,7 @@ import Contacten from "@/components/lid/Contacten";
 import Functies from "@/components/lid/Functies";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
+import LidBovenBalk from "@/components/lid/LidBovenBalk";
 
 export default {
   name: "Lid",
@@ -101,7 +109,8 @@ export default {
     Contacten,
     Functies,
     FunctiesToevoegen,
-    GroepseigenGegevens
+    GroepseigenGegevens,
+    LidBovenBalk
   },
   setup() {
     const {
@@ -117,7 +126,6 @@ export default {
       wijzigingen,
       teBekijkenLid,
     } = LidService.lidSpace();
-
 
 
     return {

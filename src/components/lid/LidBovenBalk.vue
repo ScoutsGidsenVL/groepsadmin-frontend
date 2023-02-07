@@ -52,13 +52,15 @@
 
 <script>
 
-import rechtenService from '@/services/rechten/rechtenService';
 import Opslaan from "@/components/buttons/Opslaan";
+import LidBovenBalkService from "@/services/lid/LidBovenBalkService";
+import {toRefs} from "@vue/reactivity";
 
 export default {
   name: "LidBovenBalk",
+  components: {Opslaan},
   props: {
-    lid: {
+    modelValue: {
       type: Object,
     },
     id: {
@@ -75,179 +77,32 @@ export default {
       default: false
     }
   },
-  components: {Opslaan},
-  data() {
+  setup(props) {
+    const {
+      state,
+      menu,
+      toggle,
+      gaNaar,
+      legeLedenLijst,
+      kanOpslaan,
+      kanNieuwLidAanmaken,
+      volledigeNaam,
+      volgendLid,
+      vorigLid
+    } = LidBovenBalkService.lidBovenBalkSpace(props);
+
     return {
-      filteredMenuItems: [],
-      menuItems: [
-        {
-          label: "Communicatievoorkeuren",
-          condition: this.eigenProfiel && !this.nieuwLid,
-          icon: "fal fa-satellite-dish",
-          link: "Communicatievoorkeuren",
-        },
-        {
-          label: "Individuele steekkaart",
-          condition: rechtenService.heeftSteekkaartLeesrecht(this.lid, "steekkaart") || this.eigenProfiel && !this.nieuwLid,
-          icon: "fal fa-notes-medical",
-          link: "IndividueleSteekkaart",
-        },
-        {
-          label: "Nieuw Lid",
-          condition: rechtenService.hasAccess("nieuw lid"),
-          icon: "far fa-user-plus",
-          link: "lidToevoegen",
-        },
-        {
-          label: "Broer/Zus toevoegen",
-          condition: rechtenService.hasAccess("nieuw lid"),
-          icon: "far fa-user-friends",
-          link: "broerZusToevoegen",
-        },
-        {
-          label: "Mail lid",
-          condition: !this.eigenProfiel,
-          icon: "far fa-envelope",
-          link: "Mail",
-        },
-        {
-          label: "Stop alle functies",
-          condition: this.magFunctiesVanLidStoppen || this.eigenProfiel,
-          icon: "far fa-times",
-          link: "stopAlleFuncties",
-        },
-      ],
-    };
-  },
-
-  created() {
-    this.filterMenuItems();
-  },
-
-  updated() {
-    this.filterMenuItems();
-  },
-
-  computed: {
-    volledigeNaam() {
-      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
-        return (
-          this.lid.vgagegevens.voornaam + " " + this.lid.vgagegevens.achternaam
-        );
-      } else {
-        return " ";
-      }
-    },
-
-    legeLedenLijst() {
-      return this.$store.getters.leden.length !== 0
-    },
-
-    kanOpslaan() {
-      return rechtenService.kanOpslaan(this.lid);
-    },
-
-    kanNieuwLidAanmaken() {
-      return rechtenService.hasAccess("nieuw lid")
+      ...toRefs(state),
+      menu,
+      toggle,
+      gaNaar,
+      legeLedenLijst,
+      kanOpslaan,
+      kanNieuwLidAanmaken,
+      volledigeNaam,
+      volgendLid,
+      vorigLid
     }
-  },
-  methods: {
-    gaNaar(link) {
-      if (link === 'profiel') {
-        this.$router.push({name: 'Profiel', params: {id: "profiel"}})
-      } else if (link === 'stopAlleFuncties') {
-        this.$emit('stopAlleFuncties');
-      } else if (link === 'broerZusToevoegen') {
-        this.broerZusToevoegen();
-      } else {
-        this.$router.push({name: link})
-      }
-    },
-
-    vorigLid() {
-      let index = this.$store.getters.leden.indexOf(this.lid.id);
-      if (index === 0) {
-        index = this.$store.getters.leden.length - 1;
-      } else {
-        index--;
-      }
-      this.$emit('disableWatchable');
-      this.$router.push({name: "Lid", params: {id: this.$store.getters.leden[index]}})
-    },
-
-    volgendLid() {
-      let index = this.$store.getters.leden.indexOf(this.lid.id);
-      if (index === this.$store.getters.leden.length - 1) {
-        index = 0;
-      } else {
-        index++;
-      }
-      this.$emit('disableWatchable');
-      this.$router.push({name: "Lid", params: {id: this.$store.getters.leden[index]}})
-    },
-
-    heeftToegang(label) {
-      switch(label) {
-        case "Communicatievoorkeuren":
-          return this.eigenProfiel && !this.nieuwLid;
-        case "Individuele steekkaart":
-          return rechtenService.heeftSteekkaartLeesrecht(this.lid, "steekkaart") || this.eigenProfiel && !this.nieuwLid;
-        case "Nieuw Lid":
-          return rechtenService.hasAccess("nieuw lid");
-        case "Broer/Zus toevoegen":
-          return rechtenService.hasAccess("nieuw lid");
-        case "Mail lid":
-          return !this.eigenProfiel;
-        case "Stop alle functies":
-          return rechtenService.magAlleFunctiesStoppen(this.lid) || this.eigenProfiel;
-        default:
-          return false;
-      }
-    },
-
-    opslaan() {
-      this.$emit('opslaan');
-    },
-
-    toggle(event) {
-      this.$refs.menu.toggle(event);
-    },
-
-    broerZusToevoegen() {
-      let defaultLid = {
-        vgagegevens: {
-          achternaam: this.lid.vgagegevens.achternaam
-        },
-        persoonsgegevens: {
-          verminderdlidgeld: false,
-          beperking: false,
-          geslacht: 'vrouw',
-          gsm: this.lid.persoonsgegevens.gsm
-        },
-        verbondsgegevens: {
-          lidgeldbetaald: false
-        },
-        email: this.lid.email,
-        adressen: this.lid.adressen,
-        contacten: this.lid.contacten,
-        functies: []
-      }
-      this.$store.commit('setBroerZusLid', defaultLid);
-      this.$router.push({
-        name: "lidToevoegen",
-      });
-    },
-
-    filterMenuItems() {
-      this.filteredMenuItems = [];
-      this.menuItems.forEach(item => {
-        if (this.heeftToegang(item.label)) {
-          this.filteredMenuItems.push(item);
-        }
-      })
-    },
-
-
   },
 };
 </script>
