@@ -31,12 +31,12 @@
       <div class="d-flex justify-content-end lg:mt-4 md:mt-10">
         <lid-zoek-auto-complete></lid-zoek-auto-complete>
       </div>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"
-                      :eigenProfiel="isEigenProfiel" :changes="changes"
-                      @disableWatchable="resetWatchable"
-                      @stopAlleFuncties="stopAlleFuncties"
-                      v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
-      ></lid-boven-balk>
+<!--      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 lg:mt-4" @opslaan="opslaan"-->
+<!--                      :eigenProfiel="isEigenProfiel" :changes="changes"-->
+<!--                      @disableWatchable="resetWatchable"-->
+<!--                      @stopAlleFuncties="stopAlleFuncties"-->
+<!--                      v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
+<!--      ></lid-boven-balk>-->
       <div class="lg:ml-2 mt-8 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
@@ -44,24 +44,24 @@
               <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-<!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
-<!--              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>-->
-<!--              <groepseigen-gegevens-->
-<!--                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"-->
-<!--                v-model="groepseigenVelden"-->
-<!--                :title="'Groepseigen gegevens'"-->
-<!--              ></groepseigen-gegevens>-->
+              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+              <contacten v-model="lid" :title="'Contacten'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+              <groepseigen-gegevens
+                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                v-model="groepseigenVelden"
+                :title="'Groepseigen gegevens'"
+              ></groepseigen-gegevens>
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
-<!--              <functies-->
-<!--                v-model="gesorteerdeFuncties"-->
-<!--                :lid="lid"-->
-<!--                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"-->
-<!--              ></functies>-->
-<!--              <functies-toevoegen-->
-<!--                v-model="lid"-->
-<!--                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"-->
-<!--              ></functies-toevoegen>-->
+              <functies
+                v-model="gesorteerdeFuncties"
+                :lid="lid"
+                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+              ></functies>
+              <functies-toevoegen
+                v-model="lid"
+                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
+              ></functies-toevoegen>
             </div>
           </div>
         </form>
@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import Footer from "@/components/global/Footer";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
@@ -82,18 +81,27 @@ import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
+import Adressen from "@/components/lid/Adressen";
+import Contacten from "@/components/lid/Contacten";
+import Functies from "@/components/lid/Functies";
+import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
+import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 
 export default {
   name: "Lid",
   components: {
     Footer,
-    LidBovenBalk,
     Loader,
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
     LidZoekAutoComplete,
-    Persoonlijk
+    Persoonlijk,
+    Adressen,
+    Contacten,
+    Functies,
+    FunctiesToevoegen,
+    GroepseigenGegevens
   },
   setup() {
     const {
