@@ -41,7 +41,7 @@
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
-<!--              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>-->
+              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
 <!--              <adressen v-model="lid" :title="'Adressen'" v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>-->
@@ -81,6 +81,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
+import Persoonlijk from "@/components/lid/Persoonlijk";
 
 export default {
   name: "Lid",
@@ -91,7 +92,8 @@ export default {
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
-    LidZoekAutoComplete
+    LidZoekAutoComplete,
+    Persoonlijk
   },
   setup() {
     const {
