@@ -63,9 +63,6 @@ export default {
     modelValue: {
       type: Object,
     },
-    id: {
-      type: String,
-    },
     eigenProfiel: {
       type: Boolean
     },

@@ -1,10 +1,9 @@
 import {reactive} from "@vue/reactivity";
 import rechtenService from "@/services/rechten/rechtenService";
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeUpdate, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import useEmitter from "@/services/utils/useEmitter";
-import {onUpdated} from "@vue/runtime-core";
 
 export default {
     lidBovenBalkSpace(props) {
@@ -181,7 +180,7 @@ export default {
             filterMenuItems();
         })
 
-        onUpdated(() => {
+        onBeforeUpdate(() => {
             state.lid = props.modelValue;
             filterMenuItems();
         })
