@@ -93,6 +93,7 @@ export default {
                     if (res.status === 200) {
                         state.laden = false
                         store.dispatch("getGroepen");
+                        store.dispatch("getFuncties");
                         if (!state.changesFuncties) {
                             toast.add({
                                 severity: "success",

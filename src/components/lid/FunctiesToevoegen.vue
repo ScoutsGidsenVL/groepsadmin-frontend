@@ -29,14 +29,14 @@
               <label class="mb-2"><strong>Groepseigen functies</strong></label>
               <div class="row">
                 <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
-                     class="col-md-6 flex justify-content-between">
+                     class="col-md-6 flex justify-content-start">
                   <checkbox
                     v-model="geselecteerdeFuncties[groep.groepsnummer]"
                     @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
                     :value="functie.beschrijving"
                     :input-id="functie.beschrijving"
                   ></checkbox>
-                  <label :for="functie.beschrijving">{{functie.beschrijving}}</label>
+                  <label class="small-text ml-2" :for="functie.beschrijving">{{functie.beschrijving}}</label>
                 </div>
               </div>
             </div>
