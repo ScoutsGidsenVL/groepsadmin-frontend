@@ -334,6 +334,10 @@ export default {
             updateFuncties(event.functie, event.groepsnummer);
         })
 
+        emitter.on('opslaan', () => {
+            opslaan();
+        })
+
         const updateFuncties = (functie, groepsnummer) => {
             state.loadingLid = true;
             let groep = store.getters.groepByNummer(groepsnummer);

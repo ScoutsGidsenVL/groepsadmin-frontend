@@ -85,7 +85,8 @@ export default {
       kanNieuwLidAanmaken,
       volledigeNaam,
       volgendLid,
-      vorigLid
+      vorigLid,
+      opslaan
     } = LidBovenBalkService.lidBovenBalkSpace(props);
 
     return {
@@ -98,7 +99,8 @@ export default {
       kanNieuwLidAanmaken,
       volledigeNaam,
       volgendLid,
-      vorigLid
+      vorigLid,
+      opslaan
     }
   },
 };
