@@ -72,7 +72,11 @@ export default {
         }
 
         const opslaan = () => {
-            emitter.emit('opslaan');
+            if (!state.nieuwLid) {
+                emitter.emit('opslaan');
+            } else {
+                emitter.emit('nieuwLidOpslaan')
+            }
         }
 
         const toggle = (event) => {

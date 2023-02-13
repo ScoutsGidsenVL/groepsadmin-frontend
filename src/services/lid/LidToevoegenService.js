@@ -117,6 +117,10 @@ export default {
 
             setGeboorteDatum();
 
+            emitter.on('nieuwLidOpslaan', () => {
+                opslaan();
+            })
+
             setTimeout(() => {
                 state.watchable = true;
             }, 1500);
