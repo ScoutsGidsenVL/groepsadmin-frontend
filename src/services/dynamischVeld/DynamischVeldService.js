@@ -25,6 +25,7 @@ export default {
             options.forEach(function (optie) {
                 state.keuzes.push({label: optie, value: optie});
             });
+            return state.keuzes;
         }
 
         return {
