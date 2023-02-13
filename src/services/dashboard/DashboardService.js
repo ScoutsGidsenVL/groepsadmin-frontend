@@ -117,6 +117,7 @@ export default {
     dashBoardBlockSpace(props) {
 
         const router = useRouter();
+        const store = useStore();
 
         const goto = (link) => {
             top.window.onbeforeunload = null;
@@ -126,11 +127,10 @@ export default {
                 if (link === "Profiel") {
                     router.push({name: "Lid", params: {id: "profiel"}});
                 } else if (link === "IndividueleSteekkaart") {
-                    router.push({name: link, params: {id: this.$store.getters.profiel.id }});
+                    router.push({name: link, params: {id: store.getters.profiel.id }});
                 } else {
                     router.push({name: link});
                 }
-                this.activeMenu = this.title;
             }
         }
 
