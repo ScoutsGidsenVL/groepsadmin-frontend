@@ -60,6 +60,9 @@ export default {
         }
 
         const heeftToegang = (sectie) => {
+            if (props.lidaanvraag) {
+                return true;
+            }
             return rechtenService.canBeShowed(props.modelValue, sectie);
         }
 
