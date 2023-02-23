@@ -24,6 +24,7 @@
           <div class="col-12 col-sm-6 col-md-3 col-xl-2" v-if="!filterOpslaanMode">
             <Button label="Filter toepassen"
                     :icon="'fas fa-check'" class="md:ml-2 opslaan-knop w-100 text-nowrap"
+                    :disabled="!changes"
                     @click="filterToepassen"></Button>
           </div>
         </div>
@@ -160,6 +161,7 @@ export default {
       filterOpslaanMode: false,
       bestaandeNaam: false,
       filterDelen: false,
+      changes: false,
       nieuweFilternaam: '',
       zoekTerm: '',
       geselecteerdeFilter: null,
@@ -174,27 +176,33 @@ export default {
     },
 
     filterOpslaan() {
+      this.changes = false;
       this.filterOpslaanMode = false;
       return this.$emit('filterOpslaan', this.zoekTerm, this.filterDelen, (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? this.geselecteerdeFilter.value.id : null);
     },
 
     selecteerCriterium(criterium) {
+      this.changes = true;
       this.$emit('activateCriterium', criterium);
     },
 
     deactivateCriterium(criterium) {
+      this.changes = true;
       this.$emit('deactivateCriterium', criterium)
     },
 
     setNonActieveKolom() {
+      this.changes = true;
       this.$emit('setNonActieveKolom');
     },
 
     setActieveKolom() {
+      this.changes = true;
       this.$emit('setActieveKolom');
     },
 
     filterToepassen() {
+      this.changes = false;
       this.$emit('filterToepassen');
     },
 
