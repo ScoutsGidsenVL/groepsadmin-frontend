@@ -198,12 +198,15 @@ export default {
     modelValue: {
       type: Object,
     },
+    kanGroepWijzigen: {
+      type: Boolean,
+      default: false,
+    }
   },
 
   setup(props) {
     const {
       state,
-      kanGroepWijzigen,
       geigTitel,
       verwijderGegeven,
       voegGeigToe,
@@ -215,7 +218,6 @@ export default {
 
     return {
       ...toRefs(state),
-      kanGroepWijzigen,
       geigTitel,
       verwijderGegeven,
       voegGeigToe,

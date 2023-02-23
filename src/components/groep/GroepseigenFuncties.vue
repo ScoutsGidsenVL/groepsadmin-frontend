@@ -5,7 +5,7 @@
         <span class="font18">
           Groepseigen functies
         </span>
-        <span v-if="kanFunctieWijzigen">
+        <span v-if="kanGroepWijzigen">
           <Button
             icon="pi pi-plus"
             class="p-button-rounded add-button mt-t float-end mr-1"
@@ -53,6 +53,10 @@ export default {
     modelValue: {
       type: Object,
     },
+    kanGroepWijzigen: {
+      type: Boolean,
+      default: false,
+    }
   },
 
   setup(props) {
@@ -60,18 +64,14 @@ export default {
       state,
       voegGeifToe,
       remove,
-      gesorteerdeFuncties,
-      kanFunctieWijzigen,
-      kanGroepWijzigen
+      gesorteerdeFuncties
     } = GroepseigenFunctieService.groepseigenFunctiesSpace(props)
 
     return {
       ...toRefs(state),
       voegGeifToe,
       remove,
-      gesorteerdeFuncties,
-      kanFunctieWijzigen,
-      kanGroepWijzigen
+      gesorteerdeFuncties
     };
   }
 }

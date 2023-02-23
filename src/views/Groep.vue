@@ -37,7 +37,7 @@
             <div class="row">
               <div class="col-12 col-lg-6 col-xl-4">
                 <Algemeen v-model="selectedGroep"></Algemeen>
-                <groepseigen-functies v-model="selectedGroep"></groepseigen-functies>
+                <groepseigen-functies v-model="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></groepseigen-functies>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
                 <Contacten
@@ -47,7 +47,7 @@
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
                 <Lokalen :groep="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></Lokalen>
-                <groepseigen-gegevens v-model="selectedGroep"></groepseigen-gegevens>
+                <groepseigen-gegevens v-model="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></groepseigen-gegevens>
               </div>
             </div>
           </form>
