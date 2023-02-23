@@ -20,7 +20,7 @@
           <p class="small">Geen groepseigen functies beschikbaar voor deze groep.</p>
         </div>
         <div v-if="groep && groep.groepseigenFuncties && groep.groepseigenFuncties.length > 0">
-          <div v-for="(functie, index) in gesorteerdeFuncties(groep.groepseigenFuncties)" :key="index">
+          <div v-for="(functie, index) in gesorteerdeFuncties" :key="index">
             <div class="row mb--25">
               <div class="col-12">
                 <BaseInputGeig
@@ -63,15 +63,14 @@ export default {
     const {
       state,
       voegGeifToe,
-      remove,
-      gesorteerdeFuncties
+      remove
     } = GroepseigenFunctieService.groepseigenFunctiesSpace(props)
 
     return {
       ...toRefs(state),
       voegGeifToe,
-      remove,
-      gesorteerdeFuncties
+      remove
+
     };
   }
 }

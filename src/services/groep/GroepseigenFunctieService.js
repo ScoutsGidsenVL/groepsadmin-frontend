@@ -6,6 +6,7 @@ import {useToast} from "primevue/usetoast";
 import {computed} from "vue";
 import rechtenService from "@/services/rechten/rechtenService";
 import {onUpdated} from "@vue/runtime-core";
+import useEmitter from "@/services/utils/useEmitter";
 
 export default {
 
@@ -14,9 +15,15 @@ export default {
         const confirm = useConfirm();
         const store = useStore();
         const toast = useToast();
+        const emitter = useEmitter();
+
+        emitter.on('groepOpslaan', () => {
+            sorteerFuncties()
+        } )
 
         const state = reactive({
-            groep: props.modelValue
+            groep: props.modelValue,
+            gesorteerdeFuncties: [],
         })
 
         const remove = (index) => {
@@ -83,8 +90,22 @@ export default {
             state.groep.groepseigenFuncties.unshift(nieuweFunctie);
         }
 
-        const gesorteerdeFuncties = (functies) => {
-            return functies.sort((a, b) => {
+        const kanGroepWijzigen = computed(() => {
+            return rechtenService.kanWijzigen(state.groep);
+        })
+
+        const kanFunctieWijzigen = computed(() => {
+            return rechtenService.kanGeFunctieWijzigen(state.groep);
+        })
+
+        onUpdated(() => {
+          state.groep = props.modelValue;
+            console.log('update')
+          sorteerFuncties();
+        });
+
+        const sorteerFuncties = () => {
+            state.gesorteerdeFuncties = state.groep.groepseigenFuncties.sort((a, b) => {
                 if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {{
                     return 0;
                 }}
@@ -98,23 +119,10 @@ export default {
             })
         }
 
-        const kanGroepWijzigen = computed(() => {
-            return rechtenService.kanWijzigen(state.groep);
-        })
-
-        const kanFunctieWijzigen = computed(() => {
-            return rechtenService.kanGeFunctieWijzigen(state.groep);
-        })
-
-        onUpdated(() => {
-          state.groep = props.modelValue;
-        });
-
         return {
             state,
             voegGeifToe,
             remove,
-            gesorteerdeFuncties,
             kanFunctieWijzigen,
             kanGroepWijzigen
         }

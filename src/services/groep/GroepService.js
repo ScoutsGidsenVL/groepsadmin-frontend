@@ -68,6 +68,7 @@ export default {
         }
 
         const opslaan = () => {
+            emitter.emit('groepOpslaan');
             state.laden = true;
             for (let i = 0; i < state.selectedGroep.groepseigenGegevens.length; i++) {
                 state.selectedGroep.groepseigenGegevens[i].sort = i;
