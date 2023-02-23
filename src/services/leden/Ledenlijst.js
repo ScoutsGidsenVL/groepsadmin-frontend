@@ -300,7 +300,7 @@ export default {
         const deactivateCriterium = (criterium) => {
             if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = false;
-            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart') {
+            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
             } else {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = [];
@@ -661,6 +661,7 @@ export default {
         }
 
         const selecteerAlleLeden = (number) => {
+            console.log(state.leden.length);
             state.isLoading = true;
             state.loadingText = "Alle leden verzamelen, kan even duren..."
             let offset = 0;

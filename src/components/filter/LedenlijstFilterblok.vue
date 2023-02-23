@@ -264,8 +264,61 @@ export default {
 
   created() {
     this.emitter.on('deactivateCriterium', (event) => {
+      this.changes = true;
       this.deactivateCriterium(event.criteria);
     })
+    this.emitter.on(
+      'activeerAlleFuncties', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeOudLidCriterium', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeGeslachtCriterium', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'deactiveerAlleFuncties', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'activeerFunctie', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'activeerAlleGroepFuncties', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'deactiveerAlleGroepFuncties', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeGegKeuzeCriterium', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'deactiveerGroepseigenGegeven', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeSteekkaartCriterium', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeLeeftijd', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      'changeGroepCriterium', () => {
+        this.changes = true;
+      })
+    this.emitter.on(
+      "activeerFunctie", () => {
+        this.changes = true;
+      })
   },
   computed: {
     inActivecriteria() {
