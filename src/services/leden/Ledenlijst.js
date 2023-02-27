@@ -60,6 +60,7 @@ export default {
             geselecteerdeLeden: [],
             uniekeLeden: [],
             deelFilter: false,
+            alleLeden: false,
             criteria: [],
             activeCriteria: [],
             canPost: false,
@@ -356,7 +357,7 @@ export default {
                 .then(res => {
                     state.huidigeFilter = res.data;
                     state.leden = [];
-                    getLeden();
+                    getLeden(0);
                     getFilters();
                     ledenlijstFilter.getCriteria();
                     activeerKolommen();
@@ -406,7 +407,7 @@ export default {
                                 .then(res => {
                                     state.huidigeFilter = res.data;
                                     state.offset = 0;
-                                    getLeden();
+                                    getLeden(0);
                                     getKolommen();
                                 })
                         }
@@ -495,7 +496,10 @@ export default {
             menu.value.toggle(event);
         }
 
-        const getLeden = () => {
+        const getLeden = (offset) => {
+            if (!offset) {
+                state.offset = 0;
+            }
             state.offset === 0
                 ? (state.isLoading = true)
                 : (state.isLoadingMore = true);
@@ -511,7 +515,6 @@ export default {
                     state.offset = state.leden.length;
                 })
                 .catch((error) => {
-                    console.log(error);
                     state.error = true;
                     toast.add({
                         severity: "error",
@@ -651,36 +654,63 @@ export default {
 
         const filterLeden = () => {
             state.lidIds = new Set();
-            state.geselecteerdeLeden.forEach((lid) => {
-                state.lidIds.add(lid.id);
-            });
+            if (state.geselecteerdeLeden.length > 0) {
+                state.geselecteerdeLeden.forEach((lid) => {
+                    state.lidIds.add(lid.id);
+                });
+            }
         }
 
         const aantalLedenGeselecteerd = () => {
             return state.geselecteerdeLeden.length;
         }
 
-        const selecteerAlleLeden = (number) => {
-            console.log(state.leden.length);
-            state.isLoading = true;
-            state.loadingText = "Alle leden verzamelen, kan even duren..."
-            let offset = 0;
+        const isLidGeselecteerd = (lid) => {
+            let index = state.geselecteerdeLeden.indexOf(lid);
+            return index !== -1;
+        }
 
-            if (number) {
-                offset = number;
+        const voegLidToe = (lid) => {
+            let index = state.geselecteerdeLeden.indexOf(lid);
+            if (index === -1) {
+                state.geselecteerdeLeden.push(lid);
+            } else {
+                state.geselecteerdeLeden.splice(index, 1);
             }
+            filterLeden();
+        }
 
-            if (offset === 0) {
+        const selecteerOfDeselecteerAlleleden = () => {
+            if (state.geselecteerdeLeden.length > 0) {
                 state.geselecteerdeLeden = [];
                 state.lidIds = new Set();
+                return;
             }
 
-            RestService.getLeden(offset)
+            if (state.totaalAantalLeden === state.leden.length) {
+                state.geselecteerdeLeden = state.leden;
+                filterLeden();
+            } else {
+                state.leden = [];
+                state.geselecteerdeLeden = [];
+                selecteerAlleLeden(0);
+                filterLeden();
+            }
+        }
+
+        const selecteerAlleLeden = (offset) => {
+
+            state.offset = offset;
+            state.isLoading = true;
+            state.loadingText = "Alle leden verzamelen, kan even duren..."
+
+            RestService.getLeden(state.offset)
                 .then((res) => {
                     state.aantalLedenGeladen = res.data.aantal;
                     state.totaalAantalLeden = res.data.totaal;
                     res.data.leden.forEach((lid) => {
                         state.geselecteerdeLeden.push(lid);
+                        state.leden.push(lid);
                         state.lidIds.add(lid.id);
                     });
                 }).catch((error) => {
@@ -692,9 +722,9 @@ export default {
                     life: 8000,
                 });
             }).finally(() => {
-                offset += 50;
                 if (state.aantalLedenGeladen === 50) {
-                    selecteerAlleLeden(offset)
+                    state.offset += 50;
+                    selecteerAlleLeden(state.offset);
                 } else {
                     state.isLoading = false;
                 }
@@ -744,7 +774,7 @@ export default {
             return value === '<input type="checkbox" disabled/>';
         }
 
-        getLeden();
+        getLeden(0);
         getHuidigeFilter();
         getFilters();
 
@@ -761,7 +791,7 @@ export default {
             selectLid,
             veranderFilter,
             aantalLedenGeselecteerd,
-            selecteerAlleLeden,
+            selecteerOfDeselecteerAlleleden,
             clearAlleLeden,
             selecteerLid,
             close,
@@ -775,7 +805,9 @@ export default {
             getLeden,
             menu,
             toggle,
-            scrollComponent
+            scrollComponent,
+            voegLidToe,
+            isLidGeselecteerd
         }
     }
 }

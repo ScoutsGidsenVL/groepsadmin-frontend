@@ -37,21 +37,13 @@
             </div>
             <data-table
               ref="ledenlijst"
-              :lazy="true"
-              :totalRecords="aantalLedenGeladen"
               :value="leden"
               stripedRows
               showGridlines
               responsiveLayout="scroll"
-              v-model:selection="geselecteerdeLeden"
-              @row-select-all="selecteerAlleLeden(0)"
-              @row-unselect-all="clearAlleLeden"
-              @row-select.prevent.stop="selecteerLid"
-              @row-unselect.prevent.stop="selecteerLid"
               @row-click="selectLid"
               @sort="addSort"
               @colum-click="addSort"
-              sort-mode="multiple"
               class="p-datatable-sm mt-4 ledentabel"
             >
               <template #header>
@@ -69,25 +61,28 @@
                     </template>
                   </Menu>
                 </div>
-
-                <label class="float-start mt--1">
-                  {{ totaalAantalLeden }} {{ totaalAantalLeden > 1 ? 'rijen' : 'rij' }}
-                </label>
-                <label v-if="aantalIds > 0" class="float-left mt--1"
-                >&nbsp;( {{ this.aantalIds }}
-                  {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )</label
-                >
+                <div class="d-flex justify-content-start">
+                  <label class="float-start mt--1">
+                    {{ totaalAantalLeden }} {{ totaalAantalLeden > 1 ? 'rijen' : 'rij' }}
+                  </label>
+                  <label v-if="aantalIds > 0" class="float-left mt--1"
+                  >&nbsp;( {{ this.aantalIds }}
+                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )</label
+                  >
+                </div>
               </template>
               <template #empty>
                 Geen leden gevonden op basis van de huidige filter.
               </template>
               <template #loading> Leden laden. Even geduld aub...</template>
-              <column
-                selectionMode="multiple"
-                :exportable="false"
-                headerStyle="max-width: 38px"
-                class="selecteerbaar"
-              ></column>
+              <column>
+                <template #header>
+                  <checkbox @click="selecteerOfDeselecteerAlleleden" v-model="alleLeden" :binary="true"></checkbox>
+                </template>
+                <template #body="slotProps">
+                  <checkbox @click="voegLidToe(slotProps.data)" v-model="geselecteerdeLeden" :value="slotProps.data"></checkbox>
+                </template>
+              </column>
               <column
                 v-for="kolom of actieveKolommen"
                 :field="kolom.id"
@@ -198,7 +193,7 @@ export default {
       selectLid,
       veranderFilter,
       aantalLedenGeselecteerd,
-      selecteerAlleLeden,
+      selecteerOfDeselecteerAlleleden,
       clearAlleLeden,
       selecteerLid,
       close,
@@ -212,7 +207,9 @@ export default {
       aantalLedenGeladen,
       menu,
       toggle,
-      scrollComponent
+      scrollComponent,
+      voegLidToe,
+      isLidGeselecteerd
     } = Ledenlijst.ledenlijstSpace();
 
 
@@ -221,10 +218,10 @@ export default {
     const handleScroll = () => {
       let element = scrollComponent.value;
       if (element && (element.getBoundingClientRect().bottom < window.innerHeight) && !state.isLoadingMore) {
-        if (aantalLedenGeladen.value === state.totaalAantalLeden) {
+        if (aantalLedenGeladen.value >= state.totaalAantalLeden) {
               return;
         }
-        state.offset = state.leden.length;
+        state.offset = aantalLedenGeladen.value;
         getLeden(state.offset);
       }
     }
@@ -247,7 +244,7 @@ export default {
       selectLid,
       veranderFilter,
       aantalLedenGeselecteerd,
-      selecteerAlleLeden,
+      selecteerOfDeselecteerAlleleden,
       clearAlleLeden,
       selecteerLid,
       close,
@@ -261,7 +258,9 @@ export default {
       aantalLedenGeladen,
       ledenlijst,
       menu,
-      scrollComponent
+      scrollComponent,
+      voegLidToe,
+      isLidGeselecteerd
     }
   },
 
