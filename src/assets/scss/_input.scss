@@ -1,6 +1,11 @@
+.p-checkbox-disabled.p-checkbox .p-checkbox-box.p-highlight {
+  background: darkgrey !important;
+  cursor: default !important;
+  border-color: darkgrey !important;
+}
+
 .p-checkbox-disabled {
-  background-color: darkgrey;
-  cursor: default;
+  cursor: default !important;
 }
 
 .kolom-select {
@@ -23,3 +28,4 @@
   overflow-y: auto;
   max-height: 425px;
 }
+
