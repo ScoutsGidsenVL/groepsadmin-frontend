@@ -60,7 +60,7 @@ export default {
                         let bestaandeFunctie = false;
                         if (state.huidigLid && state.huidigLid.functies) {
                             state.huidigLid.functies.forEach(lidFunctie => {
-                                if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id) {
+                                if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id && !lidFunctie.einde) {
                                     bestaandeFunctie = true;
                                 }
                             })
