@@ -7,6 +7,7 @@
     <div class="col-12 col-sm-7 p-md-8">
       <Calendar
         autocomplete="off"
+        :showOnFocus="false"
         id="icon"
         :showIcon="true"
         dateFormat="dd/mm/yy"
