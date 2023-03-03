@@ -71,14 +71,6 @@ export default {
             }
         }
 
-        const opslaan = () => {
-            if (!state.nieuwLid) {
-                emitter.emit('opslaan');
-            } else {
-                emitter.emit('nieuwLidOpslaan')
-            }
-        }
-
         const toggle = (event) => {
             menu.value.toggle(event);
         }
@@ -185,8 +177,10 @@ export default {
         })
 
         onBeforeUpdate(() => {
-            state.lid = props.modelValue;
-            filterMenuItems();
+            if (!props.nieuwLid) {
+                state.lid = props.modelValue;
+                filterMenuItems();
+            }
         })
 
         return {
@@ -198,7 +192,6 @@ export default {
             legeLedenLijst,
             kanOpslaan,
             kanNieuwLidAanmaken,
-            opslaan,
             volgendLid,
             vorigLid
         }

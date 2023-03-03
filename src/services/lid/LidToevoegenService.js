@@ -117,10 +117,6 @@ export default {
 
             setGeboorteDatum();
 
-            emitter.on('nieuwLidOpslaan', () => {
-                opslaan();
-            })
-
             setTimeout(() => {
                 state.watchable = true;
             }, 1500);
@@ -232,9 +228,13 @@ export default {
                                 router.push({name: "Lid", params: {id: res.data.id}});
                             }
                         }).finally(() => {
+                            store.commit('setGoedTeKeurenLid', null)
+                            store.commit('setBroerZusLid', null)
                             router.push({name: "Lid", params: {id: res.data.id}});
                         });
                     } else {
+                        store.commit('setGoedTeKeurenLid', null)
+                        store.commit('setBroerZusLid', null)
                         router.push({name: "Lid", params: {id: res.data.id}});
                     }
                 }
@@ -248,9 +248,10 @@ export default {
             }).finally(() => {
                 state.changes = false;
                 state.loadingLid = false;
+                store.commit('setGoedTeKeurenLid', null)
+                store.commit('setBroerZusLid', null)
             })
-            store.commit('setGoedTeKeurenLid', null)
-            store.commit('setBroerZusLid', null)
+
         }
 
         // const updateFuncties = ({functie, groepsnummer}) =>  {

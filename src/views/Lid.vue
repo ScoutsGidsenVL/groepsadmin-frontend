@@ -37,8 +37,8 @@
         v-model="lid"
         :eigenProfiel="isEigenProfiel"
         :changes="changes"
-        @opslaan="opslaan"
         @stopAlleFuncties="stopAlleFuncties"
+        @opslaan="opslaan"
       ></lid-boven-balk>
       <div class="lg:ml-2 mt-8 lg:mt-8">
         <form @submit.prevent="opslaan" autocomplete="off">

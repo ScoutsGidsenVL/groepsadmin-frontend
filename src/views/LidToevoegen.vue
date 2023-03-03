@@ -11,8 +11,8 @@
       <div class="hidden lg:block lg:ml-8">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 w-50"/>
       </div>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 md:mt-10" @opslaan="opslaan" :eigenProfiel="false"
-                      :nieuwLid="true" :changes="changes"></lid-boven-balk>
+      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 md:mt-10" :eigenProfiel="false"
+                      :nieuwLid="true" :changes="changes" @opslaan="opslaan"></lid-boven-balk>
       <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
@@ -71,7 +71,13 @@ export default {
 
 
 
-    return { ...toRefs(state), v, opslaan, laden, magFunctiesToevoegen}
+    return {
+      ...toRefs(state),
+      magFunctiesToevoegen,
+      opslaan,
+      laden,
+      v
+    }
   },
   components: {
     Footer,

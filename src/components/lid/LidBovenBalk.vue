@@ -16,7 +16,7 @@
           <div class="col-6 col-md-12">
             <div class="d-flex sm:justify-content-start md:justify-content-end">
               <div :class="!nieuwLid ? 'mr-7' : ''" v-if="kanOpslaan || kanNieuwLidAanmaken">
-                <opslaan class="md:ml-2" :disabled="!changes" @click="opslaan"></opslaan>
+                <opslaan class="md:ml-2" :disabled="!changes" @click="$emit('opslaan')"></opslaan>
               </div>
               <div class="mb-6 relative d-flex justify-content-end align-content-center mt--15" v-if="!nieuwLid">
                 <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
@@ -38,8 +38,8 @@
 
               <div class="navigate-buttons mt-2">
                 <Button type="button" icon="pi pi-step-backward-alt" @click="vorigLid" title="vorig lid"
-                        class="opslaan-button" v-if="legeLedenLijst"/>
-                <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 opslaan-button"
+                        class="actie-button" v-if="legeLedenLijst"/>
+                <Button type="button" icon="pi pi-step-forward-alt" @click="volgendLid" class="ml-2 actie-button"
                         title="volgend lid" v-if="legeLedenLijst"/>
               </div>
             </div>
@@ -85,8 +85,7 @@ export default {
       kanNieuwLidAanmaken,
       volledigeNaam,
       volgendLid,
-      vorigLid,
-      opslaan
+      vorigLid
     } = LidBovenBalkService.lidBovenBalkSpace(props);
 
     return {
@@ -99,8 +98,7 @@ export default {
       kanNieuwLidAanmaken,
       volledigeNaam,
       volgendLid,
-      vorigLid,
-      opslaan
+      vorigLid
     }
   },
 };
