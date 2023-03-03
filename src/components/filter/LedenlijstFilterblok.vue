@@ -17,7 +17,7 @@
           </div>
           <div class="col-12 col-md-3 col-xl-2" :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
             <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
-                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="lg:ml-2 opslaan-button w-100"
+                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="lg:ml-2 actie-button w-100"
                     @click="filterOpslaanMode = !filterOpslaanMode"
             ></Button>
           </div>

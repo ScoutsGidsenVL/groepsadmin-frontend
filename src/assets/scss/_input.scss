@@ -5,7 +5,9 @@
 }
 
 .p-checkbox-disabled {
+  background: darkgrey !important;
   cursor: default !important;
+  border-color: darkgrey !important;
 }
 
 .kolom-select {
