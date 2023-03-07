@@ -3,6 +3,7 @@
     <div v-if="!groep && !loading">
       <span style='font-size:100px;'>&#128532;</span>
       <p>Deze groep bestaat niet.</p>
+      <a href="mailto:groepsadministratie@scoutsengidsenvlaanderen.be">Klik hier </a><span> om contact op te nemen met Scouts en Gidsen Vlaanderen</span>
     </div>
     <Loader
       :showLoader="loading"
