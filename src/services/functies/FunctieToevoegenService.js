@@ -101,7 +101,7 @@ export default {
 
             if (state.huidigLid && state.huidigLid.functies) {
                 for (let [index, val] of state.huidigLid.functies.entries()) {
-                    if (val.functie === functie.id && val.groep === groepsnummer) {
+                    if (val.functie === functie.id && val.groep === groepsnummer && !val.einde) {
                         bestaandeFunctie = true;
                         state.huidigLid.functies.splice(index, 1);
                     }
