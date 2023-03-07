@@ -156,7 +156,9 @@ export default {
         const getGroepData = () => {
             RestService.getGroepOpNummer(state.groepsnummer)
                 .then(res => {
-                    state.groep = res.data;
+                    if (res.data['publiek-inschrijven'] && !res.data['beeindigd']) {
+                        state.groep = res.data;
+                    }
                     if (state.groep) {
                         RestService.getGroepseigenGegevens(state.groepsnummer)
                             .then(res => {
