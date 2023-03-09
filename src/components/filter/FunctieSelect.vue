@@ -18,7 +18,7 @@
       </div>
     </div>
     <div
-      class="position-absolute z999 bg-white col-12 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
+      class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
       v-if="toggleMenu">
       <div class="d-flex align-content-start pt-2">
         <checkbox :binary="true" id="label" class="mr-2" v-model="allesGeselecteerd" @change="activeerAlleFuncties"/>

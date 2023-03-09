@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-10 col-sm-6 col-md-4 col-lg-3 col-xl-2 filter-border filter-height-select" v-if="toggleMenu">
+    <div class="position-absolute z999 bg-white col-11 col-sm-6 col-md-4 col-lg-3 col-xl-2 filter-border filter-height-select" v-if="toggleMenu">
       <div v-if="geenGroepseigenGegevens()">
         <label class="text-align-left">Geen groepseigengegevens</label>
       </div>
