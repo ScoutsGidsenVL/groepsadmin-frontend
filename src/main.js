@@ -27,6 +27,7 @@ import VueRouter from 'vue-router';
 import Breadcrumb from "primevue/breadcrumb";
 import "./assets/fonts/Museo Sans/stylesheet.css";
 import Menu from "primevue/menu";
+import SplitButton from 'primevue/splitbutton';
 
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -130,6 +131,7 @@ app.component("Menu", Menu);
 app.component("InputSwitch", InputSwitch);
 app.component("RadioButton", RadioButton);
 app.component("Divider", Divider);
+app.component("SplitButton", SplitButton);
 
 app.directive('click-outside', {
     mounted(el, binding) {
