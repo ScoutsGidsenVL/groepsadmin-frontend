@@ -153,7 +153,7 @@ export default {
             }
         })
 
-        const legeLedenLijst = computed({
+        const gevuldeLedenLijst = computed({
             get() {
                 return store.getters.leden.length !== 0
             }
@@ -189,7 +189,7 @@ export default {
             menu,
             toggle,
             gaNaar,
-            legeLedenLijst,
+            gevuldeLedenLijst,
             kanOpslaan,
             kanNieuwLidAanmaken,
             volgendLid,
