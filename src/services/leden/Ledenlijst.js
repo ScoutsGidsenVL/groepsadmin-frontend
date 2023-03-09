@@ -70,40 +70,58 @@ export default {
             alleGeselecteerd: false,
             menuItems: [
                 {
-                    label: "Exporteren naar PDF",
+                    label: "Ledenlijst naar PDF",
                     condition: true,
                     icon: "fal fa-file-pdf",
                     link: "pdf",
+                    command: () => {
+                        gaNaar("pdf");
+                    }
                 },
                 {
-                    label: "Exporteren naar CSV",
+                    label: "Ledenlijst naar CSV",
                     condition: true,
                     icon: "fal fa-file-csv",
                     link: "csv",
+                    command: () => {
+                        gaNaar("csv");
+                    }
                 },
                 {
                     label: "E-mail versturen",
                     condition: true,
                     icon: "far fa-envelope",
                     link: "email",
+                    command: () => {
+                        gaNaar("email");
+                    }
                 },
                 {
                     label: "Etiketten maken",
                     condition: true,
                     icon: "far fa-tags",
                     link: "etiket",
+                    command: () => {
+                        gaNaar("etiket");
+                    }
                 },
                 {
                     label: "Individuele steekkaarten naar pdf",
                     condition: heeftSteekkaartleesRecht,
                     icon: "fal fa-file-pdf",
                     link: "steekkaart",
+                    command: () => {
+                        gaNaar("steekkaart");
+                    }
                 },
                 {
                     label: "Nieuw Lid",
                     condition: rechtenService.hasAccess("nieuw lid"),
                     icon: "far fa-user-plus",
                     link: "lidToevoegen",
+                    command: () => {
+                        gaNaar("lidToevoegen");
+                    }
                 },
             ],
         })
@@ -174,6 +192,10 @@ export default {
                     }
                 })
             }
+        }
+
+        const magNieuwLidAanmaken = () => {
+            return rechtenService.hasAccess("nieuw lid");
         }
 
         const gaNaar = (link) => {
@@ -379,6 +401,13 @@ export default {
             });
         })
 
+        const filteredexportMenuItems = computed(() => {
+            return state.menuItems.filter(obj => {
+                return obj.condition && ( obj.label.toLowerCase().includes("pdf") || obj.label.toLowerCase().includes("csv") );
+            });
+        })
+
+
         const addSort = (kolom) => {
             if (checkSortering(kolom) === -1) {
                 state.huidigeFilter.sortering.unshift(kolom.id)
@@ -491,9 +520,14 @@ export default {
         }
 
         const menu = ref(null);
+        const exportMenu = ref(null);
 
         const toggle = (event) => {
             menu.value.toggle(event);
+        }
+
+        const toggleExport = (event) => {
+            exportMenu.value.toggle(event);
         }
 
         const getLeden = (offset) => {
@@ -800,13 +834,17 @@ export default {
             aantalLedenGeladen,
             aantalIds,
             filteredMenuItems,
+            filteredexportMenuItems,
             filterToepassen,
             filterOpslaan,
             getLeden,
             menu,
+            exportMenu,
             toggle,
+            toggleExport,
             scrollComponent,
             voegLidToe,
+            magNieuwLidAanmaken,
             isLidGeselecteerd
         }
     }
