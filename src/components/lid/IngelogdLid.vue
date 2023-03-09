@@ -1,7 +1,10 @@
 <template>
   <div class="hidden lg:block">
-    <div class="container-fluid md:w-90 position-absolute mt-2 ">
+    <div class="container-fluid md:w-90 position-absolute">
       <div class="d-flex justify-content-md-end z999">
+        <div class="flex justify-content-end">
+          <lid-zoek-auto-complete></lid-zoek-auto-complete>
+        </div>
         <label class="h-1rem float-start sm:ml-4 h-2rem cursor-pointer"
                @click="gaNaarProfiel">{{ getVolledigeNaam }}</label>
         <div class="ml-4 cursor-pointer" @click="gaNaarAccount" v-show="false">
@@ -16,8 +19,13 @@
 </template>
 
 <script>
+import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
+
 export default {
   name: "IngelogdLid",
+  components: {
+    LidZoekAutoComplete
+  },
   data() {
     return {
       ingelogdLid: null
