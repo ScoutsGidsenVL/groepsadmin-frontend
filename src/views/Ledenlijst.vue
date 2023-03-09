@@ -8,14 +8,17 @@
     <ingelogd-lid></ingelogd-lid>
     <div>
       <div class="container-fluid min-height-67vh mt-7em lg:mt-0">
-        <div class="hidden lg:block md:ml-8 w-50">
+        <div class="hidden lg:block md:ml-8 w-25">
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
         <Loader
           :showLoader="isLoading" :title="loadingText"
         ></Loader>
-        <div class="lg:ml-8" >
+        <div class="lg:ml-8">
           <div class="lg:ml-6">
+            <div class="mt-9 flex justify-content-end lg:hidden">
+              <lid-zoek-auto-complete></lid-zoek-auto-complete>
+            </div>
             <LedenlijstFilterblok class="mt-6 mb-3" v-if="!isLoadingFilters"
                                   :actieveKolommen="actieveKolommen"
                                   :nonActieveKolommen="nonActieveKolommen"
@@ -32,9 +35,6 @@
                                   :active-criteria="activeCriteria"
             >
             </LedenlijstFilterblok>
-            <div class="flex justify-content-end">
-              <lid-zoek-auto-complete></lid-zoek-auto-complete>
-            </div>
             <data-table
               ref="ledenlijst"
               :value="leden"
@@ -47,28 +47,53 @@
               class="p-datatable-sm mt-4 ledentabel"
             >
               <template #header>
-                <div class="relative mb-6 d-flex justify-content-end align-content-center mt--05">
-                  <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true"
-                          aria-controls="overlay_menu"
-                          class="sub-menu-button menu-button p-button-rounded mt--1"/>
-                  <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true"
-                        class="sub-menu-items p-3 width-24">
-                    <template #item="{item}">
-                      <div @click="gaNaar(item.link)">
-                        <i :class="item.icon" class="lid-menu-item mr-2"><label
-                          class="cursor-pointer lid-menu-item font ml-2">{{ item.label }}</label></i>
-                      </div>
-                    </template>
-                  </Menu>
+                <div class="relative d-flex justify-content-end align-content-center h-auto">
+                  <div class="block md:hidden">
+                    <Button
+                      type="button"
+                      icon="pi pi-chevron-down"
+                      @click="toggle"
+                      aria-haspopup="true"
+                      aria-controls="overlay_menu"
+                      label="Acties"
+                      class="actie-button "
+                    />
+                    <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true">
+                    </Menu>
+                  </div>
+                  <div class="hidden md:block">
+                    <Button type="button" label="Nieuw lid" @click="gaNaar('lidToevoegen')" icon="far fa-user-plus"
+                            class="actie-button mr-1" v-if="magNieuwLidAanmaken()"/>
+                    <Button type="button" label="Etiketten" @click="gaNaar('etiket')" icon="pi pi-tags"
+                            class="actie-button mr-1"/>
+                    <Button type="button" label="Mail" @click="gaNaar('email')" icon="pi pi-envelope"
+                            class="actie-button mr-1"/>
+                    <Button type="button" label="Export" @click="toggleExport" aria-haspopup="true"
+                            aria-controls="overlay_menu_export" class="actie-button">
+                      <i class="pi pi-file-export"></i>
+                      <span class="px-3">Export</span>
+                      <i class="pi pi-chevron-down"></i>
+                    </Button>
+                    <Menu
+                      id="overlay_menu_export"
+                      ref="exportMenu"
+                      :model="filteredexportMenuItems"
+                      :popup="true"
+                    />
+                  </div>
                 </div>
                 <div class="d-flex justify-content-start">
-                  <label class="float-start mt--1">
+                  <label class="float-start mt--25">
                     {{ totaalAantalLeden }} {{ totaalAantalLeden > 1 ? 'rijen' : 'rij' }}
                   </label>
-                  <label v-if="aantalIds > 0" class="float-left mt--1"
-                  >&nbsp;( {{ this.aantalIds }}
-                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )</label
-                  >
+                  <label v-if="aantalIds > 0" class="float-left mt--25 hidden md:block">&nbsp;( {{ this.aantalIds }}
+                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
+                  </label>
+                </div>
+                <div class="d-flex justify-content-start ">
+                  <label v-if="aantalIds > 0" class="float-left mt--08 md:hidden">&nbsp;( {{ this.aantalIds }}
+                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
+                  </label>
                 </div>
               </template>
               <template #empty>
@@ -80,7 +105,8 @@
                   <checkbox @click="selecteerOfDeselecteerAlleleden" v-model="alleLeden" :binary="true"></checkbox>
                 </template>
                 <template #body="slotProps">
-                  <checkbox @click="voegLidToe(slotProps.data)" v-model="geselecteerdeLeden" :value="slotProps.data"></checkbox>
+                  <checkbox @click="voegLidToe(slotProps.data)" v-model="geselecteerdeLeden"
+                            :value="slotProps.data"></checkbox>
                 </template>
               </column>
               <column
@@ -201,14 +227,18 @@ export default {
       isWaardeFalse,
       aantalIds,
       filteredMenuItems,
+      filteredexportMenuItems,
       filterToepassen,
       filterOpslaan,
       getLeden,
       aantalLedenGeladen,
       menu,
+      exportMenu,
       toggle,
+      toggleExport,
       scrollComponent,
       voegLidToe,
+      magNieuwLidAanmaken,
       isLidGeselecteerd
     } = Ledenlijst.ledenlijstSpace();
 
@@ -219,7 +249,7 @@ export default {
       let element = scrollComponent.value;
       if (element && (element.getBoundingClientRect().bottom < window.innerHeight) && !state.isLoadingMore) {
         if (aantalLedenGeladen.value >= state.totaalAantalLeden) {
-              return;
+          return;
         }
         state.offset = aantalLedenGeladen.value;
         getLeden(state.offset);
@@ -235,6 +265,7 @@ export default {
       activateCriterium,
       heeftSteekkaartleesRecht,
       toggle,
+      toggleExport,
       gaNaar,
       deactivateCriterium,
       setNonActieveKolom,
@@ -252,14 +283,17 @@ export default {
       isWaardeFalse,
       aantalIds,
       filteredMenuItems,
+      filteredexportMenuItems,
       filterToepassen,
       filterOpslaan,
       getLeden,
       aantalLedenGeladen,
       ledenlijst,
       menu,
+      exportMenu,
       scrollComponent,
       voegLidToe,
+      magNieuwLidAanmaken,
       isLidGeselecteerd
     }
   },
