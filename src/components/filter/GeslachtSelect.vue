@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-12 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
+    <div class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
       <div v-for="( item, index ) in criteria.items" :key="index" class="d-flex align-content-start">
         <RadioButton :id="index" v-model="selectedOption" :value="item.value" @change="changeGeslachtCriterium"/>
         <label :for="index" class="ml-3">{{ item.label }} </label>
