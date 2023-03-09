@@ -1,5 +1,5 @@
 <template>
-  <div class="row mt-3 z999">
+  <div class="row md:mt-3 z999">
     <div class="col-12">
       <div class="">
         <div class="row">
@@ -15,13 +15,13 @@
               </template>
             </dropdown>
           </div>
-          <div class="col-12 col-md-3 col-xl-2" :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
+          <div class="col-6 col-md-3 col-xl-2" :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
             <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
                     :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="lg:ml-2 actie-button w-100"
                     @click="filterOpslaanMode = !filterOpslaanMode"
             ></Button>
           </div>
-          <div class="col-12 col-sm-6 col-md-3 col-xl-2" v-if="!filterOpslaanMode">
+          <div class="col-6 col-sm-6 col-md-3 col-xl-2" v-if="!filterOpslaanMode">
             <Button label="Filter toepassen"
                     :icon="'fas fa-check'" class="md:ml-2 opslaan-knop w-100 text-nowrap"
                     :disabled="!changes"
