@@ -22,17 +22,15 @@
       </template>
     </ConfirmDialog>
     <div class="container-fluid md:w-90">
-      <div class="hidden lg:block lg:ml-8 w-50">
+      <div class="hidden lg:block lg:ml-8 w-25">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
       </div>
       <Loader
         :showLoader="loadingLid"
       ></Loader>
-      <div class="d-flex justify-content-end lg:mt-4 md:mt-10">
-        <lid-zoek-auto-complete></lid-zoek-auto-complete>
-      </div>
+      <div>
       <lid-boven-balk
-        class="lg:ml-8 lg:mt-4"
+        class="lg:ml-8 mt-lg-4em mt-9"
         v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
         v-model="lid"
         :eigenProfiel="isEigenProfiel"
@@ -40,7 +38,7 @@
         @stopAlleFuncties="stopAlleFuncties"
         @opslaan="opslaan"
       ></lid-boven-balk>
-      <div class="lg:ml-2 mt-8 lg:mt-8">
+      <div class="lg:ml-2">
         <form @submit.prevent="opslaan" autocomplete="off">
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
@@ -72,6 +70,7 @@
           </div>
         </form>
       </div>
+      </div>
     </div>
   </div>
   <Footer/>
@@ -83,7 +82,6 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
-import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
@@ -102,7 +100,6 @@ export default {
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
-    LidZoekAutoComplete,
     Persoonlijk,
     Adressen,
     Contacten,
