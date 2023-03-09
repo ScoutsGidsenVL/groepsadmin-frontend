@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "@/store";
+import {getCurrentInstance} from "vue";
 
 
 export default function apiClient() {
@@ -20,11 +21,13 @@ export default function apiClient() {
         headers: headers,
     });
 
+    const internalInstance = getCurrentInstance();
+
     instance.interceptors.response.use((response) => {
         return response
     }, (error) => {
         if (error.response.status === 500) {
-            app.config.globalProperties.$toast.add({
+            internalInstance.appContext.config.globalProperties.$toast.add({
                 severity: "error",
                 summary: "Ai, er liep iets fout met de Groepsadministratie.",
                 detail: "Laat je even aan groepsadministratie@scoutsengidsenvlaanderen.be weten wat je aan het doen was?",
