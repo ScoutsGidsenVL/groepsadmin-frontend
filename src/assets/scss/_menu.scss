@@ -15,7 +15,7 @@
     .header_logo_inner {
       clip-path: none;
       transition: width .4s ease-in-out;
-      width: 320px;
+      width: 347px;
       background-color: white;
       border-right: solid 1px #7b8f1c;
     }
@@ -37,7 +37,7 @@
       border-right: solid 1px #7b8f1c;
       height: 100vh;
       transition: width .42s ease-out;
-      width: 333px;
+      width: 360px;
       top: 10.9em;
       padding-top: 3em;
       clip-path: none;
@@ -108,7 +108,7 @@
 }
 
 .menu-item-width {
-  width: 300px !important;
+  width: 330px !important;
 }
 
 
@@ -155,8 +155,6 @@
   right: 20px;
   top: 10px;
   border: none;
-  height: 4.5em !important;
-  width: 4.5em !important;
   &:focus {
     box-shadow: none;
   }
@@ -174,34 +172,15 @@
   width: 298px;
 }
 
-.pi-bars {
-  font-size: 3rem !important;
-}
-
 .p-menu-list li {
-  height: 70px !important;
+  height: auto !important;
 }
 
 .mobile-menu {
   width: 28rem !important;
 
-  ul li .p-menuitem-link{
+  ul li .p-menuitem-link {
     font-size: 1.2em;
-  }
-}
-
-.mobile-menu-button {
-  background-color: $sgv-donkergroen !important;
-  &:hover {
-    color: $sgv-lichtgroen !important;
-  }
-
-  .active {
-    color: $sgv-lichtgroen !important;
-
-    span {
-      color: $sgv-lichtgroen !important;
-    }
   }
 }
 

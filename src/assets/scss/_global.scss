@@ -141,6 +141,10 @@
   margin-top: 0.9rem !important;
 }
 
+.mt-9 {
+  margin-top: 9rem !important;
+}
+
 .remove-button-wrapper {
   height: 30px !important;
 }
@@ -277,6 +281,10 @@
   .pt-lg-2em {
     padding-top: 2em !important;
   }
+
+  .mt-lg-4em {
+    margin-top: 4rem !important;
+  }
 }
 
 .autocomplete-input {
@@ -346,6 +354,10 @@ a.clean-link:hover {
 @media screen and (min-width: 768px) {
   .md\:w-90 {
     width: 95% !important;
+  }
+
+  .md\:mt--25 {
+    margin-top: -2.5rem !important;
   }
 }
 
@@ -606,4 +618,8 @@ a.clean-link:hover {
   width: 2rem;
   margin-left: 15px !important;
   margin-top: 4rem !important;
+}
+
+.p-breadcrumb {
+  height: 20px !important;
 }
