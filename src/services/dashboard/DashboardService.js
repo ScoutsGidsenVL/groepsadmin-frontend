@@ -15,19 +15,6 @@ export default {
             snelNaarItems: [],
             menuItems: [
                 {
-                    label: "Leden zoeken",
-                    condition: "ledenlijst",
-                    icon: "far fa-search",
-                    internal: true,
-                },
-                {
-                    label: "Ledenlijst",
-                    condition: "ledenlijst",
-                    icon: "far fa-users",
-                    link: "Ledenlijst",
-                    internal: true,
-                },
-                {
                     label: "Mijn gegevens",
                     condition: true,
                     icon: "far fa-user",
@@ -35,17 +22,24 @@ export default {
                     internal: true,
                 },
                 {
-                    label: "Individuele steekkaart",
+                    label: "Mijn individuele steekkaart",
                     condition: true,
                     icon: "far fa-notes-medical",
                     link: "IndividueleSteekkaart",
                     internal: true,
                 },
                 {
-                    label: "Communicatievoorkeuren",
+                    label: "Mijn communicatievoorkeuren",
                     condition: true,
                     icon: "far fa-satellite-dish",
                     link: "Communicatievoorkeuren",
+                    internal: true,
+                },
+                {
+                    label: "Ledenlijst",
+                    condition: "ledenlijst",
+                    icon: "far fa-users",
+                    link: "Ledenlijst",
                     internal: true,
                 },
                 {
