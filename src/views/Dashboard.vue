@@ -5,7 +5,7 @@
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid">
-      <div class="hidden lg:block md:ml-8 w-50">
+      <div class="hidden lg:block w-50">
         <Breadcrumb class="ml-4 mt-4 md:ml-6"/>
       </div>
       <div class="custom-divider"></div>
@@ -13,7 +13,7 @@
         <div class="relative container lg:ml-8">
           <loader :show-loader="showLoader"></loader>
           <div class="d-flex lg:mt-8 sm:mt-4 mt-8">
-            <h1 class="text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-2 font-bold">Welkom {{
+            <h1 class="text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-8 lg:mt-2 font-bold">Welkom {{
                 naam
               }}</h1>
           </div>
