@@ -55,7 +55,7 @@ export default {
 
         const setHeader = (adres) => {
             return adres.gemeente
-                ? adres.straat + " " + adres.nummer + ", " + adres.gemeente
+                ? adres.straat + " " + adres.nummer + ", " + adres.postcode + " " + adres.gemeente
                 : "Nieuw adres";
         }
 
