@@ -12,7 +12,7 @@
             <ul>
               <li v-for="menuItem in desktopMenuItems" :key="menuItem.label"
                   class="menu-item menu-item-width cursor-pointer">
-                <div @click="goto(menuItem)" class="menu-item-width">
+                <div @click="goto(menuItem.link)" class="menu-item-width">
                   <div class="menu-icon">
                     <i :class="[menuItem.icon, activeMenu.toLowerCase() === menuItem.label.toLowerCase()? 'active': '']"
                        class="menu-icon"
@@ -38,9 +38,19 @@
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
         </div>
         <div class="right-0">
-          <Button type="button" icon="pi pi-bars" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
-                  class="mobile-menu-button menu-button p-button-rounded"/>
-          <Menu id="overlay_menu" ref="menu" :model="mobileMenuItems" :popup="true" class="mobile-menu"/>
+          <Button type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                  class="actie-button menu-button" label="Menu">
+                  <i class="pi pi-bars"></i>
+                  <span class="px-3">Menu</span>
+                  <i class="pi pi-chevron-down"></i>
+          </Button>
+          <Menu
+            id="overlay_menu"
+            ref="menu"
+            :model="mobileMenuItems"
+            :popup="true"
+            class="mobile-menu"
+          />
         </div>
       </div>
     </div>
@@ -59,30 +69,39 @@ export default {
       activeMenu: "",
       menuItems: [
         {
+          label: "Mijn gegevens",
+          condition: true,
+          icon: "far fa-user",
+          link: "Profiel",
+          command: () => {
+            this.goto("Profiel")
+          }
+        },
+        {
+          label: "Mijn individuele steekkaart",
+          condition: true,
+          icon: "fal fa-notes-medical",
+          link: "IndividueleSteekkaart",
+          command: () => {
+            this.goto("IndividueleSteekkaart")
+          }
+        },
+        {
+          label: "Mijn Communicatievoorkeuren",
+          condition: true,
+          icon: "fal fa-satellite-dish",
+          link: "Communicatievoorkeuren",
+          command: () => {
+            this.$router.push({name: "Communicatievoorkeuren"})
+          }
+        },
+        {
           label: "Ledenlijst",
           condition: "ledenlijst",
           icon: "far fa-users",
           link: "Ledenlijst",
           command: () => {
             this.$router.push({name: 'Ledenlijst'})
-          }
-        },
-        {
-          label: "Mijn gegevens",
-          condition: true,
-          icon: "far fa-user",
-          link: "Profiel",
-          command: () => {
-            this.$router.push({name: 'Lid', params: {id: "profiel"}})
-          }
-        },
-        {
-          label: "Ledenaantallen",
-          condition: "groepen",
-          icon: "far fa-chart-area",
-          link: "Ledenaantallen",
-          command: () => {
-            this.$router.push({name: 'Ledenaantallen'})
           }
         },
         {
@@ -101,6 +120,15 @@ export default {
           link: "Aanvragen",
           command: () => {
             this.$router.push({name: 'Aanvragen'})
+          }
+        },
+        {
+          label: "Ledenaantallen",
+          condition: "groepen",
+          icon: "far fa-chart-area",
+          link: "Ledenaantallen",
+          command: () => {
+            this.$router.push({name: 'Ledenaantallen'})
           }
         },
         {
@@ -126,11 +154,11 @@ export default {
 
     goto(menuItem) {
       top.window.onbeforeunload = null;
-      if (menuItem.label === 'Help') {
+      if (menuItem === 'Help') {
         window.open(WikiService.getWikiUrl(), '_blank');
       }
 
-      if (menuItem.label === "Vorige layout") {
+      if (menuItem === "Vorige layout") {
         if (window.origin === "http://localhost:3000") {
           window.location.href = "http://localhost:8000/#/ledenlijst";
         } else {
@@ -138,12 +166,14 @@ export default {
         }
       }
 
-      if (menuItem.link === "Profiel") {
+      if (menuItem === "Profiel") {
         this.$router.push({name: "Lid", params: {id: "profiel"}});
+      } else if (menuItem === "IndividueleSteekkaart"){
+        this.$router.push({name: menuItem, params: {id: this.$store.getters.profiel.id}});
       } else {
-        this.$router.push({name: menuItem.link});
+        this.$router.push({name: menuItem});
       }
-      this.activeMenu = menuItem.label;
+      this.activeMenu = menuItem;
     },
   },
   // In geval van refresh gaan we huidige pagina ophalen om actieve menu aan te duiden
