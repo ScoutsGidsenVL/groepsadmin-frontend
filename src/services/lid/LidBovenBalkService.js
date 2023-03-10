@@ -3,13 +3,11 @@ import rechtenService from "@/services/rechten/rechtenService";
 import {computed, onBeforeUpdate, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import useEmitter from "@/services/utils/useEmitter";
 
 export default {
-    lidBovenBalkSpace(props) {
+    lidBovenBalkSpace(props, context) {
         const router = useRouter();
         const store = useStore();
-        const emitter = useEmitter();
         const menu = ref(null);
 
         const state = reactive({
@@ -19,11 +17,6 @@ export default {
             nieuwLid: props.nieuwLid,
             filteredMenuItems: [],
             menuItems: [
-                {
-                    label: "Communicatievoorkeuren",
-                    icon: "fal fa-satellite-dish",
-                    link: "Communicatievoorkeuren",
-                },
                 {
                     label: "Individuele steekkaart",
                     icon: "fal fa-notes-medical",
@@ -54,8 +47,6 @@ export default {
 
         const heeftToegang = (label) => {
             switch (label) {
-                case "Communicatievoorkeuren":
-                    return state.eigenProfiel && !state.nieuwLid;
                 case "Individuele steekkaart":
                     return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
                 case "Nieuw Lid":
@@ -113,7 +104,7 @@ export default {
             if (link === 'profiel') {
                 router.push({name: 'Profiel', params: {id: "profiel"}})
             } else if (link === 'stopAlleFuncties') {
-                emitter.emit('stopAlleFuncties');
+                context.emit('stopAlleFuncties');
             } else if (link === 'broerZusToevoegen') {
                 broerZusToevoegen();
             } else {
