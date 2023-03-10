@@ -70,7 +70,7 @@ export default {
             alleGeselecteerd: false,
             menuItems: [
                 {
-                    label: "Ledenlijst naar PDF",
+                    label: "Ledenlijst naar pdf",
                     condition: true,
                     icon: "fal fa-file-pdf",
                     link: "pdf",
@@ -79,7 +79,7 @@ export default {
                     }
                 },
                 {
-                    label: "Ledenlijst naar CSV",
+                    label: "Ledenlijst naar csv",
                     condition: true,
                     icon: "fal fa-file-csv",
                     link: "csv",
@@ -88,7 +88,7 @@ export default {
                     }
                 },
                 {
-                    label: "E-mail versturen",
+                    label: "E-mail",
                     condition: true,
                     icon: "far fa-envelope",
                     link: "email",
@@ -97,7 +97,7 @@ export default {
                     }
                 },
                 {
-                    label: "Etiketten maken",
+                    label: "Etiketten",
                     condition: true,
                     icon: "far fa-tags",
                     link: "etiket",
