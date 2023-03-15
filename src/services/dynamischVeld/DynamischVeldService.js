@@ -22,10 +22,11 @@ export default {
         }
 
         const vulOpties = (options) => {
+            let keuzes = [];
             options.forEach(function (optie) {
-                state.keuzes.push({label: optie, value: optie});
+                keuzes.push({label: optie, value: optie});
             });
-            return state.keuzes;
+            return keuzes;
         }
 
         return {
