@@ -22,13 +22,13 @@
           <opslaan class="ml-2" :disabled="!changes" @click="$emit('opslaan')"></opslaan>
         </div>
       </div>
-      <div class="col-6 col-sm-8 flex align-items-end align-self-end flex-column">
+      <div class="col-6 col-sm-8 flex align-self-end flex-column">
         <div class="d-flex justify-content-start ">
           <div class="lg:ml-4 " v-if="!nieuwLid">
             <label class="lg:ml-0 text-sm">{{ volledigeNaam }}</label>
           </div>
         </div>
-        <div class="d-flex justify-content-start mt--05" v-if="!nieuwLid">
+        <div class="d-flex justify-content-start mt--05 text-align-left" v-if="!nieuwLid">
           <label class="mt-2 lg:ml-4 text-sm">Lidnr.: {{ lid.verbondsgegevens.lidnummer }}</label>
         </div>
       </div>
