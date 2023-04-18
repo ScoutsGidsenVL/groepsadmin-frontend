@@ -360,6 +360,7 @@ export default {
                     });
                     state.lid = res.data;
                     sorteerFuncties();
+                    filterGroepsEigenVelden();
                 }
             }).catch((error) => {
                 toast.add({
