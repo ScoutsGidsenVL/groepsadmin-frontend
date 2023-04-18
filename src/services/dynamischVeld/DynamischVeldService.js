@@ -1,5 +1,6 @@
 import {reactive} from "@vue/reactivity";
 import useEmitter from "@/services/utils/useEmitter";
+import {onUpdated} from "@vue/runtime-core";
 
 export default {
 
@@ -13,7 +14,6 @@ export default {
         });
 
         const isChecked = (id) => {
-            console.log(state.waarde[id])
             return state.waarde[id] === "true";
         }
 
@@ -28,6 +28,10 @@ export default {
             });
             return keuzes;
         }
+
+        onUpdated(() => {
+            state.waarde = props.modelValue;
+        })
 
         return {
             state,

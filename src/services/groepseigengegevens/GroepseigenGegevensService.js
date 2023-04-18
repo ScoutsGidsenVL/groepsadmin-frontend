@@ -38,6 +38,10 @@ export default {
             return store.getters.indexedGroepen;
         })
 
+        onUpdated(() => {
+            state.groepseigenVelden = props.modelValue;
+        })
+
         return {
             state,
             groepNaam,
