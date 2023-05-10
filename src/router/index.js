@@ -77,7 +77,6 @@ const routes = [
             hasAccessTo: "aanvragen"
 
         }
-
     },
     {
         path: "/lid/toevoegen",
