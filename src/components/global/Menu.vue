@@ -135,11 +135,13 @@ export default {
           label: "Help",
           condition: true,
           icon: "far fa-question",
+          link: "Help",
         },
         {
           label: 'Vorige layout',
           condition: true,
-          icon: 'fas fa-external-link'
+          icon: 'fas fa-external-link',
+          link: "Vorige layout",
         }
       ],
     }
@@ -154,8 +156,9 @@ export default {
 
     goto(menuItem) {
       top.window.onbeforeunload = null;
-      if (menuItem === 'Help') {
+      if (menuItem === "Help") {
         window.open(WikiService.getWikiUrl(), '_blank');
+        return;
       }
 
       if (menuItem === "Vorige layout") {
@@ -164,6 +167,7 @@ export default {
         } else {
           window.location.href = "/groepsadmin/client/";
         }
+        return;
       }
 
       if (menuItem === "Profiel") {
