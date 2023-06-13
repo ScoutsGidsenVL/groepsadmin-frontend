@@ -60,7 +60,7 @@
                   aria-controls="overlay_menu"
                   class="actie-button">
             <i class="pi pi-bars"></i>
-            <span class="px-3">Actiest</span>
+            <span class="px-3">Acties</span>
             <i class="pi pi-chevron-down"></i>
           </Button>
           <Menu id="overlay_menu" ref="menu" :model="filteredMenuItems" :popup="true" class="sub-menu-items p-4"
