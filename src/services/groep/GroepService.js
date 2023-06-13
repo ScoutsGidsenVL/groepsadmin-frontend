@@ -124,9 +124,11 @@ export default {
             if (state.changesFuncties) {
                 let showMessage = false;
                 state.selectedGroep.groepseigenFuncties.forEach(functie => {
+                    let index = functie.id.indexOf('tempFunctie');
                     if (functie.id.indexOf('tempFunctie') !== -1) {
                         RestService.postFuncties(functie).then(res => {
                             if (res.status === 201) {
+                                state.selectedGroep.groepseigenFuncties.splice(index, 1, res.data);
                                 if (!showMessage) {
                                     showMessage = true;
                                     toast.add({
