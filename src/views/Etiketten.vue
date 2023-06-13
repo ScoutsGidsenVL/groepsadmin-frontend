@@ -591,8 +591,7 @@ export default {
       RestService.printEtiketten(0, payload)
         .then((res) => {
           let obj = {};
-          let blob = new Blob([res.data], {type: "application/pdf"});
-          obj.fileUrl = window.URL.createObjectURL(blob);
+          obj.fileUrl = window.URL.createObjectURL(new Blob([res.data], {type: "application/pdf"}));
           obj.title = "etiketten.pdf";
           this.downloadFile(obj);
         }).catch((error) => {

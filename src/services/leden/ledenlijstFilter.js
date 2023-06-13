@@ -583,7 +583,7 @@ export default {
 
                                 }
                             }
-                            if (groepseigenGegeven.type === "vinkje") {
+                            if (groepseigenGegeven && groepseigenGegeven.type === "vinkje") {
 
                                 return {
                                     activated: false,
