@@ -624,7 +624,7 @@ export default {
             for (const [key, value] of Object.entries(huidigeFilter.criteria)) {
                 criteria.arrCriteria.forEach(crit => {
                     if (crit.criteriaKey === key) {
-                        if ((value === true || value.length > 0) || (key === 'leeftijd' || key === 'individuelesteekkaart')) {
+                        if (value && (value === true || value.length > 0)) {
                             crit.activated = true;
                             crit.value = value;
                             activeCriteria.push(crit);
