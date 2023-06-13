@@ -94,7 +94,7 @@ export default {
             let functieInstantie = {};
             functieInstantie.functie = functie.id;
             functieInstantie.groep = groepsnummer;
-            functieInstantie.begin = '2016-01-01T00:00:00.000+01:00'; // set static date
+            functieInstantie.begin = '2016-01-01 00:00:00'; // set static date
             functieInstantie.temp = "tijdelijk";
 
             let bestaandeFunctie = false;
