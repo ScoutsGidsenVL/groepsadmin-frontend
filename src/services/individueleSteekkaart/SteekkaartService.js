@@ -166,6 +166,7 @@ export default {
                     })
                     .finally(() => {
                         state.isLoadingGegevens = false;
+                        state.changes = false;
                     });
             } else {
                 toast.add({
