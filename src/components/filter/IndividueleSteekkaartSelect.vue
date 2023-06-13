@@ -82,7 +82,9 @@ export default {
     this.criteria.operator.values.forEach((value) => {
       this.aangepastOptions.push({label: value[0], value: value[1]})
     })
-    this.aangepast = this.criteria.value.operator;
+    if (this.criteria && this.criteria.value) {
+      this.aangepast = this.criteria.value.operator;
+    }
     this.change();
   },
   computed: {
