@@ -4,8 +4,6 @@
       class="lid-autocomplete custom-input-styling"
       :class="sectie === 'ledenlijst' ? 'zoekbalk-styling-ledenlijst' : ''"
       v-model="zoekTerm"
-      field="voornaam"
-      forceSelection
       :suggestions="gefilterdeLeden"
       @complete="zoekLid"
       minLength=2
@@ -44,17 +42,25 @@ export default {
       leden: null,
       gefilterdeLeden: null,
       zoekTerm: null,
+      searching: false
     };
   },
   methods: {
     zoekLid() {
-      RestService.zoeken(this.zoekTerm).then((response) => {
-        this.gefilterdeLeden = response.data.leden;
-      });
+      this.searching = true;
+      RestService.zoeken(this.zoekTerm)
+        .then((response) => {
+          this.gefilterdeLeden = response.data.leden;
+        }).finally(() => {
+          this.searching = false;
+        });
     },
     gaNaarLid(event) {
-      this.zoekTerm = "";
-      this.$router.push({ name: "Lid", params: { id: event.value.id } });
+      if (!this.searching) {
+        let id = event.value.id;
+        this.zoekTerm = "";
+        this.$router.push({ name: "Lid", params: { id: id } });
+      }
     },
     showLidGegevens(item) {
       return (
