@@ -104,7 +104,7 @@ export default {
             if (link === 'profiel') {
                 router.push({name: 'Profiel', params: {id: "profiel"}})
             } else if (link === 'IndividueleSteekkaart'){
-                router.push({name: link, params: {id: store.getters.profiel.id}})
+                router.push({name: link, params: {id: state.lid.id}})
             } else if (link === 'stopAlleFuncties') {
                 context.emit('stopAlleFuncties');
             } else if (link === 'broerZusToevoegen') {
