@@ -9,6 +9,7 @@ import {computed, onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
+import Keycloak from "keycloak-js";
 
 export default {
 
@@ -25,6 +26,9 @@ export default {
             home: {icon: 'pi pi-home', to: '/dashboard'},
 
             eigenProfiel: false,
+            messageDialog: false,
+            messageDialogMessage: "De lidkaart is nog niet beschikbaar. <br/>Meer info bij jouw leiding",
+            messageDialogHeader: "",
             watchable: false,
             changes: false,
             id: "",
@@ -264,8 +268,10 @@ export default {
         }
 
         const opslaan = () => {
+            let vga = false;
+            let confirmVGA = false;
+
             v.value.$reset();
-            state.loadingLid = true;
             v.value.$touch();
             if (v.value.$invalid) {
                 state.loadingLid = false;
@@ -279,37 +285,71 @@ export default {
                 return;
             }
 
+            console.log(state.gewijzigdLid.functies);
+
+            if (state.gewijzigdLid.functies && state.gewijzigdLid.functies.length > 0) {
+                state.gewijzigdLid.functies.forEach(functie => {
+                    if (functie.functie === specialeFuncties.VGA && functie.temp === 'tijdelijk') {
+                        vga = true;
+                        confirm.require({
+                            message: "Je maakt iemand anders dan jezelf VGA binnen de huidige groep, je zal zelf deze functie verliezen! Je wordt uitgelogd indien je bevestigt. Ben je zeker?",
+                            header: "Nieuwe VGA",
+                            icon: "pi pi-exclamation-triangle",
+                            accept: () => {
+                                confirmVGA = true;
+                                saveLid(confirmVGA, vga)
+                            },
+                            reject: () => {
+                                confirm.close();
+                            },
+                        });
+                    } else {
+                        saveLid(confirmVGA, vga);
+                    }
+                })
+            } else {
+                saveLid(confirmVGA, vga);
+            }
+        }
+
+        const saveLid = (confirmVGA, vga) => {
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
             }
 
-            RestService.updateLid(state.lid.id, state.gewijzigdLid)
-                .then(res => {
-                    state.lid = res.data;
-                    if (res.status === 200)
+            if (!vga || (vga && confirmVGA)) {
+                state.loadingLid = true;
+                RestService.updateLid(state.lid.id, state.gewijzigdLid)
+                    .then(res => {
+                        state.lid = res.data;
+                        if (res.status === 200)
+                            toast.add({
+                                severity: "success",
+                                summary: "Wijzigingen",
+                                detail: "Wijzigingen lid opgeslagen",
+                                life: 3000,
+                            });
+                        state.changes = false;
+                    }).catch(error => {
+                    if (error && error.response.status !== 303) {
                         toast.add({
-                            severity: "success",
-                            summary: "Wijzigingen",
-                            detail: "Wijzigingen lid opgeslagen",
+                            severity: "warn",
+                            summary: error.response.data.titel,
+                            detail: error.response.data.beschrijving,
                             life: 3000,
-                        });
+                        })
+                    } else {
+                        if (vga && confirmVGA) {
+                            Keycloak.logout();
+                        }
+                    }
+                }).finally(() => {
                     state.changes = false;
-                }).catch(error => {
-                if (error) {
-                    toast.add({
-                        severity: "warn",
-                        summary: error.response.data.titel,
-                        detail: error.response.data.beschrijving,
-                        life: 3000,
-                    })
-                }
-                ;
-            }).finally(() => {
-                state.changes = false;
-                getLid(state.lid.id);
-            })
+                    getLid(state.lid.id);
+                })
+            }
         }
 
         const changeGeg = (veld, waarde, groep) => {
@@ -451,6 +491,55 @@ export default {
             }
         })
 
+        const lidkaartAfdrukken = () => {
+            state.loadingLid = true;
+
+            let ledenIds = {
+                lidIds: [state.lid.id],
+            };
+
+            RestService.controleerBeschikbaarheidLidkaart(ledenIds)
+                .then((res) => {
+                    if (res.data.length > 0) {
+                        if (state.lid.functies.length > 0) {
+                            state.messageDialogMessage = "De lidkaart is pas beschikbaar wanneer de groep of ploeg </br>van jouw belangrijkste functie de leden heeft verbeterd.";
+                        }
+                        state.messageDialog = true;
+                        state.loadingLid = false;
+                    } else {
+                        downloadLidkaart(ledenIds);
+                    }
+                }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+        const downloadLidkaart = (ledenIds) => {
+            RestService.getLidkaartPdf(ledenIds)
+                .then((res) => {
+                    if (res.data) {
+                        let obj = {};
+                        let blob = new Blob([res.data], {type: "application/pdf"});
+                        obj.fileUrl = window.URL.createObjectURL(blob);
+                        obj.title = "lidkaart.pdf";
+                        downloadFile(obj);
+                    }
+                }).catch((error) => {
+                console.log(error);
+            }).finally(() => {
+                state.loadingLid = false;
+            })
+        }
+
+        const downloadFile = (obj) => {
+            var a = document.createElement("a");
+            a.href = obj.fileUrl;
+            a.download = obj.title;
+            document.body.appendChild(a);
+            a.click();
+        }
+
+
         const v = useVuelidate(rules, state);
 
         return {
@@ -464,7 +553,8 @@ export default {
             magFunctiesToevoegen,
             isEigenProfiel,
             wijzigingen,
-            teBekijkenLid
+            teBekijkenLid,
+            lidkaartAfdrukken
         }
     }
 
