@@ -21,6 +21,7 @@
         </div>
       </template>
     </ConfirmDialog>
+    <MessageDialog :dialog-visible="messageDialog" :message="messageDialogMessage" :header="messageDialogHeader" @close="messageDialog = false"/>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block lg:ml-8 w-25">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
@@ -36,6 +37,7 @@
         :eigenProfiel="isEigenProfiel"
         :changes="changes"
         @stopAlleFuncties="stopAlleFuncties"
+        @lidkaartAfdrukken="lidkaartAfdrukken"
         @opslaan="opslaan"
       ></lid-boven-balk>
       <div class="lg:ml-2">
@@ -91,10 +93,12 @@ import Functies from "@/components/lid/Functies";
 import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
+import MessageDialog from "@/components/dialog/MessageDialog.vue";
 
 export default {
   name: "Lid",
   components: {
+    MessageDialog,
     Footer,
     Loader,
     SideMenu,
@@ -121,6 +125,7 @@ export default {
       isEigenProfiel,
       wijzigingen,
       teBekijkenLid,
+      lidkaartAfdrukken
     } = LidService.lidSpace();
 
 
@@ -136,6 +141,7 @@ export default {
       resetWatchable,
       changeGeg,
       updateFuncties,
+      lidkaartAfdrukken
     }
   },
 }
