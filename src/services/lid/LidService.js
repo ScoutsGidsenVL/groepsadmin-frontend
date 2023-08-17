@@ -333,12 +333,55 @@ export default {
         const saveLid = (confirmVGA, vga) => {
             state.loadingLid = true;
 
+            console.log(state.gewijzigdLid.functies);
+
+            if (state.gewijzigdLid.functies && state.gewijzigdLid.functies.length > 0) {
+                state.gewijzigdLid.functies.forEach(functie => {
+                    if (functie.functie === specialeFuncties.VGA && functie.temp === 'tijdelijk') {
+                        vga = true;
+                        confirm.require({
+                            message: "Je maakt iemand anders dan jezelf VGA binnen de huidige groep, je zal zelf deze functie verliezen! Je wordt uitgelogd indien je bevestigt. Ben je zeker?",
+                            header: "Nieuwe VGA",
+                            icon: "pi pi-exclamation-triangle",
+                            accept: () => {
+                                confirmVGA = true;
+                                saveLid(confirmVGA, vga)
+                            },
+                            reject: () => {
+                                confirm.close();
+                            },
+                        });
+                    } else {
+                        saveLid(confirmVGA, vga);
+                    }
+                })
+            } else {
+                saveLid(confirmVGA, vga);
+            }
+        }
+
+        const saveLid = (confirmVGA, vga) => {
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
             }
 
+            if (!vga || (vga && confirmVGA)) {
+                state.loadingLid = true;
+                RestService.updateLid(state.lid.id, state.gewijzigdLid)
+                    .then(res => {
+                        state.lid = res.data;
+                        if (res.status === 200)
+                            toast.add({
+                                severity: "success",
+                                summary: "Wijzigingen",
+                                detail: "Wijzigingen lid opgeslagen",
+                                life: 3000,
+                            });
+                        state.changes = false;
+                    }).catch(error => {
+                    if (error && error.response.status !== 303) {
             // In geval van eigen profiel gaan we de waardes eruit halen die men eigenlijk niet zelf kan aanpassen
             // om backend errors te vermijden
             if (state.gewijzigdLid.groepseigenVelden && state.eigenProfiel) {
