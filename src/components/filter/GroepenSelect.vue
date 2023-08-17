@@ -66,6 +66,11 @@ export default {
 
     checkSelectedOption() {
       this.selecteerAlles = this.selectedOptions.length === this.criteria.items.length;
+      if (this.selecteerAlles) {
+        this.criteria.items.forEach((item) => {
+          this.selectedOptions.push(item.value);
+        })
+      }
       this.emitter.emit('changeGroepCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
     },
 
@@ -80,9 +85,16 @@ export default {
       this.emitter.emit('changeGroepCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
     },
   },
+
   mounted() {
     if (this.criteria && ( (this.criteria.items.length === this.value.length) || (this.value.length === 0) )) {
+      if (!this.selectedOptions) {
+        this.selectedOptions = [];
+      }
       this.selecteerAlles = true;
+      this.criteria.items.forEach((item) => {
+        this.selectedOptions.push(item.value);
+      })
     }
     this.selectedOptions = this.criteria.value;
   },
