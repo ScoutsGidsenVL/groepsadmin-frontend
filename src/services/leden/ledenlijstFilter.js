@@ -320,6 +320,10 @@ export default {
 
         returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu())
 
+        returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu())
+
+        returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu())
+
         return returnObj;
     },
 
@@ -463,6 +467,38 @@ export default {
         }
         adresGeblokkeerd.activated = false;
         return adresGeblokkeerd;
+    },
+
+    getLedenZonderLidkaartMenu() {
+        let geenLidkaart = {
+            "title": "Leden zonder lidkaart",
+            "criteriaKey": "geenLidkaart",
+            "multiplePossible": false,
+            "items": [
+                {
+                    "value": true,
+                    "label": "Ja"
+                }
+            ]
+        }
+        geenLidkaart.activated = false;
+        return geenLidkaart;
+    },
+
+    getLedenZonderMailAdresMenu() {
+        let emailLeeg = {
+            "title": "Leden zonder e-mailadres",
+            "criteriaKey": "emailleeg",
+            "multiplePossible": false,
+            "items": [
+                {
+                    "value": true,
+                    "label": "Ja"
+                }
+            ]
+        }
+        emailLeeg.activated = false;
+        return emailLeeg;
     },
 
     maakGroepSpecifiekeFunctieGroepen(functies) {
