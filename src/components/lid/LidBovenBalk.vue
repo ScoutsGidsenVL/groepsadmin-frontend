@@ -1,5 +1,8 @@
 <template>
   <div class="bovenbalk h-auto">
+    <Loader
+      :showLoader="isLoading"
+    ></Loader>
     <div class="row">
 
       <div class="col-12" v-if="!nieuwLid && gevuldeLedenLijst && !eigenProfiel">
@@ -46,10 +49,6 @@
           <opslaan class="ml-2" :disabled="!changes" @click="$emit('opslaan')" v-if="kanOpslaan || kanNieuwLidAanmaken"></opslaan>
         </div>
       </div>
-
-
-
-
       <div v-if="!gevuldeLedenLijst || eigenProfiel" class="col-6 col-sm-4">
         <div class="flex justify-content-end mb-2">
           <opslaan class="md:ml-2" :disabled="!changes" @click="$emit('opslaan')"
@@ -82,10 +81,11 @@
 import Opslaan from "@/components/buttons/Opslaan";
 import LidBovenBalkService from "@/services/lid/LidBovenBalkService";
 import {toRefs} from "@vue/reactivity";
+import Loader from "@/components/global/Loader.vue";
 
 export default {
   name: "LidBovenBalk",
-  components: {Opslaan},
+  components: {Loader, Opslaan},
   props: {
     modelValue: {
       type: Object,
