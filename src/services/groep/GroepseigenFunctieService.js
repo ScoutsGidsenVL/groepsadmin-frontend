@@ -100,7 +100,6 @@ export default {
 
         onUpdated(() => {
           state.groep = props.modelValue;
-            console.log('update')
           sorteerFuncties();
         });
 
