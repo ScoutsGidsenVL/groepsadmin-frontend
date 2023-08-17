@@ -4,6 +4,8 @@
     <confirmDialog/>
     <message-dialog message="Gelieve eerst leden te selecteren." header="Geen leden geselecteerd"
                     :dialog-visible="ledenDialog" @close="close"></message-dialog>
+    <MessageDialog :dialog-visible="messageDialog" :message="messageDialogMessage" :header="messageDialogHeader" @close="messageDialog = false"/>
+
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
     <div>
