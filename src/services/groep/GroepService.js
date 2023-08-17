@@ -92,6 +92,7 @@ export default {
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
+                        state.selectedGroep.groepseigenFuncties = res.data.groepseigenFuncties;
                         state.laden = false
                         store.dispatch("getGroepen");
                         store.dispatch("getFuncties");
@@ -129,6 +130,7 @@ export default {
                         RestService.postFuncties(functie).then(res => {
                             if (res.status === 201) {
                                 state.selectedGroep.groepseigenFuncties.splice(index, 1, res.data);
+
                                 if (!showMessage) {
                                     showMessage = true;
                                     toast.add({
@@ -152,6 +154,7 @@ export default {
                         }).finally(() => {
                             state.laden = false;
                             state.changes = false;
+                            state.changesFuncties = false;
                         })
                     } else {
                         RestService.pasFunctieAan(functie.id, functie).then(res => {
@@ -179,6 +182,7 @@ export default {
                         }).finally(() => {
                             state.laden = false;
                             state.changes = false;
+                            state.changesFuncties = false;
                         })
                     }
                 })
