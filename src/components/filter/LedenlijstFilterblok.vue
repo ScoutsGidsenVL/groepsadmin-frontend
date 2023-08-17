@@ -75,7 +75,9 @@
     <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
       <BoolFilter :activeCriteria="activeCriteria" :criteria-key="criteria.criteriaKey"
                   @deactivateCriterium="deactivateCriterium"
-                  v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld' || criteria.criteriaKey === 'emailgeblokkeerd'"></BoolFilter>
+                  v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld'
+                  || criteria.criteriaKey === 'emailgeblokkeerd' || criteria.criteriaKey === 'emailleeg' || criteria.criteriaKey === 'geenLidkaart'">
+      </BoolFilter>
       <OudLedenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'oudleden'" :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"></OudLedenSelect>
       <GeslachtSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geslacht'" :value="criteria.value"
