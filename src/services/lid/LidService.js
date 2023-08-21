@@ -272,6 +272,7 @@ export default {
             let confirmVGA = false;
 
             v.value.$reset();
+            state.loadingLid = true;
             v.value.$touch();
             if (v.value.$invalid) {
                 state.loadingLid = false;
