@@ -64,8 +64,8 @@ export default {
                 acceptClass: "approve-button",
                 rejectClass: "reject-button",
                 accept: () => {
-                    state.teStoppenFunctie.einde = new Date().toISOString().slice(0, 10);
-                    emitter.emit('updateLid', {functie: state.teStoppenFunctie, groepsnummer: groepsnummer});
+                    state.teStoppenFunctie.einde = DateUtil.formatteerDatumVolgensDatetime(new Date());
+                    emitter.emit('updateFuncties', {functie: state.teStoppenFunctie, groepsnummer: groepsnummer});
                 },
                 reject: () => {
                     confirm.close();
