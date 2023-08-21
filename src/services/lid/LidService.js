@@ -248,6 +248,9 @@ export default {
         }
 
         const stopAlleFuncties = () => {
+            if (!state.gewijzigdLid.functies) {
+                state.gewijzigdLid.functies = [];
+            }
             confirm.require({
                 message:
                     state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
@@ -268,9 +271,6 @@ export default {
                                 einde: new Date().toISOString(),
                                 begin: functie.begin
                             };
-                            if (!state.gewijzigdLid.functies) {
-                                state.gewijzigdLid.functies = [];
-                            }
                             state.gewijzigdLid.functies.push(functieInstantie);
                         }
                     })
