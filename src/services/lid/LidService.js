@@ -231,6 +231,9 @@ export default {
         }
 
         const stopAlleFuncties = () => {
+            if (!state.gewijzigdLid.functies) {
+                state.gewijzigdLid.functies = [];
+            }
             confirm.require({
                 message:
                     state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
@@ -242,16 +245,13 @@ export default {
                 icon: "pi pi-exclamation-triangle",
                 accept: () => {
                     state.lid.functies.forEach(functie => {
-                        if (functie.temp !== "tijdelijk" && (functie.functie !== specialeFuncties.vga && functie.functie !== specialeFuncties.fv)) {
+                        if (functie.temp !== "tijdelijk" && !functie.einde && (functie.functie !== specialeFuncties.VGA && functie.functie !== specialeFuncties.FV)) {
                             let functieInstantie = {
                                 functie: functie.functie,
                                 groep: functie.groep,
                                 einde: new Date().toISOString().slice(0, 10),
                                 begin: functie.begin
                             };
-                            if (!state.gewijzigdLid.functies) {
-                                state.gewijzigdLid.functies = [];
-                            }
                             state.gewijzigdLid.functies.push(functieInstantie);
                         }
                     })
