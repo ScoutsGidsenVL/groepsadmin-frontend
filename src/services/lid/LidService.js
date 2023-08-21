@@ -242,7 +242,7 @@ export default {
                 icon: "pi pi-exclamation-triangle",
                 accept: () => {
                     state.lid.functies.forEach(functie => {
-                        if (functie.temp !== "tijdelijk" && (functie.functie !== specialeFuncties.vga && functie.functie !== specialeFuncties.fv)) {
+                        if (functie.temp !== "tijdelijk" && !functie.einde && (functie.functie !== specialeFuncties.VGA && functie.functie !== specialeFuncties.FV)) {
                             let functieInstantie = {
                                 functie: functie.functie,
                                 groep: functie.groep,
@@ -297,14 +297,15 @@ export default {
                         });
                     state.changes = false;
                 }).catch(error => {
-                    if (error) {
-                        toast.add({
-                            severity: "warn",
-                            summary: error.response.data.titel,
-                            detail: error.response.data.beschrijving,
-                            life: 3000,
-                        })
-                    };
+                if (error) {
+                    toast.add({
+                        severity: "warn",
+                        summary: error.response.data.titel,
+                        detail: error.response.data.beschrijving,
+                        life: 3000,
+                    })
+                }
+                ;
             }).finally(() => {
                 state.changes = false;
                 getLid(state.lid.id);
