@@ -24,7 +24,7 @@ export default {
             }
         }
 
-        const allesGeselecteerd = () => {
+        const allesGeselecteerd = computed(() => {
             let aantal = 0;
             let aantalActieve = 0;
             if (props.criteria && props.criteria.itemgroups) {
@@ -36,7 +36,9 @@ export default {
                 })
             }
             return aantal === aantalActieve;
-        }
+        })
+
+
 
         const geselecteerdeGroepenToevoegen = () => {
             if (props.criteria) {

@@ -180,15 +180,13 @@ export default {
         })
 
         const activateCriterium = (criterium) => {
-            console.log(criterium)
-
 
             if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
             if (criterium.criteriaKey === 'functies') {
-                emitter.emit('activateFunctieCriterium')
+                activeerAlleFuncties(criterium);
             }
 
             criterium.activated = true;

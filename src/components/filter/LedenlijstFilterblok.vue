@@ -192,6 +192,7 @@ export default {
     selecteerCriterium(criterium) {
       this.changes = true;
       this.$emit('activateCriterium', criterium);
+      this.defineInactiveCriteria();
     },
 
     deactivateCriterium(criterium) {

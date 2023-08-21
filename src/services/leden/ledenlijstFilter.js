@@ -98,7 +98,6 @@ export default {
     },
 
     activateCriterium(crit, huidigeFilter) {
-        console.log('activateCriterium')
         crit.activated = true;
         this.setHuidigeFilterLabel('Huidige', huidigeFilter);
 
@@ -684,7 +683,7 @@ export default {
                                 }
                             })
                         }
-                        if (key === 'functies') {
+                        if (key === 'functies' && value.length > 0) {
                             crit.activated = true;
                             crit.itemgroups.forEach((itemgroup) => {
                                 if (itemgroup.items && itemgroup.items.length > 0) {
