@@ -65,7 +65,7 @@ export default {
                 rejectClass: "reject-button",
                 accept: () => {
                     state.teStoppenFunctie.einde = new Date().toISOString().slice(0, 10);
-                    emitter.emit('updateLid', {functie: state.teStoppenFunctie, groepsnummer: groepsnummer});
+                    emitter.emit('updateFunctie', {functie: state.teStoppenFunctie, groepsnummer: groepsnummer});
                 },
                 reject: () => {
                     confirm.close();

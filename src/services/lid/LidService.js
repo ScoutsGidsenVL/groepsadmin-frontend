@@ -330,7 +330,7 @@ export default {
             state.changes = true
         })
 
-        emitter.on("updateLid", (event) => {
+        emitter.on("updateFunctie", (event) => {
             updateFuncties(event.functie, event.groepsnummer);
         })
 
