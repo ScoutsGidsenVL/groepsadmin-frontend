@@ -330,7 +330,7 @@ export default {
             state.changes = true
         })
 
-        emitter.on("updateLid", (event) => {
+        emitter.on("updateFuncties", (event) => {
             updateFuncties(event.functie, event.groepsnummer);
         })
 
@@ -346,7 +346,7 @@ export default {
                     {
                         functie: functie.id,
                         groep: groep.id,
-                        einde: new Date().toISOString().slice(0, 10),
+                        einde: functie.einde,
                         begin: functie.begin
                     }
                 ]
