@@ -21,6 +21,7 @@
                  @end="drag=false"
                  item-key="id"
                  handle=".handle"
+                 @change="saveKolom"
       >
         <template #item="{ element }">
           <div class="handle">
@@ -123,6 +124,10 @@ export default {
 
     close() {
       this.toggleMenu = false;
+    },
+
+    saveKolom() {
+      this.$emit('kolomVolgordeVeranderd');
     },
 
     checkKolom(huidigekolom) {
