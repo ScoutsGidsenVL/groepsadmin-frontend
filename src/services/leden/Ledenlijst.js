@@ -422,10 +422,8 @@ export default {
 
 
         const addSort = (kolom) => {
-            if (checkSortering(kolom) === -1) {
-                state.huidigeFilter.sortering.unshift(kolom.id)
-                state.huidigeFilter.sortering.splice(3);
-            }
+            state.huidigeFilter.sortering.unshift(kolom.id)
+            state.huidigeFilter.sortering.splice(3);
             kolom.sorteringsIndex = checkSortering(kolom);
             filterToepassen();
         }

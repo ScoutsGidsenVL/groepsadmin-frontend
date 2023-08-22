@@ -99,8 +99,13 @@
                                      :value="criteria.value"
                                      @deactivateCriterium="deactivateCriterium"></individuele-steekkaart-select>
     </div>
-    <KolommenSelect :actieveKolommen="actieveKolommen" :nonActieveKolommen="nonActieveKolommen"
-                    @setActieveKolom="setActieveKolom" @setNonActieveKolom="setNonActieveKolom"></KolommenSelect>
+    <KolommenSelect
+      :actieveKolommen="actieveKolommen"
+      :nonActieveKolommen="nonActieveKolommen"
+      @setActieveKolom="setActieveKolom"
+      @setNonActieveKolom="setNonActieveKolom"
+      @kolomVolgordeVeranderd="kolomVolgordeVeranderd"
+    ></KolommenSelect>
   </div>
 </template>
 
@@ -201,6 +206,10 @@ export default {
     setActieveKolom() {
       this.changes = true;
       this.$emit('setActieveKolom');
+    },
+
+    kolomVolgordeVeranderd() {
+      this.changes = true;
     },
 
     filterToepassen() {
