@@ -59,13 +59,16 @@ export default {
     }
   },
   methods: {
+
     close() {
       this.toggleMenu = false;
     },
+
     checkSelectedOption() {
       this.selecteerAlles = this.selectedOptions.length === this.criteria.items.length;
       this.emitter.emit('changeGroepCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
     },
+
     selecteerAlleGroepen() {
       if (this.selecteerAlles) {
         this.criteria.items.forEach((item) => {
@@ -80,20 +83,8 @@ export default {
   mounted() {
     if (this.criteria && ( (this.criteria.items.length === this.value.length) || (this.value.length === 0) )) {
       this.selecteerAlles = true;
-      if (this.selectedOptions.length === 0) {
-        this.criteria.items.forEach((item) => {
-          this.selectedOptions.push(item.value);
-        })
-      }
-    } else if (this.value.length > 0 && (this.criteria.items.length !== this.value.length)) {
-      this.criteria.items.forEach((item) => {
-        this.value.forEach((groep) => {
-          if (groep === item.value){
-            this.selectedOptions.push(item.value);
-          }
-        })
-      })
     }
+    this.selectedOptions = this.criteria.value;
   },
   computed: {
     label() {
