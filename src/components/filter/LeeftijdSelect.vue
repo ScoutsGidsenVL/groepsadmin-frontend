@@ -25,6 +25,7 @@
           v-model="leeftijdOpDatum"
           optionLabel="label"
           optionValue="value"
+          :value="leeftijdOpDatum"
           @change="change"
         />
       </div>
@@ -47,7 +48,7 @@
           v-model="jongerDan"
           optionLabel="label"
           optionValue="value"
-          @change="change;"
+          @change="change"
         />
       </div>
     </div>

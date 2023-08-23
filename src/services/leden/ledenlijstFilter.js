@@ -98,6 +98,7 @@ export default {
     },
 
     activateCriterium(crit, huidigeFilter) {
+        console.log('activateCriterium')
         crit.activated = true;
         this.setHuidigeFilterLabel('Huidige', huidigeFilter);
 
@@ -691,6 +692,20 @@ export default {
                                     })
                                 }
                             })
+                        }
+
+                        if (key === 'leeftijd') {
+                            crit.activated = true;
+                            crit.value = {
+                                "op31december": value.op31december,
+                                "jongerdan": value.jongerdan,
+                                "ouderdan": value.ouderdan,
+                            }
+                            activeCriteria.push(crit);
+                        }
+
+                        if (key === 'groepen' && value.length > 0) {
+                            console.log('groepen')
                         }
                     }
                 })
