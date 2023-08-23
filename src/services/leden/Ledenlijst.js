@@ -384,7 +384,8 @@ export default {
                     state.leden = [];
                     getLeden(0);
                     getFilters();
-                    ledenlijstFilter.getCriteria();
+                    state.criteria = ledenlijstFilter.getCriteria();
+                    state.activeCriteria = ledenlijstFilter.getActieveCriteria(res.data, ledenlijstFilter.getCriteria())
                     activeerKolommen();
                 })
 

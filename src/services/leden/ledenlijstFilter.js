@@ -649,6 +649,7 @@ export default {
                             })
                         }
                         if (key === 'functies') {
+                            crit.activated = true;
                             crit.itemgroups.forEach((itemgroup) => {
                                 if (itemgroup.items && itemgroup.items.length > 0) {
                                     itemgroup.items.forEach((item) => {
@@ -658,7 +659,7 @@ export default {
                             })
                         }
 
-                        if (key === 'leeftijd') {
+                        if (key === 'leeftijd' && value) {
                             crit.activated = true;
                             crit.value = {
                                 "op31december": value.op31december,
@@ -666,10 +667,6 @@ export default {
                                 "ouderdan": value.ouderdan,
                             }
                             activeCriteria.push(crit);
-                        }
-
-                        if (key === 'groepen' && value.length > 0) {
-                            console.log('groepen')
                         }
                     }
                 })
