@@ -171,6 +171,7 @@ export default {
       zoekTerm: '',
       geselecteerdeFilter: null,
       geselecteerdeFilters: [],
+      inActivecriteria: [],
 
     }
   },
@@ -269,6 +270,14 @@ export default {
         })
       });
     },
+
+    defineInactiveCriteria() {
+      if (this.criteria && this.criteria.arrCriteria) {
+        this.inActivecriteria = this.criteria.arrCriteria.filter(crit => {
+          return !crit.activated
+        });
+      }
+    }
   },
 
   created() {
@@ -328,15 +337,26 @@ export default {
       "activeerFunctie", () => {
         this.changes = true;
       })
+
+    this.$watch(
+      "criteria.arrCriteria",
+      () => {
+          this.defineInactiveCriteria()
+      },
+      {
+        immediate: true,
+      }
+    );
   },
+
   computed: {
-    inActivecriteria() {
-      return this.criteria.arrCriteria.filter(crit => {
-        return !crit.activated
-      });
-    },
-    activeCriteriaArray() {
-      return this.activeCriteria;
+    inActiveCriteriaComputed: {
+      get() {
+        return this.inActivecriteria
+      },
+      set(value) {
+
+      }
     },
     opslaanLabel() {
       return (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? 'Overschrijven' : 'Opslaan';
