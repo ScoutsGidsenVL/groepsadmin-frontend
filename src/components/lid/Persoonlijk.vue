@@ -143,8 +143,12 @@ const isGeldigRekeningnummer = (value) => {
 }
 
 const isGeldigGsmNummer = (value) => {
-  value = Telefoonnummer.formatNumber(value);
-  return Telefoonnummer.validateNumber(value);
+  if (value && !value.isEmpty) {
+    value = Telefoonnummer.formatNumber(value);
+    return Telefoonnummer.validateNumber(value);
+  } else {
+    return true;
+  }
 }
 
 export default {
