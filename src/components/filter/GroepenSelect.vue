@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     label() {
-      if (this.criteria && this.selectedOptions.length > 0) {
+      if (this.criteria && this.selectedOptions && this.selectedOptions.length > 0) {
         let label = "";
         let counter = 0;
         this.criteria.items.forEach((item) => {
