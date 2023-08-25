@@ -354,9 +354,6 @@ export default {
       get() {
         return this.inActivecriteria
       },
-      set(value) {
-
-      }
     },
     opslaanLabel() {
       return (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? 'Overschrijven' : 'Opslaan';

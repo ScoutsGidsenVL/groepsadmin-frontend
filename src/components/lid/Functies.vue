@@ -105,7 +105,7 @@ export default {
       type: Object
     }
   },
-  setup(props) {
+  setup(props, context) {
     const {
       state,
       groepsNaam,
@@ -116,7 +116,7 @@ export default {
       actieveGroepen,
       nietActieveGroepen,
       laden
-    } = FunctieService.functieSpace(props);
+    } = FunctieService.functieSpace(props, context);
 
     return {
       ...toRefs(state),

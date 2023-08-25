@@ -372,22 +372,17 @@ export default {
             state.changes = true
         })
 
-        emitter.on("updateFuncties", (event) => {
-            updateFuncties(event.functie, event.groepsnummer);
-        })
-
         emitter.on('opslaan', () => {
             opslaan();
         })
 
-        const updateFuncties = (functie, groepsnummer) => {
+        const updateFuncties = (functie) => {
             state.loadingLid = true;
-            let groep = store.getters.groepByNummer(groepsnummer);
             let lid = {
                 functies: [
                     {
                         functie: functie.id,
-                        groep: groep.id,
+                        groep: functie.groep,
                         einde: functie.einde,
                         begin: functie.begin
                     }
