@@ -63,6 +63,7 @@
                 v-model="gesorteerdeFuncties"
                 :lid="lid"
                 v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+                @updateFuncties="updateFuncties"
               ></functies>
               <functies-toevoegen
                 v-model="lid"

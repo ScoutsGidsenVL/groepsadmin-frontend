@@ -1,15 +1,13 @@
 import {computed, reactive} from "@vue/reactivity";
 import rechtenService from "@/services/rechten/rechtenService";
 import DateUtil from "@/services/dates/DateUtil";
-import useEmitter from "@/services/utils/useEmitter";
 import {useStore} from "vuex";
 import {useConfirm} from "primevue/useconfirm";
 
 export default {
 
-    functieSpace(props) {
+    functieSpace(props, context) {
 
-        const emitter = useEmitter();
         const store = useStore();
         const confirm = useConfirm();
 
@@ -24,14 +22,6 @@ export default {
             if (groep) {
                 return groep.naam + " - " + groepsnummer;
             }
-        }
-
-        const boodschapStoppenFunctie = () => {
-            let message = "";
-            if (state.teStoppenFunctie) {
-                message = "Ben je zeker dat je de functie " + state.teStoppenFunctie.naam + " wil stoppen?"
-            }
-            return message;
         }
 
         const inactieveGroepsNaam = (groepsnummer) => {
@@ -53,10 +43,13 @@ export default {
             return DateUtil.formatteerDatum(datum);
         }
 
-        const stopFunctie = (functie, groepsnummer) => {
-            state.teStoppenFunctie = Object.assign({}, functie)
+        const stopFunctie = (functie, nummer) => {
+            let message = "Ben je zeker dat je de functie " + functie.naam + " wil stoppen?"
+
+            functie.groep = nummer;
+
             confirm.require({
-                message: boodschapStoppenFunctie(),
+                message: message,
                 header: "Functie stoppen",
                 icon: "pi pi-exclamation-triangle",
                 acceptIcon: "pi pi-check",
@@ -64,8 +57,8 @@ export default {
                 acceptClass: "approve-button",
                 rejectClass: "reject-button",
                 accept: () => {
-                    state.teStoppenFunctie.einde = DateUtil.formatteerDatumVolgensDatetime(new Date());
-                    emitter.emit('updateFuncties', {functie: state.teStoppenFunctie, groepsnummer: groepsnummer});
+                    functie.einde = DateUtil.formatteerDatumVolgensDatetime(new Date());
+                    context.emit('updateFuncties', functie);
                 },
                 reject: () => {
                     confirm.close();
