@@ -14,7 +14,7 @@
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true" v-if="!laden">
+        <accordion :multiple="true" v-show="!laden">
           <accordionTab v-for="(functies, nummer) in actieveGroepen" :key="nummer" :header="groepsNaam(nummer)">
             <div v-for="(functie, index) in functies" :key="index">
               <div v-if="functie.actief" class="functie-wrapper">

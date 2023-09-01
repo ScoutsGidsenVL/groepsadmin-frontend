@@ -7,7 +7,7 @@ import {onUpdated} from "@vue/runtime-core";
 
 export default {
 
-    functieToevoegenSpace(props) {
+    functieToevoegenSpace(props, context) {
         const store = useStore();
         const state = reactive({
             huidigLid: props.modelValue,
@@ -99,19 +99,8 @@ export default {
 
             let bestaandeFunctie = false;
 
-            if (state.huidigLid && state.huidigLid.functies) {
-                for (let [index, val] of state.huidigLid.functies.entries()) {
-                    if (val.functie === functie.id && val.groep === groepsnummer && !val.einde) {
-                        bestaandeFunctie = true;
-                        state.huidigLid.functies.splice(index, 1);
-                    }
-                }
-            }
             if (!bestaandeFunctie) {
-                if (!state.huidigLid.functies) {
-                    state.huidigLid.functies = [];
-                }
-                state.huidigLid.functies.push(functieInstantie);
+                context.emit('voegFunctieToe', {'functie': functieInstantie, 'groepsnummer': groepsnummer});
             }
         }
 
