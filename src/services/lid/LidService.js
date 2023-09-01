@@ -181,8 +181,7 @@ export default {
         const sorteerFuncties = () => {
             store.commit("setGroepenLaden", true);
             let ongesorteerdeFuncties = {};
-            let functies = [];
-            functies = state.lid.functies;
+            let functies = state.lid.functies;
 
             functies.forEach((functie) => {
                 if (!(functie.groep in ongesorteerdeFuncties)) {
@@ -272,7 +271,6 @@ export default {
             let confirmVGA = false;
 
             v.value.$reset();
-            state.loadingLid = true;
             v.value.$touch();
             if (v.value.$invalid) {
                 state.loadingLid = false;
@@ -286,8 +284,6 @@ export default {
                 return;
             }
 
-            console.log(state.gewijzigdLid.functies);
-
             if (state.gewijzigdLid.functies && state.gewijzigdLid.functies.length > 0) {
                 state.gewijzigdLid.functies.forEach(functie => {
                     if (functie.functie === specialeFuncties.VGA && functie.temp === 'tijdelijk') {
@@ -298,22 +294,42 @@ export default {
                             icon: "pi pi-exclamation-triangle",
                             accept: () => {
                                 confirmVGA = true;
-                                saveLid(confirmVGA, vga)
+                                saveLid(confirmVGA, vga);
                             },
                             reject: () => {
                                 confirm.close();
                             },
                         });
-                    } else {
-                        saveLid(confirmVGA, vga);
                     }
                 })
-            } else {
+            }
+
+            if (!vga) {
                 saveLid(confirmVGA, vga);
             }
         }
 
+        const voegFunctieToe = (obj) => {
+            let bestaandeFunctie = false;
+
+            if (state.lid && state.lid.functies) {
+                for (let [index, val] of state.lid.functies.entries()) {
+                    if (val.functie === obj.functie.functie && val.groep === obj.groepsnummer && !val.einde) {
+                        bestaandeFunctie = true;
+                        state.lid.functies.splice(index, 1);
+                    }
+                }
+            }
+
+            if (!bestaandeFunctie) {
+                state.lid.functies.push(obj.functie);
+            }
+        }
+
         const saveLid = (confirmVGA, vga) => {
+            console.log('save');
+            state.loadingLid = true;
+
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
@@ -330,7 +346,7 @@ export default {
                                 severity: "success",
                                 summary: "Wijzigingen",
                                 detail: "Wijzigingen lid opgeslagen",
-                                life: 3000,
+                                life: 2000,
                             });
                         state.changes = false;
                     }).catch(error => {
@@ -550,7 +566,8 @@ export default {
             isEigenProfiel,
             wijzigingen,
             teBekijkenLid,
-            lidkaartAfdrukken
+            lidkaartAfdrukken,
+            voegFunctieToe
         }
     }
 

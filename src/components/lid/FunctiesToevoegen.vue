@@ -59,13 +59,13 @@ export default {
       type: Object
     },
   },
-  setup(props) {
+  setup(props, context) {
     const {
       state,
       gesorteerdeFuncties,
       groepsNaam,
       voegToeOfVerwijderFunctie
-    } = FunctieToevoegenService.functieToevoegenSpace(props);
+    } = FunctieToevoegenService.functieToevoegenSpace(props, context);
 
     return {
       ...toRefs(state),

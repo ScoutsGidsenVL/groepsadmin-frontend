@@ -68,6 +68,7 @@
               <functies-toevoegen
                 v-model="lid"
                 v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
+                @voegFunctieToe="voegFunctieToe"
               ></functies-toevoegen>
             </div>
           </div>
@@ -126,7 +127,8 @@ export default {
       isEigenProfiel,
       wijzigingen,
       teBekijkenLid,
-      lidkaartAfdrukken
+      lidkaartAfdrukken,
+      voegFunctieToe
     } = LidService.lidSpace();
 
 
@@ -142,7 +144,8 @@ export default {
       resetWatchable,
       changeGeg,
       updateFuncties,
-      lidkaartAfdrukken
+      lidkaartAfdrukken,
+      voegFunctieToe
     }
   },
 }
