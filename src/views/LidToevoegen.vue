@@ -33,6 +33,7 @@
               <functies-toevoegen
                 v-model="lid"
                 v-if="magFunctiesToevoegen"
+                @voegFunctieToe="voegFunctieToe"
               ></functies-toevoegen>
             </div>
           </div>
@@ -66,7 +67,8 @@ export default {
       v,
       laden,
       magFunctiesToevoegen,
-      opslaan
+      opslaan,
+      voegFunctieToe
     } = LidToevoegenService.lidToevoegenSpace();
 
 
@@ -75,6 +77,7 @@ export default {
       ...toRefs(state),
       magFunctiesToevoegen,
       opslaan,
+      voegFunctieToe,
       laden,
       v
     }
