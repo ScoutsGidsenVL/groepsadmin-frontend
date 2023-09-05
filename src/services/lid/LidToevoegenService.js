@@ -22,7 +22,7 @@ export default {
 
         const setGeboorteDatum = () => {
             if (state.lid && state.lid.vgagegevens)
-            state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
         }
 
         const state = reactive({
@@ -254,6 +254,25 @@ export default {
 
         }
 
+        const voegFunctieToe = (obj) => {
+            let bestaandeFunctie = false;
+
+            if (state.lid && !state.lid.functies) {
+                state.lid.functies = [];
+            }
+
+            for (let [index, val] of state.lid.functies.entries()) {
+                if (val.functie === obj.functie.functie && val.groep === obj.groepsnummer && !val.einde) {
+                    bestaandeFunctie = true;
+                    state.lid.functies.splice(index, 1);
+                }
+            }
+
+            if (!bestaandeFunctie) {
+                state.lid.functies.push(obj.functie);
+            }
+        }
+
         // const updateFuncties = ({functie, groepsnummer}) =>  {
         //     let groep = store.getters.groepByNummer(groepsnummer);
         //     let lid = {
@@ -283,6 +302,7 @@ export default {
             state,
             v,
             magFunctiesToevoegen,
+            voegFunctieToe,
             opslaan,
         }
     }
