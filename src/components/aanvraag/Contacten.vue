@@ -1,5 +1,5 @@
 <template>
-  <confirmDialog />
+  <confirmDialog/>
   <div class="contacten-card mb-4">
     <toast position="bottom-right"/>
     <card>
@@ -54,14 +54,19 @@
               label="E-mail"
               v-model="contacten[index].email"
               type="text"
+              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].email && v.contacten.$each.$response.$errors[index].email.length > 0"
+              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
+                              v.contacten.$each.$response.$errors[index].email.length > 0) ?
+                              v.contacten.$each.$response.$errors[index].email[0].$message : ''"
             />
             <BaseInputTelefoon
               v-model="contacten[index].gsm"
               label="GSM"
               type="text"
-              :invalid="contacten[index].$invalid"
-              @blur="contacten[index].$commit"
-              error-message="Geen geldig gsm nummer"
+              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].gsm && v.contacten.$each.$response.$errors[index].gsm.length > 0"
+              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
+                              v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
+                              v.contacten.$each.$response.$errors[index].gsm[0].$message : ''"
               @changeValue="formatNumber(index)"
             ></BaseInputTelefoon>
             <base-checkbox
@@ -151,6 +156,9 @@ import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import useVuelidate from "@vuelidate/core";
+import {email, helpers} from "@vuelidate/validators";
+import {useConfirm} from "primevue/useconfirm";
+import {useToast} from "primevue/usetoast";
 
 const isGeldigGsmNummer = (value) => {
   value = Telefoonnummer.formatNumber(value);
@@ -159,9 +167,37 @@ const isGeldigGsmNummer = (value) => {
 
 export default {
   name: "Contacten",
-  components: {ConfirmDialog, BaseCheckbox, BaseInput, BaseDropdown, GemeenteZoekAutoComplete, StraatZoekAutoComplete, BaseInputTelefoon},
-  data() {
-    return {
+  components: {
+    ConfirmDialog,
+    BaseCheckbox,
+    BaseInput,
+    BaseDropdown,
+    GemeenteZoekAutoComplete,
+    StraatZoekAutoComplete,
+    BaseInputTelefoon
+  },
+
+  props: {
+    title: {
+      type: String,
+    },
+    modelValue: {
+      type: Object,
+    },
+    nieuwLid: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  setup(props) {
+    const confirm = useConfirm();
+    const toast = useToast();
+
+    const state = reactive({
+      contacten: [],
+      adres: [],
+      adresArray: [],
       landen: [
         {label: "België", value: "BE"},
         {label: "Duitsland", value: "DE"},
@@ -190,78 +226,92 @@ export default {
         },
       ],
       zelfdeAdres: false
+    });
+
+
+    const rules = {
+      contacten: {
+        $each: helpers.forEach({
+          gsm: {
+            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+          },
+          email: {
+            email: helpers.withMessage("Geen geldig emailadres", email)
+          }
+        })
+      }
     };
-  },
-  props: {
-    title: {
-      type: String,
-    },
-    modelValue: {
-      type: Object,
-    },
-    nieuwLid: {
-      type: Boolean,
-      default: false
+
+    const veranderLand = (index) => {
+      state.contacten[index].adres.postcode = "";
+      state.contacten[index].adres.gemeente = "";
+      state.contacten[index].adres.straat = "";
+      state.contacten[index].adres.nummer = "";
+      state.contacten[index].adres.bus = "";
     }
-  },
-  methods: {
-    formatNumber(index, value) {
-      this.contacten[index].gsm = Telefoonnummer.formatNumber(value)
-    },
 
-    setHeader(contact) {
+    const veldenNietGoedIngevuld = () => {
+      console.log(state.adres)
+      return !state.adres.postcode || !state.adres.gemeente || !state.adres.straat || !state.adres.nummer
+    }
+
+    const formatNumber = (index) => {
+      state.contacten[index].gsm = Telefoonnummer.formatNumber(state.contacten[index].gsm);
+    }
+
+    const setHeader = (contact) => {
       return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
-    },
+    }
 
-    remove(index) {
-      this.$confirm.require({
+    const remove = (index) => {
+      confirm.require({
         message: "Ben je zeker dat je dit contact wil verwijderen?",
         header: "Contact verwijderen",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.contacten.splice(index, 1);
+          state.contacten.splice(index, 1);
         },
         reject: () => {
-          this.$confirm.close();
+          confirm.close();
         },
       });
-    },
+    }
 
-    changeCheckBox(index) {
-      this.contacten[index].adres.postcode = this.adres.postcode;
-      this.contacten[index].adres.gemeente = this.adres.gemeente;
-      this.contacten[index].adres.straat = this.adres.straat;
-      this.contacten[index].adres.nummer = this.adres.nummer;
-      this.contacten[index].adres.bus = this.adres.bus;
-      this.contacten[index].zelfdeAdres = this.zelfdeAdres;
-    },
+    const changeCheckBox = (index) => {
+      state.contacten[index].adres.postcode = state.adres.postcode;
+      state.contacten[index].adres.gemeente = state.adres.gemeente;
+      state.contacten[index].adres.straat = state.adres.straat;
+      state.contacten[index].adres.nummer = state.adres.nummer;
+      state.contacten[index].adres.bus = state.adres.bus;
+      state.contacten[index].zelfdeAdres = state.zelfdeAdres;
+    }
 
-    isStraatIngevuld(index) {
-      if (!this.contacten[index].adres.straat) {
-        this.invalid = true;
-        return !this.contacten[index].adres.straat;
+    const isStraatIngevuld = (index) => {
+      if (!state.contacten[index].adres.straat) {
+        state.invalid = true;
+        return !state.contacten[index].adres.straat;
       } else {
-        this.invalid = false;
+        state.invalid = false;
         return true;
       }
-    },
+    }
 
-    isNummerIngevuld(index) {
-      return !this.contacten[index].adres.nummer;
-    },
+    const isNummerIngevuld = (index) => {
+      return !state.contacten[index].adres.nummer;
+    }
 
-    isGemeenteIngevuld(index) {
-      this.invalid = true;
-      return !this.contacten[index].adres.gemeente;
-    },
+    const isGemeenteIngevuld = (index) => {
+      state.invalid = true;
+      return !state.contacten[index].adres.gemeente;
+    }
 
-    isPostcodeIngevuld(index) {
-      return !this.contacten[index].adres.postcode;
-    },
+    const isPostcodeIngevuld = (index) => {
+      return !state.contacten[index].adres.postcode;
+    }
 
-    voegContactToe() {
-      if (this.veldenNietGoedIngevuld()) {
-        this.$toast.add({
+    const voegContactToe = () => {
+      if (veldenNietGoedIngevuld()) {
+        toast.add({
           severity: "warn",
           summary: "Contact toevoegen",
           detail: "Er kunnen geen contacten toegevoegd worden als de andere velden niet correct zijn ingevuld.",
@@ -270,11 +320,12 @@ export default {
         return;
       }
 
-
       let nieuwContact = {
         rol: "moeder",
         voornaam: "",
         achternaam: "",
+        email: "",
+        gsm: "",
         id: "" + Date.now(),
         adres: {
           land: "BE",
@@ -285,35 +336,8 @@ export default {
           bus: ""
         }
       };
-      this.contacten.push(nieuwContact);
-    },
-    veranderLand(index) {
-      this.contacten[index].adres.postcode = "";
-      this.contacten[index].adres.gemeente = "";
-      this.contacten[index].adres.straat = "";
-      this.contacten[index].adres.nummer = "";
-      this.contacten[index].adres.bus = "";
-    },
-
-    veldenNietGoedIngevuld() {
-      this.$emit('checkValidVelden');
-      return !this.adres.postcode || !this.adres.gemeente || !this.adres.straat || !this.adres.nummer
+      state.contacten.push(nieuwContact);
     }
-  },
-
-
-  setup(props) {
-    const rules = {
-      gsm: {
-        isGeldigGsmNummer
-      }
-    };
-
-    const state = reactive({
-      contacten: [],
-      adres: [],
-      adresArray: [],
-    });
 
     onUpdated(() => {
       state.adresArray = [];
@@ -321,10 +345,25 @@ export default {
       state.adres = props.modelValue.adres;
     });
 
-    const v$ = useVuelidate(rules, state, {$rewardEarly: true});
-    return {...toRefs(state), v$};
-  },
-};
+    const v = useVuelidate(rules, state);
+    return {
+      ...toRefs(state),
+      v,
+      formatNumber,
+      voegContactToe,
+      isNummerIngevuld,
+      isGemeenteIngevuld,
+      isPostcodeIngevuld,
+      isStraatIngevuld,
+      isGeldigGsmNummer,
+      veranderLand,
+      changeCheckBox,
+      remove,
+      setHeader
+    };
+  }
+}
+;
 </script>
 
 <style scoped></style>
