@@ -11,6 +11,7 @@
       placeholder="Zoek op naam, gsm of e-mail"
       inputClass="lid-autocomplete-input"
       panelClass="lid-autocomplete-panel"
+      :autoOptionFocus="false"
     >
       <template #item="slotProps">
         <div class="ml-2">
@@ -57,9 +58,8 @@ export default {
     },
     gaNaarLid(event) {
       if (!this.searching) {
-        let id = event.value.id;
         this.zoekTerm = "";
-        this.$router.push({ name: "Lid", params: { id: id } });
+        this.$router.push({ name: "Lid", params: { id: event.value.id } });
       }
     },
     showLidGegevens(item) {
