@@ -171,7 +171,7 @@ export default {
             console.log(criterium)
 
 
-            if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd') {
+            if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
