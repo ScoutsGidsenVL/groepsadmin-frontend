@@ -169,8 +169,9 @@ export default {
                 criterium.criteriaKey === 'verminderdLidgeld' ||
                 criterium.criteriaKey === 'emailgeblokkeerd' ||
                 criterium.criteriaKey === 'geweigerdLid' ||
-                criterium.criteriaKey === 'emailleeg'||
-                criterium.criteriaKey === 'geenLidkaart') {
+                criterium.criteriaKey === 'emailleeg' ||
+                criterium.criteriaKey === 'geenLidkaart' ||
+                criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
