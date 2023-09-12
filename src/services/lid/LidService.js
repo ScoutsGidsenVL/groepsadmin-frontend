@@ -10,6 +10,7 @@ import RestService from "@/services/api/RestService";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import Keycloak from "keycloak-js";
+import _ from "lodash";
 
 export default {
 
@@ -327,13 +328,24 @@ export default {
         }
 
         const saveLid = (confirmVGA, vga) => {
-            console.log('save');
             state.loadingLid = true;
 
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
+            }
+
+            // In geval van eigen profiel gaan we de waardes eruit halen die men eigenlijk niet zelf kan aanpassen
+            // om backend errors te vermijden
+            if (state.gewijzigdLid.groepseigenVelden && state.eigenProfiel) {
+                _.forOwn(state.gewijzigdLid.groepseigenVelden, function (groepseigenVelden) {
+                    _.forEach(groepseigenVelden.schema, function (veld) {
+                        if (!veld.kanGebruikerWijzigen) {
+                            delete groepseigenVelden.waarden[veld.id];
+                        }
+                    });
+                });
             }
 
             if (!vga || (vga && confirmVGA)) {
