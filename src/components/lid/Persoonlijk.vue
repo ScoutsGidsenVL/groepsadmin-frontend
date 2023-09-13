@@ -163,7 +163,7 @@ export default {
       ],
       omschrijvingNieuwLid: "We willen ieder kind de kans geven om lid te worden van scouting. " +
         "Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld. " +
-        "Je betaalt dan 10 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf). " +
+        "Je betaalt dan 11,6 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf). " +
         "Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken. " +
         "We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info " +
         "<a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>.",
