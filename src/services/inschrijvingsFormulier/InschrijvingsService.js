@@ -54,6 +54,7 @@ export default {
                 {label: "Luxemburg", value: "LU"},
                 {label: "Nederland", value: "NL"},
                 {label: "Canada", value: "CA"},
+                {label: "Polen", value: "PL"}
             ],
             lid: {
                 adres: {
