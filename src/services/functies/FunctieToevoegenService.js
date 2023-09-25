@@ -25,10 +25,11 @@ export default {
         })
 
         const gesorteerdeFuncties = (functies, type) => {
+
             let relevanteFuncties = [];
             if (state.huidigLid && state.huidigLid.vgagegevens && state.huidigLid.vgagegevens.geboortedatum) {
                 relevanteFuncties = functies.filter(obj => {
-                    return moment(state.huidigLid.vgagegevens.geboortedatum).isBefore(moment(obj.uiterstegeboortedatum));
+                    return !obj.uiterstegeboortedatum || moment(state.huidigLid.vgagegevens.geboortedatum).isBefore(moment(obj.uiterstegeboortedatum)) ;
                 });
             } else {
                 relevanteFuncties = functies;
@@ -65,20 +66,22 @@ export default {
                                 }
                             })
                         }
+                        console.log(functie)
                         if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
                             tempGroep.functies.push(functie);
                         }
+                        console.log(tempGroep)
                     });
                     state.groepEnfuncties.push(tempGroep);
                 }
             });
-
             state.functiesEnGroepenGeladen = true;
             state.showFunctieToevoegen = false;
 
             state.groepEnfuncties.forEach(groep => {
                 state.showFunctieToevoegen |= rechtenService.hasPermission('functies.' + groep.groepsnummer);
             });
+            console.log(state.groepEnfuncties);
         }
 
         const groepsNaam = (index) => {

@@ -40,6 +40,9 @@
                 </div>
               </div>
             </div>
+            <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length === 0 && gesorteerdeFuncties(groep.functies, 'verbond').length === 0">
+              <label class="mb-2"><strong>Geen functies beschikbaar</strong></label>
+            </div>
           </accordionTab>
         </accordion>
       </template>
