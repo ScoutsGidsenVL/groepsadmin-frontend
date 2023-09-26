@@ -11,6 +11,7 @@ import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import Keycloak from "keycloak-js";
 import _ from "lodash";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -250,7 +251,7 @@ export default {
                             let functieInstantie = {
                                 functie: functie.functie,
                                 groep: functie.groep,
-                                einde: new Date().toISOString().slice(0, 10),
+                                einde: DateUtil.formatteerDatumVoorApi(new Date()),
                                 begin: functie.begin
                             };
                             if (!state.gewijzigdLid.functies) {
@@ -333,7 +334,7 @@ export default {
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
-                state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString().slice(0, 10);
+                state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
             }
 
             // In geval van eigen profiel gaan we de waardes eruit halen die men eigenlijk niet zelf kan aanpassen

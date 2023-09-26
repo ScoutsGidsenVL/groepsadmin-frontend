@@ -6,6 +6,7 @@ import {useToast} from "primevue/usetoast";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import useEmitter from "@/services/utils/useEmitter";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -87,7 +88,7 @@ export default {
             // Conversie om datum correct door te sturen
             let opgerichtDatum = new Date(state.selectedGroep.opgericht);
             opgerichtDatum.setHours(2);
-            state.selectedGroep.opgericht = opgerichtDatum.toISOString().slice(0, 10);
+            state.selectedGroep.opgericht = DateUtil.formatteerDatumVoorApi(opgerichtDatum);
 
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
