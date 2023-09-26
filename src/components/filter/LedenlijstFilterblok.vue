@@ -1,13 +1,20 @@
 <template>
   <div class="row md:mt-3 z999">
+    <ConfirmDialog/>
     <div class="col-12">
       <div class="">
         <div class="row">
           <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
-            <dropdown @change="veranderFilter" :options="filters" option-label="label" option-group-label="label"
+            <dropdown @change="veranderFilter"
+                      v-model="geselecteerdeFilter"
+                      :options="filters"
+                      option-label="label"
+                      option-group-label="label"
                       scrollHeight="500px"
                       input-class="filter-select"
-                      option-group-children="items" placeholder="Huidige" class="col-12">
+                      option-group-children="items"
+                      placeholder="Huidige filter"
+                      class="col-12">
               <template #optiongroup="slotProps">
                 <div class="flex align-items-center filter-item">
                   <div><strong>{{ slotProps.option.label }}</strong></div>
@@ -15,17 +22,24 @@
               </template>
             </dropdown>
           </div>
-          <div class="col-6 col-md-3 col-xl-2" :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
+          <div class="col-6 col-md-3 col-xl-3 flex justify-content-start"
+               :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
             <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
-                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="lg:ml-2 actie-button w-100"
+                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="actie-button w-92"
                     @click="filterOpslaanMode = !filterOpslaanMode"
             ></Button>
-          </div>
-          <div class="col-6 col-sm-6 col-md-3 col-xl-2" v-if="!filterOpslaanMode">
-            <Button label="Filter toepassen"
-                    :icon="'fas fa-check'" class="md:ml-2 opslaan-knop w-100 text-nowrap"
+            <Button v-if="!geselecteerdeFilter"
+                    label="Filter toepassen"
+                    :icon="'fas fa-check'" class="opslaan-knop w-92 ml-2 text-nowrap"
                     :disabled="!changes"
                     @click="filterToepassen"></Button>
+            <Button v-if="geselecteerdeFilter"
+                    label="Filter verwijderen"
+                    :icon="'fas fa-trash'" class="opslaan-knop w-92 ml-2 text-nowrap"
+                    @click="filterVerwijderen"></Button>
+          </div>
+          <div class="col-6 col-sm-6 col-md-3 col-xl-2 flex justify-content-start ml--2" v-if="!filterOpslaanMode">
+
           </div>
         </div>
       </div>
@@ -123,6 +137,8 @@ import IndividueleSteekkaartSelect from "@/components/filter/IndividueleSteekkaa
 import GroepseigenGegevensSelect from "@/components/filter/GroepseigenGegevensSelect";
 import AutoComplete from "primevue/autocomplete";
 import rechtenService from "@/services/rechten/rechtenService";
+import restService from "@/services/api/RestService";
+import ConfirmDialog from 'primevue/confirmdialog';
 
 
 export default {
@@ -139,7 +155,8 @@ export default {
     FunctieSelect,
     IndividueleSteekkaartSelect,
     GroepseigenGegevensSelect,
-    AutoComplete
+    AutoComplete,
+    ConfirmDialog
   },
 
   props: {
@@ -173,8 +190,8 @@ export default {
       zoekTerm: '',
       geselecteerdeFilter: null,
       geselecteerdeFilters: [],
+      geselecteerdeFilterNaam: "Huidige filter",
       inActivecriteria: [],
-
     }
   },
 
@@ -280,6 +297,36 @@ export default {
           return !crit.activated
         });
       }
+    },
+
+    filterVerwijderen() {
+      if (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) {
+        this.$confirm.require({
+          message:
+            "Ben je zeker dat je deze filter wil verwijderen?",
+          header: "Filter verwijderen",
+          icon: "pi pi-exclamation-triangle",
+          accept: () => {
+            restService.verwijderFilter(this.geselecteerdeFilter.value.id)
+              .then(res => {
+                this.$emit("onLoading")
+                if (res.status === 204) {
+                  this.$toast.add({
+                    severity: "success",
+                    summary: "Filter",
+                    detail: "Filter verwijderd.",
+                    life: 3000,
+                  });
+                }
+              }).finally(() => {
+              this.$emit("offLoading")
+            })
+          },
+          reject: () => {
+            this.$confirm.close();
+          }
+        })
+      }
     }
   },
 
@@ -344,7 +391,7 @@ export default {
     this.$watch(
       "criteria.arrCriteria",
       () => {
-          this.defineInactiveCriteria()
+        this.defineInactiveCriteria()
       },
       {
         immediate: true,

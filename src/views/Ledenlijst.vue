@@ -32,6 +32,9 @@
                                   @filterOpslaan="filterOpslaan"
                                   @activateCriterium="activateCriterium"
                                   @deactivateCriterium="deactivateCriterium"
+                                  @getHuidigeFilter="getHuidigeFilter"
+                                  @onLoading="isLoading = true"
+                                  @offLoading="isLoading = false"
                                   :huidigeFilter="huidigeFilter"
                                   :criteria="criteria"
                                   :active-criteria="activeCriteria"
@@ -241,7 +244,8 @@ export default {
       scrollComponent,
       voegLidToe,
       magNieuwLidAanmaken,
-      isLidGeselecteerd
+      isLidGeselecteerd,
+      getHuidigeFilter
     } = Ledenlijst.ledenlijstSpace();
 
 
@@ -296,7 +300,8 @@ export default {
       scrollComponent,
       voegLidToe,
       magNieuwLidAanmaken,
-      isLidGeselecteerd
+      isLidGeselecteerd,
+      getHuidigeFilter
     }
   },
 
