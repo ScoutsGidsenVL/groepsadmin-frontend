@@ -6,6 +6,7 @@ import {useRoute, useRouter} from "vue-router";
 import RestService from "@/services/api/RestService";
 import {useToast} from "primevue/usetoast";
 import {useStore} from "vuex";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -108,9 +109,7 @@ export default {
                 state.aanvraag.groepsnummer = state.groepsnummer;
                 state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
                 state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
-                state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
-
-
+                state.aanvraag.geboortedatum = DateUtil.formatteerDatumVoorApi(state.lid.vgagegevens.geboortedatum)
 
                 RestService.saveAanvraag(state.aanvraag)
                     .then(res => {
@@ -212,7 +211,7 @@ export default {
                     if (!state.lid.vgagegevens.geboortedatum) {
                         state.lid.vgagegevens.geboortedatum = new Date(new Date().setFullYear(new Date().getFullYear() - 5))
                     }
-                    state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum).toISOString().slice(0, 10);
+                    state.aanvraag.geboortedatum = DateUtil.formatteerDatumVoorApi(state.lid.vgagegevens.geboortedatum);
                     state.changes = true;
                 }
             }, {deep: true})

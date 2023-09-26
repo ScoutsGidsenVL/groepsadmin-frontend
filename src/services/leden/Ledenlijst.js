@@ -9,6 +9,7 @@ import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {useToast} from "primevue/usetoast";
 import {ref} from "vue";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -243,7 +244,7 @@ export default {
                 state.huidigeFilter.criteria[criteria.criteriaKey] = {};
             }
             state.huidigeFilter.criteria[criteria.criteriaKey].operator = aangepast;
-            state.huidigeFilter.criteria[criteria.criteriaKey].referentie = datum.toISOString().slice(0, 10);
+            state.huidigeFilter.criteria[criteria.criteriaKey].referentie = DateUtil.formatteerDatumVoorApi(datum);
         }
 
         const changeGegKeuze = (criteria, veld, waarde, operator) => {
@@ -898,7 +899,8 @@ export default {
             scrollComponent,
             voegLidToe,
             magNieuwLidAanmaken,
-            isLidGeselecteerd
+            isLidGeselecteerd,
+            getHuidigeFilter
         }
     }
 }
