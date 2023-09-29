@@ -35,6 +35,8 @@
                                   @getHuidigeFilter="getHuidigeFilter"
                                   @onLoading="isLoading = true"
                                   @offLoading="isLoading = false"
+                                  @activeerAlleFuncties="triggerActiveerAlleFuncties"
+                                  @deactiveerAlleFuncties="triggerDeactiveerAlleFuncties"
                                   :huidigeFilter="huidigeFilter"
                                   :criteria="criteria"
                                   :active-criteria="activeCriteria"
@@ -245,7 +247,9 @@ export default {
       voegLidToe,
       magNieuwLidAanmaken,
       isLidGeselecteerd,
-      getHuidigeFilter
+      getHuidigeFilter,
+      triggerActiveerAlleFuncties,
+      triggerDeactiveerAlleFuncties
     } = Ledenlijst.ledenlijstSpace();
 
 
@@ -301,7 +305,9 @@ export default {
       voegLidToe,
       magNieuwLidAanmaken,
       isLidGeselecteerd,
-      getHuidigeFilter
+      getHuidigeFilter,
+      triggerActiveerAlleFuncties,
+      triggerDeactiveerAlleFuncties
     }
   },
 

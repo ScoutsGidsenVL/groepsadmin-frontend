@@ -19,12 +19,23 @@
     </div>
     <div class="position-absolute z999 bg-white col-11 col-sm-6 col-md-4 col-lg-3 col-xl-2 filter-border filter-height-select" v-if="toggleMenu">
       <div class="d-flex align-content-start">
-        <checkbox id="alle" v-model="selecteerAlles" @change="selecteerAlleGroepen" :binary="true"/>
+        <checkbox
+          id="alle"
+          v-model="selecteerAlles"
+          @change="$event.stopPropagation();
+          selecteerAlleGroepen"
+          :binary="true"/>
         <label for="alle" class="ml-3 text-align-left">Selecteer alle groepen</label>
       </div>
       <Divider/>
       <div v-for="( item, index ) in criteria.items" :key="index" class="d-flex align-content-start">
-        <checkbox :id="index" v-model="selectedOptions" :value="item.value" @change="checkSelectedOption"/>
+        <checkbox
+          :id="index"
+          v-model="selectedOptions"
+          :value="item.value"
+          @change="$event.stopPropagation();
+          checkSelectedOption"
+        />
         <label :for="index" class="ml-3 text-align-left">{{ item.label }} </label>
       </div>
     </div>

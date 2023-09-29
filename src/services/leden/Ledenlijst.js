@@ -164,12 +164,6 @@ export default {
         emitter.on('deactiveerGroepseigenGegeven', (event) => {
             deactiveerGroepseigenGegeven(event.criteria, event.veld);
         })
-        emitter.on('activeerAlleFuncties', (event) => {
-            activeerAlleFuncties(event.criteria);
-        })
-        emitter.on('deactiveerAlleFuncties', (event) => {
-            deactiveerAlleFuncties(event.criteria);
-        })
         emitter.on('activeerFunctie', (event) => {
             activeerFunctie(event.criteria, event.functie);
         })
@@ -862,6 +856,14 @@ export default {
             return value === '<input type="checkbox" disabled/>';
         }
 
+        const triggerActiveerAlleFuncties = (event) => {
+            activeerAlleFuncties(event.criteria);
+        }
+
+        const triggerDeactiveerAlleFuncties = (event) => {
+            deactiveerAlleFuncties(event.criteria);
+        }
+
         getLeden(0);
         getHuidigeFilter();
         getFilters();
@@ -900,7 +902,9 @@ export default {
             voegLidToe,
             magNieuwLidAanmaken,
             isLidGeselecteerd,
-            getHuidigeFilter
+            getHuidigeFilter,
+            triggerActiveerAlleFuncties,
+            triggerDeactiveerAlleFuncties
         }
     }
 }

@@ -21,14 +21,22 @@
       class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
       v-if="toggleMenu">
       <div class="d-flex align-content-start pt-2">
-        <checkbox :binary="true" id="label" class="mr-2" v-model="allesGeselecteerd" @change="activeerAlleFuncties"/>
+        <checkbox
+          :binary="true"
+          id="label"
+          class="mr-2"
+          v-model="allesGeselecteerd"
+          @change="$event.stopPropagation();
+          activeerAlleFuncties()"
+        />
         <label class="text-align-left" for="label">Selecteer alle functies</label>
       </div>
       <divider></divider>
       <div v-for="(item, key) in criteria.itemgroups" :key="key" class="border-white border-solid border-1">
         <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 cursor-pointer">
           <checkbox :id="item.label" class="mr-2" v-model="selectedGroups" :value="item.label"
-                    @change="activeerAlleGroepFuncties(item.label)"/>
+                    @change="$event.stopPropagation();
+                    activeerAlleGroepFuncties(item.label)"/>
           <label class="text-align-left vw90 cursor-pointer" @click="openSection(item.label)">{{ item.label }}</label>
           <div class="full-width d-flex justify-content-center" @click="openSection(item.label)">
             <i :class="opened(item.label) ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
@@ -40,7 +48,8 @@
           <div v-for="(functie, key2) in gesorteerdeFuncties(item.items)" :key="key2"
                class="d-flex align-content-start mt-1 ml-1">
             <checkbox :binary="true" :id="functie.label" class="mr-2 ml-1" v-model="functie.activated"
-                      @change="activeerFunctie(functie)"/>
+                      @change="$event.stopPropagation();
+                      activeerFunctie(functie)"/>
             <label class="text-align-left" :for="item.label">{{ functie.label }}</label>
           </div>
         </div>
@@ -69,7 +78,7 @@ export default {
     }
   },
 
-  setup(props) {
+  setup(props, context) {
     const {
       state,
       allesGeselecteerd,
@@ -81,7 +90,7 @@ export default {
       activeerFunctie,
       activeerAlleGroepFuncties,
       activeerAlleFuncties
-    } = FunctieFilterService.functieFilterSpace(props);
+    } = FunctieFilterService.functieFilterSpace(props, context);
 
     return {
       ...toRefs(state),

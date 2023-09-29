@@ -3,7 +3,7 @@ import useEmitter from "@/services/utils/useEmitter";
 
 export default {
 
-    functieFilterSpace(props) {
+    functieFilterSpace(props, context) {
         const emitter = useEmitter();
 
         const state = reactive({
@@ -15,13 +15,14 @@ export default {
         })
 
         const activeerAlleFuncties = () => {
-            if (!allesGeselecteerd()) {
-                emitter.emit('activeerAlleFuncties', {'criteria': props.criteria})
+            if (!state.alleFuncties) {
+                context.emit('activeerAlleFuncties', {'criteria': props.criteria})
                 geselecteerdeGroepenToevoegen();
             } else {
-                emitter.emit('deactiveerAlleFuncties', {'criteria': props.criteria})
+                context.emit('deactiveerAlleFuncties', {'criteria': props.criteria})
                 state.selectedGroups = [];
             }
+            allesGeselecteerd();
         }
 
         const allesGeselecteerd = computed(() => {
@@ -35,6 +36,7 @@ export default {
                     })
                 })
             }
+            state.alleFuncties = aantal === aantalActieve;
             return aantal === aantalActieve;
         })
 

@@ -105,7 +105,11 @@
       <functie-select :criteria="criteria"
                       v-if="criteria.criteriaKey === 'functies' && (criteria.criteriaSubKey === 'verbonds' || criteria.criteriaSubKey === 'groepspecifiek')"
                       :value="criteria.value"
-                      @deactivateCriterium="deactivateCriterium"></functie-select>
+                      @deactivateCriterium="deactivateCriterium"
+                      @activeerAlleFuncties="activeerAlleFuncties"
+                      @deactiveerAlleFuncties="deactiveerAlleFuncties"
+
+      ></functie-select>
       <groepseigen-gegevens-select :criteria="criteria" v-if="criteria.criteriaKey === 'groepseigen'"
                                    :value="criteria.value"
                                    @deactivateCriterium="deactivateCriterium"></groepseigen-gegevens-select>
@@ -246,6 +250,16 @@ export default {
           }
         });
       });
+    },
+
+    activeerAlleFuncties(event) {
+      this.changes = true;
+      this.$emit('activeerAlleFuncties', event);
+    },
+
+    deactiveerAlleFuncties(event) {
+      this.changes = true;
+      this.$emit('deactiveerAlleFuncties', event);
     },
 
     clearSelectedFilter() {
