@@ -99,6 +99,10 @@ export default {
         return apiClient().get(baseUrl + "ledenlijst/filter/" + id);
     },
 
+    verwijderFilter(id) {
+        return apiClient().delete(baseUrl + "ledenlijst/filter/" + id + "?bevestig=true");
+    },
+
     patchFilterOpId(filter, id) {
         return apiClient().patch(baseUrl + "ledenlijst/filter/" + id, filter);
     },
