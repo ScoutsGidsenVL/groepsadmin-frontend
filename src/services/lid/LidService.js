@@ -240,9 +240,11 @@ export default {
                 message:
                     state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
                     " <br/>" +
-                    "(De functie VGA en FV kan niet geschrapt worden. Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
+                    "Ben je zeker?" +
                     " <br/>" +
-                    "Ben je zeker?",
+                    "(Wie de functies VGA of FV heeft, opgelet; deze kunnen niet zelf geschrapt worden.  <br/>" +
+                    "Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
+                    " <br/>",
                 header: "Alle functies stoppen",
                 icon: "pi pi-exclamation-triangle",
                 accept: () => {
