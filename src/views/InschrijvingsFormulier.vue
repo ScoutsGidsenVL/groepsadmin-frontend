@@ -106,7 +106,7 @@
           <div class="col-12 col-lg-4">
             <contacten v-model="lid" :title="'Contacten'"></contacten>
             <div class="d-flex justify-content-end">
-              <lid-worden :disabled="!changes" @opslaan="opslaan"></lid-worden>
+              <lid-worden :disabled="!changes || loading" @opslaan="opslaan"></lid-worden>
             </div>
           </div>
         </div>
