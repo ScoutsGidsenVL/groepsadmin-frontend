@@ -253,7 +253,7 @@ export default {
                             let functieInstantie = {
                                 functie: functie.functie,
                                 groep: functie.groep,
-                                einde: DateUtil.formatteerDatumVoorApi(new Date()),
+                                einde: DateUtil.formatteerDatumVolgensDatetime(new Date()),
                                 begin: functie.begin
                             };
                             if (!state.gewijzigdLid.functies) {
