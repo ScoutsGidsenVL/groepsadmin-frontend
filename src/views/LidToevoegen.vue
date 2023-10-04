@@ -25,7 +25,7 @@
               ></groepseigen-gegevens>
             </div>
             <div class="col-12 col-lg-6 col-xl-4">
-              <adressen  v-model="lid" :title="'Adressen'"  :lidaanvraag="true"></adressen>
+              <adressen  v-model="lid" :title="'Adressen'"></adressen>
               <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
 
             </div>
