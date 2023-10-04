@@ -40,8 +40,6 @@ export default {
             return aantal === aantalActieve;
         })
 
-
-
         const geselecteerdeGroepenToevoegen = () => {
             if (props.criteria) {
                 props.criteria.itemgroups.forEach(itemgroup => {
@@ -51,7 +49,7 @@ export default {
                             active++;
                         }
                     })
-                    if (active === itemgroup.items.length) {
+                    if (active > 0) {
                         state.selectedGroups.push(itemgroup.label);
                     }
                 })
@@ -117,7 +115,7 @@ export default {
             close,
             activeerFunctie,
             activeerAlleGroepFuncties,
-            activeerAlleFuncties
+            activeerAlleFuncties,
         };
     }
 
