@@ -8,7 +8,6 @@
           v-model="zoekTerm"
           :disabled="disabled"
           field="straat"
-          forceSelection
           minLength=2
           :suggestions="gefilterdeStraten"
           @complete="zoekStraat"
@@ -119,6 +118,7 @@ export default {
       this.zoekTerm = "";
     },
     checkValue() {
+      this.adres.straat = this.zoekTerm;
       this.checked = true
     }
   },
