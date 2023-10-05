@@ -221,6 +221,12 @@ export default {
       this.$emit('deactivateCriterium', criterium)
     },
 
+    changeGegKeuzeCriterium(criterium){
+      this.changes = true;
+      this.$emit('changeGegKeuzeCriterium', criterium)
+
+    },
+
     setNonActieveKolom() {
       this.changes = true;
       this.$emit('setNonActieveKolom');
@@ -370,15 +376,16 @@ export default {
         this.changes = true;
       })
     this.emitter.on(
+      'changeGegKeuzeCriterium', (criterium) => {
+        this.changeGegKeuzeCriterium(criterium)
+        this.changes = true;
+      })
+    this.emitter.on(
       'activeerAlleGroepFuncties', () => {
         this.changes = true;
       })
     this.emitter.on(
       'deactiveerAlleGroepFuncties', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeGegKeuzeCriterium', () => {
         this.changes = true;
       })
     this.emitter.on(

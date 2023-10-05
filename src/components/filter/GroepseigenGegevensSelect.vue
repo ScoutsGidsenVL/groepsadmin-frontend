@@ -122,7 +122,7 @@ export default {
     activeerGroepseigenGegeven(item) {
       if (!item.activated) {
         this.emitter.emit('deactiveerGroepseigenGegeven', { 'criteria': this.criteria, 'veld': item.veld })
-      } else if (item.waarde) {
+      } else {
         this.selecteerGroepseigenGegeven(item.veld, item.waarde, item.operator);
       }
     },
