@@ -4,7 +4,7 @@
     <div class="col-12">
       <div class="">
         <div class="row">
-          <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
+          <div class="col-12 col-md-6 col-xl-3 d-flex justify-content-start">
             <dropdown @change="veranderFilter"
                       v-model="geselecteerdeFilter"
                       :options="filters"
@@ -22,68 +22,63 @@
               </template>
             </dropdown>
           </div>
-          <div class="col-6 col-md-3 col-xl-3 flex justify-content-start"
-               :class="filterOpslaanMode ? 'col-sm-12' : 'col-sm-6'">
-            <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
-                    :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'" class="actie-button w-92"
-                    @click="filterOpslaanMode = !filterOpslaanMode"
-            ></Button>
-            <Button v-if="!geselecteerdeFilter"
-                    label="Filter toepassen"
-                    :icon="'fas fa-check'" class="opslaan-knop w-92 ml-2 text-nowrap"
-                    :disabled="!changes"
-                    @click="filterToepassen"></Button>
-            <Button v-if="geselecteerdeFilter"
-                    label="Filter verwijderen"
-                    :icon="'fas fa-trash'" class="opslaan-knop w-92 ml-2 text-nowrap"
-                    @click="filterVerwijderen"></Button>
-          </div>
-          <div class="col-6 col-sm-6 col-md-3 col-xl-2 flex justify-content-start ml--2" v-if="!filterOpslaanMode">
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <AutoComplete
-          class="custom-input-styling col-12 mt--15 ml--07"
-          v-model="zoekTerm"
-          dense
-          field="label"
-          minLength=2
-          :suggestions="geselecteerdeFilters"
-          @complete="zoekBestaandefilter"
-          @itemSelect="kiesFilter"
-          @change="checkBestaandeFilter"
-          placeholder="Naam van sjabloon"
-          inputClass="autocomplete-input"
-          panelClass="autocomplete-panel"
-          :disabled="disabled"
-          @clear="clearSelectedFilter"
-          :class="error ? 'p-invalid' : ''"
-          v-if="filterOpslaanMode"
-        >
-          <template #item="slotProps">
-            <div class="ml-2">
-              {{ slotProps.item.label }}
+          <div class="row">
+            <div class="col-12 col-md-6 col-xl-3 flex justify-content-start" v-if="filterOpslaanMode">
+              <AutoComplete
+                class="custom-input-styling p-0 col-12"
+                v-model="zoekTerm"
+                dense
+                field="label"
+                minLength=2
+                :suggestions="geselecteerdeFilters"
+                @complete="zoekBestaandefilter"
+                @itemSelect="kiesFilter"
+                @change="checkBestaandeFilter"
+                placeholder="Naam van sjabloon"
+                inputClass="autocomplete-input"
+                @clear="clearSelectedFilter"
+              >
+                <template #item="slotProps">
+                  <div class="ml-2">
+                    {{ slotProps.item.label }}
+                  </div>
+                </template>
+              </AutoComplete>
             </div>
-          </template>
-        </AutoComplete>
-        <div
-          v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode"
-          class="ml-2 md:mt-1 col-12 d-flex justify-content-start">
-          <checkbox :binary="true" id="label" class="mr-2 ml--07" v-model="filterDelen"/>
-          <label class="text-align-left" for="label">Als gedeelde filter</label>
-        </div>
-        <div class="col-12">
-          <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode" class="ml-2 col-12 ml--07"
-                   :label="opslaanLabel"></Opslaan>
+            <div class="col-12 col-md-6 col-xl-4 flex justify-content-start"
+                 v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode">
+              <div class="flex align-items-end ml-1">
+                <checkbox :binary="true" id="label" class="mr-2 ml--05" v-model="filterDelen"/>
+                <label class="text-align-left" for="label">Als gedeelde filter</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6  flex justify-content-start">
+
+              <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode"
+                       class="col-6 col-md-6"
+                       :label="opslaanLabel"></Opslaan>
+              <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
+                      :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'"
+                      class="actie-button w-92 col-6"
+                      :class="filterOpslaanMode ? 'ml-1' : ''"
+                      @click="filterOpslaanMode = !filterOpslaanMode; zoekTerm = ''"
+              ></Button>
+              <Button v-if="!geselecteerdeFilter && !filterOpslaanMode"
+                      label="Filter toepassen"
+                      :icon="'fas fa-check'" class="opslaan-knop ml-2 text-nowrap col-6"
+                      :disabled="!changes"
+                      @click="filterToepassen"></Button>
+              <Button v-if="geselecteerdeFilter && !filterOpslaanMode"
+                      label="Filter verwijderen"
+                      :icon="'fas fa-trash'" class="opslaan-knop ml-1 text-nowrap col-6"
+                      @click="filterVerwijderen"></Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row mt--3">
+  <div class="row">
     <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
                      v-if="inActivecriteria.length > 0"></criteria-select>
     <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
@@ -221,7 +216,7 @@ export default {
       this.$emit('deactivateCriterium', criterium)
     },
 
-    changeGegKeuzeCriterium(criterium){
+    changeGegKeuzeCriterium(criterium) {
       this.changes = true;
       this.$emit('changeGegKeuzeCriterium', criterium)
 

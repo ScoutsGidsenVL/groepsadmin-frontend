@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="lg:hidden mb-8">
-      <div class="mb-6 relative d-flex justify-content-center align-content-center">
+      <div class="mb-6 relative d-flex justify-content-end align-content-center">
         <div class="ga-logo-mobile cursor-pointer" @click="goToDashBoard">
           <img :src="`${publicPath}static/img/ga-logo.svg`" alt="ga logo" class="ml-2 top-0"/>
         </div>
