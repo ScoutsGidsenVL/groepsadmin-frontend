@@ -66,11 +66,9 @@ export default {
                                 }
                             })
                         }
-                        console.log(functie)
                         if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
                             tempGroep.functies.push(functie);
                         }
-                        console.log(tempGroep)
                     });
                     state.groepEnfuncties.push(tempGroep);
                 }
@@ -81,7 +79,6 @@ export default {
             state.groepEnfuncties.forEach(groep => {
                 state.showFunctieToevoegen |= rechtenService.hasPermission('functies.' + groep.groepsnummer);
             });
-            console.log(state.groepEnfuncties);
         }
 
         const groepsNaam = (index) => {
