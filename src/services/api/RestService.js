@@ -76,7 +76,7 @@ export default {
     },
 
     getLedenSteekkaartPdf(lidIds) {
-        return apiClientPdf().post(baseUrl + "lidkaart/steekkaart", lidIds);
+        return apiClientPdf().post(baseUrl + "ledenlijst/steekkaart", lidIds);
     },
 
     getHuidigeFilter() {
