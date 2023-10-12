@@ -55,6 +55,10 @@ export default {
         return apiClient().get(baseUrl + "functie");
     },
 
+    getFunctiesVanGroep(nummer) {
+        return apiClient().get(baseUrl + "functie?groep=" + nummer);
+    },
+
     getAanvragen() {
         return apiClient().get(baseUrl + "lid/aanvraag");
     },
