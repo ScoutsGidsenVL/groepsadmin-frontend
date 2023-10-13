@@ -275,6 +275,8 @@ export default {
             state.isLoading = true;
             state.loadingText = "Filter opslaan"
             if (filterId) {
+                state.huidigeFilter.naam = naam;
+                state.huidigeFilter.delen = delen;
                 RestService.patchFilterOpId(state.huidigeFilter, filterId)
                     .then(res => {
                         if (res.status === 200) {
