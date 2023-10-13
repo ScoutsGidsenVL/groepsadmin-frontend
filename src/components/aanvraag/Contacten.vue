@@ -1,5 +1,4 @@
 <template>
-  <confirmDialog/>
   <div class="contacten-card mb-4">
     <toast position="bottom-right"/>
     <card>
@@ -19,7 +18,7 @@
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true">
+        <accordion :multiple="true" :activeIndex="contacts">
           <accordionTab v-for="(contact, index) in contacten" :key="index">
             <template #header>
               <div class="d-flex col-12 justify-content-between">
@@ -71,10 +70,10 @@
             ></BaseInputTelefoon>
             <base-checkbox
               label="Zelfde adres als lid"
-              v-model="zelfdeAdres"
+              v-model="contacten[index].zelfdeAdres"
               @changeValue="changeCheckBox(index)"
             />
-            <div v-if="!zelfdeAdres">
+            <div v-if="!contacten[index].zelfdeAdres">
               <base-dropdown
                 :options="landen"
                 label="Land"
@@ -152,12 +151,10 @@ import {reactive, toRefs} from "@vue/reactivity";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import useVuelidate from "@vuelidate/core";
 import {email, helpers} from "@vuelidate/validators";
-import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 
 const isGeldigGsmNummer = (value) => {
@@ -168,7 +165,6 @@ const isGeldigGsmNummer = (value) => {
 export default {
   name: "Contacten",
   components: {
-    ConfirmDialog,
     BaseCheckbox,
     BaseInput,
     BaseDropdown,
@@ -191,10 +187,10 @@ export default {
   },
 
   setup(props) {
-    const confirm = useConfirm();
     const toast = useToast();
 
     const state = reactive({
+      contacts: [],
       contacten: [],
       adres: [],
       adresArray: [],
@@ -226,7 +222,6 @@ export default {
           label: "Opvoedingsverantwoordelijke",
         },
       ],
-      zelfdeAdres: false
     });
 
 
@@ -252,8 +247,7 @@ export default {
     }
 
     const veldenNietGoedIngevuld = () => {
-      console.log(state.adres)
-      return !state.adres.postcode || !state.adres.gemeente || !state.adres.straat || !state.adres.nummer
+      return !props.modelValue.adres.postcode || !props.modelValue.adres.gemeente || !props.modelValue.adres.straat || !props.modelValue.adres.nummer
     }
 
     const formatNumber = (index) => {
@@ -265,26 +259,23 @@ export default {
     }
 
     const remove = (index) => {
-      confirm.require({
-        message: "Ben je zeker dat je dit contact wil verwijderen?",
-        header: "Contact verwijderen",
-        icon: "pi pi-exclamation-triangle",
-        accept: () => {
-          state.contacten.splice(index, 1);
-        },
-        reject: () => {
-          confirm.close();
-        },
-      });
+      state.contacten.splice(index, 1);
     }
 
     const changeCheckBox = (index) => {
-      state.contacten[index].adres.postcode = state.adres.postcode;
-      state.contacten[index].adres.gemeente = state.adres.gemeente;
-      state.contacten[index].adres.straat = state.adres.straat;
-      state.contacten[index].adres.nummer = state.adres.nummer;
-      state.contacten[index].adres.bus = state.adres.bus;
-      state.contacten[index].zelfdeAdres = state.zelfdeAdres;
+      if (state.contacten[index].zelfdeAdres) {
+        state.contacten[index].adres.postcode = state.adres.postcode;
+        state.contacten[index].adres.gemeente = state.adres.gemeente;
+        state.contacten[index].adres.straat = state.adres.straat;
+        state.contacten[index].adres.nummer = state.adres.nummer;
+        state.contacten[index].adres.bus = state.adres.bus;
+      } else {
+        state.contacten[index].adres.postcode = "";
+        state.contacten[index].adres.gemeente = "";
+        state.contacten[index].adres.straat = "";
+        state.contacten[index].adres.nummer = "";
+        state.contacten[index].adres.bus = "";
+      }
     }
 
     const isStraatIngevuld = (index) => {
@@ -323,6 +314,7 @@ export default {
 
       let nieuwContact = {
         rol: "moeder",
+        zelfdeAdres: false,
         voornaam: "",
         achternaam: "",
         email: "",
@@ -338,6 +330,7 @@ export default {
         }
       };
       state.contacten.push(nieuwContact);
+      state.contacts.push(state.contacten.length - 1);
     }
 
     onUpdated(() => {
