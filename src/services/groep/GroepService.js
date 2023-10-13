@@ -199,9 +199,18 @@ export default {
             state.selectedGroep = groep;
             state.selectedGroep.opgericht = new Date(groep.opgericht);
             getContacten();
+            getGroepseigenFuncties(groep);
             setTimeout(() => {
                 state.watchable = true
             }, 2000)
+        }
+
+        const getGroepseigenFuncties = (groep) => {
+            RestService.getFunctiesVanGroep(groep.groepsnummer).then(res => {
+                if (res.status === 200) {
+                    state.selectedGroep.groepseigenFunctie = res.data;
+                }
+            })
         }
 
         const kanGroepWijzigen = computed(() => {
