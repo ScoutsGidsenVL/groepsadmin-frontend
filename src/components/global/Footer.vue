@@ -248,6 +248,7 @@
                 <img
                   :src="`${publicPath}static/img/hopper_logo_wit_liggend.png`"
                   class="img-fluid"
+                  alt="hopper"
                 />
               </a>
             </div>
@@ -261,6 +262,7 @@
                 <img
                   :src="`${publicPath}static/img/vlaanderen-verbeelding-werkt.png`"
                   class="img-fluid vlaanderen"
+                  alt="vlaanderen"
                 />
               </a>
             </div>

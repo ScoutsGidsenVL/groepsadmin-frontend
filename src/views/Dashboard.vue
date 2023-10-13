@@ -35,7 +35,7 @@
                 <ul style="list-style: none;" class="ml--1">
                   <li class="text-decoration-none justify-content-start d-flex mb-3 text-align-left"
                       v-for="(item, index) in snelNaarItems" :key="index">
-                    <i class="fal fa-arrow-right color-light-green"><a :href="item.url" target="_blank"
+                    <i class="fal fa-arrow-right color-dark-green"><a :href="item.url" target="_blank"
                                                                        class="text-decoration-none"><span
                       class="text-black font ml-2 cursor-pointer">{{ item.naam }}</span></a></i>
                   </li>
