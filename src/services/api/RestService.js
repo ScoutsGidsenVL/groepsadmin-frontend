@@ -146,7 +146,7 @@ export default {
     },
 
     saveEtiketSjabloon(sjabloon) {
-        return apiClient().post(baseUrl + "sjabloon/etiket/dummyid", sjabloon);
+        return apiClient().post(baseUrl + "sjabloon/etiket", sjabloon);
     },
 
     saveNieuwLid(lid) {

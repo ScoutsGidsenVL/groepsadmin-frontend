@@ -38,7 +38,8 @@
               >
               </dropdown>
             </div>
-            <div class="col-lg-2 text-align-left" v-if="sjabloon && (sjabloon.naam !== 'deelnamebewijs' && sjabloon.naam !== 'blanco sjabloon' && sjabloon.naam !== 'STANDAARD' && sjabloon.naam !== 'standaard formaat')">
+            <div class="col-lg-2 text-align-left"
+                 v-if="sjabloon && (sjabloon.naam !== 'deelnamebewijs' && sjabloon.naam !== 'blanco sjabloon' && sjabloon.naam !== 'STANDAARD' && sjabloon.naam !== 'standaard formaat')">
               <Button
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
@@ -306,7 +307,7 @@ export default {
     };
   },
   created() {
-    this.getSjablonen(true);
+    this.getSjablonen();
 
     window.setInterval(
       function () {
@@ -418,7 +419,7 @@ export default {
   },
 
   methods: {
-    getSjablonen(setDefaultSjabloon) {
+    getSjablonen() {
       this.laden = true;
       RestService.getSjablonen("etiket")
         .then((res) => {
@@ -437,9 +438,7 @@ export default {
             life: 8000,
           });
         }).finally(() => {
-        if (setDefaultSjabloon) {
-          this.setStandaardSjabloon();
-        }
+        this.setStandaardSjabloon();
         this.laden = false;
       });
     },
@@ -485,11 +484,12 @@ export default {
             this.changes = false;
             this.laden = false;
             this.$store.commit("setEtiketSjabloon", null);
-            this.getSjablonen(false);
+            this.getSjablonen();
           });
         } else {
           this.sjabloon.naam = naam;
           this.changes = true;
+          this.sjabloon.id = null;
           this.laden = true;
           RestService.saveEtiketSjabloon(this.sjabloon)
             .then((res) => {
@@ -512,7 +512,7 @@ export default {
             this.changes = false;
             this.laden = false;
             this.$store.commit("setEtiketSjabloon", null);
-            this.getSjablonen(false);
+            this.getSjablonen();
           });
         }
       }
@@ -543,7 +543,7 @@ export default {
                   detail: "Sjabloon verwijderd.",
                   life: 3000,
                 });
-                this.setStandaardSjabloon();
+                this.setStandaardSjabloon("verwijderd");
               }).catch((error) => {
               this.error = true;
               this.$toast.add({
@@ -616,11 +616,11 @@ export default {
     },
 
     gesorteerdeSjablonen(sjablonen) {
-      return sjablonen.sort(function (a,b) {
-        if (a.label < b.label) {
+      return sjablonen.sort(function (a, b) {
+        if (a.value.naam.toLowerCase() < b.value.naam.toLowerCase()) {
           return -1;
         }
-        if (a.label > b.label) {
+        if (a.value.naam.toLowerCase() > b.value.naam.toLowerCase()) {
           return 1;
         }
         return 0;
@@ -669,9 +669,14 @@ export default {
       this.openModal = false;
     },
 
-    //Nog even laten staan in afwachting van bespreking
     setStandaardSjabloon() {
-      this.sjabloon = this.gesorteerdeSjablonen(this.sjablonen)[0].value;
+        let geselecteerdeIndex = 0;
+        this.gesorteerdeSjablonen(this.sjablonen).forEach((sjabloon, index) => {
+          if (sjabloon && sjabloon.value.naam === this.sjabloon.naam) {
+            geselecteerdeIndex = index;
+          }
+        })
+        this.sjabloon = this.gesorteerdeSjablonen(this.sjablonen)[geselecteerdeIndex].value;
     },
 
     getLeden() {
