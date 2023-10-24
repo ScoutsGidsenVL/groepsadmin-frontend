@@ -92,9 +92,8 @@
       <GeslachtSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geslacht'" :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"
       ></GeslachtSelect>
-      <GroepenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'groepen'" :value="criteria.value"
-                     @deactivateCriterium="deactivateCriterium">
-      </GroepenSelect>
+      <GroepenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'groepen'"
+                     @deactivateCriterium="deactivateCriterium"/>
       <leeftijd-select :criteria="criteria" v-if="criteria.criteriaKey === 'leeftijd'" :value="criteria.value"
                        @deactivateCriterium="deactivateCriterium"></leeftijd-select>
       <functie-select :criteria="criteria"

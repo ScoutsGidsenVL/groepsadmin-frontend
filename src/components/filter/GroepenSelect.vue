@@ -23,7 +23,7 @@
           id="alle"
           v-model="selecteerAlles"
           @change="$event.stopPropagation();
-          selecteerAlleGroepen"
+                   selecteerAlleGroepen()"
           :binary="true"/>
         <label for="alle" class="ml-3 text-align-left">Selecteer alle groepen</label>
       </div>
@@ -34,7 +34,7 @@
           v-model="selectedOptions"
           :value="item.value"
           @change="$event.stopPropagation();
-          checkSelectedOption"
+                   checkSelectedOption()"
         />
         <label :for="index" class="ml-3 text-align-left">{{ item.label }} </label>
       </div>
@@ -98,16 +98,24 @@ export default {
   },
 
   mounted() {
-    if (this.criteria && ( (this.criteria.items.length === this.value.length) || (this.value.length === 0) )) {
-      if (!this.selectedOptions) {
-        this.selectedOptions = [];
-      }
-      this.selecteerAlles = true;
+    if (this.criteria) {
       this.criteria.items.forEach((item) => {
-        this.selectedOptions.push(item.value);
+        if (item.activated) {
+          this.selectedOptions.push(item.value);
+        }
       })
+      if (this.criteria.items.length === this.selectedOptions.length) {
+        this.selecteerAlles = true;
+      }
     }
-    this.selectedOptions = this.criteria.value;
+
+    if (this.criteria.value) {
+      this.selectedOptions = this.criteria.value;
+    }
+
+    if (this.criteria.items.length === this.selectedOptions.length) {
+      this.selecteerAlles = true;
+    }
   },
   computed: {
     label() {

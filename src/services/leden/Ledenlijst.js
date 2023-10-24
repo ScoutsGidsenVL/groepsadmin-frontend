@@ -184,6 +184,10 @@ export default {
                 activeerAlleFuncties(criterium);
             }
 
+            if (criterium.criteriaKey === 'groepen') {
+                activeerAlleGroepen(criterium);
+            }
+
             criterium.activated = true;
             state.activeCriteria.unshift(criterium);
         }
@@ -453,6 +457,16 @@ export default {
                     })
             }
         }
+
+        const activeerAlleGroepen = (criteria) => {
+            criteria.items.forEach(item => {
+                if (!state.huidigeFilter.criteria[criteria.criteriaKey].includes(item.value)) {
+                    state.huidigeFilter.criteria[criteria.criteriaKey].push(item.value)
+                    item.activated = true;
+                }
+            })
+        }
+
 
         const activeerAlleFuncties = (criteria) => {
             criteria.itemgroups.forEach(group => {
