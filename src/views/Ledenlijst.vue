@@ -112,7 +112,9 @@
                   <checkbox @click="selecteerOfDeselecteerAlleleden" v-model="alleLeden" :binary="true"></checkbox>
                 </template>
                 <template #body="slotProps">
-                  <checkbox @click="voegLidToe(slotProps.data)" v-model="geselecteerdeLeden"
+                  <checkbox @click="$event.stopPropagation();
+                                    voegLidToe(slotProps.data)"
+                            v-model="geselecteerdeLeden"
                             :value="slotProps.data"></checkbox>
                 </template>
               </column>
