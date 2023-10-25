@@ -623,3 +623,13 @@ a.clean-link:hover {
 .p-breadcrumb {
   height: 20px !important;
 }
+
+.p-datatable .p-datatable-tbody > tr:focus {
+  outline: 0.15rem solid $sgv-donkergroen;
+  outline-offset: -0.15rem;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  outline: 0.15rem solid $sgv-donkergroen;
+  outline-offset: -0.15rem;
+}

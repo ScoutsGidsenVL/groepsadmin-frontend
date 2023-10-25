@@ -535,10 +535,8 @@ export default {
         }
 
         const selectLid = (event) => {
-            if (
-                event.originalEvent.target.className !== "p-selection-column" &&
-                event.originalEvent.target.className !== "p-checkbox-icon"
-            ) {
+            console.log(event.originalEvent.target.firstElementChild);
+            if (!event.originalEvent.target.firstElementChild || event.originalEvent.target.firstElementChild.className !== "p-checkbox p-component") {
                 router.push({name: "Lid", params: {id: event.data.id}});
             }
         }
