@@ -9,9 +9,9 @@ pipeline {
     stage('build') {
       steps {
         sh "npm prune --ignore-scripts"
-        sh "npm install --ignore-scripts"
+        sh "npm install --force --ignore-scripts"
         sh "rm -rf dist frontend.zip"
-        sh "npm run build"
+        sh "npm run build --force"
         sh "zip -r frontend.zip dist/*"
       }
     }
