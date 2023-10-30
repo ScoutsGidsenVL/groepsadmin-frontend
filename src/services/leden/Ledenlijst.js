@@ -535,7 +535,9 @@ export default {
         }
 
         const selectLid = (event) => {
-            if (!event.originalEvent.target.firstElementChild || event.originalEvent.target.firstElementChild.className !== "p-checkbox p-component") {
+            console.log('select');
+            console.log(event.originalEvent.target.firstElementChild)
+            if (!event.originalEvent.target.firstElementChild || !event.originalEvent.target.firstElementChild.className.includes("p-checkbox p-component")) {
                 router.push({name: "Lid", params: {id: event.data.id}});
             }
         }
