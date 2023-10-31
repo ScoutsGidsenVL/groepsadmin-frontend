@@ -3,8 +3,8 @@
   "version": "3.0.4",
   "private": true,
   "scripts": {
-    "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
-    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
