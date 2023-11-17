@@ -492,7 +492,7 @@ export default {
      this.sjabloonIsValid();
       if (!this.error) {
         this.laden = true;
-        if (value && value.value.id) {
+        if (value?.value.id) {
           this.sjabloon.id = value.value.id;
           this.sjabloon.naam = naam;
           RestService.updateSjabloon("mail", this.sjabloon.id, this.sjabloon)
@@ -684,7 +684,7 @@ export default {
       // We hebben enkel de ID's nodig om door te sturen naar de api
       let ontvangenMails = 0;
       let mislukteMails = "";
-      var sjabloonObj = {
+      let sjabloonObj = {
         bcc: this.sjabloon.bcc,
         replyTo: this.sjabloon.replyTo,
         inhoud: this.sjabloon.inhoud,
@@ -702,13 +702,13 @@ export default {
         sjabloonObj.lidIds.push(id);
       });
 
-      var formData = new FormData();
+      let formData = new FormData();
       // bijlages toevoegen aan multipart/form-data
       this.files.forEach(function (file) {
         formData.append("attachments", file);
       });
 
-      var sjabloon = new Blob([JSON.stringify(sjabloonObj)], {
+      let sjabloon = new Blob([JSON.stringify(sjabloonObj)], {
         type: "application/json",
       });
 
@@ -813,5 +813,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
