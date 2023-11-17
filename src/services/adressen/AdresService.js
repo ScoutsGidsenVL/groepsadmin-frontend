@@ -64,7 +64,7 @@ export default {
             if (props.lidaanvraag) {
                 return true;
             }
-            return rechtenService.canBeShowed(props.modelValue, sectie);
+            return rechtenService.canBeShowed(props.modelValue, sectie) || rechtenService.hasPermission("adressen");
         }
 
         const voegAdresToe = () => {

@@ -9,7 +9,7 @@
             class="p-button-rounded p-button-outlined mt-1 add-button"
             @click="voegAdresToe"
             title="Voeg adres toe"
-            v-if="lidaanvraag || heeftToegang('adressen')"
+            v-if="lidaanvraag || heeftToegang('nieuw lid')"
           />
         </div>
       </template>
@@ -41,7 +41,7 @@
               label="Land"
               v-model="adressen[index].land"
               @changeValue="veranderLand(index)"
-              :disabled="!heeftToegang('adressen')"
+              :disabled="!heeftToegang('nieuw lid')"
             />
             <gemeente-zoek-auto-complete
               :index="index"
