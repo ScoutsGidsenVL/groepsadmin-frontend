@@ -31,11 +31,11 @@ export default {
       let minLng = 7; // bovengrens
       let maxLng = 2; // ondergrens
       adressen.forEach((adres) => {
-        if (typeof adres.positie !== "undefined") {
-          minLat = Math.min(minLat, adres.positie.latitude);
-          maxLat = Math.max(maxLat, adres.positie.latitude);
-          minLng = Math.min(minLng, adres.positie.longitude);
-          maxLng = Math.max(maxLng, adres.positie.longitude);
+        if (adres.positie) {
+          minLat = Math.min(minLat, adres?.positie?.latitude);
+          maxLat = Math.max(maxLat, adres?.positie?.latitude);
+          minLng = Math.min(minLng, adres?.positie?.longitude);
+          maxLng = Math.max(maxLng, adres?.positie?.longitude);
         }
       });
       let centerLat = (maxLat - minLat) / 2 + minLat;
@@ -53,8 +53,8 @@ export default {
         if (typeof adres.positie !== "undefined") {
           let marker = {
             position: {
-              lat: adres.positie.latitude,
-              lng: adres.positie.longitude,
+              lat: adres?.positie?.latitude,
+              lng: adres?.positie?.longitude,
             },
             draggable: false,
             clickable: true,
