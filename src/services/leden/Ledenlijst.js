@@ -535,7 +535,7 @@ export default {
         }
 
         const selectLid = (event) => {
-            if (!event.originalEvent.target.firstElementChild || !event.originalEvent.target.firstElementChild.className.includes("p-checkbox p-component")) {
+            if (!event.originalEvent.target.firstElementChild?.className.includes("p-checkbox p-component")) {
                 router.push({name: "Lid", params: {id: event.data.id}});
             }
         }
@@ -554,10 +554,11 @@ export default {
         const getLeden = (offset) => {
             if (!offset) {
                 state.offset = 0;
+                state.isLoading = true;
+            } else {
+                state.isLoadingMore = true
             }
-            state.offset === 0
-                ? (state.isLoading = true)
-                : (state.isLoadingMore = true);
+
             state.loadingText = "Even wat gegevens ophalen"
             RestService.getLeden(state.offset)
                 .then((res) => {
@@ -740,7 +741,7 @@ export default {
         }
 
         const downloadFile = (obj) => {
-            var a = document.createElement("a");
+            let a = document.createElement("a");
             a.href = obj.fileUrl;
             a.download = obj.title;
             document.body.appendChild(a);

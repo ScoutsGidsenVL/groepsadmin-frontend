@@ -134,19 +134,6 @@
                       <i class="fas fa-sort-alpha-down"
                          :class="checkSortering(kolom) === 0 ? 'icon-large' :  checkSortering(kolom) === 2 ? 'icon-small' : ''"></i>
                     </div>
-                    <!--                    <div class="custom-column" v-if="kolom.label === 'Lidgeld betaald aan SGV'">-->
-                    <!--                      <a-->
-                    <!--                        class="ml-1 float-right"-->
-                    <!--                        href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:groepsinstellingen&s[]=verzekerd"-->
-                    <!--                        target="_blank"-->
-                    <!--                      >-->
-                    <!--                        <i-->
-                    <!--                          class="fa fa-question-circle resolve info-button"-->
-                    <!--                          title="meer info"-->
-                    <!--                          style="margin-left: 3px"-->
-                    <!--                        ></i>-->
-                    <!--                      </a>-->
-                    <!--                    </div>-->
                   </div>
                 </template>
                 <template #body="slotProps">
