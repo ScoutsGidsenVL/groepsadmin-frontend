@@ -43,19 +43,20 @@ export default {
                     internal: true,
                 },
                 {
-                    label: "Ledenaantallen",
-                    condition: "groepen",
-                    icon: "far fa-chart-area",
-                    link: "Ledenaantallen",
-                    internal: true,
-                },
-                {
                     label: "Groep",
                     condition: "groepen",
                     icon: "far fa-cogs",
                     link: "Groepsinstellingen",
                     internal: true,
                 },
+                {
+                    label: "Ledenaantallen",
+                    condition: "groepen",
+                    icon: "far fa-chart-area",
+                    link: "Ledenaantallen",
+                    internal: true,
+                },
+
                 {
                     label: "Lidaanvragen",
                     condition: "aanvragen",

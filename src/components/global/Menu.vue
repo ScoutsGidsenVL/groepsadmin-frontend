@@ -105,15 +105,6 @@ export default {
           }
         },
         {
-          label: "Lidaanvragen",
-          condition: "aanvragen",
-          icon: "far fa-address-book",
-          link: "Aanvragen",
-          command: () => {
-            this.$router.push({name: 'Aanvragen'})
-          }
-        },
-        {
           label: "Groep",
           condition: "groepen",
           icon: "far fa-cogs",
@@ -129,6 +120,15 @@ export default {
           link: "Ledenaantallen",
           command: () => {
             this.$router.push({name: 'Ledenaantallen'})
+          }
+        },
+        {
+          label: "Lidaanvragen",
+          condition: "aanvragen",
+          icon: "far fa-address-book",
+          link: "Aanvragen",
+          command: () => {
+            this.$router.push({name: 'Aanvragen'})
           }
         },
         {
