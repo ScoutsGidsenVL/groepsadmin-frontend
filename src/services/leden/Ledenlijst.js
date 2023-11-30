@@ -124,6 +124,15 @@ export default {
                         gaNaar("lidToevoegen");
                     }
                 },
+                {
+                    label: "Lidkaarten naar pdf",
+                    condition: true,
+                    icon: "fal fa-file-pdf",
+                    link: "lidkaart",
+                    command: () => {
+                        gaNaar("lidkaart");
+                    }
+                },
             ],
         })
 
@@ -203,7 +212,7 @@ export default {
         }
 
         const gaNaar = (link) => {
-            if (link === 'pdf' || link === 'csv' || link === 'steekkaart') {
+            if (link === 'pdf' || link === 'csv' || link === 'steekkaart' || link === 'lidkaart') {
                 if (state.geselecteerdeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
@@ -678,7 +687,47 @@ export default {
                         state.isLoading = false;
                     })
                 }
+                if (type === "lidkaart") {
+                    RestService.controleerBeschikbaarheidLidkaart(ledenIds)
+                        .then((res) => {
+                            if (res.data.length > 0) {
+                                state.messageDialogMessage = "De lidkaart van volgende leden kan niet worden afgedrukt: </br>" + res.data.join("</br> ") + "</br></br>Deze zijn mogelijk aangesloten bij een andere groep of ploeg." ;
+                                state.messageDialog = true;
+                            }
+                            if (res.data.length !== ledenIds.lidIds.length) {
+                                downloadLidkaart(ledenIds);
+                            } else {
+                                state.isLoading = false;
+                            }
+                        }).catch((error) => {
+                        state.isLoading = false;
+                        let result = ErrorService.handleError(error);
+                        toast.add({
+                            severity: result.severity,
+                            summary: result.summary,
+                            detail: result.detail,
+                            life: 8000,
+                        });
+                    });
+                }
             }
+        }
+
+        const downloadLidkaart = (ledenIds) => {
+            RestService.getLidkaartPdf(ledenIds)
+                .then((res) => {
+                    if (res.data) {
+                        let obj = {};
+                        let blob = new Blob([res.data], {type: "application/pdf"});
+                        obj.fileUrl = window.URL.createObjectURL(blob);
+                        obj.title = "lidkaart.pdf";
+                        downloadFile(obj);
+                    }
+                }).catch((error) => {
+                console.log(error);
+            }).finally(() => {
+                state.isLoading = false;
+            })
         }
 
         const downloadFile = (obj) => {
