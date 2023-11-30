@@ -206,6 +206,21 @@ export default {
                     if (!ongesorteerdeFuncties[functie.groep].active) {
                         ongesorteerdeFuncties[functie.groep].active = functieObject.actief;
                     }
+                } else {
+                    let functieObject = {
+                        id: functie.functie,
+                        naam: functie.omschrijving,
+                        begin: functie.begin,
+                        einde: functie.einde,
+                        specialeFunctie:
+                            functie.functie === specialeFuncties.FV ||
+                            functie.functie === specialeFuncties.VGA,
+                        actief: !functie.einde,
+                    };
+                    ongesorteerdeFuncties[functie.groep].push(functieObject);
+                    if (!ongesorteerdeFuncties[functie.groep].active) {
+                        ongesorteerdeFuncties[functie.groep].active = functieObject.actief;
+                    }
                 }
             });
 
