@@ -23,6 +23,11 @@ export default {
                     link: "IndividueleSteekkaart",
                 },
                 {
+                    label: "Lidkaart afdrukken",
+                    icon: "fal fa-address-card",
+                    link: "Lidkaart",
+                },
+                {
                     label: "Nieuw Lid",
                     icon: "far fa-user-plus",
                     link: "lidToevoegen",
@@ -109,7 +114,10 @@ export default {
                 context.emit('stopAlleFuncties');
             } else if (link === 'broerZusToevoegen') {
                 broerZusToevoegen();
-            } else {
+            } else if (link === 'Lidkaart') {
+                context.emit('lidkaartAfdrukken');
+            }
+            else {
                 router.push({name: link})
             }
         }
