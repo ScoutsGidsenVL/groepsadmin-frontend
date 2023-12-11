@@ -64,7 +64,7 @@
           ></BaseCheckbox>
           <BaseInput
             v-model="lid.email"
-            :disabled="!eigenProfiel && !nieuwLid"
+            :disabled="(!eigenProfiel && !nieuwLid) && (!!hasPermission('vgagegevens') && !!lid.gebruikersnaam)"
             label="Email"
             type="email"
             :invalid="v.lid.email.$dirty && v.lid.email.$invalid"
