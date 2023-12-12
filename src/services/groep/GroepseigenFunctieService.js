@@ -104,7 +104,7 @@ export default {
         });
 
         const sorteerFuncties = () => {
-            state.gesorteerdeFuncties = state.groep.groepseigenFuncties.sort((a, b) => {
+            state.gesorteerdeFuncties = state.groep?.groepseigenFuncties?.sort((a, b) => {
                 if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {{
                     return 0;
                 }}
