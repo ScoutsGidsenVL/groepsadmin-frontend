@@ -13,7 +13,7 @@
         <accordion :multiple="true" v-if="!groepenLaden">
           <accordionTab v-for="(geg, index) in groepseigenVelden" :key="index">
             <template #header>
-              <div class="d-flex col-12 justify-content-between">
+              <div class="d-flex col-11 justify-content-between">
                 <span>
                   {{ groepNaam(index) }}
                 </span>
