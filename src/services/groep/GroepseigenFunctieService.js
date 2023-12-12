@@ -87,7 +87,7 @@ export default {
                 beschrijving: null,
                 groepen: [state.groep.groepsnummer]
             };
-            state.groep.groepseigenFuncties.unshift(nieuweFunctie);
+            state.groep?.groepseigenFuncties?.unshift(nieuweFunctie);
         }
 
         const kanGroepWijzigen = computed(() => {

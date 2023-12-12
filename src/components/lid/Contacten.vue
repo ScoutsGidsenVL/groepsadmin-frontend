@@ -18,7 +18,7 @@
           <accordionTab v-for="(contact, index) in contacten" :key="index">
             <template #header>
               <div class="d-flex col-11 justify-content-between">
-                <span>{{ setHeader(contact) }}</span>
+                <span style="margin-top: 5px;">{{ setHeader(contact) }}</span>
                 <Button
                   v-if="heeftToegang('contacten') || lidaanvraag"
                   icon="pi pi-trash"
