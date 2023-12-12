@@ -68,7 +68,7 @@
             label="Email"
             type="email"
             :invalid="v.lid.email.$dirty && v.lid.email.$invalid"
-            :error-message="v.lid.email.email.$invalid ? v.lid.email.email.$message : v.lid.email.requiredIfNieuwLid.$message"
+            :error-message="v.lid.email.email.$message"
           ></BaseInput>
           <BaseInputTelefoon
             :disabled="!eigenProfiel && !nieuwLid"
@@ -122,7 +122,7 @@ import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import {reactive, toRefs} from "@vue/reactivity";
 import {useVuelidate} from '@vuelidate/core'
-import {email, helpers, required, requiredIf} from '@vuelidate/validators'
+import {email, helpers, required} from '@vuelidate/validators'
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
@@ -224,8 +224,7 @@ export default {
     const rules = {
       lid: {
         email: {
-          email: helpers.withMessage('Geen geldig emailadres', email),
-          requiredIfNieuwLid: helpers.withMessage("Email is verplicht", requiredIf(props.inschrijving || props.nieuwLid))
+          email: helpers.withMessage('Geen geldig emailadres', email)
         },
         persoonsgegevens: {
           gsm: {
