@@ -4,12 +4,15 @@
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span class="font22">Contact</span
-          ><span class="small mt-1" v-if="contactenImporteren"
+          ><span class="small mt-1" v-if="contactenImporteren && groep.contacten?.length > 0"
             >Contacten laden &nbsp;<i class="fas fa-spinner fa-spin"></i
           ></span>
         </div>
       </template>
       <template #content>
+        <div class="ml-2" v-if="groep.contacten?.length === 0">
+          Geen contacten beschikbaar
+        </div>
         <div class="ml-3" v-if="groep.groepsleiding && groep.groepsleiding.length > 0">
           <label class="f-500 text-decoration-underline"> Groepsleiding</label>
           <div v-for="(grl, key) in groep.groepsleiding" :key="key">

@@ -35,19 +35,19 @@
               :options="rollen"
               label="Rol"
               v-model="contacten[index].rol"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             />
             <base-input
               label="Voornaam"
               v-model="contacten[index].voornaam"
               type="text"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             />
             <base-input
               label="Achternaam"
               v-model="contacten[index].achternaam"
               type="text"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             />
             <base-input
               label="E-mail"
@@ -57,7 +57,7 @@
               :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
                               v.contacten.$each.$response.$errors[index].email.length > 0) ?
                               v.contacten.$each.$response.$errors[index].email[0].$message : ''"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             />
             <BaseInputTelefoon
               v-model="contacten[index].gsm"
@@ -67,13 +67,13 @@
               :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
                               v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
                               v.contacten.$each.$response.$errors[index].gsm[0].$message : ''"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             ></BaseInputTelefoon>
             <base-dropdown
               :options="adresArray"
               label="Adres"
               v-model="contacten[index].adres"
-              :disabled="!heeftToegang('contacten') || lidaanvraag"
+              :disabled="!heeftToegang('contacten')"
             />
             <template v-for="(adres, index2) in adressen" :key="index2">
               <base-input
@@ -81,7 +81,7 @@
                 v-model="adressen[index2].telefoon"
                 type="text"
                 v-if="contacten[index] && adres.id === contacten[index].adres"
-                :disabled="!heeftToegang('contacten') || lidaanvraag"
+                :disabled="!heeftToegang('contacten')"
               />
             </template>
           </accordionTab>
@@ -97,7 +97,7 @@ import BaseDropdown from "@/components/input/BaseDropdown";
 import {reactive, toRefs} from "@vue/reactivity";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
-import {onMounted} from "vue";
+import {onMounted, watch} from "vue";
 import {onUpdated} from "@vue/runtime-core";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import {useVuelidate} from "@vuelidate/core";
@@ -218,6 +218,18 @@ export default {
         });
       }
     }
+
+    watch(
+      () => props.modelValue.adressen,
+      () => {
+        console.log('update adressen')
+        resetData();
+      },
+      {
+        deep: true
+      }
+
+    )
 
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);
