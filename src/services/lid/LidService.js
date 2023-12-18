@@ -9,7 +9,6 @@ import {computed, onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
 import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
-import Keycloak from "keycloak-js";
 import _ from "lodash";
 import DateUtil from "@/services/dates/DateUtil";
 
@@ -347,6 +346,8 @@ export default {
 
         const saveLid = (confirmVGA, vga) => {
             state.loadingLid = true;
+            let bevestig = false;
+
 
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
@@ -368,9 +369,17 @@ export default {
 
             if (!vga || (vga && confirmVGA)) {
                 state.loadingLid = true;
-                RestService.updateLid(state.lid.id, state.gewijzigdLid)
+                RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
+                            if (res.status === 400) {
+                                console.log(res.data)
+                            }
+
+
+
+
+
                         if (res.status === 200)
                             toast.add({
                                 severity: "success",
@@ -387,10 +396,6 @@ export default {
                             detail: error.response.data.beschrijving,
                             life: 3000,
                         })
-                    } else {
-                        if (vga && confirmVGA) {
-                            Keycloak.logout();
-                        }
                     }
                 }).finally(() => {
                     state.changes = false;
