@@ -201,8 +201,8 @@ export default {
         return apiClient().get(baseUrl);
     },
 
-    updateLid(id, lid) {
-        return apiClient().patch(baseUrl + "lid/" + id + "?bevestig=" + true, lid)
+    updateLid(id, lid, bevestig) {
+        return apiClient().patch(baseUrl + "lid/" + id + "?bevestig=" + bevestig, lid)
     },
 
     getCommunicatieProducten() {
