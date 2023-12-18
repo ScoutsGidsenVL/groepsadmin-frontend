@@ -4,6 +4,7 @@
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span class="font22"> Functies </span>
+          <Button icon="far fa-hand-paper" class="stop-knop" title="Stop alle functies" label="Stop alle functies" @click="stopAlleFuncties"/>
         </div>
         <div class="d-flex col-12">
           <InputSwitch v-model="historiek"/>
@@ -115,7 +116,8 @@ export default {
       stopFunctie,
       actieveGroepen,
       nietActieveGroepen,
-      laden
+      laden,
+      stopAlleFuncties
     } = FunctieService.functieSpace(props, context);
 
     return {
@@ -127,7 +129,8 @@ export default {
       stopFunctie,
       actieveGroepen,
       nietActieveGroepen,
-      laden
+      laden,
+      stopAlleFuncties
       }
     }
   }

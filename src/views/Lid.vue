@@ -64,6 +64,7 @@
                 :lid="lid"
                 v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
                 @updateFuncties="updateFuncties"
+                @stopAlleFuncties="stopAlleFuncties"
               ></functies>
               <functies-toevoegen
                 v-model="lid"

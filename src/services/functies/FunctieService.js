@@ -14,7 +14,8 @@ export default {
         const state = reactive({
             historiek: false,
             confirmDialog: false,
-            teStoppenFunctie: {}
+            teStoppenFunctie: {},
+            lid: props.lid
         })
 
         const groepsNaam = (groepsnummer) => {
@@ -41,6 +42,10 @@ export default {
 
         const formatteerDatum = (datum) => {
             return DateUtil.formatteerDatum(datum);
+        }
+
+        const stopAlleFuncties = () => {
+            context.emit('stopAlleFuncties');
         }
 
         const stopFunctie = (functie, nummer) => {
@@ -88,7 +93,8 @@ export default {
             stopFunctie,
             actieveGroepen,
             nietActieveGroepen,
-            laden
+            laden,
+            stopAlleFuncties
         }
     }
 }
