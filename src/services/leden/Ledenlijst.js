@@ -276,6 +276,15 @@ export default {
         }
 
         const filterOpslaan = (naam, delen, filterId) => {
+            if (!naam) {
+                toast.add({
+                    severity: "warn",
+                    summary: "Naam leeg",
+                    detail: "Naam mag niet leeg zijn",
+                    life: 8000,
+                });
+                return;
+            }
             state.isLoading = true;
             state.loadingText = "Filter opslaan"
             if (filterId) {
@@ -626,6 +635,7 @@ export default {
                 })
                 .finally(() => {
                     state.isLoadingFilters = false;
+                    state.isLoading = false;
                 });
         }
 

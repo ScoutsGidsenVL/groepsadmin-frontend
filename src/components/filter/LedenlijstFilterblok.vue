@@ -4,7 +4,7 @@
     <div class="col-12">
       <div class="">
         <div class="row">
-          <div class="col-12 col-md-6 col-xl-3 d-flex justify-content-start">
+          <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
             <dropdown @change="veranderFilter"
                       v-model="geselecteerdeFilter"
                       :options="filters"
@@ -23,7 +23,7 @@
             </dropdown>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6 col-xl-3 flex justify-content-start" v-if="filterOpslaanMode">
+            <div class="col-12 col-md-6 col-xl-4 flex justify-content-start" v-if="filterOpslaanMode">
               <AutoComplete
                 class="custom-input-styling p-0 col-12"
                 v-model="zoekTerm"
@@ -52,7 +52,8 @@
                 <label class="text-align-left" for="label">Als gedeelde filter</label>
               </div>
             </div>
-            <div class="col-12 col-md-6  flex justify-content-start">
+            <div class="md:col-offset-6 xl:col-offset-8"></div>
+            <div class="col-12 col-md-6 col-xl-4  flex justify-content-start">
 
               <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode"
                        class="col-6 col-md-6"
@@ -199,8 +200,10 @@ export default {
     },
 
     filterOpslaan() {
-      this.changes = false;
-      this.filterOpslaanMode = false;
+      if (this.zoekTerm) {
+        this.changes = false;
+        this.filterOpslaanMode = false;
+      }
       return this.$emit('filterOpslaan', this.zoekTerm, this.filterDelen, (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? this.geselecteerdeFilter.value.id : null);
     },
 
@@ -325,6 +328,7 @@ export default {
               .then(res => {
                 this.$emit("onLoading")
                 if (res.status === 204) {
+                  this.$emit("getHuidigeFilter")
                   this.$toast.add({
                     severity: "success",
                     summary: "Filter",
