@@ -54,6 +54,8 @@ export default {
             switch (label) {
                 case "Individuele steekkaart":
                     return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
+                case "Lidkaart afdrukken":
+                    return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
                 case "Nieuw Lid":
                     return rechtenService.hasAccess("nieuw lid");
                 case "Broer/Zus toevoegen":
