@@ -461,6 +461,9 @@ export default {
                                     state.offset = 0;
                                     getLeden(0);
                                     getKolommen();
+                                    state.criteria = ledenlijstFilter.getCriteria();
+                                    state.activeCriteria = ledenlijstFilter.getActieveCriteria(res.data, ledenlijstFilter.getCriteria())
+                                    activeerKolommen();
                                 })
                         }
                     })
@@ -611,6 +614,7 @@ export default {
 
         const getFilters = () => {
             state.isLoadingFilters = true;
+            state.isLoading = true;
             RestService.getFilters().then(res => {
                 state.filters = ledenlijstFilter.groepeerFilters(res.data.filters)
             }).catch(error => {
@@ -623,6 +627,7 @@ export default {
 
         const getHuidigeFilter = () => {
             state.isLoadingFilters = true;
+            state.isLoading = true;
             RestService.getHuidigeFilter()
                 .then((res) => {
                     state.huidigeFilter = res.data;
