@@ -346,7 +346,7 @@ export default {
 
         const saveLid = (confirmVGA, vga) => {
             state.loadingLid = true;
-            let bevestig = false;
+            let bevestig = true;
 
 
             if (state.gewijzigdLid.vgagegevens) {
@@ -372,13 +372,6 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
-                            if (res.status === 400) {
-                                console.log(res.data)
-                            }
-
-
-
-
 
                         if (res.status === 200)
                             toast.add({
@@ -389,14 +382,12 @@ export default {
                             });
                         state.changes = false;
                     }).catch(error => {
-                    if (error && error.response.status !== 303) {
-                        toast.add({
-                            severity: "warn",
-                            summary: error.response.data.titel,
-                            detail: error.response.data.beschrijving,
-                            life: 3000,
-                        })
-                    }
+                    toast.add({
+                        severity: "warn",
+                        summary: error.response.data.titel,
+                        detail: error.response.data.beschrijving,
+                        life: 3000,
+                    })
                 }).finally(() => {
                     state.changes = false;
                     getLid(state.lid.id);
@@ -428,6 +419,7 @@ export default {
         })
 
         const updateFuncties = (functie) => {
+            let bevestig = true;
             state.loadingLid = true;
             let lid = {
                 functies: [
@@ -439,7 +431,7 @@ export default {
                     }
                 ]
             };
-            RestService.updateLid(state.lid.id, lid).then(res => {
+            RestService.updateLid(state.lid.id, lid, bevestig).then(res => {
                 if (res.status === 200) {
                     toast.add({
                         severity: "success",
