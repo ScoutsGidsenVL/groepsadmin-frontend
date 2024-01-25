@@ -64,7 +64,7 @@
           ></BaseCheckbox>
           <BaseInput
             v-model="lid.email"
-            :disabled="!eigenProfiel && !nieuwLid"
+            :disabled="kanNietBewerken"
             label="Email"
             type="email"
             :invalid="v.lid.email.$dirty && v.lid.email.$invalid"
@@ -198,6 +198,19 @@ export default {
     },
     formattedDate() {
       return DateUtil.formatGeboortedatum(this.lid.vgagegevens.geboortedatum);
+    },
+    kanNietBewerken() {
+      let nietBewerkbaar = true;
+      if (this.eigenProfiel) {
+        nietBewerkbaar = false;
+      }
+      if (this.nieuwLid) {
+        nietBewerkbaar = false;
+      }
+      if (this.hasPermission('vgagegevens') && !this.lid.gebruikersnaam) {
+        nietBewerkbaar = false;
+      }
+      return nietBewerkbaar;
     }
   },
   props: {
