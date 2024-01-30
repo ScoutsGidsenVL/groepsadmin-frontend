@@ -89,7 +89,7 @@ export default {
             let opgerichtDatum = new Date(state.selectedGroep.opgericht);
             opgerichtDatum.setHours(2);
             state.selectedGroep.opgericht = DateUtil.formatteerDatumVoorApi(opgerichtDatum);
-
+            state.watchable = false;
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
@@ -119,7 +119,9 @@ export default {
                     state.changes = false;
                 }
                 store.commit("setGroepenLaden", false);
-
+                setTimeout(() => {
+                    state.watchable = true
+                }, 1500)
             })
 
             // indien er functieaanpassingen zijn gaan we deze allemaal overlopen en opslaan
