@@ -176,7 +176,11 @@ export default {
 
         const activateCriterium = (criterium) => {
 
-            if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailgeblokkeerd' || criterium.criteriaKey === 'oudleden') {
+            if (criterium.criteriaKey === 'adresgeblokkeerd' ||
+                criterium.criteriaKey === 'verminderdLidgeld' ||
+                criterium.criteriaKey === 'emailgeblokkeerd' ||
+                criterium.criteriaKey === 'emailleeg'||
+                criterium.criteriaKey === 'geenLidkaart') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
