@@ -105,6 +105,13 @@
             :disabled="true"
           ></BaseCheckbox>
           <BaseCheckbox
+            :disabled="true"
+            type="checkbox"
+            v-model="lid.isActiefVvksmLid"
+            label="Verzekerd door Scouts en Gidsen Vlaanderen"
+            multiple="false"
+          ></BaseCheckbox>
+          <BaseCheckbox
             v-if="nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.verminderdlidgeld"

@@ -21,7 +21,8 @@
         </div>
       </template>
     </ConfirmDialog>
-    <MessageDialog :dialog-visible="messageDialog" :message="messageDialogMessage" :header="messageDialogHeader" @close="messageDialog = false"/>
+    <MessageDialog :dialog-visible="messageDialog" :message="messageDialogMessage" :header="messageDialogHeader"
+                   @close="messageDialog = false"/>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block lg:ml-8 w-25">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4"/>
@@ -30,51 +31,54 @@
         :showLoader="loadingLid"
       ></Loader>
       <div>
-      <lid-boven-balk
-        class="lg:ml-8 mt-lg-4em mt-9"
-        v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
-        v-model="lid"
-        :eigenProfiel="isEigenProfiel"
-        :changes="changes"
-        @stopAlleFuncties="stopAlleFuncties"
-        @lidkaartAfdrukken="lidkaartAfdrukken"
-        @opslaan="opslaan"
-      ></lid-boven-balk>
-      <div class="lg:ml-2">
-        <form @submit.prevent="opslaan" autocomplete="off">
-          <div class="row lg:ml-8">
-            <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel"
-                           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
+        <lid-boven-balk
+          class="lg:ml-8 mt-lg-4em mt-9"
+          v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+          v-model="lid"
+          :eigenProfiel="isEigenProfiel"
+          :changes="changes"
+          @stopAlleFuncties="stopAlleFuncties"
+          @lidkaartAfdrukken="lidkaartAfdrukken"
+          @opslaan="opslaan"
+        ></lid-boven-balk>
+        <div class="lg:ml-2">
+          <form @submit.prevent="opslaan" autocomplete="off">
+            <div class="row lg:ml-8">
+              <Message severity="warn" v-if="!loadingLid && !lid.isActiefVvksmLid">
+                {{ lid.nietVerzekerdReden }}
+              </Message>
+              <div class="col-12 col-lg-6 col-xl-4">
+                <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel"
+                             v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
+              </div>
+              <div class="col-12 col-lg-6 col-xl-4">
+                <adressen v-model="lid" :title="'Adressen'"
+                          v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
+                <contacten v-model="lid" :title="'Contacten'"
+                           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+                <groepseigen-gegevens
+                  v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                  v-model="groepseigenVelden"
+                  :title="'Groepseigen gegevens'"
+                ></groepseigen-gegevens>
+              </div>
+              <div class="col-12 col-lg-12 col-xl-4">
+                <functies
+                  v-model="gesorteerdeFuncties"
+                  :lid="lid"
+                  v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+                  @updateFuncties="updateFuncties"
+                  @stopAlleFuncties="stopAlleFuncties"
+                ></functies>
+                <functies-toevoegen
+                  v-model="lid"
+                  v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
+                  @voegFunctieToe="voegFunctieToe"
+                ></functies-toevoegen>
+              </div>
             </div>
-            <div class="col-12 col-lg-6 col-xl-4">
-              <adressen v-model="lid" :title="'Adressen'"
-                        v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
-              <contacten v-model="lid" :title="'Contacten'"
-                         v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
-              <groepseigen-gegevens
-                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
-                v-model="groepseigenVelden"
-                :title="'Groepseigen gegevens'"
-              ></groepseigen-gegevens>
-            </div>
-            <div class="col-12 col-lg-12 col-xl-4">
-              <functies
-                v-model="gesorteerdeFuncties"
-                :lid="lid"
-                v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
-                @updateFuncties="updateFuncties"
-                @stopAlleFuncties="stopAlleFuncties"
-              ></functies>
-              <functies-toevoegen
-                v-model="lid"
-                v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
-                @voegFunctieToe="voegFunctieToe"
-              ></functies-toevoegen>
-            </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -97,6 +101,7 @@ import FunctiesToevoegen from "@/components/lid/FunctiesToevoegen";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import MessageDialog from "@/components/dialog/MessageDialog.vue";
+import Message from "primevue/message";
 
 export default {
   name: "Lid",
@@ -113,7 +118,8 @@ export default {
     Functies,
     FunctiesToevoegen,
     GroepseigenGegevens,
-    LidBovenBalk
+    LidBovenBalk,
+    Message
   },
   setup() {
     const {
