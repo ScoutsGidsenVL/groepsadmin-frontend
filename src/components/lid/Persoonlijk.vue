@@ -1,5 +1,12 @@
 <template>
   <div class="mb-4">
+    <MessageDialog
+      :dialog-visible="messageDialog"
+      :message="messageDialogMessage"
+      :header="messageDialogHeader"
+      :leden="messageDialogLeden"
+      @close="messageDialog = false"
+    />
     <card>
       <template #title>
         <span class="font22">
@@ -12,6 +19,7 @@
             v-model="lid.vgagegevens.voornaam"
             label="Voornaam"
             type="text"
+            @blur="checkBestaandLid"
             :disabled="!hasPermission('vgagegevens') && !nieuwLid"
             :invalid="v.lid.vgagegevens.voornaam.$dirty && v.lid.vgagegevens.voornaam.$invalid"
             :error-message="v.lid.vgagegevens.voornaam.required.$message"
@@ -20,6 +28,7 @@
             v-model="lid.vgagegevens.achternaam"
             label="Achternaam"
             type="text"
+            @blur="checkBestaandLid"
             :disabled="!hasPermission('vgagegevens') && !nieuwLid"
             :invalid="v.lid.vgagegevens.achternaam.$dirty && v.lid.vgagegevens.achternaam.$invalid"
             :error-message="v.lid.vgagegevens.achternaam.required.$message"
@@ -129,6 +138,8 @@ import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
 import {onUpdated} from "@vue/runtime-core";
 import DateUtil from "@/services/dates/DateUtil";
+import restService from "@/services/api/RestService";
+import MessageDialog from "@/components/dialog/MessageDialog.vue";
 
 const ibantools = require('ibantools');
 const isGeldigRekeningnummer = (value) => {
@@ -153,9 +164,13 @@ const isGeldigGsmNummer = (value) => {
 
 export default {
   name: "Persoonlijk",
-  components: {DatePicker, BaseInput, BaseCheckbox, BaseDropDown, BaseInputTelefoon, BaseTextArea},
+  components: {MessageDialog, DatePicker, BaseInput, BaseCheckbox, BaseDropDown, BaseInputTelefoon, BaseTextArea, },
   data() {
     return {
+      messageDialog: false,
+      messageDialogMessage: "",
+      messageDialogHeader: "",
+      messageDialogLeden: [],
       geslacht: [
         {label: "Mannelijk", value: "man"},
         {label: "Vrouwelijk", value: "vrouw"},
@@ -191,6 +206,21 @@ export default {
         return this.nieuwLid;
       }
     },
+    checkBestaandLid() {
+      if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
+        restService.zoekGelijkaardig(this.lid.vgagegevens.voornaam, this.lid.vgagegevens.achternaam)
+          .then(res => {
+            if (res.data.leden.length > 0) {
+              this.messageDialog = true;
+              this.messageDialogHeader = res.data.leden.length > 1 ? "Bestaande leden?" : "Bestaand lid?";
+              this.messageDialogMessage = "Er zijn leden gevonden met een gelijkaardige naam. Ga naar het juiste lid of sluit dit venster.</br>";
+              this.messageDialogLeden = res.data.leden;
+            }
+          }).catch (error => {
+            console.log(error);
+        })
+      }
+    }
   },
   computed: {
     omschrijving() {
@@ -231,7 +261,8 @@ export default {
   },
   setup(props) {
     const state = reactive({
-      lid: props.modelValue
+      lid: props.modelValue,
+
     });
 
     const rules = {
@@ -264,7 +295,6 @@ export default {
     onUpdated(() => {
       state.lid = props.modelValue;
     })
-
 
     const v = useVuelidate(rules, state);
     return {...toRefs(state), v};

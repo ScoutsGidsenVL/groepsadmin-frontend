@@ -21,6 +21,10 @@ export default {
         return apiClient().get(baseUrl + "zoeken", {params: {query: zoekTerm}});
     },
 
+    zoekGelijkaardig(voornaam, achternaam) {
+        return apiClient().get(baseUrl + "zoeken/gelijkaardig", {params: {voornaam: voornaam, achternaam: achternaam}});
+    },
+
     async getLid(id) {
         if (id) {
             return apiClient().get(baseUrl + "lid/" + id);

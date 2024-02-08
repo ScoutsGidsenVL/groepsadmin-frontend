@@ -8,6 +8,13 @@
   >
     <div class="confirmation-content">
       <span v-html="message"></span>
+      <div v-if="leden?.length > 0">
+        <div v-for="(lid, index) in leden" :key="index">
+          <router-link :to="{ name:'Lid', params: { id: lid.id }}">
+            {{ lid.voornaam }} {{ lid.achternaam }} - {{ formatteerDatum(lid.geboortedatum) }}
+          </router-link>
+        </div>
+      </div>
     </div>
     <template #footer>
       <Button
@@ -22,11 +29,16 @@
 </template>
 
 <script>
+import DateUtil from "@/services/dates/DateUtil";
+
 export default {
   name: "MessageDialog",
   props: {
     message: {
       type: String,
+    },
+    leden: {
+      type: Array
     },
     header: {
       type: String,
@@ -40,6 +52,9 @@ export default {
   methods: {
     sluiten() {
       this.$emit("close");
+    },
+    formatteerDatum(datum) {
+      return DateUtil.formatteerDatum(datum);
     },
   },
   computed: {
