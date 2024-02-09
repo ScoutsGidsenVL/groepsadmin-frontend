@@ -142,11 +142,7 @@ export default {
         }
 
         const getProfiel = () => {
-            state.lid = store.getters.profiel;
-            sorteerFuncties();
-            filterGroepsEigenVelden();
-            state.loadingLid = false;
-            setGeboorteDatum();
+            getLid("profiel");
         }
 
         const getLid = (id) => {
@@ -541,7 +537,7 @@ export default {
                 .then((res) => {
                     if (res.data.length > 0) {
                         if (state.lid.functies.length > 0) {
-                            state.messageDialogMessage = "De lidkaart is pas beschikbaar wanneer de groep of ploeg </br>van jouw belangrijkste functie de leden heeft verbeterd.";
+                            state.messageDialogMessage = "De lidkaart is pas beschikbaar wanneer de groep of ploeg </br> van jouw belangrijkste functie de leden heeft verbeterd.";
                         }
                         state.messageDialog = true;
                         state.loadingLid = false;
