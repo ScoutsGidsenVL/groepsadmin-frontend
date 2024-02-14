@@ -310,6 +310,8 @@ export default {
 
         returnObj.arrCriteria.push(this.getOudledenMenu());
 
+        returnObj.arrCriteria.push(this.getGeweigerdeledenMenu());
+
         returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu())
 
         returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu())
@@ -399,6 +401,22 @@ export default {
         }
         geslacht.activated = false;
         return geslacht;
+    },
+
+    getGeweigerdeledenMenu() {
+        let geweigerdLid = {
+            "title": "Geweigerde leden",
+            "criteriaKey": "geweigerdLid",
+            "multiplePossible": false,
+            "items": [
+                {
+                    "value": true,
+                    "label": "Ja"
+                }
+            ]
+        }
+        geweigerdLid.activated = false;
+        return geweigerdLid;
     },
 
     getOudledenMenu() {
