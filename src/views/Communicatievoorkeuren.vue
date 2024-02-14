@@ -249,7 +249,7 @@
                 {{ product.omschrijving }}
               </div>
               <div class="col-md-2 hidden d-md-flex"></div>
-              <div class="col-md-2 mt09 hidden d-md-flex justify-content-center ">
+              <div class="col-md-2 mt09 hidden d-md-flex justify-content-end ml--2">
                 <base-checkbox :model-value="checkValue(product, product.type[0])"
                                @check="verwerkCommunicatie(product, product.type[0])"/>
               </div>
@@ -376,6 +376,7 @@ export default {
     },
 
     voegBijlageToe(type) {
+      this.changes = true;
       this.communicatieProducten.forEach(cp => {
         if (cp.bijlage && cp.type.includes(type)) {
           let communicatieproductabonnement = Object.assign({}, this.defaultCommunicatieproductabonnement);
@@ -385,10 +386,6 @@ export default {
           this.selectedCommunicatieProducten.push(communicatieproductabonnement);
         }
       })
-    },
-
-    checkBijlages(type) {
-      return CommunicatieProductService.checkBijlages(this.selectedCommunicatieProducten, type);
     },
 
     checkAantalBijlages(type) {
@@ -413,12 +410,16 @@ export default {
         }
       })
 
+      console.log(this.selectedCommunicatieProducten.length)
+      console.log(index)
+
       if (index < 0) {
         this.selectedCommunicatieProducten.push(communicatieproductabonnement);
       } else {
         this.selectedCommunicatieProducten.splice(index, 1);
       }
 
+      console.log(this.selectedCommunicatieProducten.length)
 
       if (!this.leiding) {
         if (CommunicatieProductService.getAantalBijlagesVanType(this.selectedCommunicatieProducten, type) >= 2 && index < 0) {
