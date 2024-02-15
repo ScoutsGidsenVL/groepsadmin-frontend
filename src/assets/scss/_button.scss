@@ -204,6 +204,24 @@
   }
 }
 
+.verwijder-knop {
+  background: $sgv-rood !important;
+  border: 1px solid $sgv-rood !important;
+  &:hover {
+    border: 1px solid $sgv-rood !important;
+    box-shadow: 0 0 0 1px $sgv-rood !important;
+  }
+  &:active {
+    border: 1px solid $sgv-rood !important;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0.2rem $sgv-rood !important;
+  }
+  .pi {
+    font-size: 1.3rem !important;
+  }
+}
+
 .algemene-lid-knop {
   background: $sgv-donkergroen !important;
   border: 1px solid $sgv-donkergroen !important;
