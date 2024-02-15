@@ -57,22 +57,21 @@
 
               <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode"
                        class="col-6 col-md-6"
-                       :label="opslaanLabel"></Opslaan>
+                       :label="opslaanLabel"/>
               <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
                       :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'"
                       class="actie-button w-92 col-6"
                       :class="filterOpslaanMode ? 'ml-1' : ''"
-                      @click="filterOpslaanMode = !filterOpslaanMode; zoekTerm = ''"
-              ></Button>
-              <Button v-if="!geselecteerdeFilter && !filterOpslaanMode"
+                      @click="filterOpslaanMode = !filterOpslaanMode; zoekTerm = ''"/>
+              <Button v-if="geselecteerdeFilter && !filterOpslaanMode"
+                      label="Filter verwijderen"
+                      :icon="'fas fa-trash'" class="verwijder-knop ml-2 text-nowrap col-6"
+                      @click="filterVerwijderen"/>
+              <Button v-if="!filterOpslaanMode"
                       label="Filter toepassen"
                       :icon="'fas fa-check'" class="opslaan-knop ml-2 text-nowrap col-6"
                       :disabled="!changes"
-                      @click="filterToepassen"></Button>
-              <Button v-if="geselecteerdeFilter && !filterOpslaanMode"
-                      label="Filter verwijderen"
-                      :icon="'fas fa-trash'" class="opslaan-knop ml-1 text-nowrap col-6"
-                      @click="filterVerwijderen"></Button>
+                      @click="filterToepassen"/>
             </div>
           </div>
         </div>
@@ -209,6 +208,7 @@ export default {
     },
 
     selecteerCriterium(criterium) {
+      this.filterOpslaanMode = false;
       this.changes = true;
       this.$emit('activateCriterium', criterium);
       this.defineInactiveCriteria();
