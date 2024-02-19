@@ -4,6 +4,7 @@ import moment from "moment";
 import rechtenService from "@/services/rechten/rechtenService";
 import {useStore} from "vuex";
 import {onUpdated} from "@vue/runtime-core";
+import dateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -94,7 +95,7 @@ export default {
             let functieInstantie = {};
             functieInstantie.functie = functie.id;
             functieInstantie.groep = groepsnummer;
-            functieInstantie.begin = '2016-01-01 00:00:00'; // set static date
+            functieInstantie.begin = dateUtil.formatteerDatumVolgensDatetime(new Date()); // set static date
             functieInstantie.temp = "tijdelijk";
 
             let bestaandeFunctie = false;
