@@ -11,10 +11,12 @@ import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import _ from "lodash";
 import DateUtil from "@/services/dates/DateUtil";
+import useKeycloak from "@/services/utils/useKeycloak";
 
 export default {
 
     lidSpace() {
+        const keycloak = useKeycloak();
         const state = reactive({
             breadcrumbItems: [
                 {
@@ -368,20 +370,23 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
-
-                        if (res.status === 200)
+                        if (res.status === 200) {
                             toast.add({
                                 severity: "success",
                                 summary: "Wijzigingen",
                                 detail: "Wijzigingen lid opgeslagen",
                                 life: 2000,
                             });
+                            if (vga && confirmVGA) {
+                                keycloak.logout();
+                            }
+                        }
                         state.changes = false;
                     }).catch(error => {
                     toast.add({
                         severity: "warn",
-                        summary: error.response.data.titel,
-                        detail: error.response.data.beschrijving,
+                        summary: error?.response?.data?.titel,
+                        detail: error?.response?.data?.beschrijving,
                         life: 3000,
                     })
                 }).finally(() => {
