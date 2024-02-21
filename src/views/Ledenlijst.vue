@@ -40,8 +40,7 @@
                                   :huidigeFilter="huidigeFilter"
                                   :criteria="criteria"
                                   :active-criteria="activeCriteria"
-            >
-            </LedenlijstFilterblok>
+            />
             <data-table
               ref="ledenlijst"
               :value="leden"

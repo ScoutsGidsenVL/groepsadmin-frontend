@@ -576,7 +576,7 @@ export default {
                 state.isLoadingMore = true
             }
 
-            state.loadingText = "Even wat gegevens ophalen"
+            state.loadingText = "Leden en filters ophalen..."
             RestService.getLeden(state.offset)
                 .then((res) => {
                     state.aantalLedenGeladen = res.data.aantal;
@@ -631,7 +631,6 @@ export default {
 
 
         const getHuidigeFilter = () => {
-            state.isLoadingFilters = true;
             state.isLoading = true;
             RestService.getHuidigeFilter()
                 .then((res) => {
@@ -644,7 +643,6 @@ export default {
                     console.log(error);
                 })
                 .finally(() => {
-                    state.isLoadingFilters = false;
                     state.isLoading = false;
                 });
         }
