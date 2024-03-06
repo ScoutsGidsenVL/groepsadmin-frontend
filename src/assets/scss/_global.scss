@@ -52,6 +52,14 @@
   border-color: $sgv-donkergroen !important;
 }
 
+.lid-autocomplete .p-inputtext {
+  border-color: $sgv-donkergroen !important;
+}
+
+.lid-autocomplete-input::placeholder {
+  color: black !important;
+}
+
 .p-checkbox .p-checkbox-box.p-highlight {
   box-shadow: 0 0 0 0.2px $sgv-lichtgroen !important;
   border-color: $sgv-lichtgroen !important;
