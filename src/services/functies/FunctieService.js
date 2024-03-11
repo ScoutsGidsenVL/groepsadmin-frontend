@@ -15,7 +15,7 @@ export default {
             historiek: false,
             confirmDialog: false,
             teStoppenFunctie: {},
-            lid: props.lid
+            lid: props.lid,
         })
 
         const groepsNaam = (groepsnummer) => {
@@ -83,6 +83,19 @@ export default {
             return store.getters.groepenLaden || store.getters.functiesLaden;
         })
 
+        const gesorteerdeFuncties = (functies) => {
+            functies.sort(function (f1, f2) {
+                if (f1.begin > f2.begin) {
+                    return -1;
+                }
+                if (f1.begin < f2.begin) {
+                    return 1;
+                }
+                return 0;
+            })
+            return functies
+        }
+
         return {
             state,
             groepsNaam,
@@ -94,6 +107,7 @@ export default {
             actieveGroepen,
             nietActieveGroepen,
             laden,
+            gesorteerdeFuncties,
             stopAlleFuncties
         }
     }
