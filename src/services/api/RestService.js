@@ -231,5 +231,17 @@ export default {
 
     controleerBeschikbaarheidLidkaart(ledenIds) {
         return apiClient().post(baseUrl + "lidkaart/beschikbaarheid", ledenIds);
+    },
+
+    activiteitOpslaan(activiteit) {
+        return apiClient().post(baseUrl + "activiteit", activiteit)
+    },
+
+    activiteitAanpassen(activiteit) {
+        return apiClient().patch(baseUrl + "activiteit", activiteit)
+    },
+
+    getActiviteiten(nummer) {
+        return apiClient().get(baseUrl + "activiteit?groep=" + nummer)
     }
 };
