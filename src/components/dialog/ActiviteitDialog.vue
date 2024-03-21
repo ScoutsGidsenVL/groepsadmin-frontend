@@ -174,6 +174,9 @@ export default {
         return;
       }
       emitter.emit("activiteitOpslaan", {"activiteit": state.activiteit});
+      setTimeout(() => {
+        state.activiteit = Object.assign({}, state.defaultActiviteit);
+      }, 1000)
     }
 
     const v = useVuelidate(rules, state);
