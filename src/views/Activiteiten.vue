@@ -56,7 +56,7 @@
             <column field="periode" header="Periode">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
-                  {{ slotProps.data.van }} - {{ slotProps.data.tot }}
+                  {{ formatteerPeriode(slotProps.data) }}
                 </div>
               </template>
             </column>
@@ -128,23 +128,23 @@ export default {
     const {
       state,
       registreerAanwezigheden,
-      voegActivteitToe,
       wijzigActiviteit,
       veranderGroep,
       verwijderActiviteit,
       bevestigVerwijderen,
-      annuleerVerwijderen
+      annuleerVerwijderen,
+      formatteerPeriode
     } = ActiviteitenService.activiteitenSpace();
 
     return {
       ...toRefs(state),
       registreerAanwezigheden,
-      voegActivteitToe,
       wijzigActiviteit,
       veranderGroep,
       verwijderActiviteit,
       bevestigVerwijderen,
-      annuleerVerwijderen
+      annuleerVerwijderen,
+      formatteerPeriode
     }
   }
 }
