@@ -1,3 +1,32 @@
 .pi-exclamation-triangle {
   color: $sgv-oranje !important;
 }
+
+.header-background {
+  color: white !important;
+  z-index:999;
+  position: absolute;
+  top: 1px
+}
+
+.activiteit-dialog {
+  border: 10px solid white;
+  border-radius: 15px;
+}
+
+.activiteit-content {
+  overflow: hidden;
+}
+
+.activiteit-dialog::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px; /* Beginpunt van de gekleurde border */
+  width: 550px; /* Lengte van de gekleurde border */
+  height: 50px;
+  border: 10px solid $sgv-donkergroen;
+  background: $sgv-donkergroen;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+}
