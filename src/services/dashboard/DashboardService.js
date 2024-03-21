@@ -56,12 +56,18 @@ export default {
                     link: "Ledenaantallen",
                     internal: true,
                 },
-
                 {
                     label: "Lidaanvragen",
                     condition: "aanvragen",
                     icon: "far fa-address-book",
                     link: "Aanvragen",
+                    internal: true,
+                },
+                {
+                    label: "Betalende activiteiten",
+                    condition: "aanvragen",
+                    icon: "fas fa-campground",
+                    link: "Activiteiten",
                     internal: true,
                 },
                 // {

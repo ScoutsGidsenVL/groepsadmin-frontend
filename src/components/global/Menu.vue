@@ -132,6 +132,15 @@ export default {
           }
         },
         {
+          label: "Betalende activiteiten",
+          condition: "aanvragen",
+          icon: "fas fa-campground",
+          link: "Activiteiten",
+          command: () => {
+            this.$router.push({name: 'Activiteiten'})
+          }
+        },
+        {
           label: "Help",
           condition: true,
           icon: "far fa-question",
