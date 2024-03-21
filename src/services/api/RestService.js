@@ -243,5 +243,9 @@ export default {
 
     getActiviteiten(nummer) {
         return apiClient().get(baseUrl + "activiteit?groep=" + nummer)
+    },
+
+    verwijderActiviteit(id) {
+        return apiClient().delete(baseUrl + "activiteit/" + id );
     }
 };
