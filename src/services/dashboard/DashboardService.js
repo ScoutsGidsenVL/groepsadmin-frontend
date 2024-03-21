@@ -56,6 +56,13 @@ export default {
                     link: "Aanvragen",
                     internal: true,
                 },
+                {
+                    label: "Betalende activiteiten",
+                    condition: "aanvragen",
+                    icon: "fas fa-campground",
+                    link: "Activiteiten",
+                    internal: true,
+                },
             ],
         })
 
