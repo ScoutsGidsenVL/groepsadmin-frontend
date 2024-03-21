@@ -41,13 +41,26 @@ export default {
             console.log(activiteitId)
         }
 
-        const voegActivteitToe = () => {
-
-        }
-
         const bevestigVerwijderen = () => {
-            console.log("bevestig verwijderen")
-            console.log(state.teVerwijderenActiviteitId);
+            state.isLoadingActiviteiten = true;
+
+            restService.verwijderActiviteit(state.teVerwijderenActiviteitId).then(() => {
+                state.activiteiten.forEach((activiteit) => {
+                    if (activiteit.id === state.teVerwijderenActiviteitId) {
+                        state.activiteiten.splice(state.activiteiten.indexOf(activiteit), 1);
+                    }
+                })
+                state.isLoadingActiviteiten = true
+                toast.add({
+                    severity: "success",
+                    summary: "Verwijderen activiteit",
+                    detail: "Activiteit verwijderd",
+                    life: 2000,
+                });
+            }).finally(() => {
+                state.messageDialog = false;
+                state.isLoadingActiviteiten = false
+            })
         }
 
         const annuleerVerwijderen = () => {
@@ -107,10 +120,15 @@ export default {
                         detail: "Nieuwe activiteit opgeslagen",
                         life: 2000,
                     });
+                    state.activiteiten.push(res.data);
                 }
             }).finally(() => {
                 state.isLoadingActiviteiten = false;
             })
+        }
+
+        const formatteerPeriode = (activiteit) => {
+            return DateUtil.formatteerDatum(activiteit.van) + " - " + DateUtil.formatteerDatum(activiteit.tot);
         }
 
         const activiteitAanpassen = (activiteit) => {
@@ -137,7 +155,7 @@ export default {
                 event.activiteit.tot = DateUtil.formatteerDatumVoorApi(event.activiteit.tot);
                 event.activiteit.groep = state.selectedGroep;
 
-                if (event.activiteit) {
+                if (event.activiteit.id) {
                     activiteitAanpassen(event.activiteit);
                 } else {
                     activiteitOpslaan(event.activiteit);
@@ -159,12 +177,12 @@ export default {
         return {
             state,
             registreerAanwezigheden,
-            voegActivteitToe,
             wijzigActiviteit,
             verwijderActiviteit,
             veranderGroep,
             bevestigVerwijderen,
-            annuleerVerwijderen
+            annuleerVerwijderen,
+            formatteerPeriode
         }
     }
 }
