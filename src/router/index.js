@@ -14,6 +14,7 @@ import LidToevoegen from "@/views/LidToevoegen";
 import InschrijvingsFormulier from "@/views/InschrijvingsFormulier";
 import InschrijvingsFormulierVerstuurd from "@/views/InschrijvingsFormulierVerstuurd";
 import Activiteiten from "@/views/Activiteiten.vue";
+import Aanwezigheden from "@/views/Aanwezigheden.vue";
 
 const routes = [
     {
@@ -83,6 +84,16 @@ const routes = [
         path: "/activiteiten",
         name: "Activiteiten",
         component: Activiteiten,
+        meta: {
+            requiresAuth: true,
+            hasAccessTo: "aanvragen"
+
+        }
+    },
+    {
+        path: "/aanwezigheden/:activiteit",
+        name: "Aanwezigheden",
+        component: Aanwezigheden,
         meta: {
             requiresAuth: true,
             hasAccessTo: "aanvragen"
