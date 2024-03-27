@@ -245,6 +245,10 @@ export default {
         return apiClient().get(baseUrl + "activiteit?groep=" + nummer)
     },
 
+    getActiviteit(id) {
+        return apiClient().get(baseUrl + "activiteit/" + id)
+    },
+
     verwijderActiviteit(id) {
         return apiClient().delete(baseUrl + "activiteit/" + id );
     }
