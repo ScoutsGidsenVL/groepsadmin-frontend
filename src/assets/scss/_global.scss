@@ -14,6 +14,7 @@
 @import "./dialog";
 @import "./filter";
 @import "./text";
+@import "./datatable";
 
 .content {
   min-height: 60vh;
@@ -640,4 +641,13 @@ a.clean-link:hover {
 .p-datatable .p-datatable-tbody > tr:hover {
   outline: 0.15rem solid $sgv-donkergroen;
   outline-offset: -0.15rem;
+}
+
+.p-breadcrumb-list .p-menuitem .p-menuitem-link {
+  text-decoration: none;
+}
+
+.p-accordion-header-link {
+  color: $sgv-black;
+  text-decoration: none;
 }
