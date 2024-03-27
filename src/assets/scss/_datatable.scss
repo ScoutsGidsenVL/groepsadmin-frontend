@@ -1,0 +1,11 @@
+.p-datatable .p-datatable-tbody .p-rowgroup-header{
+  background-color: $sgv-donkergroen !important;
+  color: white !important;
+}
+
+.ellipsis {
+  width: inherit;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
