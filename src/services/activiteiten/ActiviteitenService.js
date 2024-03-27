@@ -5,8 +5,8 @@ import {useStore} from "vuex";
 import rechtenService from "@/services/rechten/rechtenService";
 import useEmitter from "@/services/utils/useEmitter";
 import RestService from "@/services/api/RestService";
-import restService from "@/services/api/RestService";
 import {useToast} from "primevue/usetoast";
+import {useRouter} from "vue-router";
 
 export default {
 
@@ -14,6 +14,7 @@ export default {
         const store = useStore();
         const emitter = useEmitter();
         const toast = useToast();
+        const router = useRouter();
 
         const state = reactive({
             groepEnfuncties: [],
@@ -38,13 +39,13 @@ export default {
         })
 
         const registreerAanwezigheden = (activiteitId) => {
-            console.log(activiteitId)
+            router.push({name: "Aanwezigheden", params: {activiteit: activiteitId}});
         }
 
         const bevestigVerwijderen = () => {
             state.isLoadingActiviteiten = true;
 
-            restService.verwijderActiviteit(state.teVerwijderenActiviteitId).then(() => {
+            RestService.verwijderActiviteit(state.teVerwijderenActiviteitId).then(() => {
                 state.activiteiten.forEach((activiteit) => {
                     if (activiteit.id === state.teVerwijderenActiviteitId) {
                         state.activiteiten.splice(state.activiteiten.indexOf(activiteit), 1);
@@ -100,7 +101,7 @@ export default {
 
         const getActiviteiten = () => {
             state.isLoadingActiviteiten = true
-            restService.getActiviteiten(state.selectedGroep.groepsnummer).then(res => {
+            RestService.getActiviteiten(state.selectedGroep.groepsnummer).then(res => {
                 if (res.status === 200) {
                     state.activiteiten = res.data.activiteiten;
                 }
@@ -129,6 +130,17 @@ export default {
 
         const formatteerPeriode = (activiteit) => {
             return DateUtil.formatteerDatum(activiteit.van) + " - " + DateUtil.formatteerDatum(activiteit.tot);
+        }
+
+        const formatteerFunctieOmschrijving = (functies) => {
+            let functiesString = '';
+            functies.forEach((functie) => {
+                functiesString = functiesString + functie.beschrijving
+                if (functies.indexOf(functie) < functies.length - 1) {
+                    functiesString = functiesString + ", "
+                }
+            })
+            return functiesString;
         }
 
         const activiteitAanpassen = (activiteit) => {
@@ -182,7 +194,8 @@ export default {
             veranderGroep,
             bevestigVerwijderen,
             annuleerVerwijderen,
-            formatteerPeriode
+            formatteerPeriode,
+            formatteerFunctieOmschrijving
         }
     }
 }
