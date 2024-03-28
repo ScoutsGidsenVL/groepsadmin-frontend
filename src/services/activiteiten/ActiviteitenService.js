@@ -29,6 +29,7 @@ export default {
             contactenLaden: false,
             activiteiten: [],
             teVerwijderenActiviteitId: null,
+            teBewerkenActiviteit: null,
             home: {icon: 'pi pi-home', to: '/dashboard'},
             breadcrumbItems: [
                 {
@@ -70,7 +71,13 @@ export default {
         }
 
         const wijzigActiviteit = (activiteit) => {
-            console.log(activiteit)
+            state.teBewerkenActiviteit = activiteit;
+            state.activiteitDialog = true;
+        }
+
+        const close = () => {
+            state.teBewerkenActiviteit = null;
+            state.activiteitDialog = false;
         }
 
         const verwijderActiviteit = (activiteitId) => {
@@ -110,24 +117,6 @@ export default {
             })
         }
 
-        const activiteitOpslaan = (activiteit) => {
-            RestService.activiteitOpslaan(activiteit).then(res => {
-                if (res.status === 200) {
-                    state.isLoadingActiviteiten = true;
-                    state.activiteitDialog = false;
-                    toast.add({
-                        severity: "success",
-                        summary: "Nieuwe activiteit",
-                        detail: "Nieuwe activiteit opgeslagen",
-                        life: 2000,
-                    });
-                    state.activiteiten.push(res.data);
-                }
-            }).finally(() => {
-                state.isLoadingActiviteiten = false;
-            })
-        }
-
         const formatteerPeriode = (activiteit) => {
             return DateUtil.formatteerDatum(activiteit.van) + " - " + DateUtil.formatteerDatum(activiteit.tot);
         }
@@ -143,37 +132,7 @@ export default {
             return functiesString;
         }
 
-        const activiteitAanpassen = (activiteit) => {
-            RestService.activiteitAanpassen(activiteit).then(res => {
-                if (res.status === 200) {
-                    state.isLoadingActiviteiten = true;
-                    state.activiteitDialog = false;
-                    toast.add({
-                        severity: "success",
-                        summary: "Wijzigingen",
-                        detail: "Wijzigingen activiteit opgeslagen",
-                        life: 2000,
-                    });
-                }
-            }).finally(() => {
-                state.isLoadingActiviteiten = false;
-            })
-        }
-
         onMounted(() => {
-            emitter.on("activiteitOpslaan", (event) => {
-                state.isLoadingActiviteiten = true;
-                event.activiteit.van = DateUtil.formatteerDatumVoorApi(event.activiteit.van);
-                event.activiteit.tot = DateUtil.formatteerDatumVoorApi(event.activiteit.tot);
-                event.activiteit.groep = state.selectedGroep;
-
-                if (event.activiteit.id) {
-                    activiteitAanpassen(event.activiteit);
-                } else {
-                    activiteitOpslaan(event.activiteit);
-                }
-            })
-
             functiesEnGroepen();
             state.selectedGroep = store.getters.groepen[0];
             store.getters.groepen.forEach((groep) => {
@@ -182,8 +141,13 @@ export default {
                     value: groep,
                 });
             });
+            emitter.on("activiteitenOphalen", () => {
+                getActiviteiten();
+                state.activiteitDialog = false
+            });
 
             getActiviteiten();
+
         })
 
         return {
@@ -195,7 +159,8 @@ export default {
             bevestigVerwijderen,
             annuleerVerwijderen,
             formatteerPeriode,
-            formatteerFunctieOmschrijving
+            formatteerFunctieOmschrijving,
+            close
         }
     }
 }

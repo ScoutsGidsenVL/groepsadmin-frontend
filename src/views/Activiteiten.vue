@@ -8,8 +8,13 @@
       @confirm="bevestigVerwijderen"
       @cancel="annuleerVerwijderen"
     />
-    <activiteitDialog :functies="functies" :dialog-visible="activiteitDialog" @close="activiteitDialog = false"
-                      :groep="selectedGroep"/>
+    <activiteitDialog
+      :functies="functies"
+      :dialog-visible="activiteitDialog"
+      @close="close"
+      :groep="selectedGroep"
+      :te-bewerken-activiteit="teBewerkenActiviteit"
+    />
     <toast position="bottom-right"/>
     <div>
       <ingelogd-lid></ingelogd-lid>
@@ -140,7 +145,8 @@ export default {
       bevestigVerwijderen,
       annuleerVerwijderen,
       formatteerPeriode,
-      formatteerFunctieOmschrijving
+      formatteerFunctieOmschrijving,
+      close
     } = ActiviteitenService.activiteitenSpace();
 
     return {
@@ -152,7 +158,8 @@ export default {
       bevestigVerwijderen,
       annuleerVerwijderen,
       formatteerPeriode,
-      formatteerFunctieOmschrijving
+      formatteerFunctieOmschrijving,
+      close
     }
   }
 }
