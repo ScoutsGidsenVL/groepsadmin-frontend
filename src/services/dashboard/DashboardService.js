@@ -65,7 +65,7 @@ export default {
                 },
                 {
                     label: "Betalende activiteiten",
-                    condition: "aanvragen",
+                    condition: "ledenlijst",
                     icon: "fas fa-campground",
                     link: "Activiteiten",
                     internal: true,
