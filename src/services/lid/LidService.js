@@ -349,17 +349,6 @@ export default {
             let bevestig = true;
 
             if (state.gewijzigdLid.vgagegevens) {
-<<<<<<< HEAD
-                var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
-                if (isNaN(geboortedatum)) {
-                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'DD/MM/YYYY').toDate();
-||||||| parent of c594ca7 (T6670 - Correctie geboortedatum)
-                if (state.gewijzigdLid.vgagegevens.geboortedatum instanceof Date) {
-                    // De geboortedatum aanpassen via de datepicker zorgt voor een datum met tijdzone.
-                    let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
-                    geboortedatum.setHours(2);
-                    state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
-=======
                 if (state.gewijzigdLid.vgagegevens.geboortedatum instanceof Date) {
                     // De geboortedatum aanpassen via de datepicker zorgt voor een datum met tijdzone.
                     let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
@@ -372,7 +361,6 @@ export default {
                     if (geboortedatum != "Invalid date") {
                         state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum;
                     }
->>>>>>> c594ca7 (T6670 - Correctie geboortedatum)
                 }
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString();
@@ -395,6 +383,7 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
+                        state.lid.persoonsgegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.persoonsgegevens.geboortedatum);
                         if (res.status === 200) {
                             toast.add({
                                 severity: "success",
