@@ -16,7 +16,8 @@
         <div class="lg:ml-8">
           <div class="lg:ml-6">
             <label class="d-flex justify-content-start">Aanwezigheden registreren</label>
-
+            <label class="d-flex justify-content-start text-gray-500">{{ selectedAanwezigheid.omschrijving }}
+              {{ formatteerDatum(selectedAanwezigheid.van) }} - {{ formatteerDatum(selectedAanwezigheid.tot) }}</label>
             <data-table
               ref="ledenlijst"
               :value="sorteerLeden"
@@ -38,7 +39,7 @@
               <column selectionMode="multiple" headerStyle="width: 3rem"></column>
               <column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
                 <template #body="{ data, field }">
-                  {{ field === 'prijs' ? formateerBedrag(data[field]) : data[field] }}
+                  {{ field === 'prijs' ? formatteerBedrag(data[field]) : data[field] }}
                 </template>
                 <template #editor="{ data, field }">
                   <template v-if="field === 'aantal'">
@@ -90,14 +91,16 @@ export default {
     const {
       state,
       bewerkCell,
-      formateerBedrag,
-      sorteerLeden
+      formatteerBedrag,
+      sorteerLeden,
+      formatteerDatum
     } = AanwezighedenService.aanwezighedenSpace();
 
     return {
       bewerkCell,
-      formateerBedrag,
+      formatteerBedrag,
       sorteerLeden,
+      formatteerDatum,
       ...toRefs(state)
     }
   }
