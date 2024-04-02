@@ -88,13 +88,13 @@ export default {
             // Conversie om datum correct door te sturen
             let opgerichtDatum = new Date(state.selectedGroep.opgericht);
             opgerichtDatum.setHours(2);
-            state.selectedGroep.opgericht = DateUtil.formatteerDatumVoorApi(opgerichtDatum);
+            state.selectedGroep.opgericht = opgerichtDatum.toISOString();
             state.watchable = false;
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
                         state.selectedGroep.groepseigenFuncties = res.data.groepseigenFuncties;
-                        state.laden = false
+                        state.laden = false;
                         store.dispatch("getGroepen");
                         store.dispatch("getFuncties");
                         if (!state.changesFuncties) {
@@ -105,6 +105,7 @@ export default {
                                 life: 3000,
                             });
                         }
+                        state.selectedGroep.opgericht = DateUtil.formatteerDatum(state.selectedGroep.opgericht);
                     }
                 }).catch((error) => {
                 toast.add({

@@ -43,7 +43,7 @@ export default {
       default: "",
     },
     modelValue: {
-      type: [Date, String],
+      type: Date,
       default: new Date(new Date().setFullYear(new Date().getFullYear() - 5))
     },
     disabled: {

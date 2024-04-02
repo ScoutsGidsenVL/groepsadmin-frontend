@@ -27,11 +27,11 @@
                 {{ lid.vgagegevens.achternaam }}
               </p>
               <p class="panel-subtitle">
-                Geboortedatum: {{ lid.vgagegevens.geboortedatum }}
+                Geboortedatum: {{ DateUtil.formatteerDatum(lid.vgagegevens.geboortedatum) }}
               </p>
               <p class="panel-subtitle">
                 Laatste aanpassing:
-                {{ lid.vgagegevens.individueleSteekkaartdatumaangepast }}
+                {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartdatumaangepast) }}
               </p>
             </div>
           </div>
@@ -80,9 +80,16 @@ import IngelogdLid from "@/components/lid/IngelogdLid";
 import SteekkaartService from "@/services/individueleSteekkaart/SteekkaartService";
 import {toRefs} from "@vue/reactivity";
 import ConfirmDialog from "primevue/confirmdialog";
+import DateUtil from "../services/dates/DateUtil";
 
 export default {
   name: "IndividueleSteekkaart",
+  computed: {
+    DateUtil() {
+      return DateUtil
+    }
+  },
+
   components: {
     DynamischVeld,
     Loader,
