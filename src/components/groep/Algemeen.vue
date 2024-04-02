@@ -152,14 +152,14 @@ export default {
       switch (type) {
         case 'leidingVerbeterd':
           if (!this.groep.facturatieLeiding) {
-            this.groep.facturatieLeiding = DateUtil.formatteerDatumVolgensDatetime(new Date())
+            this.groep.facturatieLeiding = new Date().toISOString()
           } else {
             this.groep.facturatieLeiding = null;
           }
           break;
         case 'ledenverbeterd':
           if (!this.groep.facturatieLeden) {
-            this.groep.facturatieLeden = DateUtil.formatteerDatumVolgensDatetime(new Date())
+            this.groep.facturatieLeden = new Date().toISOString();
           } else {
             this.groep.facturatieLeden = null;
           }

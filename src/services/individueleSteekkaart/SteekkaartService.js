@@ -6,6 +6,7 @@ import {useStore} from "vuex";
 import {useToast} from "primevue/usetoast";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import {useConfirm} from "primevue/useconfirm";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -71,6 +72,7 @@ export default {
 
             RestService.getLid(state.id).then((response) => {
                 state.lid = response.data;
+                state.lid.persoonsgegevens.geboortedatum = DateUtil.formatteerDatum(state.lid.persoonsgegevens.geboortedatum);
             });
         })
 

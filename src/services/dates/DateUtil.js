@@ -16,7 +16,7 @@ export default {
   },
 
   formatteerDatumVolgensDatetime(datum) {
-    return moment(String(datum)).format("YYYY-MM-DD hh:mm:ss");
+    return moment(String(datum)).toISOString(true);
   },
 
   formatteerDatumVoorApi(datum) {

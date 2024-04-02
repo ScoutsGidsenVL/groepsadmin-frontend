@@ -7,7 +7,6 @@ import {useToast} from "primevue/usetoast";
 import {useStore} from "vuex";
 import rechtenService from "@/services/rechten/rechtenService";
 import RestService from "@/services/api/RestService";
-import DateUtil from "@/services/dates/DateUtil";
 
 let _ = require('lodash');
 
@@ -203,7 +202,8 @@ export default {
             if (state.lid.vgagegevens.geboortedatum) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
-                state.lid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
+                state.lid.vgagegevens.geboortedatum = geboortedatum.toISOString();
+                console.log(state.lid.vgagegevens.geboortedatum)
             }
 
             if (!state.lid.vgagegevens.beperking) {

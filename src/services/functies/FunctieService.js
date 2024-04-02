@@ -62,7 +62,7 @@ export default {
                 acceptClass: "approve-button",
                 rejectClass: "reject-button",
                 accept: () => {
-                    functie.einde = DateUtil.formatteerDatumVolgensDatetime(new Date());
+                    functie.einde = new Date().toISOString();
                     context.emit('updateFuncties', functie);
                 },
                 reject: () => {

@@ -140,7 +140,7 @@ export default {
         )
 
         const setGeboorteDatum = () => {
-            state.lid.vgagegevens.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+            state.lid.vgagegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.vgagegevens.geboortedatum);
         }
 
         const getProfiel = () => {
@@ -265,7 +265,7 @@ export default {
                             let functieInstantie = {
                                 functie: functie.functie,
                                 groep: functie.groep,
-                                einde: DateUtil.formatteerDatumVolgensDatetime(new Date()),
+                                einde: new Date().toISOString(),
                                 begin: functie.begin
                             };
                             if (!state.gewijzigdLid.functies) {
@@ -350,7 +350,7 @@ export default {
             if (state.gewijzigdLid.vgagegevens) {
                 let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 geboortedatum.setHours(2);
-                state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
+                state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString();
             }
 
             // In geval van eigen profiel gaan we de waardes eruit halen die men eigenlijk niet zelf kan aanpassen
@@ -370,6 +370,7 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
+                        state.lid.persoonsgegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.persoonsgegevens.geboortedatum);
                         if (res.status === 200) {
                             toast.add({
                                 severity: "success",
@@ -440,6 +441,7 @@ export default {
                         detail: "Functie is gestopt",
                     });
                     state.lid = res.data;
+                    state.lid.vgagegevens.geboortedatum = DateUtil.formatteerDatum(state.lid.vgagegevens.geboortedatum);
                     sorteerFuncties();
                     filterGroepsEigenVelden();
                 }
