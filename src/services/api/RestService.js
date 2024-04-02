@@ -251,5 +251,9 @@ export default {
 
     verwijderActiviteit(id) {
         return apiClient().delete(baseUrl + "activiteit/" + id );
+    },
+
+    getAlleGeregistreerdeLeden(activiteitId) {
+        return apiClient().get(baseUrl + "aanwezigheid/geregistreerdeleden/" + activiteitId)
     }
 };
