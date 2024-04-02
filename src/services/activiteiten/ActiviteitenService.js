@@ -98,7 +98,7 @@ export default {
             store.getters.groepen.forEach(groep => {
                 if (rechtenService.hasPermission('functies.' + groep.groepsnummer)) {
                     store.getters.functies.forEach(functie => {
-                        if (functie.type === 'verbond' && (functie.groeperingen[0].naam !== "Leiding" && functie.groeperingen[0].naam !== "Anderen")) {
+                        if (functie.groeperingen[0].naam !== "Leiding" && functie.groeperingen[0].naam !== "Anderen") {
                             state.functies.push(functie);
                         }
                     });

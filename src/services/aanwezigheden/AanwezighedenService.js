@@ -2,6 +2,8 @@ import {reactive} from "@vue/reactivity";
 import {computed, onMounted, watch} from "vue";
 import {useRoute} from "vue-router";
 import restService from "@/services/api/RestService";
+import CurrencyUtil from "@/services/utils/CurrencyUtil";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
 
@@ -27,6 +29,7 @@ export default {
             ],
             isLoadingAanwezigheden:  false,
             aanwezigeLeden: [],
+            selectedAanwezigheid: {},
             leden: [
                 {
                     id: 1,
@@ -95,29 +98,45 @@ export default {
             return state.leden;
         })
 
-        const formateerBedrag = (value) => {
-            return value.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+        const formatteerBedrag = (value) => {
+            return CurrencyUtil.formateerBedrag(value);
         };
+
+        const formatteerDatum = value => {
+            return DateUtil.formatteerDatum(value);
+        }
+
+        const getActiviteit = () => {
+            restService.getActiviteit(route.params.activiteit)
+                .then((res) => {
+                    state.selectedAanwezigheid = res.data;
+                    getAlleInAanmerkingKomendeLeden(res.data);
+                })
+        };
+
+        const getAlleInAanmerkingKomendeLeden = (activiteitId) => {
+            restService.getAlleInAanmerkingKomendeLeden(activiteitId)
+                .then(res => {
+                    console.log(res);
+                })
+        }
 
         watch(
             () =>  route.params.activiteit,
             () => {
-                console.log("watch")
-                console.log(route.params.activiteit)
+                getActiviteit();
             }
         )
 
         onMounted(() => {
-            restService.getActiviteit(route.params.activiteit)
-                .then((res) => {
-                    console.log(res.data)
-                })
+            getActiviteit();
         })
 
         return {
             state,
             bewerkCell,
-            formateerBedrag,
+            formatteerBedrag,
+            formatteerDatum,
             sorteerLeden
         }
     }
