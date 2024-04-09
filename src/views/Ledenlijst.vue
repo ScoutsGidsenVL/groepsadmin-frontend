@@ -45,6 +45,7 @@
               ref="ledenlijst"
               :value="leden"
               stripedRows
+              :loading="isLoading"
               showGridlines
               responsiveLayout="scroll"
               @row-click="selectLid"

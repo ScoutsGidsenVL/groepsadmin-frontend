@@ -42,14 +42,7 @@ export default {
             ledenDialog: false,
             loadingText: "",
             isFilterCollapsed: false,
-            isLoading: false,
-            isSavingFilters: false,
-            tableheaderIsSticky: true,
-            hasLoadedFilters: false,
-            dataLoaded: false,
-            ledenAanLijstToevoegen: false,
-            busy: false,
-            end: false,
+            isLoading: true,
             offset: 0,
             totaalAantalLeden: 0,
             aantalPerPagina: 10,
@@ -64,11 +57,6 @@ export default {
             alleLeden: false,
             criteria: [],
             activeCriteria: [],
-            canPost: false,
-            canShare: false,
-            toPdf: false,
-            isVgaOfLeiding: false,
-            alleGeselecteerd: false,
             messageDialog: false,
             messageDialogMessage: "",
             messageDialogHeader: "",
@@ -597,6 +585,7 @@ export default {
                     });
                 })
                 .finally(() => {
+                    console.log("done")
                     state.isLoading = false;
                     state.isLoadingMore = false;
                     store.commit("setLeden", Array.from(state.ledenIds))
