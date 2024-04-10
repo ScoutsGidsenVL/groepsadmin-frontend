@@ -14,7 +14,7 @@
           <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
         </div>
         <Loader
-          :showLoader="isLoading || isLoadingFilters" :title="loadingText"
+          :showLoader="isLoading || isLoadingFilters || isLoadingHuidigeFilter" :title="loadingText"
         ></Loader>
         <div class="lg:ml-8">
           <div class="lg:ml-6">
