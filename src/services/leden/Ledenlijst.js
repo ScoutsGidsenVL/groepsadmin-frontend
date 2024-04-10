@@ -37,6 +37,7 @@ export default {
             lidIds: new Set(),
             ledenIds: new Set(),
             isLoadingFilters: true,
+            isLoadingHuidigeFilter: true,
             isLoadingMore: false,
             isExporting: false,
             ledenDialog: false,
@@ -557,7 +558,7 @@ export default {
         }
 
         const getLeden = (offset) => {
-            if (!offset) {
+            if (offset === 0) {
                 state.offset = 0;
                 state.isLoading = true;
             } else {
@@ -585,10 +586,9 @@ export default {
                     });
                 })
                 .finally(() => {
-                    console.log("done")
+                    store.commit("setLeden", Array.from(state.ledenIds));
                     state.isLoading = false;
                     state.isLoadingMore = false;
-                    store.commit("setLeden", Array.from(state.ledenIds))
                 });
         }
 
@@ -599,7 +599,6 @@ export default {
                     state.kolommen = res.data.kolommen;
                     store.commit("setKolommen", res.data.kolommen);
                     activeerKolommen();
-                    state.isLoading = false;
                 });
             } else {
                 activeerKolommen();
@@ -620,7 +619,7 @@ export default {
 
 
         const getHuidigeFilter = () => {
-            state.isLoading = true;
+            state.isLoadingHuidigeFilter = true;
             RestService.getHuidigeFilter()
                 .then((res) => {
                     state.huidigeFilter = res.data;
@@ -632,7 +631,7 @@ export default {
                     console.log(error);
                 })
                 .finally(() => {
-                    state.isLoading = false;
+                    state.isLoadingHuidigeFilter = false;
                 });
         }
 
