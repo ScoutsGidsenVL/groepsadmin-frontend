@@ -1,9 +1,10 @@
 import {reactive} from "@vue/reactivity";
 import {onMounted} from "vue";
-import moment from "moment";
 import rechtenService from "@/services/rechten/rechtenService";
 import {useStore} from "vuex";
 import {onUpdated} from "@vue/runtime-core";
+import DateUtil from "@/services/dates/DateUtil";
+import moment from "moment";
 
 export default {
 
@@ -25,11 +26,11 @@ export default {
         })
 
         const gesorteerdeFuncties = (functies, type) => {
-
             let relevanteFuncties = [];
             if (state.huidigLid && state.huidigLid.vgagegevens && state.huidigLid.vgagegevens.geboortedatum) {
-                relevanteFuncties = functies.filter(obj => {
-                    return !obj.uiterstegeboortedatum || moment(state.huidigLid.vgagegevens.geboortedatum).isBefore(moment(obj.uiterstegeboortedatum)) ;
+                relevanteFuncties = functies.filter(functie => {
+                    let geboortedatum = moment(state.huidigLid.vgagegevens.geboortedatum, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                    return !functie.uiterstegeboortedatum || moment(geboortedatum).isBefore(moment(DateUtil.formatteerDatumVoorApi(functie.uiterstegeboortedatum)));
                 });
             } else {
                 relevanteFuncties = functies;
@@ -48,6 +49,7 @@ export default {
             return relevanteFuncties.filter(obj => {
                 return obj.type === type;
             });
+
         }
 
         const functiesEnGroepen = () => {
