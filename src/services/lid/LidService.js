@@ -370,7 +370,7 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
-                        state.lid.persoonsgegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.persoonsgegevens.geboortedatum);
+                        state.lid.vgagegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.vgagegevens.geboortedatum);
                         if (res.status === 200) {
                             toast.add({
                                 severity: "success",
@@ -384,6 +384,7 @@ export default {
                         }
                         state.changes = false;
                     }).catch(error => {
+                    console.log(error)
                     toast.add({
                         severity: "warn",
                         summary: error?.response?.data?.titel,
