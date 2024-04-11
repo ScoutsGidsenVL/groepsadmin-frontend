@@ -41,6 +41,19 @@
             :invalid="v.lid.vgagegevens.geboortedatum.$dirty && v.lid.vgagegevens.geboortedatum.$invalid"
           />
           <BaseInput
+            v-model="lid.persoonsgegevens.rijksregisternummer"
+            label="Rijksregisternummer"
+            type="text"
+            v-if="eigenProfiel"
+          ></BaseInput>
+          <BaseCheckbox
+            v-if="!eigenProfiel"
+            type="checkbox"
+            v-model="lid.persoonsgegevens.rijksregisternummerIngevuld"
+            label="Rijksregisternummer ingevuld"
+            :disabled="true"
+          ></BaseCheckbox>
+          <BaseInput
             v-model="lid.gebruikersnaam"
             :disabled="true"
             label="Gebruikersnaam"
