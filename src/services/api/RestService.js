@@ -255,5 +255,9 @@ export default {
 
     getAlleGeregistreerdeLeden(activiteitId) {
         return apiClient().get(baseUrl + "aanwezigheid/geregistreerdeleden/" + activiteitId)
+    },
+
+    getAlleInAanmerkingKomendeLeden(activiteitId) {
+        return apiClient().get(baseUrl + "aanwezigheid/ledenOphalenVoorActiviteit/" + activiteitId)
     }
 };

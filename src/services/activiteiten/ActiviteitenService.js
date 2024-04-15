@@ -1,12 +1,14 @@
 import {reactive} from "@vue/reactivity";
 import DateUtil from "@/services/dates/DateUtil";
-import {onMounted} from "vue";
+import {computed, onMounted, watch} from "vue";
 import {useStore} from "vuex";
 import rechtenService from "@/services/rechten/rechtenService";
 import useEmitter from "@/services/utils/useEmitter";
 import RestService from "@/services/api/RestService";
 import {useToast} from "primevue/usetoast";
 import {useRouter} from "vue-router";
+import {helpers, minValue, required} from "@vuelidate/validators";
+import {useVuelidate} from "@vuelidate/core";
 
 export default {
 
@@ -161,6 +163,172 @@ export default {
             formatteerPeriode,
             formatteerFunctieOmschrijving,
             close
+        }
+    },
+
+    activiteitenDialogSpace(props) {
+        const toast = useToast();
+        const emitter = useEmitter();
+
+        const state = reactive({
+            geselecteerdeFuncties: [],
+            activiteit: {
+                van: new Date(),
+                tot: new Date(),
+                omschrijving: "",
+                prijs: 0,
+                functies: [],
+                groep: props.groep
+            },
+            defaultActiviteit: {
+                van: new Date(),
+                tot: new Date(),
+                omschrijving: "",
+                prijs: 0,
+                functies: [],
+                groep: props.groep
+            },
+
+            activiteitOpslaan: false
+        });
+
+        const rules = {
+            activiteit: {
+                van: {
+                    required: helpers.withMessage('Startdatum is verplicht', required)
+                },
+                tot: {
+                    required: helpers.withMessage('Einddatum is verplicht', required)
+                },
+                prijs: {
+                    required: helpers.withMessage('Prijs is verplicht', required),
+                    minValue: helpers.withMessage('Prijs mag niet 0 zijn', minValue(1))
+                },
+            },
+        }
+
+        const openDialog = computed(
+            () => {
+                return props.dialogVisible;
+            },
+        )
+
+        watch(
+            () => props.dialogVisible,
+            () => {
+                if (props.teBewerkenActiviteit) {
+                    state.activiteit = Object.assign({}, props.teBewerkenActiviteit);
+                    state.activiteit.functies = [];
+                    props.teBewerkenActiviteit.functies.forEach(activiteitsFunctie => {
+                        props.functies.forEach(functie => {
+                            if (activiteitsFunctie.id === functie.id) {
+                                state.activiteit.functies.push(functie);
+                            }
+                        })
+                    })
+                    state.activiteit.van = new Date(props.teBewerkenActiviteit.van);
+                    state.activiteit.tot = new Date(props.teBewerkenActiviteit.tot);
+                } else {
+                    state.activiteit = Object.assign({}, state.defaultActiviteit);
+                }
+            },
+            {deep: true}
+        )
+
+        const formatteerDatum = (datum) => {
+            return DateUtil.formatteerDatum(datum);
+        }
+
+        const opslaan = () => {
+            v.value.$touch();
+            if (v.value.$invalid) {
+                state.loading = false;
+                toast.add({
+                    severity: "warn",
+                    summary: "Wijzigingen",
+                    detail: "Kan nog niet opslaan. Er zijn nog fouten vastgesteld in het formulier.",
+                    life: 3000,
+                });
+                return;
+            }
+
+            state.isLoadingActiviteiten = true;
+            state.activiteit.van = DateUtil.formatteerDatumVoorApi(state.activiteit.van);
+            state.activiteit.tot = DateUtil.formatteerDatumVoorApi(state.activiteit.tot);
+            state.activiteit.groep = props.groep;
+
+            if (state.activiteit.id) {
+                activiteitAanpassen();
+            } else {
+                activiteitOpslaan();
+            }
+
+            setTimeout(() => {
+                state.activiteit = Object.assign({}, state.defaultActiviteit);
+            }, 1000)
+        }
+
+        const activiteitOpslaan = () => {
+            state.activiteitOpslaan = true;
+            state.activiteit.van = new Date(state.activiteit.van);
+            state.activiteit.tot = new Date(state.activiteit.tot);
+            RestService.activiteitOpslaan(state.activiteit).then(res => {
+                if (res.status === 200) {
+                    toast.add({
+                        severity: "success",
+                        summary: "Nieuwe activiteit",
+                        detail: "Nieuwe activiteit opgeslagen",
+                        life: 2000,
+                    });
+                }
+            }).finally(() => {
+                state.activiteitOpslaan = false;
+                emitter.emit('activiteitenOphalen')
+            })
+        }
+
+        const activiteitAanpassen = () => {
+            state.activiteitOpslaan = true;
+            state.activiteit.van = new Date(state.activiteit.van);
+            state.activiteit.tot = new Date(state.activiteit.tot);
+            RestService.activiteitAanpassen(state.activiteit).then(res => {
+                if (res.status === 200) {
+                    toast.add({
+                        severity: "success",
+                        summary: "Wijzigingen",
+                        detail: "Wijzigingen activiteit opgeslagen",
+                        life: 2000,
+                    });
+                }
+            }).finally(() => {
+                state.activiteitOpslaan = false;
+                emitter.emit('activiteitenOphalen')
+            })
+        }
+
+        const v = useVuelidate(rules, state);
+
+        const gesorteerdeFuncties = () => {
+            props.functies.sort(function (a, b) {
+                if (a.beschrijving < b.beschrijving) {
+                    return -1;
+                }
+                if (a.beschrijving > b.beschrijving) {
+                    return 1;
+                }
+                return 0;
+            })
+            return props.functies;
+        }
+
+
+        return {
+            state,
+            v,
+            openDialog,
+            formatteerDatum,
+            opslaan,
+            gesorteerdeFuncties
         }
     }
 }

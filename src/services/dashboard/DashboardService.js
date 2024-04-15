@@ -85,8 +85,6 @@ export default {
                 .then(res => {
                     state.snelNaarItems = res.data.websites;
                 }).catch(error => {
-                console.log(error);
-                console.log('geen websites kunnen ophalen')
             })
         })
 

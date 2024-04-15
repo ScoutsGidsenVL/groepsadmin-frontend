@@ -30,6 +30,7 @@ export default {
             isLoadingAanwezigheden:  false,
             aanwezigeLeden: [],
             selectedAanwezigheid: {},
+            activiteit: {},
             leden: [
                 {
                     id: 1,
@@ -109,8 +110,8 @@ export default {
         const getActiviteit = () => {
             restService.getActiviteit(route.params.activiteit)
                 .then((res) => {
-                    state.selectedAanwezigheid = res.data;
-                    getAlleInAanmerkingKomendeLeden(res.data);
+                    state.activiteit = res.data;
+                    getAlleInAanmerkingKomendeLeden(res.data.id);
                 })
         };
 
