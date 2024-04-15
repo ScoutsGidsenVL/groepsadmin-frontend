@@ -16,8 +16,8 @@
         <div class="lg:ml-8">
           <div class="lg:ml-6">
             <label class="d-flex justify-content-start">Aanwezigheden registreren</label>
-            <label class="d-flex justify-content-start text-gray-500">{{ selectedAanwezigheid.omschrijving }}
-              {{ formatteerDatum(selectedAanwezigheid.van) }} - {{ formatteerDatum(selectedAanwezigheid.tot) }}</label>
+            <label class="d-flex justify-content-start text-gray-500">{{ activiteit.omschrijving }} </label>
+            <label class="d-flex justify-content-start text-gray-500">  {{ formatteerDatum(activiteit.van) }} - {{ formatteerDatum(activiteit.tot) }}</label>
             <data-table
               ref="ledenlijst"
               :value="sorteerLeden"
