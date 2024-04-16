@@ -118,14 +118,12 @@ export default {
             top.window.onbeforeunload = null;
             if (!props.internal) {
                 window.location.href = link;
+            } else if (link === "Profiel") {
+                router.push({name: "Lid", params: {id: "profiel"}});
+            } else if (link === "IndividueleSteekkaart") {
+                router.push({name: link, params: {id: store.getters.profiel.id}});
             } else {
-                if (link === "Profiel") {
-                    router.push({name: "Lid", params: {id: "profiel"}});
-                } else if (link === "IndividueleSteekkaart") {
-                    router.push({name: link, params: {id: store.getters.profiel.id }});
-                } else {
-                    router.push({name: link});
-                }
+                router.push({name: link});
             }
         }
 
