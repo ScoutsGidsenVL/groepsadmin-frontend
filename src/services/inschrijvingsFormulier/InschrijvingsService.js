@@ -109,7 +109,7 @@ export default {
                 state.aanvraag.groepsnummer = state.groepsnummer;
                 state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
                 state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
-                state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum)
+                state.aanvraag.geboortedatum = DateUtil.formatteerDatumVoorApi(state.lid.vgagegevens.geboortedatum)
 
                 RestService.saveAanvraag(state.aanvraag)
                     .then(res => {
