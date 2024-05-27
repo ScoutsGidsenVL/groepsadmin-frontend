@@ -347,7 +347,6 @@ export default {
             state.loadingLid = true;
             let bevestig = true;
 
-
             if (state.gewijzigdLid.vgagegevens) {
                 var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 if (isNaN(geboortedatum)) {
@@ -374,7 +373,6 @@ export default {
                 RestService.updateLid(state.lid.id, state.gewijzigdLid, bevestig)
                     .then(res => {
                         state.lid = res.data;
-                        state.lid.persoonsgegevens.geboortedatum = DateUtil.formatGeboortedatum(state.lid.persoonsgegevens.geboortedatum);
                         if (res.status === 200) {
                             toast.add({
                                 severity: "success",
