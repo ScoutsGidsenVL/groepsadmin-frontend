@@ -262,11 +262,10 @@ export default {
   },
   setup(props) {
     const state = reactive({
-      lid: props.modelValue,
-
+      lid: props.modelValue
     });
 
-    const rules = {
+    let rules = {
       lid: {
         email: {
           email: helpers.withMessage('Geen geldig emailadres', email)
@@ -291,6 +290,11 @@ export default {
           }
         }
       },
+    }
+    
+    // Verplicht voor lidaanvragen
+    if (props.inschrijving) {
+        rules.lid.email.required = helpers.withMessage('E-mailadres is verplicht', required);
     }
 
     onUpdated(() => {
