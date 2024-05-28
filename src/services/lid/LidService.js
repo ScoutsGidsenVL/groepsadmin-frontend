@@ -11,6 +11,7 @@ import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import _ from "lodash";
 import DateUtil from "@/services/dates/DateUtil";
+import moment from "moment";
 import useKeycloak from "@/services/utils/useKeycloak";
 
 export default {
@@ -352,6 +353,13 @@ export default {
                     let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                     geboortedatum.setHours(2);
                     state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
+                } else {
+                    // Het formaat van geboortedatum kan nu DD/MM/YYYY (ongewenst) of YYYY-MM-DD (gewenst) zijn.
+
+                    let geboortedatum = moment(state.gewijzigdLid.vgagegevens.geboortedatum, "DD/MM/YYYY").format('YYYY-MM-DD');
+                    if (geboortedatum != "Invalid date") {
+                        state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum;
+                    }
                 }
             }
 
