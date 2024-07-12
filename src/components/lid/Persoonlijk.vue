@@ -50,7 +50,7 @@
           <BaseDropDown
             v-model="lid.persoonsgegevens.geslacht"
             :options="geslacht"
-            label="Geslacht"
+            label="Gender"
             :disabled="!hasPermission('persoonsgegevens')  && !nieuwLid"
           />
           <BaseCheckbox

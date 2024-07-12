@@ -381,7 +381,7 @@ export default {
 
     getGeslachtMenu() {
         let geslacht = {
-            "title": "Geslacht",
+            "title": "Gender",
             "criteriaKey": "geslacht",
             "multiplePossible": false,
             "items": [
