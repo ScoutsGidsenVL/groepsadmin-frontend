@@ -99,7 +99,7 @@ export default {
 
     activateCriterium(crit, huidigeFilter) {
         crit.activated = true;
-        this.setHuidigeFilterLabel('Huidige', huidigeFilter);
+        this.setHuidigeFilterLabel('Huidige lijst', huidigeFilter);
 
         if (!crit.multiValues && !(crit.criteriaSubKey === "verbonds" || crit.criteriaSubKey === "groepspecifiek")) {
             if (crit.multiplePossible) {
