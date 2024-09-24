@@ -63,7 +63,7 @@ export default {
                 case "Mail lid":
                     return !state.eigenProfiel;
                 case "Stop alle functies":
-                    return rechtenService.magAlleFunctiesStoppen(state.lid) || state.eigenProfiel;
+                    return state.eigenProfiel;
                 default:
                     return false;
             }
