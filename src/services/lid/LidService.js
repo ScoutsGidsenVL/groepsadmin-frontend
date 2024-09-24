@@ -258,7 +258,7 @@ export default {
                     " <br/>" +
                     "Ben je zeker? <br/><br/>" +
                     "<b>Opgelet:</b> Als je de functie VGA of FV hebt, deze kan je niet zelf schrappen.  <br/>" +
-                    "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. <br/>"
+                    "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. <br/>" +
                     "Ondervind je hiermee toch problemen, neem dan contact op met groepsadministratie@scoutsengidsenvlaanderen.be" +
                     " <br/>",
                 header: "Alle functies stoppen",
