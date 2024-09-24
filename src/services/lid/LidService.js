@@ -257,10 +257,10 @@ export default {
                     state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam + ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
                     " <br/>" +
                     "Ben je zeker? <br/><br/>" +
-                    "<b>Opgelet:</b> Als je de functie VGA of FV hebt, deze kan je niet zelf schrappen.  <br/>" +
-                    "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. <br/>" +
+                    "<p><b>Opgelet:</b> Als je de functie VGA of FV hebt kan je deze zelf niet schrappen. " +
+                    "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. " +
                     "Ondervind je hiermee toch problemen, neem dan contact op met groepsadministratie@scoutsengidsenvlaanderen.be" +
-                    " <br/>",
+                    "</p>",
                 header: "Alle functies stoppen",
                 icon: "pi pi-exclamation-triangle",
                 accept: () => {
