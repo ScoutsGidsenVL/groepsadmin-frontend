@@ -259,7 +259,8 @@ export default {
                     "Ben je zeker?" +
                     " <br/>" +
                     "(Wie de functies VGA of FV heeft, opgelet; deze kunnen niet zelf geschrapt worden.  <br/>" +
-                    "Neem hiervoor contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
+                    "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. Ondervind je hiermee toch problemen, " +
+                    "neem dan contact op met groepsadministratie@scoutsengidsenvlaanderen.be)" +
                     " <br/>",
                 header: "Alle functies stoppen",
                 icon: "pi pi-exclamation-triangle",
