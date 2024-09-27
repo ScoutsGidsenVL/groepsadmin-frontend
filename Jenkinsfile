@@ -8,6 +8,8 @@ pipeline {
   stages {
     stage('build') {
       steps {
+        sh "nodejs --version"
+        sh "npm --version"
         sh "npm prune --ignore-scripts"
         sh "npm install --ignore-scripts"
         sh "rm -rf dist frontend.zip"
