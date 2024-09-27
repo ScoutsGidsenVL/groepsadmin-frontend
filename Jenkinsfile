@@ -8,6 +8,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
+        sh "node -v"
         sh "npm --version"
         sh "npm prune --ignore-scripts"
         sh "npm install --ignore-scripts"
