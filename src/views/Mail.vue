@@ -179,7 +179,7 @@
               <div class="col-12 pr-lg-5em">
                 <Editor
                   :init="getOptions"
-                  api-key="qmu5w2kmbjx8haxl44oep83j5638yoa35ltdsv5blsf1nmi8"
+                  api-key="gp9gxbwybvcdodaamr22rltbeuwise4ns068lsgcnu4iravz"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
