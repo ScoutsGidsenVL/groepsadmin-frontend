@@ -227,6 +227,8 @@
   <Footer/>
 </template>
 
+<script src="/node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script>
 import RestService from "@/services/api/RestService";
 import Editor from "@tinymce/tinymce-vue";
