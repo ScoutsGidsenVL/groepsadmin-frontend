@@ -179,7 +179,6 @@
               <div class="col-12 pr-lg-5em">
                 <Editor
                   :init="getOptions"
-                  license_key="gpl"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
@@ -261,6 +260,7 @@ import MessageDialog from "@/components/dialog/MessageDialog";
 
 export default {
   name: "Mail",
+  license_key: "gpl",
   components: {
     MessageDialog,
     Footer,
