@@ -180,7 +180,7 @@
                 <Editor
                   :init="getOptions"
                   license_key="gpl"
-                  tinymce-script-src="/node_modules/tinymce/tinymce.min.js"
+                  tinymce-script-src="node_modules/tinymce/tinymce.min.js"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
