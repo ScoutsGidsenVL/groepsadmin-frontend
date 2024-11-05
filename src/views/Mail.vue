@@ -179,7 +179,8 @@
               <div class="col-12 pr-lg-5em">
                 <Editor
                   :init="getOptions"
-                  api-key="qmu5w2kmbjx8haxl44oep83j5638yoa35ltdsv5blsf1nmi8"
+                  license_key="gpl"
+                  tinymce-script-src="/node_modules/tinymce/tinymce.min.js"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
