@@ -228,8 +228,12 @@
 </template>
 
 <script>
-import RestService from "@/services/api/RestService";
 import "tinymce/tinymce";
+import "tinymce/themes/silver";
+import "tinymce/icons/default";
+import "tinymce/skins/ui/oxide/skin.css";
+
+import RestService from "@/services/api/RestService";
 import Editor from "@tinymce/tinymce-vue";
 import store from "../store";
 import BaseInput from "@/components/input/BaseInput";
