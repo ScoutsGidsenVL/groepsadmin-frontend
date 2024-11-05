@@ -233,14 +233,18 @@ import "tinymce/icons/default";
 import "tinymce/models/dom";
 import "tinymce/skins/ui/oxide/skin.css";
 
- /* Import plugins */
- import 'tinymce/plugins/advlist';
- import 'tinymce/plugins/code';
- import 'tinymce/plugins/emoticons';
- import 'tinymce/plugins/emoticons/js/emojis';
- import 'tinymce/plugins/link';
- import 'tinymce/plugins/lists';
- import 'tinymce/plugins/table';
+/* Import plugins */
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/emoticons';
+import 'tinymce/plugins/emoticons/js/emojis';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/table';
+
+ /* Import content css */
+import contentUiCss from 'tinymce/skins/ui/oxide/content.css';
+import contentCss from 'tinymce/skins/content/default/content.css';
 
 import RestService from "@/services/api/RestService";
 import Editor from "@tinymce/tinymce-vue";
