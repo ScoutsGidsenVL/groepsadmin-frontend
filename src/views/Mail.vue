@@ -233,6 +233,15 @@ import "tinymce/themes/silver";
 import "tinymce/icons/default";
 import "tinymce/skins/ui/oxide/skin.css";
 
+ /* Import plugins */
+ import 'tinymce/plugins/advlist';
+ import 'tinymce/plugins/code';
+ import 'tinymce/plugins/emoticons';
+ import 'tinymce/plugins/emoticons/js/emojis';
+ import 'tinymce/plugins/link';
+ import 'tinymce/plugins/lists';
+ import 'tinymce/plugins/table';
+
 import RestService from "@/services/api/RestService";
 import Editor from "@tinymce/tinymce-vue";
 import store from "../store";
@@ -410,16 +419,10 @@ export default {
       return {
         selector: 'textarea',
         images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
-        plugins: [
-          "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-          "searchreplace wordcount visualblocks visualchars code fullscreen",
-          "insertdatetime media nonbreaking save table contextmenu",
-          "template paste textcolor colorpicker textpattern imagetools codesample fullscreen",
-        ],
+        plugins: 'advlist code emoticons link lists table',
+        toolbar: 'bold italic | bullist numlist | link emoticons',
         height: 500,
         menubar: false,
-        toolbar:
-          "undo redo | bold italic underline strikethrough | fontselect |forecolor backcolor | bullist numlist | alignleft aligncenter alignright | table | code | customDrpdwn | image | preview | fullscreen",
         relative_urls: false,
         branding: false,
         remove_script_host: true,
