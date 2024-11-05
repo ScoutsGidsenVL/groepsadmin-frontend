@@ -260,10 +260,8 @@ import Footer from "@/components/global/Footer";
 import ConfirmDialog from 'primevue/confirmdialog';
 import MessageDialog from "@/components/dialog/MessageDialog";
 
-
 export default {
   name: "Mail",
-  license_key: "gpl",
   components: {
     MessageDialog,
     Footer,
@@ -421,6 +419,7 @@ export default {
     },
     getOptions() {
       return {
+        license_key: 'gpl',
         selector: 'textarea',
         images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
         plugins: 'advlist code emoticons link lists table',
