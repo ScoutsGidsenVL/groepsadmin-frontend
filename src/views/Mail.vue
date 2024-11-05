@@ -180,7 +180,6 @@
                 <Editor
                   :init="getOptions"
                   license_key="gpl"
-                  tinymce-script-src="node_modules/tinymce/tinymce.min.js"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
@@ -230,6 +229,7 @@
 
 <script>
 import RestService from "@/services/api/RestService";
+import "tinymce/tinymce";
 import Editor from "@tinymce/tinymce-vue";
 import store from "../store";
 import BaseInput from "@/components/input/BaseInput";
