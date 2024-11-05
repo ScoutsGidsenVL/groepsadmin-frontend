@@ -179,7 +179,7 @@
               <div class="col-12 pr-lg-5em">
                 <Editor
                   :init="getOptions"
-                  licenseKey="gpl"
+                  api-key="qmu5w2kmbjx8haxl44oep83j5638yoa35ltdsv5blsf1nmi8"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>
