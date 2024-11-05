@@ -231,6 +231,7 @@
 import "tinymce/tinymce";
 import "tinymce/themes/silver";
 import "tinymce/icons/default";
+import "tinymce/models/dom";
 import "tinymce/skins/ui/oxide/skin.css";
 
  /* Import plugins */
