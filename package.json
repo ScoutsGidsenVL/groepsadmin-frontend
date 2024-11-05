@@ -68,5 +68,10 @@
     "typescript": "~3.9.3",
     "vue-jest": "^5.0.0-0",
     "cross-env": "^7.0.3"
-  }
+  },
+  "files": [
+    "tinymce/skins/ui/oxide/skin.css",
+    "tinymce/skins/ui/oxide/content.css",
+    "tinymce/skins/content/default/content.css"
+  ]
 }
