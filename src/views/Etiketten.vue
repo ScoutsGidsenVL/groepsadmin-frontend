@@ -391,12 +391,7 @@ export default {
       return {
         selector: 'textarea',
         images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
-        plugins: [
-          "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-          "searchreplace wordcount visualblocks visualchars code fullscreen",
-          "insertdatetime media nonbreaking save table contextmenu",
-          "template paste textcolor colorpicker textpattern imagetools codesample fullscreen",
-        ],
+        plugins: 'advlist code emoticons link lists table',
         height: 500,
         menubar: false,
         toolbar:
