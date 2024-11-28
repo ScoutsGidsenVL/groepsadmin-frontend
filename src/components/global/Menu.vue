@@ -136,12 +136,6 @@ export default {
           condition: true,
           icon: "far fa-question",
           link: "Help",
-        },
-        {
-          label: 'Vorige layout',
-          condition: true,
-          icon: 'fas fa-external-link',
-          link: "Vorige layout",
         }
       ],
     }
@@ -158,15 +152,6 @@ export default {
       top.window.onbeforeunload = null;
       if (menuItem === "Help") {
         window.open(WikiService.getWikiUrl(), '_blank');
-        return;
-      }
-
-      if (menuItem === "Vorige layout") {
-        if (window.origin === "http://localhost:3000") {
-          window.location.href = "http://localhost:8000/#/ledenlijst";
-        } else {
-          window.location.href = "/groepsadmin/client/";
-        }
         return;
       }
 

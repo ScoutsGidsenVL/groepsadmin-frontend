@@ -130,10 +130,6 @@ const routes = [
         name: "Communicatievoorkeuren",
         component: Communicatievoorkeuren,
         meta: {requiresAuth: false}
-    },
-    {
-        path: "/groepsadmin/client/",
-        name: 'VorigeLayout'
     }
 ];
 
