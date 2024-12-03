@@ -1,6 +1,6 @@
 export default function getClient() {
   let returnClient = {
-    url: "https://login-dev.scoutsengidsenvlaanderen.be/auth",
+    url: "https://login-dev.scoutsengidsenvlaanderen.be",
     realm: "scouts",
     clientId: null,
     onLoad: "login-required",
@@ -24,7 +24,7 @@ export default function getClient() {
       returnClient.clientId = "ga-staging-frontend";
       break;
     case "https://groepsadmin.scoutsengidsenvlaanderen.be":
-      returnClient.url = "https://login.scoutsengidsenvlaanderen.be/auth";
+      returnClient.url = "https://login.scoutsengidsenvlaanderen.be";
       returnClient.clientId = "groepsadmin-production-client";
       break;
   }
