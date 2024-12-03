@@ -31,7 +31,7 @@
               </p>
               <p class="panel-subtitle">
                 Laatste aanpassing:
-                {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartdatumaangepast) }}
+                {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartDatumAangepast) }}
               </p>
             </div>
           </div>
