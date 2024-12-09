@@ -50,6 +50,17 @@
               :disabled="!heeftToegang('contacten')"
             />
             <base-input
+              label="Rijksregisternummer"
+              v-model="contacten[index].rijksregisternummer"
+              type="text"
+            />           
+            <base-checkbox
+              type="checkbox"
+              v-model="contacten[index].rijksregisternummerIngevuld"
+              label="Rijksregisternummer ingevuld"
+              :disabled="true"
+            />
+            <base-input
               label="E-mail"
               v-model="contacten[index].email"
               type="text"
@@ -155,6 +166,8 @@ export default {
           rol: "moeder",
           voornaam: "",
           achternaam: "",
+          rijksregisternummer: "",
+          rijksregisternummerIngevuld: false,
           adres: state.adressen[0].id,
           id: "" + Date.now(),
         };

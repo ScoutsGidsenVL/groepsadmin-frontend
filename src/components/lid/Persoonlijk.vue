@@ -44,10 +44,10 @@
             v-model="lid.persoonsgegevens.rijksregisternummer"
             label="Rijksregisternummer"
             type="text"
-            v-if="eigenProfiel || hasPermission('vgagegevens')"
+            v-if="eigenProfiel"
           ></BaseInput>
           <BaseCheckbox
-            v-if="!eigenProfiel && !hasPermission('vgagegevens')"
+            v-if="!eigenProfiel"
             type="checkbox"
             v-model="lid.persoonsgegevens.rijksregisternummerIngevuld"
             label="Rijksregisternummer ingevuld"
