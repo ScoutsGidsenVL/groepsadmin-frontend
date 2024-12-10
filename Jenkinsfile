@@ -11,6 +11,7 @@ pipeline {
         sh "npm prune --ignore-scripts"
         sh "npm install --ignore-scripts"
         sh "rm -rf dist frontend.zip"
+        sh "npx update-browserslist-db@latest"
         sh "npm run build "
         sh "zip -r frontend.zip dist/*"
       }
