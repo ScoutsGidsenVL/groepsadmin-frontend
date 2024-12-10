@@ -217,11 +217,12 @@ export default {
       if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
         restService.zoekGelijkaardig(this.lid.vgagegevens.voornaam, this.lid.vgagegevens.achternaam)
           .then(res => {
-            if (res.data.leden.length > 0) {
+            const leden = res.data.leden.filter((lid) => lid.id != this.lid.id);
+            if (leden.length > 0) {
               this.messageDialog = true;
-              this.messageDialogHeader = res.data.leden.length > 1 ? "Bestaande leden?" : "Bestaand lid?";
+              this.messageDialogHeader = leden.length > 1 ? "Bestaande leden?" : "Bestaand lid?";
               this.messageDialogMessage = "Er zijn leden gevonden met een gelijkaardige naam. Ga naar het juiste lid of sluit dit venster.</br>";
-              this.messageDialogLeden = res.data.leden;
+              this.messageDialogLeden = leden;
             }
           }).catch (error => {
             console.log(error);
