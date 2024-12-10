@@ -12,6 +12,7 @@ import rechtenService from "@/services/rechten/rechtenService";
 import _ from "lodash";
 import DateUtil from "@/services/dates/DateUtil";
 import useKeycloak from "@/services/utils/useKeycloak";
+import moment from "moment";
 
 export default {
 
@@ -348,7 +349,10 @@ export default {
 
 
             if (state.gewijzigdLid.vgagegevens) {
-                let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                if (isNaN(geboortedatum)) {
+                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'dd/mm/yyyy').toDate();
+                }
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString();
             }
