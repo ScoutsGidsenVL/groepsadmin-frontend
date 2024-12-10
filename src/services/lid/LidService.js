@@ -351,7 +351,7 @@ export default {
             if (state.gewijzigdLid.vgagegevens) {
                 var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 if (isNaN(geboortedatum)) {
-                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'dd/mm/yyyy').toDate();
+                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'DD/MM/YYYY').toDate();
                 }
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString();
