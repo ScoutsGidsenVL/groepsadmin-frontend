@@ -49,7 +49,7 @@
           <BaseCheckbox
             v-if="!eigenProfiel"
             type="checkbox"
-            v-model="lid.persoonsgegevens.rijksregisternummerIngevuld"
+            v-model="lid.persoonsgegevens.rijksregisternummeringevuld"
             label="Rijksregisternummer ingevuld"
             :disabled="true"
           ></BaseCheckbox>

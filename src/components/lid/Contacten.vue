@@ -49,17 +49,28 @@
               type="text"
               :disabled="!heeftToegang('contacten')"
             />
+            <BaseCheckbox
+              type="checkbox"
+              v-model="contacten[index].lidtenlaste"
+              label="Lid ten laste"
+              multiple="false"
+              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            ></BaseCheckbox>
             <base-input
+              v-if="contacten[index].hasOwnProperty('rijksregisternummer')"
               label="Rijksregisternummer"
               v-model="contacten[index].rijksregisternummer"
               type="text"
-            />           
-            <base-checkbox
-              type="checkbox"
-              v-model="contacten[index].rijksregisternummerIngevuld"
-              label="Rijksregisternummer ingevuld"
-              :disabled="true"
             />
+            <BaseCheckbox
+              v-if="!contacten[index].hasOwnProperty('rijksregisternummer')"
+              :disabled="true"
+              type="checkbox"
+              v-model="contacten[index].rijksregisternummeringevuld"
+              label="Rijksregisternummer ingevuld"
+              multiple="false"
+              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            ></BaseCheckbox>
             <base-input
               label="E-mail"
               v-model="contacten[index].email"
@@ -104,6 +115,8 @@
 
 <script>
 import BaseInput from "@/components/input/BaseInput";
+
+import BaseCheckbox from "@/components/input/BaseCheckbox";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import {reactive, toRefs} from "@vue/reactivity";
 import {useConfirm} from "primevue/useconfirm";
@@ -118,10 +131,13 @@ import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
   name: "Contacten",
-  components: {BaseInput, BaseDropdown, BaseInputTelefoon},
+  components: {BaseInput, BaseDropdown, BaseCheckbox, BaseInputTelefoon},
   props: {
     title: {
       type: String,
+    },
+    eigenProfiel: {
+      type: Boolean
     },
     modelValue: {
       type: Object,
@@ -167,7 +183,7 @@ export default {
           voornaam: "",
           achternaam: "",
           rijksregisternummer: "",
-          rijksregisternummerIngevuld: false,
+          rijksregisternummeringevuld: false,
           adres: state.adressen[0].id,
           id: "" + Date.now(),
         };
