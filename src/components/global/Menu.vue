@@ -87,15 +87,6 @@ export default {
           }
         },
         {
-          label: "Mijn Communicatievoorkeuren",
-          condition: true,
-          icon: "fal fa-satellite-dish",
-          link: "Communicatievoorkeuren",
-          command: () => {
-            this.$router.push({name: "Communicatievoorkeuren"})
-          }
-        },
-        {
           label: "Ledenlijst",
           condition: "ledenlijst",
           icon: "far fa-users",

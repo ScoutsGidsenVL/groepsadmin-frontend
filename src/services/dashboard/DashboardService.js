@@ -29,13 +29,6 @@ export default {
                     internal: true,
                 },
                 {
-                    label: "Mijn communicatievoorkeuren",
-                    condition: true,
-                    icon: "far fa-satellite-dish",
-                    link: "Communicatievoorkeuren",
-                    internal: true,
-                },
-                {
                     label: "Ledenlijst",
                     condition: "ledenlijst",
                     icon: "far fa-users",
@@ -56,7 +49,6 @@ export default {
                     link: "Ledenaantallen",
                     internal: true,
                 },
-
                 {
                     label: "Lidaanvragen",
                     condition: "aanvragen",
@@ -64,13 +56,6 @@ export default {
                     link: "Aanvragen",
                     internal: true,
                 },
-                // {
-                //   label: "Verzekeringen",
-                //   condition: true,
-                //   icon: "far fa-umbrella",
-                //   link: "https://vz.scoutsengidsenvlaanderen.be",
-                //   internal: false,
-                // },
             ],
         })
 

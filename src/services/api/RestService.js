@@ -209,18 +209,6 @@ export default {
         return apiClient().patch(baseUrl + "lid/" + id + "?bevestig=" + bevestig, lid)
     },
 
-    getCommunicatieProducten() {
-        return apiClient().get(baseUrl + "communicatieproduct")
-    },
-
-    getCommunicatieProductAbonnementen() {
-        return apiClient().get(baseUrl + "/communicatieproduct/abonnementen")
-    },
-
-    saveCommunicatieProductAbonnement(payload) {
-        return apiClient().post(baseUrl + "communicatieproduct/abonnementen", payload)
-    },
-
     getGroepseigenGegevens(groepsnummer) {
         return apiClient().get(baseUrl + "groep/groepseigengegevens/" + groepsnummer);
     },

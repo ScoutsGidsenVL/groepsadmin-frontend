@@ -8,7 +8,6 @@ import Lid from "@/views/Lid";
 import Mail from "@/views/Mail";
 import Etiketten from "@/views/Etiketten";
 import Aanvragen from "@/views/Aanvragen";
-import Communicatievoorkeuren from "@/views/Communicatievoorkeuren";
 import rechtenService from "@/services/rechten/rechtenService";
 import LidToevoegen from "@/views/LidToevoegen";
 import InschrijvingsFormulier from "@/views/InschrijvingsFormulier";
@@ -124,12 +123,6 @@ const routes = [
         meta: {
             requiresAuth: false
         }
-    },
-    {
-        path: "/lid/communicatievoorkeuren",
-        name: "Communicatievoorkeuren",
-        component: Communicatievoorkeuren,
-        meta: {requiresAuth: false}
     }
 ];
 
