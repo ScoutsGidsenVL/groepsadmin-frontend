@@ -117,10 +117,10 @@ export default {
                     }
                 },
                 {
-                    label: "Lidkaarten naar pdf",
+                    label: "Activiteit",
                     condition: true,
                     icon: "fal fa-file-pdf",
-                    link: "lidkaart",
+                    link: "activiteit",
                     command: () => {
                         gaNaar("lidkaart");
                     }
@@ -212,7 +212,7 @@ export default {
                     return;
                 }
                 exporteer(link)
-            } else if (link === 'email' || link === 'etiket') {
+            } else if (link === 'email' || link === 'etiket' || link === 'activiteit') {
                 if (state.geselecteerdeLeden.length < 1) {
                     state.ledenDialog = true;
                     return;
@@ -866,6 +866,9 @@ export default {
             }
             if (type === "etiket") {
                 router.push({name: "Etiket"});
+            }
+            if (type === "activiteit") {
+                router.push({name: "Activiteit"})
             }
         }
 

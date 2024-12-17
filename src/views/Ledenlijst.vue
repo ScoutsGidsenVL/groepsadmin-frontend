@@ -71,7 +71,7 @@
                   <div class="hidden md:block">
                     <Button type="button" label="Nieuw lid" @click="gaNaar('lidToevoegen')" icon="far fa-user-plus"
                             class="actie-button mr-1" v-if="magNieuwLidAanmaken()"/>
-                    <Button type="button" label="Activiteiten" @click="gaNaar('deelnemenActiviteit')" icon="far fa-campground"
+                    <Button type="button" label="Activiteiten" @click="gaNaar('activiteit')" icon="far fa-campground"
                             class="actie-button mr-1"/>
                     <Button type="button" label="Etiketten" @click="gaNaar('etiket')" icon="pi pi-tags"
                             class="actie-button mr-1"/>

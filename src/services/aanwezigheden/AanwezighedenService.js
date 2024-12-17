@@ -119,6 +119,7 @@ export default {
             restService.getAlleInAanmerkingKomendeLeden(activiteitId)
                 .then(res => {
                     console.log(res);
+                    state.leden = res.data;
                 })
         }
 
