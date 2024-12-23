@@ -39,7 +39,11 @@
               />
             </div>
             <div>
-              <Button type="button" label="Activiteit toevoegen" @click="activiteitDialog = true" icon="far fa-plus"
+              <Button v-if="true" type="button" label="5 Leden Toevoegen" @click="activiteitDialog = true" icon="far fa-users"
+                      class="actie-button mr-1 mt-3"/>
+              <Button v-if="true" type="button" label="Leden Selecteren" @click="$router.push('/ledenlijst')" icon="far fa-users"
+                      class="actie-button mr-1 mt-3"/>
+              <Button type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
                       class="actie-button mr-1 mt-3"/>
             </div>
           </div>
