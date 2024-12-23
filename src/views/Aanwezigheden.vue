@@ -1,7 +1,13 @@
 <template>
   <div>
     <SideMenu/>
-    <confirmDialog/>
+    <confirmDialog
+      :message="dialogMessage"
+      :header="dialogHeader"
+      :dialog-visible="messageDialog"
+      @confirm="bevestigVerwijderen"
+      @cancel="annuleerVerwijderen"
+    />
     <toast position="bottom-right"/>
     <div>
       <ingelogd-lid></ingelogd-lid>
@@ -15,7 +21,7 @@
         ></Loader>
         <div class="lg:ml-8">
           <div class="lg:ml-6">
-            <label class="d-flex justify-content-start">Aanwezigheden registreren</label>
+            <label class="d-flex justify-content-start">Aanwezigheden bewerken</label>
             <label class="d-flex justify-content-start text-gray-500">{{ activiteit.omschrijving }} </label>
             <label class="d-flex justify-content-start text-gray-500">  {{ formatteerDatum(activiteit.van) }} - {{ formatteerDatum(activiteit.tot) }}</label>
             <data-table
@@ -48,6 +54,14 @@
                   <template v-if="field === 'prijs'">
                     <input-number v-model="data[field]" mode="currency" currency="EUR" locale="de-DE" autofocus />
                   </template>
+                </template>
+              </column>
+              <column field="acties" header="Acties" style="width: 150px">
+                <template #body="slotProps">
+                  <div class="flex justify-content-between">
+                    <i class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"
+                       title="Aanwezigheid verwijderen" @click="verwijderAanwezigheid(slotProps.data.id)"></i>
+                  </div>
                 </template>
               </column>
               <template #empty>
@@ -93,7 +107,10 @@ export default {
       bewerkCell,
       formatteerBedrag,
       sorteerLeden,
-      formatteerDatum
+      formatteerDatum,
+      verwijderAanwezigheid,
+      bevestigVerwijderen,
+      annuleerVerwijderen
     } = AanwezighedenService.aanwezighedenSpace();
 
     return {
@@ -101,6 +118,9 @@ export default {
       formatteerBedrag,
       sorteerLeden,
       formatteerDatum,
+      verwijderAanwezigheid,
+      bevestigVerwijderen,
+      annuleerVerwijderen,
       ...toRefs(state)
     }
   }

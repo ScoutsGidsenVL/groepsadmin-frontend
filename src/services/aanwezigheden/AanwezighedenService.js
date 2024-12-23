@@ -4,18 +4,21 @@ import {useRoute} from "vue-router";
 import restService from "@/services/api/RestService";
 import CurrencyUtil from "@/services/utils/CurrencyUtil";
 import DateUtil from "@/services/dates/DateUtil";
+import RestService from "@/services/api/RestService";
+import {useToast} from "primevue/usetoast";
+
 
 export default {
 
     aanwezighedenSpace() {
+        const toast = useToast();
         const route = useRoute();
         const state = reactive({
             columns: [
                 { field: 'voornaam', header: 'Voornaam' },
                 { field: 'naam', header: 'Achternaam' },
                 { field: 'prijs', header: 'Prijs' },
-                { field: 'aantal', header: 'Aantal dagen' },
-                { field: 'betaald', header: 'Volledig betaald' }
+                { field: 'aantaldagen', header: 'Aantal dagen' }
             ],
             home: {icon: 'pi pi-home', to: '/dashboard'},
             breadcrumbItems: [
@@ -27,52 +30,15 @@ export default {
                     label: 'aanwezigheden'
                 },
             ],
+            dialogMessage: "",
+            dialogHeader: "",
             isLoadingAanwezigheden:  false,
+            messageDialog: false,
             aanwezigeLeden: [],
+            teVerwijderenActiviteitId: null,
             selectedAanwezigheid: {},
             activiteit: {},
-            leden: [
-                {
-                    id: 1,
-                    voornaam: 'John',
-                    naam: 'Doe',
-                    functie: {
-                        omschrijving: 'Kapoenen',
-                    },
-                    aantal: 10,
-                    prijs: 25
-                },
-                {
-                    id: 2,
-                    voornaam: 'Jane',
-                    naam: 'Smith',
-                    functie: {
-                        omschrijving: 'Kapoenen',
-                    },
-                    aantal: 9,
-                    prijs: 25
-                },
-                {
-                    id: 1,
-                    voornaam: 'John',
-                    naam: 'Doe',
-                    functie: {
-                        omschrijving: 'Jin',
-                    },
-                    aantal: 10,
-                    prijs: 25
-                },
-                {
-                    id: 4,
-                    voornaam: 'Jane',
-                    naam: 'Smith',
-                    functie: {
-                        omschrijving: 'Jin',
-                    },
-                    aantal: 9,
-                    prijs: 25
-                },
-            ],
+            leden: []
         })
 
         const bewerkCell = (value) => {
@@ -80,7 +46,7 @@ export default {
                 let index = state.leden.indexOf(value.data);
                 state.leden[index].prijs = value.newValue;
             }
-            if (value.field === "aantal") {
+            if (value.field === "aantaldagen") {
                 let index = state.leden.indexOf(value.data);
                 state.leden[index].aantal = value.newValue;
             }
@@ -118,13 +84,48 @@ export default {
         const getAlleInAanmerkingKomendeLeden = (activiteitId) => {
             restService.getAlleInAanmerkingKomendeLeden(activiteitId)
                 .then(res => {
-                    console.log(res);
-                    state.leden = res.data;
+                    console.log(state.leden);
+                    state.leden = res.data.aanwezigen;
+                    console.log(state.leden);
                 })
+        }
+        
+        const verwijderAanwezigheid = (aanwezigheidId) => {
+            state.messageDialog = true;
+            state.dialogMessage = "Je staat op het punt om deze aanwezige te verwijderen. </br> Dit kan niet ongedaan worden gemaakt. Ben je zeker?"
+            state.dialogHeader = "Aanwezige verwijderen?"
+            state.teVerwijderenAanwezigheidId = aanwezigheidId;
+        }
+
+        const bevestigVerwijderen = () => {
+            state.isLoadingAanwezigheden = true;
+
+            RestService.verwijderAanwezigheid(state.teVerwijderenAanwezigheidId).then(() => {
+                state.leden.forEach((aanwezigheid) => {
+                    if (aanwezigheid.id === state.teVerwijderenAanwezigheidId) {
+                        state.leden.splice(state.leden.indexOf(aanwezigheid), 1);
+                    }
+                })
+                state.isLoadingAanwezigheden = true
+                toast.add({
+                    severity: "success",
+                    summary: "Verwijderen activiteit",
+                    detail: "Activiteit verwijderd",
+                    life: 2000,
+                });
+            }).finally(() => {
+                state.messageDialog = false;
+                state.isLoadingAanwezigheden = false
+            })
+        }
+
+        const annuleerVerwijderen = () => {
+            state.teVerwijderenAanwezigheidId = null;
+            state.messageDialog = false;
         }
 
         watch(
-            () =>  route.params.activiteit,
+            () =>  route.params.aanwezigheid,
             () => {
                 getActiviteit();
             }
@@ -139,7 +140,10 @@ export default {
             bewerkCell,
             formatteerBedrag,
             formatteerDatum,
-            sorteerLeden
+            sorteerLeden,
+            verwijderAanwezigheid,
+            bevestigVerwijderen,
+            annuleerVerwijderen
         }
     }
 }

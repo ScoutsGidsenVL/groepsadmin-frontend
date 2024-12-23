@@ -90,8 +90,8 @@
             <column field="acties" header="Acties" style="width: 150px">
               <template #body="slotProps">
                 <div class="flex justify-content-between">
-                  <i class="fas fa-users-medical mr-3 cursor-pointer" style="font-size: 1.5rem"
-                     title="Leden toevoegen" @click="registreerAanwezigheden(slotProps.data.id)"></i>
+                  <i class="fas fa-users mr-3 cursor-pointer" style="font-size: 1.5rem"
+                     title="Aanwezigen bewerken" @click="registreerAanwezigheden(slotProps.data.id)"></i>
                   <i class="fas fa-pencil mr-3 cursor-pointer" style="font-size: 1.5rem"
                      title="Activiteit bewerken" @click="wijzigActiviteit(slotProps.data)"></i>
                   <i class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"

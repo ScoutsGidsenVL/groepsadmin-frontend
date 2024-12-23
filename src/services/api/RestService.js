@@ -241,11 +241,19 @@ export default {
         return apiClient().delete(baseUrl + "activiteit/" + id );
     },
 
+    verwijderAanwezigheid(id) {
+        return apiClient().delete(baseUrl + "aanwezigheid/" + id );
+    },
+
     getAlleGeregistreerdeLeden(activiteitId) {
         return apiClient().get(baseUrl + "aanwezigheid/geregistreerdeleden/" + activiteitId)
     },
 
     getAlleInAanmerkingKomendeLeden(activiteitId) {
+        return apiClient().get(baseUrl + "aanwezigheid/" + activiteitId)
+    },
+
+    getAlleInAanmerkingKomendeLeden2(activiteitId) {
         return apiClient().get(baseUrl + "aanwezigheid/ledenOphalenVoorActiviteit/" + activiteitId)
     }
 };
