@@ -85,7 +85,7 @@ const routes = [
         component: Activiteiten,
         meta: {
             requiresAuth: true,
-            hasAccessTo: "aanvragen"
+            hasAccessTo: "ledenlijst"
 
         }
     },

@@ -39,9 +39,10 @@
               />
             </div>
             <div>
-              <Button v-if="true" type="button" label="5 Leden Toevoegen" @click="activiteitDialog = true" icon="far fa-users"
+              <Button v-if="leden.length > 0" type="button" :label="leden.length === 1 ? '1 lid toevoegen' : leden.length + ' leden toevoegen'"
+                  @click="activiteitDialog = true" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
-              <Button v-if="true" type="button" label="Leden Selecteren" @click="$router.push('/ledenlijst')" icon="far fa-users"
+              <Button v-if="leden.length < 1" type="button" label="Leden Selecteren" @click="$router.push('/ledenlijst')" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
               <Button type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
                       class="actie-button mr-1 mt-3"/>
@@ -138,6 +139,47 @@ export default {
     IngelogdLid,
     ActiviteitDialog
   },
+
+  data() {
+    return {
+      geselecteerdeLeden: [],      
+      leden: []
+    }
+  },
+  created() {
+    console.log("======================================================================");
+    console.log(this.$store.getters.geselecteerdeLeden);
+    console.log(this.$store.getters.geselecteerdeLeden.length > 0);
+    console.log("======================================================================");
+    
+    if (
+      this.$store.getters.geselecteerdeLeden &&
+      this.$store.getters.geselecteerdeLeden.length > 0 &&
+      this.$store.getters.geselecteerdeLeden[0].waarden !== undefined
+    ) {
+      this.sorteerLeden = true;
+      this.$store.getters.geselecteerdeLeden.forEach((lid) => {
+        this.geselecteerdeLeden.push(lid);
+        this.leden.push({
+          voornaam:
+            lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
+          achternaam:
+            lid.waarden["be.vvksm.groepsadmin.model.column.AchternaamColumn"],
+          volledigenaam:
+            lid.waarden[
+              "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
+              ],
+        });
+      });
+      this.sorteerLeden = false;
+    } else {
+      //this.getLeden();
+      this.leden = [];
+    }
+    console.log(this.leden);
+    console.log("======================================================================");
+  },
+
   setup() {
 
     const {
@@ -171,7 +213,7 @@ export default {
 </script>
 
 
-<style scoped>
+<!--<style scoped>
 .fa-pencil {
   color: blue;
 }
@@ -179,4 +221,4 @@ export default {
 .fa-trash {
   color: red;
 }
-</style>
+</style>-->

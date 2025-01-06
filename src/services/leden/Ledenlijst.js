@@ -868,7 +868,7 @@ export default {
                 router.push({name: "Etiket"});
             }
             if (type === "activiteit") {
-                router.push({name: "Activiteit"})
+                router.push({name: "Activiteiten"})
             }
         }
 
