@@ -15,6 +15,13 @@
       :groep="selectedGroep"
       :te-bewerken-activiteit="teBewerkenActiviteit"
     />
+    <MessageDialog
+      :message="dialogMessage"
+      :header="dialogHeader"
+      :dialog-visible="geenActiviteitenDialog"
+      @close="close"
+    
+    />
     <toast position="bottom-right"/>
     <div>
       <ingelogd-lid></ingelogd-lid>
@@ -40,9 +47,9 @@
             </div>
             <div>
               <Button v-if="leden.length > 0" type="button" :label="leden.length === 1 ? '1 lid toevoegen' : leden.length + ' leden toevoegen'"
-                  @click="activiteitDialog = true" icon="far fa-users"
+                  @click="voegLedenToe(leden)" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
-              <Button v-if="leden.length < 1" type="button" label="Leden Selecteren" @click="$router.push('/ledenlijst')" icon="far fa-users"
+              <Button :label="leden.length > 0 ? 'Selectie wijzigen' : 'Leden Selecteren'" @click="$router.push('/ledenlijst')" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
               <Button type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
                       class="actie-button mr-1 mt-3"/>
@@ -57,42 +64,60 @@
             size="small"
             class="p-datatable-sm activiteitentabel"
           >
-            <column field="werkjaar" header="Werkjaar" style="width: 50px">
+
+            <column v-if="leden.length > 0">
+              <template #body="slotProps">
+                <div class="table-checkbox cursor-pointer">
+                    <i
+                      class="pi"
+                      :class="{
+                  'true-icon pi-check-circle': isWaardeTrue(
+                    slotProps.data.werkjaar
+                  ),
+                  'false-icon pi-times-circle': isWaardeFalse(
+                    slotProps.data.werkjaar
+                  ),
+                }"
+                    ><input v-model="geselecteerdeActiviteiten" :value="slotProps.data" type="checkbox"/></i>
+                  </div>                
+              </template>
+            </column>
+            <column field="werkjaar" header="Werkjaar">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
                   {{ slotProps.data.werkjaar }}
                 </div>
               </template>
             </column>
-            <column field="periode" header="Periode" style="width: 250px">
+            <column field="periode" header="Periode">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
                   {{ formatteerPeriode(slotProps.data) }}
                 </div>
               </template>
             </column>
-            <column field="omschrijving" header="Omschrijving" style="width: 400px">
+            <column field="omschrijving" header="Omschrijving">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer ellipsis">
                   {{ slotProps.data.omschrijving }}
                 </div>
               </template>
             </column>
-            <column field="functies" header="Functies" style="width: 300px">
+            <column field="functies" header="Functies">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer ellipsis">
                   {{ formatteerFunctieOmschrijving(slotProps.data.functies) }}
                 </div>
               </template>
             </column>
-            <column field="prijs" header="Prijs" style="width: 80px">
+            <column field="prijs" header="Prijs">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
                   {{ slotProps.data.prijs }} €
                 </div>
               </template>
             </column>
-            <column field="acties" header="Acties" style="width: 150px">
+            <column field="acties" header="Acties">
               <template #body="slotProps">
                 <div class="flex justify-content-between">
                   <i class="fas fa-users mr-3 cursor-pointer" style="font-size: 1.5rem"
@@ -126,6 +151,7 @@ import {toRefs} from "@vue/reactivity";
 import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
 import Footer from "@/components/global/Footer.vue";
 import ActiviteitDialog from "@/components/dialog/ActiviteitDialog.vue";
+import MessageDialog from "@/components/dialog/MessageDialog";
 import BaseDropdown from "@/components/input/BaseDropdown.vue";
 
 export default {
@@ -137,7 +163,8 @@ export default {
     ConfirmDialog,
     SideMenu,
     IngelogdLid,
-    ActiviteitDialog
+    ActiviteitDialog,
+    MessageDialog
   },
 
   data() {
@@ -159,21 +186,23 @@ export default {
     ) {
       this.sorteerLeden = true;
       this.$store.getters.geselecteerdeLeden.forEach((lid) => {
+        console.log("======================================================================");
         this.geselecteerdeLeden.push(lid);
+        console.log("======================================================================");
+        console.log(lid);
         this.leden.push({
           voornaam:
             lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
           achternaam:
             lid.waarden["be.vvksm.groepsadmin.model.column.AchternaamColumn"],
           volledigenaam:
-            lid.waarden[
-              "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-              ],
+            lid.waarden["be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"],
+          id:
+            lid.id
         });
       });
       this.sorteerLeden = false;
     } else {
-      //this.getLeden();
       this.leden = [];
     }
     console.log(this.leden);
@@ -192,6 +221,9 @@ export default {
       annuleerVerwijderen,
       formatteerPeriode,
       formatteerFunctieOmschrijving,
+      isWaardeTrue,
+      isWaardeFalse,
+      voegLedenToe,
       close
     } = ActiviteitenService.activiteitenSpace();
 
@@ -205,20 +237,12 @@ export default {
       annuleerVerwijderen,
       formatteerPeriode,
       formatteerFunctieOmschrijving,
+      isWaardeTrue,
+      isWaardeFalse,
+      voegLedenToe,
       close
     }
   }
 }
 
 </script>
-
-
-<!--<style scoped>
-.fa-pencil {
-  color: blue;
-}
-
-.fa-trash {
-  color: red;
-}
-</style>-->

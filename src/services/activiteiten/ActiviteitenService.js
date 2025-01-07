@@ -17,7 +17,7 @@ export default {
         const emitter = useEmitter();
         const toast = useToast();
         const router = useRouter();
-
+        
         const state = reactive({
             groepEnfuncties: [],
             functies: [],
@@ -26,12 +26,14 @@ export default {
             isLoadingActiviteiten: false,
             activiteitDialog: false,
             messageDialog: false,
+            geenActiviteitenDialog: false,
             selectedGroep: {},
             groepenArray: [],
             contactenLaden: false,
             activiteiten: [],
             teVerwijderenActiviteitId: null,
             teBewerkenActiviteit: null,
+            geselecteerdeActiviteiten: [],
             home: {icon: 'pi pi-home', to: '/dashboard'},
             breadcrumbItems: [
                 {
@@ -40,6 +42,54 @@ export default {
             ],
 
         })
+
+        const isWaardeTrue = (value) => {
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            return value === '<input type="checkbox" disabled checked/>';
+        }
+
+        const isWaardeFalse = (value) => {
+            console.log("------------------------------------------------------------");
+            return value === '<input type="checkbox" disabled/>';
+        }
+
+        const voegLedenToe = (leden) => {
+            if (state.geselecteerdeActiviteiten.length > 0) {
+                state.geselecteerdeActiviteiten.forEach((activiteit) => {
+                    leden.forEach((lid) => {
+
+                        const aanwezigheid = {
+                            activiteitid: activiteit.id,
+                            lidid: lid.id,
+                            voornaam: lid.voornaam,
+                            naam: lid.achternaam,
+                            betaaljaar: activiteit.werkjaar,
+                            prijs: activiteit.prijs
+                        };
+
+                        RestService.voegLidToeAanActiviteit(activiteit.id, aanwezigheid).then(() => {
+                            toast.add({
+                                severity: "success",
+                                summary: "Verwijderen activiteit",
+                                detail: "Activiteit verwijderd",
+                                life: 2000,
+                            });
+                        }).finally(() => {
+                            state.messageDialog = false;
+                            state.isLoadingActiviteiten = false
+                        })
+                        console.log(activiteit);//
+                        console.log("************************************************************");
+                        console.log(lid);
+                    })
+                  })
+            } else {
+                state.dialogMessage = "Gelieve eerst activiteiten te selecteren";
+                state.dialogHeader = "Geen activiteit geselecteerd";
+                state.geenActiviteitenDialog = true;
+            }
+            return;
+        }
 
         const registreerAanwezigheden = (activiteitId) => {
             router.push({name: "Aanwezigheden", params: {activiteit: activiteitId}});
@@ -80,6 +130,7 @@ export default {
         const close = () => {
             state.teBewerkenActiviteit = null;
             state.activiteitDialog = false;
+            state.geenActiviteitenDialog = false;
         }
 
         const verwijderActiviteit = (activiteitId) => {
@@ -162,6 +213,9 @@ export default {
             annuleerVerwijderen,
             formatteerPeriode,
             formatteerFunctieOmschrijving,
+            isWaardeTrue,
+            isWaardeFalse,
+            voegLedenToe,
             close
         }
     },
