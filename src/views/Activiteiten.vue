@@ -9,7 +9,6 @@
       @cancel="annuleerVerwijderen"
     />
     <activiteitDialog
-      :functies="functies"
       :dialog-visible="activiteitDialog"
       @close="close"
       :groep="selectedGroep"
@@ -100,13 +99,6 @@
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer ellipsis">
                   {{ slotProps.data.omschrijving }}
-                </div>
-              </template>
-            </column>
-            <column field="functies" header="Functies">
-              <template #body="slotProps">
-                <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer ellipsis">
-                  {{ formatteerFunctieOmschrijving(slotProps.data.functies) }}
                 </div>
               </template>
             </column>
@@ -220,7 +212,6 @@ export default {
       bevestigVerwijderen,
       annuleerVerwijderen,
       formatteerPeriode,
-      formatteerFunctieOmschrijving,
       isWaardeTrue,
       isWaardeFalse,
       voegLedenToe,
@@ -236,7 +227,6 @@ export default {
       bevestigVerwijderen,
       annuleerVerwijderen,
       formatteerPeriode,
-      formatteerFunctieOmschrijving,
       isWaardeTrue,
       isWaardeFalse,
       voegLedenToe,

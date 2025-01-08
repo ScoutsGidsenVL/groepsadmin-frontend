@@ -25,7 +25,7 @@
       />
       <date-picker
         v-model="activiteit.tot"
-        label="Van"
+        label="Tot"
         :invalid="v.activiteit.tot.$dirty && v.activiteit.tot.$invalid"
         :error-message="v.activiteit.tot.required.$message"
       />
@@ -44,17 +44,6 @@
           :minFractionDigits="2"
           :invalid="v.activiteit.prijs.$dirty && v.activiteit.prijs.$invalid"
           :error-message="v.activiteit.prijs.required.$message"
-        />
-      </div>
-      <div style="margin-top: 13px">
-        <label style="margin-right: 9.55rem">Functies</label>
-        <MultiSelect
-          v-model="activiteit.functies"
-          :options="gesorteerdeFuncties()"
-          display="chip"
-          optionLabel="beschrijving"
-          placeholder="Selecteer de functies"
-          class="w-full md:w-14rem"
         />
       </div>
     </div>
@@ -76,7 +65,6 @@ import Opslaan from "@/components/buttons/Opslaan.vue";
 import DatePicker from "@/components/input/DatePicker.vue";
 import BaseInput from "@/components/input/BaseInput.vue";
 import {toRefs} from "@vue/reactivity";
-import MultiSelect from "primevue/multiselect";
 import Loader from "@/components/global/Loader.vue";
 import InputNumber from "primevue/inputnumber";
 import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
@@ -88,16 +76,12 @@ export default {
     BaseInput,
     DatePicker,
     Opslaan,
-    MultiSelect,
     InputNumber
   },
   props: {
     dialogVisible: {
       type: Boolean,
       default: false,
-    },
-    functies: {
-      type: Array
     },
     groep: {
       type: Object
@@ -114,7 +98,6 @@ export default {
       openDialog,
       formatteerDatum,
       opslaan,
-      gesorteerdeFuncties
     } = ActiviteitenService.activiteitenDialogSpace(props);
 
     return {
@@ -123,7 +106,6 @@ export default {
       openDialog,
       formatteerDatum,
       opslaan,
-      gesorteerdeFuncties
     }
   }
 };

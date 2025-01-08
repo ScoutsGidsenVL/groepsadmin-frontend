@@ -169,17 +169,6 @@ export default {
             return DateUtil.formatteerDatum(activiteit.van) + " - " + DateUtil.formatteerDatum(activiteit.tot);
         }
 
-        const formatteerFunctieOmschrijving = (functies) => {
-            let functiesString = '';
-            functies.forEach((functie) => {
-                functiesString = functiesString + functie.beschrijving
-                if (functies.indexOf(functie) < functies.length - 1) {
-                    functiesString = functiesString + ", "
-                }
-            })
-            return functiesString;
-        }
-
         onMounted(() => {
             functiesEnGroepen();
             state.selectedGroep = store.getters.groepen[0];
@@ -207,7 +196,6 @@ export default {
             bevestigVerwijderen,
             annuleerVerwijderen,
             formatteerPeriode,
-            formatteerFunctieOmschrijving,
             isWaardeTrue,
             isWaardeFalse,
             voegLedenToe,
@@ -220,13 +208,11 @@ export default {
         const emitter = useEmitter();
 
         const state = reactive({
-            geselecteerdeFuncties: [],
             activiteit: {
                 van: new Date(),
                 tot: new Date(),
                 omschrijving: "",
                 prijs: 0,
-                functies: [],
                 groep: props.groep
             },
             defaultActiviteit: {
@@ -234,7 +220,6 @@ export default {
                 tot: new Date(),
                 omschrijving: "",
                 prijs: 0,
-                functies: [],
                 groep: props.groep
             },
 
@@ -251,7 +236,7 @@ export default {
                 },
                 prijs: {
                     required: helpers.withMessage('Prijs is verplicht', required),
-                    minValue: helpers.withMessage('Prijs mag niet 0 zijn', minValue(1))
+                    minValue: helpers.withMessage('Prijs mag niet 0 zijn', minValue(0.01))
                 },
             },
         }
@@ -267,14 +252,6 @@ export default {
             () => {
                 if (props.teBewerkenActiviteit) {
                     state.activiteit = Object.assign({}, props.teBewerkenActiviteit);
-                    state.activiteit.functies = [];
-                    props.teBewerkenActiviteit.functies.forEach(activiteitsFunctie => {
-                        props.functies.forEach(functie => {
-                            if (activiteitsFunctie.id === functie.id) {
-                                state.activiteit.functies.push(functie);
-                            }
-                        })
-                    })
                     state.activiteit.van = new Date(props.teBewerkenActiviteit.van);
                     state.activiteit.tot = new Date(props.teBewerkenActiviteit.tot);
                 } else {
@@ -357,27 +334,12 @@ export default {
 
         const v = useVuelidate(rules, state);
 
-        const gesorteerdeFuncties = () => {
-            props.functies.sort(function (a, b) {
-                if (a.beschrijving < b.beschrijving) {
-                    return -1;
-                }
-                if (a.beschrijving > b.beschrijving) {
-                    return 1;
-                }
-                return 0;
-            })
-            return props.functies;
-        }
-
-
         return {
             state,
             v,
             openDialog,
             formatteerDatum,
-            opslaan,
-            gesorteerdeFuncties
+            opslaan
         }
     }
 }
