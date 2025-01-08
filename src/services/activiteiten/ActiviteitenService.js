@@ -44,12 +44,10 @@ export default {
         })
 
         const isWaardeTrue = (value) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             return value === '<input type="checkbox" disabled checked/>';
         }
 
         const isWaardeFalse = (value) => {
-            console.log("------------------------------------------------------------");
             return value === '<input type="checkbox" disabled/>';
         }
 
@@ -70,17 +68,14 @@ export default {
                         RestService.voegLidToeAanActiviteit(activiteit.id, aanwezigheid).then(() => {
                             toast.add({
                                 severity: "success",
-                                summary: "Verwijderen activiteit",
-                                detail: "Activiteit verwijderd",
+                                summary: "Toegevoegd aan activiteit",
+                                detail: "Lid " + lid.voornaam + " " + lid.achternaam + " toegevoegd aan " + activiteit.omschrijving,
                                 life: 2000,
                             });
                         }).finally(() => {
                             state.messageDialog = false;
                             state.isLoadingActiviteiten = false
                         })
-                        console.log(activiteit);//
-                        console.log("************************************************************");
-                        console.log(lid);
                     })
                   })
             } else {
