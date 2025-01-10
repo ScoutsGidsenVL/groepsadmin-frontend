@@ -249,6 +249,10 @@ export default {
         return apiClient().delete(baseUrl + "aanwezigheid/" + id );
     },
 
+    aanwezigheidAanpassen(aanwezigheid) {
+        return apiClient().patch(baseUrl + "aanwezigheid/" + aanwezigheid.id, aanwezigheid);
+    },
+
     getAlleGeregistreerdeLeden(activiteitId) {
         return apiClient().get(baseUrl + "aanwezigheid/geregistreerdeleden/" + activiteitId)
     },

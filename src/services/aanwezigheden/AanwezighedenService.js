@@ -42,13 +42,28 @@ export default {
         })
 
         const bewerkCell = (value) => {
-            if (value.field === "prijs") {
+            if ((value.field === "prijs") || (value.field === "aantaldagen")) {
                 let index = state.leden.indexOf(value.data);
-                state.leden[index].prijs = value.newValue;
-            }
-            if (value.field === "aantaldagen") {
-                let index = state.leden.indexOf(value.data);
-                state.leden[index].aantal = value.newValue;
+
+                if (value.field === "prijs") {
+                    state.leden[index].prijs = value.newValue;
+                }
+                if (value.field === "aantaldagen") {
+                    state.leden[index].aantaldagen = value.newValue;
+                }
+
+                console.log(state.leden[index]);
+
+                RestService.aanwezigheidAanpassen(state.leden[index]).then(() => {
+                    toast.add({
+                        severity: "success",
+                        summary: "Aanwezigheid aanpassen",
+                        detail: "Aanwezigheid " + state.leden[index].voornaam + " " + state.leden[index].naam + " aangepast.",
+                        life: 2000,
+                    });
+                }).finally(() => {
+                    state.messageDialog = false;
+                })
             }
         }
 

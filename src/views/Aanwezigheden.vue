@@ -32,24 +32,20 @@
               editMode="cell"
               @cell-edit-complete="bewerkCell"
               rowGroupMode="subheader"
-              groupRowsBy="functie.omschrijving"
               sortMode="single"
-              sortField="functie.omschrijving"
               :sortOrder="1"
               stripedRows
               showGridlines
               responsiveLayout="stack"
               class="p-datatable-sm mt-4 aanwezighedenTabel"
             >
-              <column field="functie.omschrijving" header="Functie"></column>
-              <column selectionMode="multiple" headerStyle="width: 3rem"></column>
               <column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
                 <template #body="{ data, field }">
                   {{ field === 'prijs' ? formatteerBedrag(data[field]) : data[field] }}
                 </template>
                 <template #editor="{ data, field }">
-                  <template v-if="field === 'aantal'">
-                    <input-text v-model="data[field]" autofocus />
+                  <template v-if="field === 'aantaldagen'">
+                    <input-number v-model="data[field]" autofocus />
                   </template>
                   <template v-if="field === 'prijs'">
                     <input-number v-model="data[field]" mode="currency" currency="EUR" locale="de-DE" autofocus />
@@ -66,11 +62,6 @@
               </column>
               <template #empty>
                 Geen leden gevonden.
-              </template>
-              <template #groupheader="slotProps">
-                <div class="flex align-items-center gap-2">
-                  <span class="font-bold ml-5">{{ slotProps.data.functie.omschrijving }}</span>
-                </div>
               </template>
             </data-table>
           </div>

@@ -873,12 +873,10 @@ export default {
         }
 
         const isWaardeTrue = (value) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             return value === '<input type="checkbox" disabled checked/>';
         }
 
         const isWaardeFalse = (value) => {
-            console.log("------------------------------------------------------------");
             return value === '<input type="checkbox" disabled/>';
         }
 
