@@ -51,6 +51,7 @@
             />
             <BaseCheckbox
               type="checkbox"
+              :disabled="!contacten[index].hasOwnProperty('rijksregisternummer')"
               v-model="contacten[index].lidtenlaste"
               label="Lid ten laste"
               multiple="false"
@@ -177,16 +178,18 @@ export default {
 
     const voegContactToe = () => {
       // Wanneer er geen adressen bestaan mag er geen contact toegevoegd kunnen worden
+      if(props.modelValue.persoonsgegevens.rijksregisternummer) console.log('heeft toegang rijksregister nummer');
       if (state.adressen && state.adressen.length > 0) {
         let nieuwContact = {
           rol: "moeder",
           voornaam: "",
           achternaam: "",
-          rijksregisternummer: "",
+          lidtenlaste: false,
           rijksregisternummeringevuld: false,
           adres: state.adressen[0].id,
           id: "" + Date.now(),
         };
+        if(props.modelValue.persoonsgegevens.rijksregisternummer) nieuwContact.rijksregisternummer = "";
         state.contacten.push(nieuwContact);
       } else {
         toast.add({
@@ -278,7 +281,6 @@ export default {
     }
 
     const v = useVuelidate(rules, state);
-
 
     onMounted(() => {
       resetData();
