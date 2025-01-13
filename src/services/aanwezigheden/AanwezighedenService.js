@@ -124,8 +124,8 @@ export default {
                 state.isLoadingAanwezigheden = true
                 toast.add({
                     severity: "success",
-                    summary: "Verwijderen activiteit",
-                    detail: "Activiteit verwijderd",
+                    summary: "Verwijderen aanwezigheid",
+                    detail: "Aanwezigheid verwijderd",
                     life: 2000,
                 });
             }).finally(() => {

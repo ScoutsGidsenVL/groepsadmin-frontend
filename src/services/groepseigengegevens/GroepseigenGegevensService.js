@@ -123,6 +123,7 @@ export default {
         }
 
         const voegGeigToe = () => {
+            if (!state.groep.groepseigenGegevens) state.groep.groepseigenGegevens = [];
             let newGegeven = {
                 beschrijving: null,
                 kanLeidingWijzigen: false,
