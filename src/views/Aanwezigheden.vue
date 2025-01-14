@@ -39,7 +39,7 @@
               responsiveLayout="stack"
               class="p-datatable-sm mt-4 aanwezighedenTabel"
             >
-              <column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
+              <column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 20%">
                 <template #body="{ data, field }">
                   {{ field === 'prijs' ? formatteerBedrag(data[field]) : data[field] }}
                 </template>

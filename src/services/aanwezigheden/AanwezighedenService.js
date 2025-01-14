@@ -18,7 +18,8 @@ export default {
                 { field: 'voornaam', header: 'Voornaam' },
                 { field: 'naam', header: 'Achternaam' },
                 { field: 'prijs', header: 'Prijs' },
-                { field: 'aantaldagen', header: 'Aantal dagen' }
+                { field: 'aantaldagen', header: 'Aantal dagen' },
+                { field: 'dagprijs', header: 'Dagprijs' }
             ],
             home: {icon: 'pi pi-home', to: '/dashboard'},
             breadcrumbItems: [
@@ -44,26 +45,33 @@ export default {
         const bewerkCell = (value) => {
             if ((value.field === "prijs") || (value.field === "aantaldagen")) {
                 let index = state.leden.indexOf(value.data);
+                let update = false;
 
                 if (value.field === "prijs") {
-                    state.leden[index].prijs = value.newValue;
-                }
-                if (value.field === "aantaldagen") {
-                    state.leden[index].aantaldagen = value.newValue;
+                    if (state.leden[index].prijs != value.newValue) {
+                        state.leden[index].prijs = value.newValue;
+                        update = true;
+                    }
+                } else if (value.field === "aantaldagen") {
+                    if (state.leden[index].aantaldagen != value.newValue) {
+                        state.leden[index].aantaldagen = value.newValue;
+                        update = true;
+                    }
                 }
 
-                console.log(state.leden[index]);
-
-                RestService.aanwezigheidAanpassen(state.leden[index]).then(() => {
-                    toast.add({
-                        severity: "success",
-                        summary: "Aanwezigheid aanpassen",
-                        detail: "Aanwezigheid " + state.leden[index].voornaam + " " + state.leden[index].naam + " aangepast.",
-                        life: 2000,
-                    });
-                }).finally(() => {
-                    state.messageDialog = false;
-                })
+                if (update) {
+                   RestService.aanwezigheidAanpassen(state.leden[index]).then(() => {
+                        toast.add({
+                            severity: "success",
+                            summary: "Aanwezigheid aanpassen",
+                            detail: "Aanwezigheid " + state.leden[index].voornaam + " " + state.leden[index].naam + " aangepast.",
+                            life: 2000,
+                        });
+                    }).finally(() => {
+                        state.messageDialog = false;
+                    })
+                    berekenDagprijs();
+                }
             }
         }
 
@@ -96,12 +104,20 @@ export default {
                 })
         };
 
+        const berekenDagprijs = () => {
+            console.log(state.leden);
+            state.leden.forEach((lid) => {
+                console.log(lid.prijs);
+                console.log(lid.aantaldagen);
+                lid.dagprijs = formatteerBedrag(lid.prijs/lid.aantaldagen);
+            })
+        };
+
         const getAlleInAanmerkingKomendeLeden = (activiteitId) => {
             restService.getAlleInAanmerkingKomendeLeden(activiteitId)
                 .then(res => {
-                    console.log(state.leden);
-                    state.leden = res.data.aanwezigen;
-                    console.log(state.leden);
+                    state.leden = res.data.aanwezigen;     
+                    berekenDagprijs();
                 })
         }
         
