@@ -159,6 +159,13 @@ export default {
             RestService.getActiviteiten(state.selectedGroep.groepsnummer).then(res => {
                 if (res.status === 200) {
                     state.activiteiten = res.data.activiteiten;
+                    state.activiteiten.forEach(activiteit => {
+                        const aantalDagen = Math.round(
+                            (new Date(activiteit.tot).getTime() - new Date(activiteit.van).getTime()) / (1000 * 3600 * 24)
+                        );
+                        const dagprijs = activiteit.prijs / aantalDagen;
+                        activiteit.dagprijs = Number.parseFloat(dagprijs).toFixed(2);
+                    });
                 }
             }).finally(() => {
                 state.isLoadingActiviteiten = false

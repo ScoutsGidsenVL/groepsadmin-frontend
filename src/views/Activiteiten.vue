@@ -109,6 +109,13 @@
                 </div>
               </template>
             </column>
+            <column field="dagprijs" header="Dagprijs">
+              <template #body="slotProps">
+                <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
+                  {{ slotProps.data.dagprijs }} €
+                </div>
+              </template>
+            </column>
             <column field="acties" header="Acties">
               <template #body="slotProps">
                 <div class="flex justify-content-between">
@@ -166,11 +173,6 @@ export default {
     }
   },
   created() {
-    console.log("======================================================================");
-    console.log(this.$store.getters.geselecteerdeLeden);
-    console.log(this.$store.getters.geselecteerdeLeden.length > 0);
-    console.log("======================================================================");
-    
     if (
       this.$store.getters.geselecteerdeLeden &&
       this.$store.getters.geselecteerdeLeden.length > 0 &&
@@ -178,10 +180,7 @@ export default {
     ) {
       this.sorteerLeden = true;
       this.$store.getters.geselecteerdeLeden.forEach((lid) => {
-        console.log("======================================================================");
         this.geselecteerdeLeden.push(lid);
-        console.log("======================================================================");
-        console.log(lid);
         this.leden.push({
           voornaam:
             lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
@@ -197,8 +196,6 @@ export default {
     } else {
       this.leden = [];
     }
-    console.log(this.leden);
-    console.log("======================================================================");
   },
 
   setup() {
