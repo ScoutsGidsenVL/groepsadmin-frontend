@@ -105,10 +105,7 @@ export default {
         };
 
         const berekenDagprijs = () => {
-            console.log(state.leden);
             state.leden.forEach((lid) => {
-                console.log(lid.prijs);
-                console.log(lid.aantaldagen);
                 lid.dagprijs = formatteerBedrag(lid.prijs/lid.aantaldagen);
             })
         };

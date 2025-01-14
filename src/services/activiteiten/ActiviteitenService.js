@@ -61,7 +61,6 @@ export default {
                             lidid: lid.id,
                             voornaam: lid.voornaam,
                             naam: lid.achternaam,
-                            betaaljaar: activiteit.werkjaar,
                             prijs: activiteit.prijs
                         };
 
