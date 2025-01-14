@@ -290,7 +290,6 @@ export default {
             }
 
             state.isLoadingActiviteiten = true;
-            delete state.activiteit.werkjaar;
             state.activiteit.van = DateUtil.formatteerDatumVoorApi(state.activiteit.van);
             state.activiteit.tot = DateUtil.formatteerDatumVoorApi(state.activiteit.tot);
             state.activiteit.groep = props.groep;
