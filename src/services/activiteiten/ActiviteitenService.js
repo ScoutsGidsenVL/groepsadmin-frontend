@@ -161,7 +161,7 @@ export default {
                     state.activiteiten = res.data.activiteiten;
                     state.activiteiten.forEach(activiteit => {
                         const aantalDagen = Math.round(
-                            (new Date(activiteit.tot).getTime() - new Date(activiteit.van).getTime()) / (1000 * 3600 * 24)
+                            ((new Date(activiteit.tot).getTime() - new Date(activiteit.van).getTime()) / (1000 * 3600 * 24)) + 1
                         );
                         const dagprijs = activiteit.prijs / aantalDagen;
                         activiteit.dagprijs = Number.parseFloat(dagprijs).toFixed(2);
