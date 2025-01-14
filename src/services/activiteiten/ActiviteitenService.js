@@ -180,20 +180,22 @@ export default {
 
         onMounted(() => {
             functiesEnGroepen();
-            state.selectedGroep = store.getters.groepen[0];
             store.getters.groepen.forEach((groep) => {
-                state.groepenArray.push({
-                    label: groep.naam + " - " + groep.id,
-                    value: groep,
-                });
+                if(groep.evenementSchrijfRecht) {
+                    state.groepenArray.push({
+                        label: groep.naam + " - " + groep.id,
+                        value: groep,
+                    });
+                    if (!(state.selectedGroep == [])) {
+                        state.selectedGroep = groep;
+                    }
+                };
             });
             emitter.on("activiteitenOphalen", () => {
                 getActiviteiten();
                 state.activiteitDialog = false
             });
-
             getActiviteiten();
-
         })
 
         return {
