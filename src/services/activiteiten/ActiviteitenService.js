@@ -160,9 +160,11 @@ export default {
                 if (res.status === 200) {
                     state.activiteiten = res.data.activiteiten;
                     state.activiteiten.forEach(activiteit => {
+                        activiteit.werkjaar = activiteit.werkjaar + "-" + (activiteit.werkjaar+1);
+                        activiteit.prijs = Number.parseFloat(activiteit.prijs).toFixed(2);
                         const aantalDagen = Math.round(
-                            ((new Date(activiteit.tot).getTime() - new Date(activiteit.van).getTime()) / (1000 * 3600 * 24)) + 1
-                        );
+                            ((new Date(activiteit.tot).getTime() - new Date(activiteit.van).getTime())
+                            / (1000 * 3600 * 24)) + 1);
                         const dagprijs = activiteit.prijs / aantalDagen;
                         activiteit.dagprijs = Number.parseFloat(dagprijs).toFixed(2);
                     });
