@@ -397,11 +397,11 @@ export default {
                         }
                         state.changes = false;
                     }).catch(error => {
-                    console.log(error)
+                    console.log(error);
                     toast.add({
                         severity: "warn",
-                        summary: error?.response?.data?.titel,
-                        detail: error?.response?.data?.beschrijving,
+                        summary: "Probleem",
+                        detail: "Validatie probleem",
                         life: 3000,
                     })
                 }).finally(() => {
