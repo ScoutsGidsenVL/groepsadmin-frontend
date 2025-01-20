@@ -75,7 +75,7 @@
             help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
           ></BaseCheckbox>
           <BaseCheckbox
-            :disabled="!hasPermission('vgagegevens')  && !nieuwLid"
+            :disabled="!hasPermission('vgagegevens') && !nieuwLid && !eigenProfiel"
             type="checkbox"
             v-model="lid.vgagegevens.verhoogdekinderbijslag"
             label="Verhoogde kinderbijslag"
