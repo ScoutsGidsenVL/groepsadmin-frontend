@@ -81,13 +81,13 @@
                   </div>                
               </template>
             </column>
-            <column field="werkjaar" header="Werkjaar">
+            <!--<column field="werkjaar" header="Werkjaar">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
                   {{ slotProps.data.werkjaar }}
                 </div>
               </template>
-            </column>
+            </column>-->
             <column field="periode" header="Periode">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
