@@ -70,8 +70,7 @@ export default {
             RestService.getWebsites()
                 .then(res => {
                     state.snelNaarItems = res.data.websites;
-                }).catch(error => {
-            })
+                })
         })
 
         const dashboardItems = computed(() => {
