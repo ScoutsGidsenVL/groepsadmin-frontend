@@ -49,6 +49,7 @@
             type="text"
             :disabled="!kanGroepWijzigen"
           />
+          <Button icon="far fa-search-dollar" class="actie-button" title="Fiscaal attest 2024" label="Fiscaal attest 2024" @click="stopAlleFuncties"/>
         </div>
       </template>
     </card>

@@ -45,7 +45,7 @@
                   :contactenLaden="contactenLaden"
                 ></Contacten>
               </div>
-              <div class="col-12 col-lg-12 col-xl-4">
+              <div class="col-12 col-lg-6 col-xl-4">
                 <InstantieFinanciaalAttest
                   v-model="selectedGroep"
                   :contactenLaden="contactenLaden"
