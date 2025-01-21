@@ -124,7 +124,7 @@ export default {
         },
         {
           label: "Betalende activiteiten",
-          condition: "aanvragen",
+          condition: "groepen",
           icon: "fas fa-campground",
           link: "Activiteiten",
           command: () => {
