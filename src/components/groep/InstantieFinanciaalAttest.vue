@@ -49,7 +49,7 @@
             type="text"
             :disabled="!kanGroepWijzigen"
           />
-          <Button icon="far fa-search-dollar" class="actie-button" title="Fiscaal attest 2024" label="Fiscaal attest 2024" @click="stopAlleFuncties"/>
+          <Button icon="far fa-search-dollar" class="actie-button" title="Fiscaal attest 2024" label="Fiscaal attest 2024" @click="fiscaalAttestOphalen"/>
         </div>
       </template>
     </card>
@@ -57,13 +57,12 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
 import BaseInput from "@/components/input/BaseInput";
 import DatePicker from "@/components/input/DatePicker";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
 import DateUtil from "@/services/dates/DateUtil";
+import FiscaalAttestService from "@/services/groep/FiscaalAttestService";
 
 export default {
   name: "Algemeen",
@@ -126,32 +125,14 @@ export default {
     },
   },
 
-  setup(props) {
-    const state = reactive({
-      baseUrl: window.location.origin.split('#' + window.location.pathname)[0] + '/groepsadmin/frontend/formulier/lidworden/',
-      groep: {
-        naam: "",
-        groepsnummer: "",
-        rekeningnummer: "",
-        vrijeInfo: "",
-        opgericht: "",
-        facturatieLeidingCheck: false,
-        facturatieLedenCheck: false,
-        adressen: [],
-        email: "",
-        website: "",
-        contacten: [],
-        groepseigenGegevens: [],
-        groepseigenFuncties: [],
-      },
-    });
+  setup() {
+    const {
+      fiscaalAttestOphalen,
+    } = FiscaalAttestService.fiscaalAttestSpace();
 
-    onUpdated(() => {
-      state.groep = props.modelValue;
-      state.groep.opgericht = new Date(props.modelValue.opgericht);
-    });
-
-    return {...toRefs(state)};
+    return {
+      fiscaalAttestOphalen
+    };
   },
 };
 </script>
