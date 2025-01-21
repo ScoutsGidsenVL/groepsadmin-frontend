@@ -95,7 +95,7 @@ const routes = [
         component: Aanwezigheden,
         meta: {
             requiresAuth: true,
-            hasAccessTo: "aanvragen"
+            hasAccessTo: "ledenlijst"
 
         }
     },

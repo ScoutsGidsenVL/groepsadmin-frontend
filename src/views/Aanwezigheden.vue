@@ -29,7 +29,7 @@
               :value="sorteerLeden"
               v-model:selection="aanwezigeLeden"
               dataKey="id"
-              editMode="cell"
+              :editMode="magActivteitBeheren ? 'cell' : 'none'"
               @cell-edit-complete="bewerkCell"
               rowGroupMode="subheader"
               sortMode="single"
@@ -52,7 +52,7 @@
                   </template>
                 </template>
               </column>
-              <column field="acties" header="Acties" style="width: 150px">
+              <column v-if="magActivteitBeheren" field="acties" header="Acties" style="width: 150px">
                 <template #body="slotProps">
                   <div class="flex justify-content-between">
                     <i class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"
@@ -82,6 +82,7 @@ import Footer from "@/components/global/Footer.vue";
 import AanwezighedenService from "@/services/aanwezigheden/AanwezighedenService";
 import InputNumber from "primevue/inputnumber";
 
+
 export default {
   name: "Aanwezigheden",
   components: {
@@ -92,6 +93,7 @@ export default {
     IngelogdLid,
     InputNumber
   },
+
   setup() {
     const {
       state,

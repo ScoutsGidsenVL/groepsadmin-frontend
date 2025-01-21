@@ -48,9 +48,9 @@
               <Button v-if="leden.length > 0" type="button" :label="leden.length === 1 ? '1 lid toevoegen' : leden.length + ' leden toevoegen'"
                   @click="voegLedenToe(leden)" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
-              <Button :label="leden.length > 0 ? 'Selectie wijzigen' : 'Leden Selecteren'" @click="$router.push('/ledenlijst')" icon="far fa-users"
+              <Button v-if="magActivteitBeheren" :label="leden.length > 0 ? 'Selectie wijzigen' : 'Leden Selecteren'" @click="$router.push('/ledenlijst')" icon="far fa-users"
                       class="actie-button mr-1 mt-3"/>
-              <Button type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
+              <Button v-if="magActivteitBeheren" type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
                       class="actie-button mr-1 mt-3"/>
             </div>
           </div>
@@ -121,9 +121,9 @@
                 <div class="flex justify-content-between">
                   <i class="fas fa-users mr-3 cursor-pointer" style="font-size: 1.5rem"
                      title="Aanwezigen bewerken" @click="registreerAanwezigheden(slotProps.data.id)"></i>
-                  <i class="fas fa-pencil mr-3 cursor-pointer" style="font-size: 1.5rem"
+                  <i v-if="magActivteitBeheren" class="fas fa-pencil mr-3 cursor-pointer" style="font-size: 1.5rem"
                      title="Activiteit bewerken" @click="wijzigActiviteit(slotProps.data)"></i>
-                  <i class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"
+                  <i v-if="magActivteitBeheren" class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"
                      title="Activiteit verwijderen" @click="verwijderActiviteit(slotProps.data.id)"></i>
                 </div>
               </template>
@@ -152,6 +152,8 @@ import Footer from "@/components/global/Footer.vue";
 import ActiviteitDialog from "@/components/dialog/ActiviteitDialog.vue";
 import MessageDialog from "@/components/dialog/MessageDialog";
 import BaseDropdown from "@/components/input/BaseDropdown.vue";
+import rechtenService from "@/services/rechten/rechtenService";
+
 
 export default {
   name: "Aanvragen",
@@ -195,6 +197,12 @@ export default {
       this.sorteerLeden = false;
     } else {
       this.leden = [];
+    }
+  },
+
+  computed: {
+    magActivteitBeheren() {
+      return rechtenService.kanWijzigen(this.selectedGroep);
     }
   },
 

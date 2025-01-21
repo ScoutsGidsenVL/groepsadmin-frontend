@@ -6,6 +6,7 @@ import CurrencyUtil from "@/services/utils/CurrencyUtil";
 import DateUtil from "@/services/dates/DateUtil";
 import RestService from "@/services/api/RestService";
 import {useToast} from "primevue/usetoast";
+import rechtenService from "@/services/rechten/rechtenService";
 
 
 export default {
@@ -39,7 +40,8 @@ export default {
             teVerwijderenActiviteitId: null,
             selectedAanwezigheid: {},
             activiteit: {},
-            leden: []
+            leden: [],
+            magActivteitBeheren: false,
         })
 
         const bewerkCell = (value) => {
@@ -101,6 +103,7 @@ export default {
                 .then((res) => {
                     state.activiteit = res.data;
                     getAlleInAanmerkingKomendeLeden(res.data.id);
+                    berekenMagActivteitBeheren(res.data.groep);
                 })
         };
 
@@ -150,6 +153,15 @@ export default {
         const annuleerVerwijderen = () => {
             state.teVerwijderenAanwezigheidId = null;
             state.messageDialog = false;
+        }
+  
+        const berekenMagActivteitBeheren = (groep) => {
+            console.log(groep);
+            restService.getGroepOpNummer(groep)
+                .then((res) => {
+                    state.magActivteitBeheren = rechtenService.kanWijzigen(res.data);
+                    console.log(state.magActivteitBeheren);
+                })
         }
 
         watch(
