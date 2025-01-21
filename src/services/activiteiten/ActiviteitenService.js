@@ -179,20 +179,22 @@ export default {
 
         onMounted(() => {
             functiesEnGroepen();
-            state.selectedGroep = store.getters.groepen[0];
             store.getters.groepen.forEach((groep) => {
-                state.groepenArray.push({
-                    label: groep.naam + " - " + groep.id,
-                    value: groep,
-                });
+                if (groep.verantwoordelijkheden && groep.verantwoordelijkheden.includes('leiding')) {
+                    state.groepenArray.push({
+                        label: groep.naam + " - " + groep.id,
+                        value: groep,
+                    });
+                    if (!state.selectedGroep.naam) {
+                        state.selectedGroep = groep;
+                        getActiviteiten();
+                    }
+                }
             });
             emitter.on("activiteitenOphalen", () => {
                 getActiviteiten();
                 state.activiteitDialog = false
             });
-
-            getActiviteiten();
-
         })
 
         return {
@@ -290,7 +292,7 @@ export default {
             delete state.activiteit.werkjaar;
             state.activiteit.van = DateUtil.formatteerDatumVoorApi(state.activiteit.van);
             state.activiteit.tot = DateUtil.formatteerDatumVoorApi(state.activiteit.tot);
-            state.activiteit.groep = props.groep.groepsnummer;
+            state.activiteit.groep = props.groep;
 
             if (state.activiteit.id) {
                 activiteitAanpassen();
