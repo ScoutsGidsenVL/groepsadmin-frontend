@@ -13,7 +13,6 @@ import _ from "lodash";
 import DateUtil from "@/services/dates/DateUtil";
 import moment from "moment";
 import useKeycloak from "@/services/utils/useKeycloak";
-import moment from "moment";
 
 export default {
 
@@ -349,18 +348,9 @@ export default {
             let bevestig = true;
 
             if (state.gewijzigdLid.vgagegevens) {
-                if (state.gewijzigdLid.vgagegevens.geboortedatum instanceof Date) {
-                    // De geboortedatum aanpassen via de datepicker zorgt voor een datum met tijdzone.
-                    let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
-                    geboortedatum.setHours(2);
-                    state.gewijzigdLid.vgagegevens.geboortedatum = DateUtil.formatteerDatumVoorApi(geboortedatum);
-                } else {
-                    // Het formaat van geboortedatum kan nu DD/MM/YYYY (ongewenst) of YYYY-MM-DD (gewenst) zijn.
-
-                    let geboortedatum = moment(state.gewijzigdLid.vgagegevens.geboortedatum, "DD/MM/YYYY").format('YYYY-MM-DD');
-                    if (geboortedatum != "Invalid date") {
-                        state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum;
-                    }
+                var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                if (isNaN(geboortedatum)) {
+                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'DD/MM/YYYY').toDate();
                 }
                 geboortedatum.setHours(2);
                 state.gewijzigdLid.vgagegevens.geboortedatum = geboortedatum.toISOString();
