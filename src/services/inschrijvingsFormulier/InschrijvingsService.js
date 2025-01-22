@@ -109,8 +109,14 @@ export default {
                 state.aanvraag.groepsnummer = state.groepsnummer;
                 state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
                 state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
-                state.aanvraag.geboortedatum = new Date(state.lid.vgagegevens.geboortedatum)
 
+                var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
+                if (isNaN(geboortedatum)) {
+                    geboortedatum = moment(state.lid.vgagegevens.geboortedatum, 'DD/MM/YYYY').toDate();
+                }
+                geboortedatum.setHours(2);
+                state.aanvraag.geboortedatum = geboortedatum.toISOString();
+                
                 RestService.saveAanvraag(state.aanvraag)
                     .then(res => {
                         if (res.status === 204) {
