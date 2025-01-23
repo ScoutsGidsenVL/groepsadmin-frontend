@@ -40,7 +40,7 @@ export default {
         },
         {
           naam: "Hopper",
-          url: "http://www.hopper.be",
+          url: "https://www.hopper.be",
         },
         {
           naam: "Groepsadministratie",
