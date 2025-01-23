@@ -126,15 +126,24 @@ export default {
                             router.push({name: 'LidWordenVerstuurd', params: {groep: state.groepsnummer}})
                         }
                     }).catch((error) => {
-                    toast.add({
-                        severity: "warn",
-                        summary: error.response.data.titel,
-                        detail: error.response.data.beschrijving,
-                        life: 3000,
-                    });
-                }).finally(() => {
-                    state.loading = false;
-                })
+                        if (error && error.response && error.response.data) {
+                            toast.add({
+                                severity: "warn",
+                                summary: error.response.data.titel,
+                                detail: error.response.data.beschrijving,
+                                life: 3000,
+                            });
+                        } else {
+                            toast.add({
+                                severity: "error",
+                                summary: "Onverwachte fout",
+                                detail: "Probeer het later opnieuw",
+                                life: 10000,
+                            });
+                        }
+                    }).finally(() => {
+                        state.loading = false;
+                    })
             }
         }
 
