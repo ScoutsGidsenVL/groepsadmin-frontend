@@ -137,8 +137,8 @@ export default {
                             toast.add({
                                 severity: "error",
                                 summary: "Onverwachte fout",
-                                detail: "Probeer het later opnieuw",
-                                life: 10000,
+                                detail: "Probeer het later opnieuw of contacteer groepsadmin@scoutsengidsenvlaanderen.be",
+                                life: 30000,
                             });
                         }
                     }).finally(() => {
