@@ -14,8 +14,8 @@ export default function getClient() {
     case "http://localhost:3000":
       returnClient.clientId = "groepsadmin-localhost-3000-client";
       break;
-    case "https://groepsadmin-dev-tvl.scoutsengidsenvlaanderen.be":
-      returnClient.clientId = "groepsadmin-dev-tvl-client";
+    case "https://ga-dev-kdv.scoutsengidsenvlaanderen.be":
+      returnClient.clientId = "ga-dev-kdv-client";
       break;
     case "https://ga-dev-tvl.scoutsengidsenvlaanderen.be":
       returnClient.clientId = "ga-dev-tvl-client";
