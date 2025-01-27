@@ -215,6 +215,10 @@ export default {
                 state.lid.vgagegevens.verminderdlidgeld = false;
             }
 
+            if (!state.lid.vgagegevens.verhoogdekinderbijslag) {
+                state.lid.vgagegevens.verhoogdekinderbijslag = false;
+            }
+
             RestService.saveNieuwLid(state.lid).then(res => {
                 if (res.status === 201) {
                     toast.add({

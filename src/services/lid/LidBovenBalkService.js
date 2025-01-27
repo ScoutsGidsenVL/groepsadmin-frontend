@@ -88,10 +88,11 @@ export default {
                     achternaam: state.lid.vgagegevens.achternaam
                 },
                 persoonsgegevens: {
-                    verminderdlidgeld: false,
+                    verminderdlidgeld: state.lid.vgagegevens.verminderdlidgeld,
                     beperking: false,
                     geslacht: 'vrouw',
-                    gsm: state.lid.persoonsgegevens.gsm
+                    gsm: state.lid.persoonsgegevens.gsm,
+                    verhoogdekinderbijslag: state.lid.vgagegevens.verhoogdekinderbijslag,
                 },
                 verbondsgegevens: {
                     lidgeldbetaald: false
