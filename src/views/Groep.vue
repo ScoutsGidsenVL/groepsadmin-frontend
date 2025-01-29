@@ -46,10 +46,9 @@
                 ></Contacten>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
-                <InstantieFinanciaalAttest
+                <Algemeen2
                   v-model="selectedGroep"
-                  :contactenLaden="contactenLaden"
-                ></InstantieFinanciaalAttest>
+                ></Algemeen2>
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
                 <Lokalen :groep="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></Lokalen>
@@ -79,7 +78,8 @@ import Loader from "@/components/global/Loader";
 import Footer from "@/components/global/Footer";
 import GroepService from "@/services/groep/GroepService";
 import {toRefs} from "@vue/reactivity";
-import InstantieFinanciaalAttest from "../components/groep/InstantieFinanciaalAttest.vue";
+//import InstantieFinanciaalAttest from "../components/groep/InstantieFinanciaalAttest.vue";
+import Algemeen2 from "../components/groep/Algemeen2.vue";
 
 export default {
   name: "Groep",
@@ -89,8 +89,9 @@ export default {
     GroepseigenFuncties,
     BaseDropdown,
     Algemeen,
+    Algemeen2,
     Contacten,
-    InstantieFinanciaalAttest,
+    //InstantieFinanciaalAttest,
     Lokalen,
     ConfirmDialog,
     SideMenu,

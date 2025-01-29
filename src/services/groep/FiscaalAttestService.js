@@ -25,10 +25,37 @@ export default {
             gesorteerdeFuncties: [],
         })
 
-        const fiscaalAttestOphalen = () => {
-            console.log("fiscaalAttestOphalen");
+        const fiscaalAttestOphalen = (groep, jaar) => {
+            RestService.getFiscaalAttest(groep, jaar)
+                .then((res) => {
+                    if (res.data) {
+                        const contentDisposition = res.headers['content-disposition'];
+                        let fileName = 'unknown';
+                        if (contentDisposition) {
+                            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+                            if (fileNameMatch.length === 2)
+                                fileName = fileNameMatch[1];
+                        }
+                        let obj = {};
+                        let blob = new Blob([res.data], { type: "application/zip" });
+                        obj.fileUrl = window.URL.createObjectURL(blob);
+                        obj.title = fileName;
+                        downloadFile(obj);
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                }).finally(() => {
+                    state.isLoading = false;
+                })
         }
 
+        const downloadFile = (obj) => {
+            let a = document.createElement("a");
+            a.href = obj.fileUrl;
+            a.download = obj.title;
+            document.body.appendChild(a);
+            a.click();
+        }
 
         const remove = (index) => {
             let geif = state.groep.groepseigenFuncties[index];

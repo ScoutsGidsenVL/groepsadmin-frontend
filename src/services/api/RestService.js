@@ -3,6 +3,7 @@ import apiConfig from "@/services/api/ApiConfig";
 import apiClientCsv from "@/services/api/ApiClientCsv";
 import apiClientPdf from "@/services/api/ApiClientPdf";
 import apiClientMail from "@/services/api/ApiClientMail";
+import apiClientZip from "@/services/api/ApiClientZip";
 
 const backendUrl = apiConfig().host;
 let baseUrl = "";
@@ -263,5 +264,9 @@ export default {
 
     getAlleInAanmerkingKomendeLeden2(activiteitId) {
         return apiClient().get(baseUrl + "aanwezigheid/ledenOphalenVoorActiviteit/" + activiteitId)
+    },
+
+    getFiscaalAttest(groepsnummer, jaar) {
+        return apiClientZip().get(baseUrl + "groep/" + groepsnummer + "/fiscaalattest?jaar=" + jaar)
     }
 };
