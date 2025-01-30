@@ -86,8 +86,7 @@
                   @deactivateCriterium="deactivateCriterium"
                   v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld'
                   || criteria.criteriaKey === 'emailgeblokkeerd'    || criteria.criteriaKey === 'emailleeg'
-                  || criteria.criteriaKey === 'geenLidkaart'        || criteria.criteriaKey === 'geweigerdLid'
-                  || criteria.criteriaKey === 'rijksregisternummer'">
+                  || criteria.criteriaKey === 'geenLidkaart'        || criteria.criteriaKey === 'geweigerdLid'">
       </BoolFilter>
       <OudLedenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'oudleden'" :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"></OudLedenSelect>
