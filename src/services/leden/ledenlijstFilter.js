@@ -312,21 +312,19 @@ export default {
 
         returnObj.arrCriteria.push(this.getGeweigerdeledenMenu());
 
-        returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu());
+        returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu())
 
-        returnObj.arrCriteria.push(this.getRijksregisternummerMenu());
+        returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu())
 
-        returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu());
+        returnObj.arrCriteria.push(this.getEmailGeblokkeerdMenu())
 
-        returnObj.arrCriteria.push(this.getEmailGeblokkeerdMenu());
+        returnObj.arrCriteria.push(this.getLeeftijdMenu())
 
-        returnObj.arrCriteria.push(this.getLeeftijdMenu());
+        returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu())
 
-        returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu());
+        returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu())
 
-        returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu());
-
-        returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu());
+        returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu())
 
         return returnObj;
     },
@@ -455,22 +453,6 @@ export default {
         }
         verminderdLidgeld.activated = false;
         return verminderdLidgeld;
-    },
-
-    getRijksregisternummerMenu() {
-        let rijksregisternummer = {
-            "title": "Rijksregisternummer",
-            "criteriaKey": "rijksregisternummer",
-            "multiplePossible": false,
-            "items": [
-                {
-                    "value": true,
-                    "label": "Ja"
-                }
-            ]
-        }
-        rijksregisternummer.activated = false;
-        return rijksregisternummer;
     },
 
     getEmailGeblokkeerdMenu() {

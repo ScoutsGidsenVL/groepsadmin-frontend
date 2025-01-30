@@ -171,8 +171,7 @@ export default {
                 criterium.criteriaKey === 'geweigerdLid' ||
                 criterium.criteriaKey === 'emailleeg' ||
                 criterium.criteriaKey === 'geenLidkaart' ||
-                criterium.criteriaKey === 'oudleden' ||
-                criterium.criteriaKey === 'rijksregisternummer') {
+                criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
@@ -341,8 +340,7 @@ export default {
 
         const deactivateCriterium = (criterium) => {
             if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd'
-                || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailleeg' || criterium.criteriaKey === 'geenLidkaart' || criterium.criteriaKey === 'geweigerdLid'
-                || criterium.criteriaKey === 'rijksregisternummer') {
+                || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailleeg' || criterium.criteriaKey === 'geenLidkaart' || criterium.criteriaKey === 'geweigerdLid') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = false;
             } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
