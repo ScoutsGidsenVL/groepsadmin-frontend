@@ -11,7 +11,7 @@
   >
     <template #header>
       <div class="inline-flex align-items-center justify-content-start gap-2 header-background">
-        <span class="font-bold white-space-nowrap">Fiscaal Attest Genereren</span>
+        <span class="font-bold white-space-nowrap">Fiscaal attest genereren</span>
       </div>
     </template>
     <div class="activiteit-content">
@@ -20,32 +20,44 @@
         v-model="attest.kbo"
         label="KBO"
         type="text"
+        :invalid="v.attest.kbo.$dirty && v.attest.kbo.$invalid"
+        :error-message="v.attest.kbo.required.$message"
       />
-      <h4>Certificerende Instantie</h4>
+      <h4>Certificerende instantie</h4>
       <BaseInput
         v-model="attest.certnaam"
         label="Naam"
         type="text"
+        :invalid="v.attest.certnaam.$dirty && v.attest.certnaam.$invalid"
+        :error-message="v.attest.certnaam.required.$message"
       />
       <BaseInput
         v-model="attest.certadres"
         label="Straat + nr"
         type="text"
+        :invalid="v.attest.certadres.$dirty && v.attest.certadres.$invalid"
+        :error-message="v.attest.certadres.required.$message"
       />
       <BaseInput
         v-model="attest.certpostcode"
         label="Postcode"
         type="text"
+        :invalid="v.attest.certpostcode.$dirty && v.attest.certpostcode.$invalid"
+        :error-message="v.attest.certpostcode.required.$message"
       />
       <BaseInput
         v-model="attest.certgemeente"
         label="Gemeente"
         type="text"
+        :invalid="v.attest.certgemeente.$dirty && v.attest.certgemeente.$invalid"
+        :error-message="v.attest.certgemeente.required.$message"
       />
       <BaseInput
         v-model="attest.certkbo"
         label="KBO"
         type="text"
+        :invalid="v.attest.certkbo.$dirty && v.attest.certkbo.$invalid"
+        :error-message="v.attest.certkbo.required.$message"
       />
     </div>
     <template #footer>
@@ -87,7 +99,6 @@ export default {
   },
   methods: {
     genereer() {
-      console.log("genereer");
       this.genereerAttest();
     },
   },

@@ -373,14 +373,22 @@ export default {
         const rules = {
             attest: {
                 kbo: {
-                    required: helpers.withMessage('Pseudeo-kbo-nummer is verplicht', required)
+                    required: helpers.withMessage('Pseudeo-KBO-nummer is verplicht', required)
                 },
-                tot: {
-                    required: helpers.withMessage('Einddatum is verplicht', required)
+                certnaam: {
+                    required: helpers.withMessage('Naam certificerende instantie is verplicht', required)
                 },
-                prijs: {
-                    required: helpers.withMessage('Prijs is verplicht', required),
-                    minValue: helpers.withMessage('Prijs mag niet 0 zijn', minValue(0.01))
+                certadres: {
+                    required: helpers.withMessage('Adres certificerende instantie is verplicht', required),
+                },
+                certpostcode: {
+                    required: helpers.withMessage('Postcode certificerende instantie is verplicht', required),
+                },
+                certgemeente: {
+                    required: helpers.withMessage('Gemeente certificerende instantie is verplicht', required),
+                },
+                certkbo: {
+                    required: helpers.withMessage('KBO-nummer certificerende instantie is verplicht', required),
                 },
             },
         }
@@ -410,19 +418,35 @@ export default {
                 });
                 return;
             } else {
-                RestService.getFiscaalAttest(state.groep, state.attest).then(res => {
-                    if (res.status === 200) {
-                        toast.add({
-                            severity: "success",
-                            summary: "Fiscaal attest",
-                            detail: "Fiscaal attest gedownload",
-                            life: 2000,
-                        });
+                RestService.getFiscaalAttest(state.groep, state.attest).then((res) => {
+                    if (res.data) {
+                        const contentDisposition = res.headers['content-disposition'];
+                        let fileName = 'unknown';
+                        if (contentDisposition) {
+                            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+                            if (fileNameMatch.length === 2)
+                                fileName = fileNameMatch[1];
+                        }
+                        let obj = {};
+                        let blob = new Blob([res.data], { type: "application/zip" });
+                        obj.fileUrl = window.URL.createObjectURL(blob);
+                        obj.title = fileName;
+                        downloadFile(obj);
                     }
+                }).catch((error) => {
+                    console.log(error);
                 }).finally(() => {
                     emitter.emit('close')
                 })
             } 
+        }
+
+        const downloadFile = (obj) => {
+            let a = document.createElement("a");
+            a.href = obj.fileUrl;
+            a.download = obj.title;
+            document.body.appendChild(a);
+            a.click();
         }
 
         const v = useVuelidate(rules, state);
