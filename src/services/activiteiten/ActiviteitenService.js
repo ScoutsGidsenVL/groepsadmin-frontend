@@ -420,7 +420,7 @@ export default {
             } else {
                 const attestParams = new URLSearchParams(state.attest).toString();
                 console.log(attestParams);
-                RestService.getFiscaalAttest(state.selectedGroep.groepsnummer, attestParams).then((res) => {
+                RestService.getFiscaalAttest(state.groep.groepsnummer, attestParams).then((res) => {
                     if (res.data) {
                         const contentDisposition = res.headers['content-disposition'];
                         let fileName = 'unknown';
