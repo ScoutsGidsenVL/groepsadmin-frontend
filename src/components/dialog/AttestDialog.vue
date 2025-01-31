@@ -52,7 +52,7 @@
       <Button
         label="Annuleer"
         icon="pi pi-times"
-        @click="sluiten"
+        @click="$emit('close')"
         class="p-button-text reject-button"
       />
       <Button
@@ -86,12 +86,6 @@ export default {
     groep: {
       type: Object
     }
-  },
-  methods: {
-    sluiten() {
-      console.log("sluiten");
-      this.$emit("close");
-    },
   },
 
   setup(props) {
