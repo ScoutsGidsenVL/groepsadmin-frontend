@@ -57,16 +57,14 @@
       />
       <Button
         label="Genereer Attest"
-        @click="$emit('genereerAttest')"
+        @click="genereer"
         class="p-button-text"
       />
-      <!--<Opslaan @opslaan="opslaan"></Opslaan>-->
     </template>
   </Dialog>
 </template>
 
 <script>
-//import Opslaan from "@/components/buttons/Opslaan.vue";
 import BaseInput from "@/components/input/BaseInput.vue";
 import {toRefs} from "@vue/reactivity";
 import Loader from "@/components/global/Loader.vue";
@@ -86,6 +84,12 @@ export default {
     groep: {
       type: Object
     }
+  },
+  methods: {
+    genereer() {
+      console.log("genereer");
+      this.genereerAttest();
+    },
   },
 
   setup(props) {
