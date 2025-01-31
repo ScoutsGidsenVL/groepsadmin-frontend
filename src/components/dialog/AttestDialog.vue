@@ -70,7 +70,7 @@
       <Button
         label="Genereer Attest"
         @click="genereer"
-        class="p-button-text"
+        class="p-button-text approve-button"
       />
     </template>
   </Dialog>

@@ -418,7 +418,9 @@ export default {
                 });
                 return;
             } else {
-                RestService.getFiscaalAttest(state.groep, state.attest).then((res) => {
+                const attestParams = new URLSearchParams(state.attest).toString();
+                console.log(attestParams);
+                RestService.getFiscaalAttest(state.selectedGroep.groepsnummer, attestParams).then((res) => {
                     if (res.data) {
                         const contentDisposition = res.headers['content-disposition'];
                         let fileName = 'unknown';

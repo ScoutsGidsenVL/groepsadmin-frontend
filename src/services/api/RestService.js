@@ -266,7 +266,7 @@ export default {
         return apiClient().get(baseUrl + "aanwezigheid/ledenOphalenVoorActiviteit/" + activiteitId)
     },
 
-    getFiscaalAttest(groepsnummer, jaar) {
-        return apiClientZip().get(baseUrl + "groep/" + groepsnummer + "/fiscaalattest?jaar=" + jaar)
+    getFiscaalAttest(groepsnummer, attestParams) {
+        return apiClientZip().get(baseUrl + "groep/" + groepsnummer + "/fiscaalattest?" + attestParams)
     }
 };
