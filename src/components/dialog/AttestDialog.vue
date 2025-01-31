@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     sluiten() {
+      console.log("sluiten");
       this.$emit("close");
     },
   },

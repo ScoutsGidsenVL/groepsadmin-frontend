@@ -16,7 +16,7 @@
     />
     <attestDialog
       :dialog-visible="attestDialog"
-      @close="sluitAttestDialog"
+      @close="close"
       :groep="selectedGroep"
       :te-bewerken-activiteit="teBewerkenActiviteit"
     />
