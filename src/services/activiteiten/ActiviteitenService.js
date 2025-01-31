@@ -401,7 +401,9 @@ export default {
 
         watch(
             () => props.dialogVisible,
-            () => {},
+            () => {
+                state.group = props.groep;
+            },
             {deep: true}
         )
 
@@ -420,10 +422,18 @@ export default {
             } else {
                 const attestParams = new URLSearchParams(state.attest).toString();
                 console.log(attestParams);
+                console.log(state.groep);
+                console.log(state.groep.groepsnummer);
+                if (props) {
+                    console.log(props.groep);
+                    if (props.groep) {
+                        console.log(props.groep.groepsnummer);
+                    }
+                }
                 RestService.getFiscaalAttest(state.groep.groepsnummer, attestParams).then((res) => {
                     if (res.data) {
                         const contentDisposition = res.headers['content-disposition'];
-                        let fileName = 'unknown';
+                        let fileName = 'fiscaalattest.zip';
                         if (contentDisposition) {
                             const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
                             if (fileNameMatch.length === 2)
