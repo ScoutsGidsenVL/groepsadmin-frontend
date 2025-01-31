@@ -25,6 +25,7 @@ export default {
             dialogHeader: "",
             isLoadingActiviteiten: false,
             activiteitDialog: false,
+            attestDialog: false,
             messageDialog: false,
             geenActiviteitenDialog: false,
             selectedGroep: {},
@@ -125,6 +126,7 @@ export default {
             state.teBewerkenActiviteit = null;
             state.activiteitDialog = false;
             state.geenActiviteitenDialog = false;
+            state.attestDialog = false;
         }
 
         const verwijderActiviteit = (activiteitId) => {
@@ -133,7 +135,6 @@ export default {
             state.dialogHeader = "Activiteit verwijderen?"
             state.teVerwijderenActiviteitId = activiteitId;
         }
-
 
         const veranderGroep = (groep) => {
             state.selectedGroep = groep;
@@ -232,7 +233,6 @@ export default {
                 prijs: 0,
                 groep: props.groep
             },
-
             activiteitOpslaan: false
         });
 
@@ -351,6 +351,87 @@ export default {
             openDialog,
             formatteerDatum,
             opslaan
+        }
+    },
+
+    attestenDialogSpace(props) {
+        const toast = useToast();
+        const emitter = useEmitter();
+
+        const state = reactive({
+            groep: props.groep,
+            attest: {
+                kbo: "",
+                certnaam: "",
+                certadres: "",
+                certpostcode: "",
+                certgemeente: "",
+                certkbo: ""
+            }
+        });
+
+        const rules = {
+            attest: {
+                kbo: {
+                    required: helpers.withMessage('Pseudeo-kbo-nummer is verplicht', required)
+                },
+                tot: {
+                    required: helpers.withMessage('Einddatum is verplicht', required)
+                },
+                prijs: {
+                    required: helpers.withMessage('Prijs is verplicht', required),
+                    minValue: helpers.withMessage('Prijs mag niet 0 zijn', minValue(0.01))
+                },
+            },
+        }
+
+        const openDialog = computed(
+            () => {
+                return props.dialogVisible;
+            },
+        )
+
+        watch(
+            () => props.dialogVisible,
+            () => {},
+            {deep: true}
+        )
+
+        const genereerAttest = () => {
+            console.log("genereerAttest");
+            v.value.$touch();
+            if (v.value.$invalid) {
+                state.loading = false;
+                toast.add({
+                    severity: "warn",
+                    summary: "Wijzigingen",
+                    detail: "Kan nog niet indienen. Er zijn nog fouten vastgesteld in het formulier.",
+                    life: 3000,
+                });
+                return;
+            } else {
+                RestService.getFiscaalAttest(state.groep, state.attest).then(res => {
+                    if (res.status === 200) {
+                        toast.add({
+                            severity: "success",
+                            summary: "Fiscaal attest",
+                            detail: "Fiscaal attest gedownload",
+                            life: 2000,
+                        });
+                    }
+                }).finally(() => {
+                    emitter.emit('close')
+                })
+            } 
+        }
+
+        const v = useVuelidate(rules, state);
+
+        return {
+            state,
+            v,
+            openDialog,
+            genereerAttest
         }
     }
 }

@@ -14,6 +14,12 @@
       :groep="selectedGroep"
       :te-bewerken-activiteit="teBewerkenActiviteit"
     />
+    <attestDialog
+      :dialog-visible="attestDialog"
+      @close="sluitAttestDialog"
+      :groep="selectedGroep"
+      :te-bewerken-activiteit="teBewerkenActiviteit"
+    />
     <MessageDialog
       :message="dialogMessage"
       :header="dialogHeader"
@@ -52,6 +58,8 @@
                       class="actie-button mr-1 mt-3"/>
               <Button v-if="magActivteitBeheren" type="button" label="Nieuwe Activiteit" @click="activiteitDialog = true" icon="far fa-plus"
                       class="actie-button mr-1 mt-3"/>
+              <Button v-if="magActivteitBeheren" type="button" label="Attest Genereren" @click="attestDialog = true" icon="far fa-search-dollar"
+                      class="actie-button mr-1 mt-3"/>                      
             </div>
           </div>
           <data-table
@@ -150,6 +158,7 @@ import {toRefs} from "@vue/reactivity";
 import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
 import Footer from "@/components/global/Footer.vue";
 import ActiviteitDialog from "@/components/dialog/ActiviteitDialog.vue";
+import AttestDialog from "@/components/dialog/AttestDialog.vue";
 import MessageDialog from "@/components/dialog/MessageDialog";
 import BaseDropdown from "@/components/input/BaseDropdown.vue";
 import rechtenService from "@/services/rechten/rechtenService";
@@ -165,6 +174,7 @@ export default {
     SideMenu,
     IngelogdLid,
     ActiviteitDialog,
+    AttestDialog,
     MessageDialog
   },
 
