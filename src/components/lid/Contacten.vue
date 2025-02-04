@@ -60,6 +60,7 @@
             <base-input
               v-if="contacten[index].hasOwnProperty('rijksregisternummer')"
               label="Rijksregisternummer"
+              placeholder="xx.xx.xx-xxx.xx"
               v-model="contacten[index].rijksregisternummer"
               type="text"
             />

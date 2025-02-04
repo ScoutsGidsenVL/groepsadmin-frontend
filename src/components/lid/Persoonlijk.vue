@@ -43,6 +43,7 @@
           <BaseInput
             v-model="lid.persoonsgegevens.rijksregisternummer"
             label="Rijksregisternummer"
+            placeholder="xx.xx.xx-xxx.xx"
             type="text"
             v-if="eigenProfiel"
           ></BaseInput>
