@@ -50,6 +50,7 @@ export default {
                 links: [],
                 adressen: [],
                 functies: [],
+                contacten: [],
                 persoonsgegevens: {
                     geslacht: "vrouw"
                 },
@@ -73,6 +74,7 @@ export default {
                     links: [],
                     adressen: [],
                     functies: [],
+                    contacten: [],
                     persoonsgegevens: {
                         geslacht: "vrouw"
                     },
