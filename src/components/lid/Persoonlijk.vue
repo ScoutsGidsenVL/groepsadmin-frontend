@@ -82,6 +82,7 @@
             v-model="lid.vgagegevens.verhoogdekinderbijslag"
             label="Verhoogde kinderbijslag"
             multiple="false"
+            :beschrijving="uitleg"
             help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
           ></BaseCheckbox>
           <BaseCheckbox
@@ -212,7 +213,8 @@ export default {
         " Als je <a href=\"https://www.scoutsengidsenvlaanderen.be/aanvraagformulier-voor-fonds-op-maat\" target=\"_blank\">dit formulier</a> " +
         " invult (let op: je moet ingelogd zijn op de website), " +
         " komt Scouts en Gidsen Vlaanderen vzw voor 1/3 tussen in de deelnameprijs.<br> " +
-        " Het formulier vul je als (groeps)leiding in, de ouders hoeven niets te doen."
+        " Het formulier vul je als (groeps)leiding in, de ouders hoeven niets te doen.",
+      uitleg: "Zoals bepaald door de <a href=\"https://fin.belgium.be/nl/particulieren/belastingvoordelen/kinderopvang/belastingvermindering\" target=\"_blank\">overheid</a>."
     };
   },
   methods: {
