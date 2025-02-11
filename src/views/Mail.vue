@@ -179,7 +179,7 @@
               <div class="col-12 pr-lg-5em">
                 <Editor
                   :init="getOptions"
-                  api-key="1o4al3jtztab1wf2880j7iio0hww1b4c6ut5qjqan57p3j4f"
+                  tinymce-script-src="/groepsadmin/frontend/js/tinymce.min.js"
                   v-model="sjabloon.inhoud"
                 ></Editor>
               </div>

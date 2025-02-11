@@ -14,7 +14,8 @@ pipeline {
         sh "npm install --ignore-scripts"
         sh "rm -rf dist frontend.zip"
         sh "npx browserslist@latest --update-db"
-        sh "npm run build "
+        sh "npm run build"
+        sh "cp -r node_modules/tinymce/*.min.js node_modules/tinymce/*/ dist/js/"
         sh "zip -r frontend.zip dist/*"
       }
     }
