@@ -387,9 +387,7 @@ export default {
                 certgemeente: {
                     required: helpers.withMessage('Gemeente certificerende instantie is verplicht', required),
                 },
-                certkbo: {
-                    required: helpers.withMessage('KBO-nummer certificerende instantie is verplicht', required),
-                },
+                certkbo: {},
             },
         }
 

@@ -54,10 +54,8 @@
       />
       <BaseInput
         v-model="attest.certkbo"
-        label="KBO"
+        label="KBO (optioneel)"
         type="text"
-        :invalid="v.attest.certkbo.$dirty && v.attest.certkbo.$invalid"
-        :error-message="v.attest.certkbo.required.$message"
       />
     </div>
     <template #footer>
