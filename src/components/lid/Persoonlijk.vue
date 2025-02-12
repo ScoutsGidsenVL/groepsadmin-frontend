@@ -45,10 +45,10 @@
             label="Rijksregisternummer"
             placeholder="xx.xx.xx-xxx.xx"
             type="text"
-            v-if="eigenProfiel"
+            v-if="eigenProfiel || inschrijving"
           ></BaseInput>
           <BaseCheckbox
-            v-if="!eigenProfiel"
+            v-if="!eigenProfiel && !inschrijving"
             type="checkbox"
             v-model="lid.persoonsgegevens.rijksregisternummeringevuld"
             label="Rijksregisternummer ingevuld"
