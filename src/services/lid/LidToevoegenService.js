@@ -155,7 +155,6 @@ export default {
                         adres.gemeente === contact.adres.gemeente) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
-                        contact.id = 'tempcontact_' + counter
                     } else if (adres.id === contact.adres) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
@@ -171,7 +170,6 @@ export default {
 
             _.forEach(state.lid.contacten, function (contact) {
                 if (contact.id.length > 28) {
-                    contact.id = 'tempcontact';
                     contact.adressen = null;
                 }
             })
