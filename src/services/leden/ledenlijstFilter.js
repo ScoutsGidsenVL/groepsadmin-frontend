@@ -307,24 +307,16 @@ export default {
         returnObj.arrCriteria.push(groepsEigenCriteria);
 
         returnObj.arrCriteria.push(this.getGeslachtMenu());
-
         returnObj.arrCriteria.push(this.getOudledenMenu());
-
         returnObj.arrCriteria.push(this.getGeweigerdeledenMenu());
-
-        returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu())
-
-        returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu())
-
-        returnObj.arrCriteria.push(this.getEmailGeblokkeerdMenu())
-
-        returnObj.arrCriteria.push(this.getLeeftijdMenu())
-
-        returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu())
-
-        returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu())
-
-        returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu())
+        returnObj.arrCriteria.push(this.getVerminderdLidgeldMenu());
+        returnObj.arrCriteria.push(this.getAdresGeblokkeerdMenu());
+        returnObj.arrCriteria.push(this.getEmailGeblokkeerdMenu());
+        returnObj.arrCriteria.push(this.getLeeftijdMenu());
+        returnObj.arrCriteria.push(this.getIndividueleSteekkaartMenu());
+        returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu());
+        returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu());
+        returnObj.arrCriteria.push(this.getRijksregisternummerMenu());
 
         return returnObj;
     },
@@ -517,6 +509,22 @@ export default {
         }
         emailLeeg.activated = false;
         return emailLeeg;
+    },
+
+    getRijksregisternummerMenu() {
+        let rijksregisternummer = {
+            "title": "Geen rijksregisternummer",
+            "criteriaKey": "geenRijksregisternummer",
+            "multiplePossible": false,
+            "items": [
+                {
+                    "value": true,
+                    "label": "Ja"
+                }
+            ]
+        }
+        rijksregisternummer.activated = false;
+        return rijksregisternummer;
     },
 
     maakGroepSpecifiekeFunctieGroepen(functies) {
