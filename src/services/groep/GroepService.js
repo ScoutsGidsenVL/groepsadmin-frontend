@@ -212,6 +212,7 @@ export default {
             RestService.getFunctiesVanGroep(groep.groepsnummer).then(res => {
                 if (res.status === 200) {
                     state.selectedGroep.groepseigenFunctie = res.data;
+                    // state.selectedGroep.groepseigenFuncties = res.data.functies; Is this correct???
                 }
             })
         }

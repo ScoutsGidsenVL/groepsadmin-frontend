@@ -286,6 +286,7 @@ export default {
         const opslaan = () => {
             let vga = false;
             let confirmVGA = false;
+            console.log("opslaan");
 
             v.value.$reset();
             v.value.$touch();

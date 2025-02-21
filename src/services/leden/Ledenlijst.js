@@ -135,6 +135,9 @@ export default {
         emitter.on('changeOudLidCriterium', (event) => {
             changeOudLidCriterium(event.criteria, event.selectedOption);
         })
+        emitter.on('changeGeenRijksregisternummerCriterium', (event) => {
+            changeGeenRijksregisternummerCriterium(event.criteria, event.selectedOption);
+        })
         emitter.on('setActieveKolom', (event) => {
             setActieveKolom(event.kolom);
         })
@@ -172,7 +175,8 @@ export default {
                 criterium.criteriaKey === 'emailleeg' ||
                 criterium.criteriaKey === 'geenLidkaart' ||
                 criterium.criteriaKey === 'oudleden' ||
-                criterium.criteriaKey === 'geenRijksregisternummer') {
+                criterium.criteriaKey === 'geenRijksregisternummer' ||
+                criterium.criteriaKey === 'geenLidTenLaste') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
 
@@ -271,6 +275,10 @@ export default {
             }
         }
 
+        const changeGeenRijksregisternummerCriterium = (criteria, keuze) => {
+            state.huidigeFilter.criteria[criteria.criteriaKey] = keuze;
+        }
+
         const filterOpslaan = (naam, delen, filterId) => {
             if (!naam) {
                 toast.add({
@@ -342,9 +350,10 @@ export default {
         const deactivateCriterium = (criterium) => {
             if (criterium.criteriaKey === 'adresgeblokkeerd' || criterium.criteriaKey === 'emailgeblokkeerd'
                 || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailleeg' || criterium.criteriaKey === 'geenLidkaart' || criterium.criteriaKey === 'geweigerdLid'
-                || criterium.criteriaKey === 'geenRijksregisternummer') {
+                || criterium.criteriaKey === 'geenLidTenLaste') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = false;
-            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden') {
+            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden' || 
+                criterium.criteriaKey === 'geenRijksregisternummer') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
             } else {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = [];

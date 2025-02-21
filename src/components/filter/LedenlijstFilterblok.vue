@@ -87,7 +87,7 @@
                   v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld'
                   || criteria.criteriaKey === 'emailgeblokkeerd'    || criteria.criteriaKey === 'emailleeg'
                   || criteria.criteriaKey === 'geenLidkaart'        || criteria.criteriaKey === 'geweigerdLid'
-                  || criteria.criteriaKey === 'geenRijksregisternummer'">
+                  || criteria.criteriaKey === 'geenLidTenLaste'">
       </BoolFilter>
       <OudLedenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'oudleden'" :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"></OudLedenSelect>
@@ -112,6 +112,9 @@
       <individuele-steekkaart-select :criteria="criteria" v-if="criteria.criteriaKey === 'individuelesteekkaart'"
                                      :value="criteria.value"
                                      @deactivateCriterium="deactivateCriterium"></individuele-steekkaart-select>
+      <rijksregisternummer-select :criteria="criteria" v-if="criteria.criteriaKey === 'geenRijksregisternummer'"
+                                  :value="criteria.value"
+                                  @deactivateCriterium="deactivateCriterium"></rijksregisternummer-select>                                 
     </div>
     <KolommenSelect
       :actieveKolommen="actieveKolommen"
@@ -135,6 +138,7 @@ import LeeftijdSelect from "@/components/filter/LeeftijdSelect";
 import FunctieSelect from "@/components/filter/FunctieSelect";
 import IndividueleSteekkaartSelect from "@/components/filter/IndividueleSteekkaartSelect";
 import GroepseigenGegevensSelect from "@/components/filter/GroepseigenGegevensSelect";
+import RijksregisternummerSelect from "@/components/filter/RijksregisternummerSelect";
 import AutoComplete from "primevue/autocomplete";
 import rechtenService from "@/services/rechten/rechtenService";
 import restService from "@/services/api/RestService";
@@ -155,6 +159,7 @@ export default {
     FunctieSelect,
     IndividueleSteekkaartSelect,
     GroepseigenGegevensSelect,
+    RijksregisternummerSelect,
     AutoComplete,
     ConfirmDialog
   },
@@ -363,6 +368,10 @@ export default {
       'changeOudLidCriterium', () => {
         this.changes = true;
       })
+    this.emitter.on(
+      'changeGeenRijksregisternummerCriterium', () => {
+        this.changes = true;
+      })     
     this.emitter.on(
       'changeGeslachtCriterium', () => {
         this.changes = true;

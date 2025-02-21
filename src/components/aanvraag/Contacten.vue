@@ -160,7 +160,6 @@ export default {
     });
 
     const lidTenLasteClick = (index) => {
-      console.log("lidTenLasteClick");
       if (state.contacten[index].lidtenlaste) {
         if ((state.contacten[index].voornaam.length == 0) || (state.contacten[index].achternaam.length == 0)) {
           toast.add({

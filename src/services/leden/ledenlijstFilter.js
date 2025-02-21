@@ -30,7 +30,7 @@ export default {
                     filter.gedeeldvanuit.forEach((groep) => {
                         let filterIdArray = []
                         if (!categorisedFilters[groep]) {
-                            categorisedFilters[groep] = {isHeader: true, filters: []};
+                            categorisedFilters[groep] = { isHeader: true, filters: [] };
                         }
 
                         // Voorkomen dat er dubbele filters worden getoond
@@ -90,7 +90,7 @@ export default {
                     }
                     items.push(filter);
                 });
-                let filter = {label: filterGroup.naam, code: filterGroup.naam, items: items};
+                let filter = { label: filterGroup.naam, code: filterGroup.naam, items: items };
                 gestructureerdeFilters.push(filter);
             }
         })
@@ -109,7 +109,7 @@ export default {
             } else {
                 if (crit.criteriaKey === 'geslacht') {
                     // ladies first!
-                    _.find(crit.items, {'value': 'vrouw'}).activated = true;
+                    _.find(crit.items, { 'value': 'vrouw' }).activated = true;
                 } else {
                     let bAlreadyActive = false;
                     _.forEach(crit.items, function (value) {
@@ -152,10 +152,10 @@ export default {
             }
             ,
             "value":
-                {
-                    "operator":
-                        "ouder"
-                }
+            {
+                "operator":
+                    "ouder"
+            }
         }
 
     },
@@ -317,6 +317,7 @@ export default {
         returnObj.arrCriteria.push(this.getLedenZonderLidkaartMenu());
         returnObj.arrCriteria.push(this.getLedenZonderMailAdresMenu());
         returnObj.arrCriteria.push(this.getRijksregisternummerMenu());
+        returnObj.arrCriteria.push(this.getLidTenLasteMenu());
 
         return returnObj;
     },
@@ -340,7 +341,7 @@ export default {
 
             verbondFunctie.groeperingen.forEach(groepering => {
 
-                let itemGroupObj = _.find(functieGroep.itemgroups, {'label': groepering.naam});
+                let itemGroupObj = _.find(functieGroep.itemgroups, { 'label': groepering.naam });
 
                 if (!itemGroupObj) {
                     itemGroupObj = {};
@@ -513,8 +514,28 @@ export default {
 
     getRijksregisternummerMenu() {
         let rijksregisternummer = {
-            "title": "Geen rijksregisternummer",
+            "title": "Geen\xa0rijksregisternummer",
             "criteriaKey": "geenRijksregisternummer",
+            "multiplePossible": false,
+            "items": [
+                {
+                    "value": "lid",
+                    "label": "Lid"
+                },
+                {
+                    "value": "contact",
+                    "label": "Contact"
+                }
+            ]
+        }
+        rijksregisternummer.activated = false;
+        return rijksregisternummer;
+    },
+
+    getLidTenLasteMenu() {
+        let lidTenLaste = {
+            "title": "Geen\xa0lid\xa0ten\xa0laste",
+            "criteriaKey": "geenLidTenLaste",
             "multiplePossible": false,
             "items": [
                 {
@@ -523,8 +544,8 @@ export default {
                 }
             ]
         }
-        rijksregisternummer.activated = false;
-        return rijksregisternummer;
+        lidTenLaste.activated = false;
+        return lidTenLaste;
     },
 
     maakGroepSpecifiekeFunctieGroepen(functies) {
@@ -637,10 +658,10 @@ export default {
                                     keuzes: groepseigenGegeven.keuzes,
                                     operator: 'like',
                                     operatorValues: [
-                                        {label: 'bevat', value: 'like'},
-                                        {label: 'is', value: 'equals'},
-                                        {label: 'is kleiner dan', value: 'less'},
-                                        {label: 'is groter dan', value: 'greater'}
+                                        { label: 'bevat', value: 'like' },
+                                        { label: 'is', value: 'equals' },
+                                        { label: 'is kleiner dan', value: 'less' },
+                                        { label: 'is groter dan', value: 'greater' }
                                     ]
 
                                 }
@@ -665,10 +686,10 @@ export default {
                                 waarde: '',
                                 operator: 'like',
                                 operatorValues: [
-                                    {label: 'bevat', value: 'like'},
-                                    {label: 'is', value: 'equals'},
-                                    {label: 'is kleiner dan', value: 'less'},
-                                    {label: 'is groter dan', value: 'greater'}
+                                    { label: 'bevat', value: 'like' },
+                                    { label: 'is', value: 'equals' },
+                                    { label: 'is kleiner dan', value: 'less' },
+                                    { label: 'is groter dan', value: 'greater' }
                                 ]
                             }
                         });
@@ -744,6 +765,16 @@ export default {
                 }
             })
         }
+        // Om de vreemde constructie van deze filter op te vangen moeten we gaan checken als die bestaat in de criteria van de huidige filter
+        /*if (!Object.prototype.hasOwnProperty.call(huidigeFilter.criteria, 'geenRijksregisternummer')) {
+            criteria.arrCriteria.forEach(crit => {
+                if (crit.criteriaKey === 'geenRijksregisternummer') {
+                    crit.activated = true;
+                    crit.value = "Lid";
+                    activeCriteria.push(crit);
+                }
+            })
+        }*/
         // groepseigen gegevens controle om elk item apart te activeren en te voorzien van de juiste waarde
 
         return activeCriteria;
