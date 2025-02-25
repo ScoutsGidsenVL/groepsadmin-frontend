@@ -5,7 +5,7 @@
         <div class="col-10 ">
           <div class="text-align-left d-flex">
             <div>
-              <label>{{ criteria.title }}: </label>
+              <label>{{ criteria.title }}:</label>
             </div>
             <div class="row">
               <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
@@ -19,14 +19,21 @@
     </div>
     <div class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
       <div v-for="( item, index ) in criteria.items" :key="index" class="d-flex align-content-start">
-        <RadioButton :id="index" v-model="selectedOption" :value="item.value" @change="checkSelectedOption"/>
-        <label :for="index" class="ml-3">{{ item.label }} </label>
+        <checkbox
+          :id="index"
+          v-model="selectedOptions"
+          :value="item.value"
+          @change="$event.stopPropagation();
+                   checkSelectedOption()"
+        />
+        <label :for="index" class="ml-3 text-align-left">{{ item.label }} </label>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
 
 export default {
@@ -34,43 +41,68 @@ export default {
   components: {
     VerwijderCriteria
   },
-  props: {
-    criteria: {
-      type: Object
-    },
-    value : {
-      type: String
-    }
-  },
   data() {
     return {
       toggleMenu: false,
-      selectedOption: null,
+      selecteerAlles: false,
+      selectedOptions: [],
     }
   },
-  mounted() {
-    this.selectedOption = this.value;
-    if (this.selectedOption === undefined) {
-      this.selectedOption = true;
+  props: {
+    criteria: {
+      type: Array
+    },
+    value: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   methods: {
-    deactivateCriterium(criteria) {
-      this.$emit('deactivateCriterium', criteria);
-    },
 
     close() {
-      this.toggleMenu = false;
+      this.toggleMenu = false;    
+      this.emitter.emit('changeGeenRijksregisternummerCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
     },
 
     checkSelectedOption() {
-      this.emitter.emit('changeGeenRijksregisternummerCriterium', {'criteria': this.criteria, 'selectedOption': this.selectedOption})
+      this.emitter.emit('changeGeenRijksregisternummerCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
+    },
+
+  },
+  mounted() {
+    if (this.criteria) {
+      this.criteria.items.forEach((item) => {
+        if (item.activated) {
+          this.selectedOptions.push(item.value);
+        }
+      })
+    }
+
+    if (this.criteria.value) {
+      this.selectedOptions = this.criteria.value;
     }
   },
-
   computed: {
     label() {
-      return this.selectedOption === "contact" ? 'Contact' : 'Lid';
+      if (this.criteria && this.selectedOptions && this.selectedOptions.length > 0) {
+        let label = "";
+        let counter = 0;
+        this.criteria.items.forEach((item) => {
+          this.selectedOptions.forEach((value) => {
+            counter++;
+            if (item.value === value) {
+              label += item.label;
+              if (counter !== this.selectedOptions.length) {
+                label += ", "
+              }
+            }
+          })
+        })
+        return label;
+      }
+      return "";
     }
   }
 

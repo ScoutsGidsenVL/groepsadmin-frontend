@@ -128,15 +128,11 @@ export default {
             ],
         })
 
-
         emitter.on('changeGeslachtCriterium', (event) => {
             changeGeslachtCriterium(event.criteria, event.selectedOption);
         })
         emitter.on('changeOudLidCriterium', (event) => {
             changeOudLidCriterium(event.criteria, event.selectedOption);
-        })
-        emitter.on('changeGeenRijksregisternummerCriterium', (event) => {
-            changeGeenRijksregisternummerCriterium(event.criteria, event.selectedOption);
         })
         emitter.on('setActieveKolom', (event) => {
             setActieveKolom(event.kolom);
@@ -144,6 +140,9 @@ export default {
         emitter.on('changeGroepCriterium', (event) => {
             changeGroepCriterium(event.criteria, event.selectedOptions);
         })
+        emitter.on('changeGeenRijksregisternummerCriterium', (event) => {
+            changeGeenRijksregisternummerCriterium(event.criteria, event.selectedOptions);
+        })        
         emitter.on('changeLeeftijd', (event) => {
             changeLeeftijd(event.criteria, event.leeftijdOpDatum, event.jongerDan, event.ouderDan);
         })
@@ -175,7 +174,6 @@ export default {
                 criterium.criteriaKey === 'emailleeg' ||
                 criterium.criteriaKey === 'geenLidkaart' ||
                 criterium.criteriaKey === 'oudleden' ||
-                criterium.criteriaKey === 'geenRijksregisternummer' ||
                 criterium.criteriaKey === 'geenLidTenLaste') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = true;
             }
@@ -186,6 +184,10 @@ export default {
 
             if (criterium.criteriaKey === 'groepen') {
                 activeerAlleGroepen(criterium);
+            }
+
+            if (criterium.criteriaKey === 'geenRijksregisternummer') {
+                criterium.items[0].activated = true;
             }
 
             criterium.activated = true;
@@ -267,16 +269,16 @@ export default {
             state.huidigeFilter.criteria[criteria.criteriaKey] = selectedOptions;
         }
 
+        const changeGeenRijksregisternummerCriterium = (criteria, selectedOptions) => {
+            state.huidigeFilter.criteria[criteria.criteriaKey] = selectedOptions;
+        }
+
         const changeOudLidCriterium = (criteria, keuze) => {
             if (keuze === "alles") {
                 state.huidigeFilter.criteria[criteria.criteriaKey] = null;
             } else {
                 state.huidigeFilter.criteria[criteria.criteriaKey] = keuze;
             }
-        }
-
-        const changeGeenRijksregisternummerCriterium = (criteria, keuze) => {
-            state.huidigeFilter.criteria[criteria.criteriaKey] = keuze;
         }
 
         const filterOpslaan = (naam, delen, filterId) => {
@@ -352,8 +354,7 @@ export default {
                 || criterium.criteriaKey === 'verminderdLidgeld' || criterium.criteriaKey === 'emailleeg' || criterium.criteriaKey === 'geenLidkaart' || criterium.criteriaKey === 'geweigerdLid'
                 || criterium.criteriaKey === 'geenLidTenLaste') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = false;
-            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden' || 
-                criterium.criteriaKey === 'geenRijksregisternummer') {
+            } else if (criterium.criteriaKey === 'geslacht' || criterium.criteriaKey === 'leeftijd' || criterium.criteriaKey === 'individuelesteekkaart' || criterium.criteriaKey === 'oudleden') {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = undefined;
             } else {
                 state.huidigeFilter.criteria[criterium.criteriaKey] = [];

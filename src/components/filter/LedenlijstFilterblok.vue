@@ -80,41 +80,37 @@
   </div>
   <div class="row">
     <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
-                     v-if="inActivecriteria.length > 0"></criteria-select>
+                     v-if="inActivecriteria.length > 0"/>
     <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
       <BoolFilter :activeCriteria="activeCriteria" :criteria-key="criteria.criteriaKey"
                   @deactivateCriterium="deactivateCriterium"
                   v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld'
                   || criteria.criteriaKey === 'emailgeblokkeerd'    || criteria.criteriaKey === 'emailleeg'
                   || criteria.criteriaKey === 'geenLidkaart'        || criteria.criteriaKey === 'geweigerdLid'
-                  || criteria.criteriaKey === 'geenLidTenLaste'">
-      </BoolFilter>
+                  || criteria.criteriaKey === 'geenLidTenLaste'"/>
       <OudLedenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'oudleden'" :value="criteria.value"
-                      @deactivateCriterium="deactivateCriterium"></OudLedenSelect>
+                      @deactivateCriterium="deactivateCriterium"/>
       <GeslachtSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geslacht'" :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"
       ></GeslachtSelect>
       <GroepenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'groepen'"
                      @deactivateCriterium="deactivateCriterium"/>
+      <RijksregisternummerSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geenRijksregisternummer'"
+                     @deactivateCriterium="deactivateCriterium"/>
       <leeftijd-select :criteria="criteria" v-if="criteria.criteriaKey === 'leeftijd'" :value="criteria.value"
-                       @deactivateCriterium="deactivateCriterium"></leeftijd-select>
+                       @deactivateCriterium="deactivateCriterium"/>
       <functie-select :criteria="criteria"
                       v-if="criteria.criteriaKey === 'functies' && (criteria.criteriaSubKey === 'verbonds' || criteria.criteriaSubKey === 'groepspecifiek')"
                       :value="criteria.value"
                       @deactivateCriterium="deactivateCriterium"
                       @activeerAlleFuncties="activeerAlleFuncties"
-                      @deactiveerAlleFuncties="deactiveerAlleFuncties"
-
-      ></functie-select>
+                      @deactiveerAlleFuncties="deactiveerAlleFuncties"/>
       <groepseigen-gegevens-select :criteria="criteria" v-if="criteria.criteriaKey === 'groepseigen'"
                                    :value="criteria.value"
-                                   @deactivateCriterium="deactivateCriterium"></groepseigen-gegevens-select>
+                                   @deactivateCriterium="deactivateCriterium"/>
       <individuele-steekkaart-select :criteria="criteria" v-if="criteria.criteriaKey === 'individuelesteekkaart'"
                                      :value="criteria.value"
-                                     @deactivateCriterium="deactivateCriterium"></individuele-steekkaart-select>
-      <rijksregisternummer-select :criteria="criteria" v-if="criteria.criteriaKey === 'geenRijksregisternummer'"
-                                  :value="criteria.value"
-                                  @deactivateCriterium="deactivateCriterium"></rijksregisternummer-select>                                 
+                                     @deactivateCriterium="deactivateCriterium"/>
     </div>
     <KolommenSelect
       :actieveKolommen="actieveKolommen"
@@ -367,11 +363,7 @@ export default {
     this.emitter.on(
       'changeOudLidCriterium', () => {
         this.changes = true;
-      })
-    this.emitter.on(
-      'changeGeenRijksregisternummerCriterium', () => {
-        this.changes = true;
-      })     
+      })  
     this.emitter.on(
       'changeGeslachtCriterium', () => {
         this.changes = true;
@@ -413,6 +405,10 @@ export default {
       'changeGroepCriterium', () => {
         this.changes = true;
       })
+    this.emitter.on(
+      'changeGeenRijksregisternummerCriterium', () => {
+        this.changes = true;
+      })       
     this.emitter.on(
       "activeerFunctie", () => {
         this.changes = true;

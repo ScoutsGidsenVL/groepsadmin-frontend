@@ -516,7 +516,7 @@ export default {
         let rijksregisternummer = {
             "title": "Geen\xa0rijksregisternummer",
             "criteriaKey": "geenRijksregisternummer",
-            "multiplePossible": false,
+            "multiplePossible": true,
             "items": [
                 {
                     "value": "lid",
@@ -528,7 +528,6 @@ export default {
                 }
             ]
         }
-        rijksregisternummer.activated = false;
         return rijksregisternummer;
     },
 
