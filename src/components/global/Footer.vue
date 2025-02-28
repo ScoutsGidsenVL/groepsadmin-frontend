@@ -228,7 +228,7 @@
                 >
                 <br />
                 <a href="tel:+32 3 231 16 20" class="clean-link text-white"
-                  >+32 03 231 16 20</a
+                  >+32 3 231 16 20</a
                 >
               </p>
             </div>
