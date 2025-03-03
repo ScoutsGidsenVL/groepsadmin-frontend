@@ -132,7 +132,7 @@ export default {
           toast.add({
             severity: "warn",
             summary: "Voor- en Achternaam",
-            detail: "Om correcte fiscale attesten te kunnen generen zijn zowel voor als achternaam verplicht.",
+            detail: "Om correcte fiscale attesten te kunnen generen zijn zowel voor- als achternaam verplicht.",
             life: 3000,
           });
         } else if (state.contacten[index].rijksregisternummer.length == 0) {
@@ -203,6 +203,10 @@ export default {
       state.adressen = props.modelValue.adressen;
       if (!state.contacten) {
         state.contacten = [];
+      } else {
+        state.contacten.forEach((contact) => {
+          if (contact.adresId) contact.adres = contact.adresId;
+        });
       }
       if (state.adressen && state.adressen.length > 0) {
         state.adressen.forEach((adres) => {
