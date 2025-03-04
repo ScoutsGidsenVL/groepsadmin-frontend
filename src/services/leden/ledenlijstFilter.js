@@ -533,7 +533,7 @@ export default {
 
     getLidTenLasteMenu() {
         let lidTenLaste = {
-            "title": "Geen\xa0lid\xa0ten\xa0laste",
+            "title": "\"Lid\xa0ten\xa0laste\"\xa0niet\xa0aangevinkt",
             "criteriaKey": "geenLidTenLaste",
             "multiplePossible": false,
             "items": [
