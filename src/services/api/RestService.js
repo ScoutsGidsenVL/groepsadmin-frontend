@@ -242,6 +242,10 @@ export default {
         return apiClient().post(baseUrl + "activiteit/" + activiteitId, aanwezigheid);
     },
 
+    voegLedenToeAanActiviteit(activiteitId, leden) {
+        return apiClient().post(baseUrl + "activiteit/" + activiteitId + "/lijst", leden);
+    },
+
     verwijderActiviteit(id) {
         return apiClient().delete(baseUrl + "activiteit/" + id );
     },

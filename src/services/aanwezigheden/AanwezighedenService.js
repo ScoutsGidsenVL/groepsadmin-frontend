@@ -156,11 +156,9 @@ export default {
         }
   
         const berekenMagActivteitBeheren = (groep) => {
-            console.log(groep);
             restService.getGroepOpNummer(groep)
                 .then((res) => {
                     state.magActivteitBeheren = rechtenService.kanWijzigen(res.data);
-                    console.log(state.magActivteitBeheren);
                 })
         }
 

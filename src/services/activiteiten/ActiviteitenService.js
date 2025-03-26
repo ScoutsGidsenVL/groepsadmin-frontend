@@ -53,9 +53,23 @@ export default {
         }
 
         const voegLedenToe = (leden) => {
+            var ledenIds = leden.map(function(lid) {
+                return lid['id'];
+              });
             if (state.geselecteerdeActiviteiten.length > 0) {
                 state.geselecteerdeActiviteiten.forEach((activiteit) => {
-                    leden.forEach((lid) => {
+                    RestService.voegLedenToeAanActiviteit(activiteit.id, ledenIds).then(() => {
+                        toast.add({
+                            severity: "success",
+                            summary: "Toegevoegd aan activiteit",
+                            detail: leden.length + " leden toegevoegd aan " + activiteit.omschrijving,
+                            life: 2000,
+                        });
+                    }).finally(() => {
+                        state.messageDialog = false;
+                        state.isLoadingActiviteiten = false
+                    })
+                    /*leden.forEach((lid) => {
 
                         const aanwezigheid = {
                             activiteitid: activiteit.id,
@@ -76,7 +90,7 @@ export default {
                             state.messageDialog = false;
                             state.isLoadingActiviteiten = false
                         })
-                    })
+                    })*/
                   })
             } else {
                 state.dialogMessage = "Gelieve eerst activiteiten te selecteren";
