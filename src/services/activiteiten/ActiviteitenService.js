@@ -419,6 +419,11 @@ export default {
             {deep: true}
         )
 
+        const genereerAlleAttesten = () => {
+            console.log("getAlleAttesten");
+            RestService.getAttestenCsv();
+        }
+
         const genereerAttest = () => {
             console.log("genereerAttest");
             v.value.$touch();
@@ -470,7 +475,8 @@ export default {
             state,
             v,
             openDialog,
-            genereerAttest
+            genereerAttest,
+            genereerAlleAttesten
         }
     }
 }

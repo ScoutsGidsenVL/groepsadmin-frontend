@@ -272,5 +272,10 @@ export default {
 
     getFiscaalAttest(groepsnummer, attestParams) {
         return apiClientZip().get(baseUrl + "groep/" + groepsnummer + "/fiscaalattest?" + attestParams)
-    }
+    },
+
+    getAttestenCsv() {
+        return apiClientCsv().get(baseUrl + "groep/fiscaalattesten?jaar=2024");
+    },
+
 };

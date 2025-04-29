@@ -70,6 +70,11 @@
         @click="genereer"
         class="p-button-text approve-button"
       />
+      <Button
+        label="Genereer Alle Attesten"
+        @click="genereerAlle"
+        class="p-button-text approve-button"
+      />      
     </template>
   </Dialog>
 </template>
@@ -99,6 +104,9 @@ export default {
     genereer() {
       this.genereerAttest();
     },
+    genereerAlle() {
+      this.genereerAlleAttesten();
+    },    
   },
 
   setup(props) {
@@ -107,6 +115,7 @@ export default {
       v,
       openDialog,
       genereerAttest,
+      genereerAlleAttesten,
     } = ActiviteitenService.attestenDialogSpace(props);
 
     return {
@@ -114,6 +123,7 @@ export default {
       v,
       openDialog,
       genereerAttest,
+      genereerAlleAttesten,
     }
   }
 };
