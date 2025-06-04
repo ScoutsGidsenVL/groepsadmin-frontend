@@ -196,6 +196,7 @@ export default createStore({
             commit("setGroepenLaden", true);
             return RestService.getGroepen().then((response) => {
                 if (response.data.groepen) {
+                    response.data.groepen.sort((a, b) => a.id.localeCompare(b.id));
                     commit("setGroepen", response.data.groepen);
                     response.data.groepen.forEach((groep) => {
                         groepen[groep.id] = groep;
