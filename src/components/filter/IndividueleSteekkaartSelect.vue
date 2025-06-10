@@ -84,6 +84,7 @@ export default {
     })
     if (this.criteria && this.criteria.value) {
       this.aangepast = this.criteria.value.operator;
+      this.datum = this.criteria.value.datum;
     }
     this.change();
   },

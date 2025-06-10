@@ -1,4 +1,5 @@
 import store from "@/store";
+import { Date } from "core-js";
 
 let _ = require('lodash');
 
@@ -134,30 +135,6 @@ export default {
 
     setHuidigeFilterLabel(str, huidigeFilter) {
         huidigeFilter.naam = str;
-    },
-
-    getIndividueleSteekkaartMenu() {
-        return {
-            "title": "Individuele steekkaart",
-            "criteriaKey": "individuelesteekkaart",
-            "multiplePossible": false,
-            "multiValues": true,
-            "operator": {
-                "label": "Aangepast ",
-                "key": "operator",
-                "values": [
-                    ["voor", "ouder"],
-                    ["na", "jonger"]
-                ]
-            }
-            ,
-            "value":
-            {
-                "operator":
-                    "ouder"
-            }
-        }
-
     },
 
     getLeeftijdMenu() {
@@ -547,6 +524,32 @@ export default {
         return lidTenLaste;
     },
 
+    getIndividueleSteekkaartMenu() {
+        let individuelesteekkaart = {
+            "title": "Individuele steekkaart",
+            "criteriaKey": "individuelesteekkaart",
+            "multiplePossible": false,
+            "multiValues": true,
+            "operator": {
+                "label": "Aangepast ",
+                "key": "operator",
+                "values": [
+                    ["voor", "ouder"],
+                    ["na", "jonger"]
+                ]
+            },
+            "value": {
+                "operator": "jonger",
+                "datum": "Date"
+            }
+        }
+        var today = new Date();
+        var datestring = ("0" + today.getDate()).slice(-2) + "/" + ("0"+(today.getMonth()+1)).slice(-2) + "/" + today.getFullYear();
+        individuelesteekkaart.value.datum = datestring;
+        individuelesteekkaart.activated = false;
+        return individuelesteekkaart;
+    },
+
     maakGroepSpecifiekeFunctieGroepen(functies) {
 
         let groepFuncties = _.filter(functies, function (f) {
@@ -746,6 +749,17 @@ export default {
                                 "op31december": value.op31december,
                                 "jongerdan": value.jongerdan,
                                 "ouderdan": value.ouderdan,
+                            }
+                            activeCriteria.push(crit);
+                        }
+
+                        if (key === 'individuelesteekkaart') {
+                            crit.activated = true;
+                            var datum = new Date(value.referentie);
+                            var datumstring = ("0" + datum.getDate()).slice(-2) + "/" + ("0"+(datum.getMonth()+1)).slice(-2) + "/" + datum.getFullYear();
+                            crit.value = {
+                                "datum": datumstring,
+                                "operator": value.operator,
                             }
                             activeCriteria.push(crit);
                         }
