@@ -756,9 +756,8 @@ export default {
                         if (key === 'individuelesteekkaart') {
                             crit.activated = true;
                             var datum = new Date(value.referentie);
-                            var datumstring = ("0" + datum.getDate()).slice(-2) + "/" + ("0"+(datum.getMonth()+1)).slice(-2) + "/" + datum.getFullYear();
                             crit.value = {
-                                "datum": datumstring,
+                                "datum": datum,
                                 "operator": value.operator,
                             }
                             activeCriteria.push(crit);
