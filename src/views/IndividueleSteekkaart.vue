@@ -29,7 +29,7 @@
               <p class="panel-subtitle">
                 Geboortedatum: {{ DateUtil.formatteerDatum(lid.vgagegevens.geboortedatum) }}
               </p>
-              <p class="panel-subtitle">
+              <p class="panel-subtitle" v-if="lid.vgagegevens.individueleSteekkaartDatumAangepast != null">
                 Laatste aanpassing:
                 {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartDatumAangepast) }}
               </p>
