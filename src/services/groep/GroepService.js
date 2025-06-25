@@ -71,17 +71,19 @@ export default {
         const opslaan = () => {
             emitter.emit('groepOpslaan');
             state.laden = true;
-            for (let i = 0; i < state.selectedGroep.groepseigenGegevens.length; i++) {
-                state.selectedGroep.groepseigenGegevens[i].sort = i;
+            if (state.selectedGroep.groepseigenGegevens != null) {
+                for (let i = 0; i < state.selectedGroep.groepseigenGegevens.length; i++) {
+                    state.selectedGroep.groepseigenGegevens[i].sort = i;
 
-                if (state.selectedGroep.groepseigenGegevens[i].type !== 'lijst') {
-                    delete state.selectedGroep.groepseigenGegevens[i].keuzes;
-                } else {
-                    state.selectedGroep.groepseigenGegevens[i].keuzes.forEach((keuze, index) => {
-                        if (!keuze) {
-                            state.selectedGroep.groepseigenGegevens[i].keuzes.splice(index, 1);
-                        }
-                    })
+                    if (state.selectedGroep.groepseigenGegevens[i].type !== 'lijst') {
+                        delete state.selectedGroep.groepseigenGegevens[i].keuzes;
+                    } else {
+                        state.selectedGroep.groepseigenGegevens[i].keuzes.forEach((keuze, index) => {
+                            if (!keuze) {
+                                state.selectedGroep.groepseigenGegevens[i].keuzes.splice(index, 1);
+                            }
+                        })
+                    }
                 }
             }
 
