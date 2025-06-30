@@ -16,10 +16,10 @@
       </template>
       <template #content>
         <div class="text-black ml-1 small-text font-light"
-             v-if="groep && groep.groepseigenFuncties && groep.groepseigenFuncties.length === 0">
+             v-if="(groep && groep.groepseigenFuncties && groep.groepseigenFuncties.length === 0) || (groep.groepseigenFuncties == null)">
           <p class="small">Geen groepseigen functies beschikbaar voor deze groep.</p>
         </div>
-        <div v-if="groep && groep.groepseigenFuncties && groep.groepseigenFuncties.length > 0">
+        <div v-if="groep && groep.groepseigenFuncties">
           <div v-for="(functie, index) in gesorteerdeFuncties" :key="index">
             <div class="row mb--25">
               <div class="col-12">

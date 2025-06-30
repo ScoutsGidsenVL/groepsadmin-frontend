@@ -16,7 +16,7 @@
       </template>
       <template #content>
         <div class="text-black ml-1 small-text font-light"
-             v-if="groep && groep.groepseigenGegevens && groep.groepseigenGegevens.length === 0">
+             v-if="(groep && groep.groepseigenGegevens && groep.groepseigenGegevens.length === 0) || (groep.groepseigenGegevens == null)">
           <p class="small">Geen groepseigen gegevens beschikbaar voor deze groep.</p>
         </div>
         <div v-if="groep && groep.groepseigenGegevens">

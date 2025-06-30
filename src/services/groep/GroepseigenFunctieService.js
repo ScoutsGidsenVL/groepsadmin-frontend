@@ -74,6 +74,7 @@ export default {
                             life: 3000,
                         });
                     }
+                    sorteerFuncties();
                 },
                 reject: () => {
                     confirm.close();
@@ -82,12 +83,15 @@ export default {
         }
 
         const voegGeifToe = () => {
+            if (!state.groep.groepseigenFuncties) state.groep.groepseigenFuncties = [];
             let nieuweFunctie = {
                 id: 'tempFunctie' + Math.random(),
                 beschrijving: null,
                 groepen: [state.groep.groepsnummer]
             };
-            state.groep?.groepseigenFuncties?.unshift(nieuweFunctie);
+            state.groep.groepseigenFuncties.unshift(nieuweFunctie);
+            state.activeIndex = 0;
+            sorteerFuncties();
         }
 
         const kanGroepWijzigen = computed(() => {
@@ -100,14 +104,14 @@ export default {
 
         onUpdated(() => {
           state.groep = props.modelValue;
-          sorteerFuncties();
+          sorteerFuncties()
         });
 
         const sorteerFuncties = () => {
             state.gesorteerdeFuncties = state.groep?.groepseigenFuncties?.sort((a, b) => {
-                if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {{
+                if (a.id.includes("tempFunctie") || b.id.includes("tempFunctie")) {
                     return 0;
-                }}
+                }
                 if (a.beschrijving < b.beschrijving) {
                     return -1;
                 }
