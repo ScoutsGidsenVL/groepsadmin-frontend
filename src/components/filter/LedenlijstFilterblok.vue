@@ -49,7 +49,7 @@
                  v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode">
               <div class="flex align-items-end ml-1">
                 <checkbox :binary="true" id="label" class="mr-2 ml--05" v-model="filterDelen"/>
-                <label class="text-align-left" for="label">Als gedeelde filter</label>
+                <label class="text-align-left" for="label">Delen met je leidingsploeg</label>
               </div>
             </div>
             <div class="md:col-offset-6 xl:col-offset-8"></div>
