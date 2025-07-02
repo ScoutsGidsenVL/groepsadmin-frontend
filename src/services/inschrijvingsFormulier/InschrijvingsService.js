@@ -241,6 +241,12 @@ export default {
                 if (state.watchable) {
                     state.aanvraag.contacten = state.lid.contacten;
                     state.changes = true;
+                    if (state.aanvraag.contacten) {
+                        state.aanvraag.contacten.forEach(contact => {
+                            if (contact.adres.nummer) contact.adres.nummer = contact.adres.nummer.toUpperCase();
+                            if (contact.adres.bus) contact.adres.bus = contact.adres.bus.toUpperCase();
+                        });
+                    }
                 }
             }, {deep: true})
 
