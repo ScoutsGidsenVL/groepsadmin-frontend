@@ -109,8 +109,17 @@ export default {
             });
             if (patchObject) {
                 return patchObject.secties.length > 0;
+            } else { // Kan groepseigen gegevens aanpassen?
+                if(lid.groepseigenVelden) {
+                    for (const groep in lid.groepseigenVelden) {
+                        for (const schema of lid.groepseigenVelden[groep].schema) {
+                            if (schema.kanGebruikerWijzigen) return true;
+                        }
+                    }
+                }
             }
         }
+        return false;
     }
 
 };
