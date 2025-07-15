@@ -9,7 +9,7 @@
             class="p-button-rounded p-button-outlined mt-1 add-button"
             @click="voegAdresToe"
             title="Voeg adres toe"
-            v-if="lidaanvraag || heeftToegang('nieuw lid')"
+            v-if="lidaanvraag || heeftToegang('adressen')"
           />
         </div>
       </template>
