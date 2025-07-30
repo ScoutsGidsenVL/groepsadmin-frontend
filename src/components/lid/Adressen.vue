@@ -41,7 +41,7 @@
               label="Land"
               v-model="adressen[index].land"
               @changeValue="veranderLand(index)"
-              :disabled="!heeftToegang('nieuw lid')"
+              :disabled="!heeftToegang('adressen')"
             />
             <gemeente-zoek-auto-complete
               :index="index"
