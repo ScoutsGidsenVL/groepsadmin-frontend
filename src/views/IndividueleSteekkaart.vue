@@ -16,9 +16,11 @@
           <Button
             icon="pi pi-save"
             class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
-            v-show="changes"
             @click="save"
-            :class="changes ? 'animate' : ''"
+            :class="[
+              changes ? '' : 'opacity-50',
+              {animate: changes}
+            ]"
           />
           <div class="row">
             <div
