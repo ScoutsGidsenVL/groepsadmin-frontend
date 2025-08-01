@@ -124,6 +124,13 @@
                 </div>
               </template>
             </column>
+            <column field="aantalAanwezigen" header="Aantal inschrijvingen">
+              <template #body="slotProps">
+                <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
+                  {{ slotProps.data.aantalAanwezigheden }}
+                </div>
+              </template>
+            </column>
             <column field="acties" header="Acties">
               <template #body="slotProps">
                 <div class="flex justify-content-between">
