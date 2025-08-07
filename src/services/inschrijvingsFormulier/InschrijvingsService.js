@@ -184,7 +184,7 @@ export default {
                             console.log(error);
                         })
                     }
-                    state.groepseigenVelden = res.data.groepseigenGegevens
+                    state.groepseigenVelden = res.data.groepseigenGegevens;
                     state.loading = false;
                 }).catch(error => {
                 toast.add({

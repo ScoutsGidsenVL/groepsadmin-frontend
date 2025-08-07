@@ -57,7 +57,7 @@ export default {
   methods: {
     changeValue(veld, waarde) {
       this.gegVelden.forEach(geig => {
-        geig.waarde = waarde;
+        if(geig.id == veld) geig.waarde = waarde;
       })
     },
   },
