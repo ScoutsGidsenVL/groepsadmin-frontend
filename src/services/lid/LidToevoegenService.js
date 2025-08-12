@@ -121,6 +121,17 @@ export default {
 
             setGeboorteDatum();
 
+            RestService.getLid("profiel").then((res) => {
+                // Toon enkel groepseigengegevens voor die groep waarin wordt ingeschreven
+                if(res.data.groepseigenVelden[state.groepsnummer].schema.length > 0)
+                    state.groepseigenVelden = {[state.groepsnummer]: res.data.groepseigenVelden[state.groepsnummer]};
+                // Voeg de waardes die werden opgegeven op het inschrijvingsformulier in
+                state.groepseigenVelden[state.groepsnummer].waarden = {};
+                state.lid.groepseigenVeldenAanvraag.forEach((groepseigenVeldAanvraag) => {
+                    state.groepseigenVelden[state.groepsnummer].waarden[groepseigenVeldAanvraag.id] = groepseigenVeldAanvraag.waarde;
+                });
+            })
+
             setTimeout(() => {
                 state.watchable = true;
             }, 1500);
@@ -137,10 +148,6 @@ export default {
             store.commit('setBroerZusLid', null)
             next();
         })
-
-        // const filterGroepsEigenVelden = () => {
-        //     state.groepseigenVelden = Object.fromEntries(Object.entries(state.lid.groepseigenVelden).filter(([key]) => state.lid.groepseigenVelden[key].schema.length > 0));
-        // }
 
         const opslaan = () => {
             state.loadingLid = true;

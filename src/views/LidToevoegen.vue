@@ -18,16 +18,15 @@
           <div class="row lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4">
               <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4">
+              <adressen  v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
+              <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
               <groepseigen-gegevens
                 v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
                 v-model="groepseigenVelden"
                 :title="'Groepseigen gegevens'"
               ></groepseigen-gegevens>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-4">
-              <adressen  v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
-              <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
-
             </div>
             <div class="col-12 col-lg-12 col-xl-4">
               <functies-toevoegen

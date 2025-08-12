@@ -184,8 +184,8 @@ export default {
         id: aanvraag.id,
         adressen: aanvraag.adressen,
         contacten: aanvraag.contacten,
-        groepsnummer: aanvraag.groepsnummer,
-        groepseigenGegevens: aanvraag.groepseigenGegevens,
+        groepsnummer: aanvraag.groepsnummer, // TODO elegantere oplossing
+        groepseigenVeldenAanvraag: aanvraag.groepsEigenGegevens
       }
       aanvraag.links.forEach(link => {
         if (link.rel === "goedkeuren") {
