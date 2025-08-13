@@ -1,8 +1,8 @@
-import {reactive} from "@vue/reactivity";
-import {onMounted} from "vue";
+import { reactive } from "@vue/reactivity";
+import { onMounted } from "vue";
 import rechtenService from "@/services/rechten/rechtenService";
-import {useStore} from "vuex";
-import {onUpdated} from "@vue/runtime-core";
+import { useStore } from "vuex";
+import { onUpdated } from "@vue/runtime-core";
 import DateUtil from "@/services/dates/DateUtil";
 import moment from "moment";
 
@@ -27,6 +27,7 @@ export default {
 
         const gesorteerdeFuncties = (functies, type) => {
             let relevanteFuncties = [];
+
             if (state.huidigLid && state.huidigLid.vgagegevens && state.huidigLid.vgagegevens.geboortedatum) {
                 relevanteFuncties = functies.filter(functie => {
                     let geboortedatum = moment(state.huidigLid.vgagegevens.geboortedatum, 'DD/MM/YYYY').format('YYYY-MM-DD');
@@ -54,27 +55,31 @@ export default {
 
         const functiesEnGroepen = () => {
             state.groepEnfuncties = [];
+
             store.getters.groepen.forEach(groep => {
                 if (rechtenService.hasPermission('functies.' + groep.groepsnummer)) {
-                    state.geselecteerdeFuncties[groep.groepsnummer] = [];
-                    let tempGroep = groep;
-                    tempGroep.functies = [];
-                    store.getters.functies.forEach(functie => {
-                        let bestaandeFunctie = false;
-                        if (state.huidigLid && state.huidigLid.functies) {
-                            state.huidigLid.functies.forEach(lidFunctie => {
-                                if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id && !lidFunctie.einde) {
-                                    bestaandeFunctie = true;
-                                }
-                            })
-                        }
-                        if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
-                            tempGroep.functies.push(functie);
-                        }
-                    });
-                    state.groepEnfuncties.push(tempGroep);
+                    if ((!state.groepsnummer) || (state.groepsnummer == groep.groepsnummer)) {
+                        state.geselecteerdeFuncties[groep.groepsnummer] = [];
+                        let tempGroep = groep;
+                        tempGroep.functies = [];
+                        store.getters.functies.forEach(functie => {
+                            let bestaandeFunctie = false;
+                            if (state.huidigLid && state.huidigLid.functies) {
+                                state.huidigLid.functies.forEach(lidFunctie => {
+                                    if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id && !lidFunctie.einde) {
+                                        bestaandeFunctie = true;
+                                    }
+                                })
+                            }
+                            if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
+                                tempGroep.functies.push(functie);
+                            }
+                        });
+                        state.groepEnfuncties.push(tempGroep);
+                    }
                 }
             });
+
             state.functiesEnGroepenGeladen = true;
             state.showFunctieToevoegen = false;
 
@@ -102,11 +107,18 @@ export default {
             let bestaandeFunctie = false;
 
             if (!bestaandeFunctie) {
-                context.emit('voegFunctieToe', {'functie': functieInstantie, 'groepsnummer': groepsnummer});
+                context.emit('voegFunctieToe', { 'functie': functieInstantie, 'groepsnummer': groepsnummer });
             }
         }
 
         onMounted(() => {
+            if (store.getters.goedTeKeurenLid) {
+                state.lid = store.getters.goedTeKeurenLid;
+                state.groepsnummer = store.getters.goedTeKeurenLid.groepsnummer;
+            } else if (store.getters.broerZusLid && Object.keys(store.getters.broerZusLid).length !== 0) {
+                state.lid = store.getters.broerZusLid;
+                state.groepsnummer = store.getters.broerZusLid.groepsnummer;
+            }
             functiesEnGroepen()
         })
 
