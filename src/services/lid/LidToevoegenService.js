@@ -181,8 +181,6 @@ export default {
                 }
             })
 
-            state.lid.verbondsgegevens = null;
-
             v.value.$touch();
 
             if (v.value.$invalid) {
@@ -225,6 +223,13 @@ export default {
             if (!state.lid.vgagegevens.verhoogdekinderbijslag) {
                 state.lid.vgagegevens.verhoogdekinderbijslag = false;
             }
+
+            if(state.groepseigenVelden[state.groepsnummer]) {
+                state.lid.groepseigenVelden = {[state.groepsnummer]: state.groepseigenVelden[state.groepsnummer]};
+            }
+
+            Reflect.deleteProperty(state.lid, 'verbondsgegevens');
+            Reflect.deleteProperty(state.lid, 'groepseigenVeldenAanvraag');
 
             RestService.saveNieuwLid(state.lid).then(res => {
                 if (res.status === 201) {
