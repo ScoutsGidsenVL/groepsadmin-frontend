@@ -214,6 +214,9 @@ export default {
                     if (state.aanvraag.adres.bus) {
                         state.aanvraag.adres.bus = state.aanvraag.adres.bus.toUpperCase();
                     }
+                    if (state.aanvraag.adres.nummer) {
+                        state.aanvraag.adres.nummer = state.aanvraag.adres.nummer.toUpperCase();
+                    }
                     state.changes = true;
                 }
             }, {deep: true})
