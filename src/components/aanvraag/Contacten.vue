@@ -268,7 +268,7 @@ export default {
 
       let nieuwContact = {
         rol: "moeder",
-        zelfdeAdres: false,
+        zelfdeAdres: true,
         voornaam: "",
         achternaam: "",
         rijksregisternummer: "",
