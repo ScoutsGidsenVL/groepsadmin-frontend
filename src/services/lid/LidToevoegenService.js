@@ -154,15 +154,17 @@ export default {
 
             let counter = 0;
             _.forEach(state.lid.adressen, function (adres) {
+                let adresId = adres.id;
                 counter++;
                 _.forEach(state.lid.contacten, function (contact) {
                     if (adres.straat === contact.adres.straat &&
                         adres.nummer === contact.adres.nummer &&
                         adres.postcode === contact.adres.postcode &&
-                        adres.gemeente === contact.adres.gemeente) {
+                        adres.gemeente === contact.adres.gemeente &&
+                        adres.bus === contact.adres.bus) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
-                    } else if (adres.id === contact.adres) {
+                    } else if (adresId === contact.adres) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
                     }
@@ -177,7 +179,7 @@ export default {
 
             _.forEach(state.lid.contacten, function (contact) {
                 if (contact.id.length > 28) {
-                    contact.adressen = null;
+                    contact.adressen = null; // adres???
                 }
             })
 
