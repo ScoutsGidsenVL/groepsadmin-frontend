@@ -11,6 +11,7 @@
       <div class="lg:ml-6">
         <div class="p-4 lg:ml-8 md:mt-10 lg:mt-4">
           <Button
+            v-if="eigenProfiel"
             icon="pi pi-save"
             class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
             @click="save"
