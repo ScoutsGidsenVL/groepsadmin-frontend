@@ -158,6 +158,7 @@ export default {
         const voegAdresToe = () => {
             state.lid.adres = {
                 land: "BE",
+                postadres: true
             };
         }
 
