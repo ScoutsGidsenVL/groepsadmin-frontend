@@ -26,9 +26,9 @@
           :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
           @keyup="changeValue(veld.id, waarde[veld.id])"
           @change="changeValue(veld.id, waarde[veld.id])"
-        >
-        </checkbox>
+        ></checkbox>
       </div>
+      <label v-if="veld.type === 'vinkje'" class="text-align-left" :for="veld.id">{{ veld.beschrijving }}</label>
       <BaseDropdown
         v-if="veld.type === 'lijst'"
         v-model="waarde[veld.id]"
