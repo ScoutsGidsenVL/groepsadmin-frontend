@@ -31,7 +31,8 @@ export default {
                 links: [],
                 contacten: [],
                 persoonsgegevens: {
-                    geslacht: "man"
+                    geslacht: "man",
+                    beperking: false
                 },
                 vgagegevens: {
                     voornaam: "",
@@ -66,7 +67,8 @@ export default {
                 gebruikersnaam: "",
                 links: [],
                 persoonsgegevens: {
-                    geslacht: "man"
+                    geslacht: "man",
+                    beperking: false
                 },
                 vgagegevens: {},
             },
@@ -110,6 +112,7 @@ export default {
                 state.aanvraag.groepsnummer = state.groepsnummer;
                 state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
                 state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
+                state.aanvraag.beperking = state.lid.vgagegevens.beperking;
 
                 var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 if (isNaN(geboortedatum)) {

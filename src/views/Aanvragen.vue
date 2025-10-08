@@ -173,6 +173,7 @@ export default {
           voornaam: aanvraag.voornaam,
           achternaam: aanvraag.achternaam,
           verminderdlidgeld: aanvraag.verminderdlidgeld,
+          beperking: aanvraag.beperking,
           geboortedatum: aanvraag.geboortedatum,
           verhoogdekinderbijslag: false,
         },
