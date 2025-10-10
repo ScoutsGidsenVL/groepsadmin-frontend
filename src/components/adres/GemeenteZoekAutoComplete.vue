@@ -106,7 +106,6 @@ export default {
       this.adres.straat = "";
       this.adres.bus = "";
       this.adres.nummer = "";
-      this.emitter.emit("clearStraat", { "index": this.index});
     },
 
     verwijderGemeente() {
