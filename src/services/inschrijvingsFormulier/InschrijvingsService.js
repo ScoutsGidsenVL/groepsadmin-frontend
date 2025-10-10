@@ -24,7 +24,7 @@ export default {
             },
             defaultLid: {
                 adres: {
-                    land: "BE",
+                    land: "BE"
                 },
                 email: "",
                 gebruikersnaam: "",
@@ -155,21 +155,6 @@ export default {
             state.lid.adres.bus = "";
         }
 
-        const voegAdresToe = () => {
-            state.lid.adres = {
-                land: "BE",
-                postadres: true
-            };
-        }
-
-        const clearInvalidForm = (type) => {
-            if (type === 'gemeente') {
-                state.invalidGemeente = false;
-            } else {
-                state.invalidStraat = false;
-            }
-        }
-
         const getGroepData = () => {
             RestService.getGroepOpNummer(state.groepsnummer)
                 .then(res => {
@@ -280,27 +265,18 @@ export default {
             }
 
             setTimeout(() => {
-                state.lid = Object.assign({}, state.defaultLid);
-                voegAdresToe();
-            }, 1000);
-
-            setTimeout(() => {
                 state.watchable = true;
                 state.loading = false;
             }, 2000);
         })
 
-
         const v = useVuelidate(rules, state);
-
 
         return {
             state,
             v,
             opslaan,
             veranderLand,
-            clearInvalidForm,
-
         }
     }
 }

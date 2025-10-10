@@ -40,7 +40,6 @@
                     label="Woonplaats"
                     v-model="lid.adres"
                     v-if="lid.adres.land === 'BE'"
-                    @clearInvalidForm="clearInvalidForm('gemeente')"
                     :invalidForm="v.lid.adres.$dirty && v.lid.adres.gemeente.$invalid"
                     :error-message="v.lid.adres.gemeente.required.$message"
                   />
@@ -50,7 +49,6 @@
                     v-model="lid.adres"
                     :value="lid.adres.straat"
                     v-if="lid.adres.land === 'BE'"
-                    @clearInvalidForm="clearInvalidForm('straat')"
                     :invalidForm="v.lid.adres.$dirty && v.lid.adres.straat.$invalid"
                     :error-message="v.lid.adres.straat.required.$message"
                   />
@@ -150,14 +148,12 @@ export default {
       v,
       opslaan,
       veranderLand,
-      clearInvalidForm,
     } = InschrijvingsService.inschrijvingsSpace();
     return {
       ...toRefs(state),
       v,
       opslaan,
       veranderLand,
-      clearInvalidForm,
     };
   },
 
