@@ -54,7 +54,7 @@
               <div class="col-12 col-lg-6 col-xl-4">
                 <adressen v-model="lid" :title="'Adressen'"
                           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
-                <contacten v-model="lid" :title="'Contacten'"
+                <contacten v-model="lid" :title="'Contacten'" :eigenProfiel="isEigenProfiel"
                            v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
                 <groepseigen-gegevens
                   v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"

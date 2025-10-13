@@ -27,9 +27,9 @@
               :disabled="!heeftToegang('contacten')" />
             <base-input label="Achternaam" v-model="contacten[index].achternaam" type="text"
               :disabled="!heeftToegang('contacten')" />
-            <base-input v-if="contacten[index].hasOwnProperty('rijksregisternummer')" label="Rijksregisternummer"
+            <base-input v-if="eigenProfiel" label="Rijksregisternummer"
               placeholder="xx.xx.xx-xxx.xx" v-model="contacten[index].rijksregisternummer" type="text" />
-            <BaseCheckbox v-if="!contacten[index].hasOwnProperty('rijksregisternummer')" :disabled="true"
+            <BaseCheckbox v-if="!eigenProfiel" :disabled="true"
               type="checkbox" v-model="contacten[index].rijksregisternummeringevuld"
               label="Rijksregisternummer ingevuld" multiple="false"
               help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk">
