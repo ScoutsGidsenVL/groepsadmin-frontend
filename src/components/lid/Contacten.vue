@@ -113,6 +113,10 @@ export default {
           label: "Vader",
         },
         {
+          value: "ouder",
+          label: "Ouder",
+        },        
+        {
           value: "voogd",
           label: "Voogd",
         },
