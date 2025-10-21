@@ -119,8 +119,11 @@ export default {
     this.$watch(
       () => this.modelValue,
       () => {
-        this.zoekTerm =
-          this.modelValue.postcode + " " + this.modelValue.gemeente;
+        if (this.modelValue.postcode && this.modelValue.gemeente){
+          this.zoekTerm = this.modelValue.postcode + " " + this.modelValue.gemeente;
+        } else {
+          this.zoekTerm = null;
+        }
       }
     );
   },

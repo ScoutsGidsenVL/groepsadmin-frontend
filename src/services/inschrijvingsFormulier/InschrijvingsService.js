@@ -268,6 +268,10 @@ export default {
             }
 
             setTimeout(() => {
+                state.lid = Object.assign({}, state.defaultLid);
+            }, 1000);
+
+            setTimeout(() => {
                 state.watchable = true;
                 state.loading = false;
             }, 2000);
