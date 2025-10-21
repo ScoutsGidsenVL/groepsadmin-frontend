@@ -6,7 +6,6 @@
         v-model="waarde[veld.id]"
         :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
         :label="veld.label"
-        :beschrijving="veld.beschrijving"
         @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
@@ -14,6 +13,7 @@
         :invalid="errors && errors[veld.id] && errors[veld.id].invalid"
       >
       </BaseInput>
+      <label v-if="veld.type === 'tekst'" class="text-align-left mb-4" :for="veld.id">{{ veld.beschrijving }}</label>
       <div v-if="veld.type === 'vinkje'" class="d-flex justify-content-between mb-2">
         <label class="text-align-left cursor-pointer" :for="veld.id">{{ veld.label }}</label>
         <checkbox
