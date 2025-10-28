@@ -198,7 +198,7 @@ export default {
     }
 
     const setHeader = (contact) => {
-      return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
+      return contact.rol + (contact.voornaam ? " " + contact.voornaam : "") + (contact.achternaam ? " " + contact.achternaam : "");
     }
 
     const resetData = () => {
