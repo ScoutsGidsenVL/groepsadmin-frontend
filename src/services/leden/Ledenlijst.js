@@ -370,6 +370,7 @@ export default {
         }
 
         const setActieveKolom = (kolom) => {
+            console.log("setActieveKolom: ", kolom);
             if (kolom) {
                 let index = state.huidigeFilter.sortering.indexOf(kolom.id);
                 if (index > -1) {
@@ -385,13 +386,13 @@ export default {
         }
 
         const checkSortering = (kolom) => {
+            let kolomnaam = kolom.id;
             let mapping = {
                 'be.vvksm.groepsadmin.model.column.VVKSMGroepsNamenColumn': 'be.vvksm.groepsadmin.model.column.VVKSMGroepenColumn',
                 'be.vvksm.groepsadmin.model.column.VVKSMGroepsNummersColumn': 'be.vvksm.groepsadmin.model.column.VVKSMGroepenColumn',
                 'be.vvksm.groepsadmin.model.column.LeeftijdColumn': 'be.vvksm.groepsadmin.model.column.GeboorteDatumColumn'
             };
 
-            let kolomnaam = kolom.id;
             if (kolom.sorteringsIndex === -1 && mapping[kolom.id] !== undefined) {
                 kolomnaam = mapping[kolom.id];
             }
@@ -406,9 +407,12 @@ export default {
                 actKolommen.push(kolom.id);
             })
             state.huidigeFilter.kolommen = actKolommen;
+            console.log("We're here now");
+            console.log("request", state.huidigeFilter.sortering);
             RestService.patchHuidigeFilter(state.huidigeFilter)
                 .then(res => {
                     state.huidigeFilter = res.data;
+                    console.log("response: ", res.data.sortering);
                     state.leden = [];
                     getLeden(0);
                     getFilters();
@@ -441,8 +445,21 @@ export default {
 
 
         const addSort = (kolom) => {
-            state.huidigeFilter.sortering.unshift(kolom.id)
-            state.huidigeFilter.sortering.splice(3);
+            const currentSortering = [...state.huidigeFilter.sortering]; // Create a copy
+            const index = currentSortering.indexOf(kolom.id);
+    
+            if (index > -1) {
+                // Remove the column
+                currentSortering.splice(index, 1);
+            } else {
+                // Add to beginning and keep only first 3
+                currentSortering.unshift(kolom.id);
+                currentSortering.splice(3);
+            }
+    
+            // Assign the new array back
+            state.huidigeFilter.sortering = currentSortering;
+
             kolom.sorteringsIndex = checkSortering(kolom);
             filterToepassen();
         }
@@ -853,7 +870,6 @@ export default {
                 }
             }
         }
-
 
         const clearAlleLeden = () => {
             state.lidIds.clear();
