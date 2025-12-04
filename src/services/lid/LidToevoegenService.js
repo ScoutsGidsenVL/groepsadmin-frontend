@@ -121,6 +121,17 @@ export default {
 
             setGeboorteDatum();
 
+            RestService.getLid("profiel").then((res) => {
+                // Toon enkel groepseigengegevens voor die groep waarin wordt ingeschreven
+                if(res.data.groepseigenVelden[state.groepsnummer].schema.length > 0)
+                    state.groepseigenVelden = {[state.groepsnummer]: res.data.groepseigenVelden[state.groepsnummer]};
+                // Voeg de waardes die werden opgegeven op het inschrijvingsformulier in
+                state.groepseigenVelden[state.groepsnummer].waarden = {};
+                state.lid.groepseigenVeldenAanvraag.forEach((groepseigenVeldAanvraag) => {
+                    state.groepseigenVelden[state.groepsnummer].waarden[groepseigenVeldAanvraag.id] = groepseigenVeldAanvraag.waarde;
+                });
+            })
+
             setTimeout(() => {
                 state.watchable = true;
             }, 1500);
@@ -138,24 +149,22 @@ export default {
             next();
         })
 
-        // const filterGroepsEigenVelden = () => {
-        //     state.groepseigenVelden = Object.fromEntries(Object.entries(state.lid.groepseigenVelden).filter(([key]) => state.lid.groepseigenVelden[key].schema.length > 0));
-        // }
-
         const opslaan = () => {
             state.loadingLid = true;
 
             let counter = 0;
             _.forEach(state.lid.adressen, function (adres) {
+                let adresId = adres.id;
                 counter++;
                 _.forEach(state.lid.contacten, function (contact) {
                     if (adres.straat === contact.adres.straat &&
                         adres.nummer === contact.adres.nummer &&
                         adres.postcode === contact.adres.postcode &&
-                        adres.gemeente === contact.adres.gemeente) {
+                        adres.gemeente === contact.adres.gemeente &&
+                        adres.bus === contact.adres.bus) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
-                    } else if (adres.id === contact.adres) {
+                    } else if (adresId === contact.adres) {
                         adres.id = 'tempadres_' + counter;
                         contact.adres = adres.id;
                     }
@@ -170,11 +179,9 @@ export default {
 
             _.forEach(state.lid.contacten, function (contact) {
                 if (contact.id.length > 28) {
-                    contact.adressen = null;
+                    contact.adressen = null; // adres???
                 }
             })
-
-            state.lid.verbondsgegevens = null;
 
             v.value.$touch();
 
@@ -218,6 +225,13 @@ export default {
             if (!state.lid.vgagegevens.verhoogdekinderbijslag) {
                 state.lid.vgagegevens.verhoogdekinderbijslag = false;
             }
+
+            if(state.groepseigenVelden[state.groepsnummer]) {
+                state.lid.groepseigenVelden = {[state.groepsnummer]: state.groepseigenVelden[state.groepsnummer]};
+            }
+
+            Reflect.deleteProperty(state.lid, 'verbondsgegevens');
+            Reflect.deleteProperty(state.lid, 'groepseigenVeldenAanvraag');
 
             RestService.saveNieuwLid(state.lid).then(res => {
                 if (res.status === 201) {

@@ -137,13 +137,13 @@ export default {
       if (this.facturatieLeidingCheck) {
         return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeiding)
       }
-      return "";
+      return "<b>Deadline: 1 september</b>";
     },
     ledenVerbeterd() {
       if (this.facturatieLedenCheck) {
         return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeden)
       }
-      return "";
+      return "<b>Deadline: 15 oktober</b>";
     }
   },
 

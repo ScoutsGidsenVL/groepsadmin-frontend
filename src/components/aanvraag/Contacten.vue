@@ -149,6 +149,10 @@ export default {
           label: "Vader",
         },
         {
+          value: "ouder",
+          label: "Ouder",
+        },
+        {
           value: "voogd",
           label: "Voogd",
         },
@@ -268,7 +272,7 @@ export default {
 
       let nieuwContact = {
         rol: "moeder",
-        zelfdeAdres: false,
+        zelfdeAdres: true,
         voornaam: "",
         achternaam: "",
         rijksregisternummer: "",

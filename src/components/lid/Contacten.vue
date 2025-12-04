@@ -27,9 +27,9 @@
               :disabled="!heeftToegang('contacten')" />
             <base-input label="Achternaam" v-model="contacten[index].achternaam" type="text"
               :disabled="!heeftToegang('contacten')" />
-            <base-input v-if="contacten[index].hasOwnProperty('rijksregisternummer')" label="Rijksregisternummer"
+            <base-input v-if="eigenProfiel" label="Rijksregisternummer"
               placeholder="xx.xx.xx-xxx.xx" v-model="contacten[index].rijksregisternummer" type="text" />
-            <BaseCheckbox v-if="!contacten[index].hasOwnProperty('rijksregisternummer')" :disabled="true"
+            <BaseCheckbox v-if="!eigenProfiel" :disabled="true"
               type="checkbox" v-model="contacten[index].rijksregisternummeringevuld"
               label="Rijksregisternummer ingevuld" multiple="false"
               help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk">
@@ -113,6 +113,10 @@ export default {
           label: "Vader",
         },
         {
+          value: "ouder",
+          label: "Ouder",
+        },        
+        {
           value: "voogd",
           label: "Voogd",
         },
@@ -172,10 +176,10 @@ export default {
     }
 
     const heeftToegang = (sectie) => {
-      if (!props.lidaanvraag) {
-        return rechtenService.canBeShowed(props.modelValue, sectie);
+      if (props.lidaanvraag) {
+        return true;
       }
-      return true;
+      return rechtenService.canBeShowed(props.modelValue, sectie);
     }
 
     const remove = (event, index) => {
@@ -194,7 +198,7 @@ export default {
     }
 
     const setHeader = (contact) => {
-      return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
+      return contact.rol + (contact.voornaam ? " " + contact.voornaam : "") + (contact.achternaam ? " " + contact.achternaam : "");
     }
 
     const resetData = () => {

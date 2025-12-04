@@ -106,7 +106,6 @@ export default {
       this.adres.straat = "";
       this.adres.bus = "";
       this.adres.nummer = "";
-      this.emitter.emit("clearStraat", { "index": this.index});
     },
 
     verwijderGemeente() {
@@ -120,8 +119,11 @@ export default {
     this.$watch(
       () => this.modelValue,
       () => {
-        this.zoekTerm =
-          this.modelValue.postcode + " " + this.modelValue.gemeente;
+        if (this.modelValue.postcode && this.modelValue.gemeente){
+          this.zoekTerm = this.modelValue.postcode + " " + this.modelValue.gemeente;
+        } else {
+          this.zoekTerm = null;
+        }
       }
     );
   },

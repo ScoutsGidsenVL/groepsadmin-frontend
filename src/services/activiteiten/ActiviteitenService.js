@@ -67,30 +67,9 @@ export default {
                         });
                     }).finally(() => {
                         state.messageDialog = false;
-                        state.isLoadingActiviteiten = false
+                        state.isLoadingActiviteiten = false;
+                        getActiviteiten();
                     })
-                    /*leden.forEach((lid) => {
-
-                        const aanwezigheid = {
-                            activiteitid: activiteit.id,
-                            lidid: lid.id,
-                            voornaam: lid.voornaam,
-                            naam: lid.achternaam,
-                            prijs: activiteit.prijs
-                        };
-
-                        RestService.voegLidToeAanActiviteit(activiteit.id, aanwezigheid).then(() => {
-                            toast.add({
-                                severity: "success",
-                                summary: "Toegevoegd aan activiteit",
-                                detail: "Lid " + lid.voornaam + " " + lid.achternaam + " toegevoegd aan " + activiteit.omschrijving,
-                                life: 2000,
-                            });
-                        }).finally(() => {
-                            state.messageDialog = false;
-                            state.isLoadingActiviteiten = false
-                        })
-                    })*/
                   })
             } else {
                 state.dialogMessage = "Gelieve eerst activiteiten te selecteren";

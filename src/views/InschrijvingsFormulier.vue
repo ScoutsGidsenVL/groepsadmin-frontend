@@ -40,7 +40,6 @@
                     label="Woonplaats"
                     v-model="lid.adres"
                     v-if="lid.adres.land === 'BE'"
-                    @clearInvalidForm="clearInvalidForm('gemeente')"
                     :invalidForm="v.lid.adres.$dirty && v.lid.adres.gemeente.$invalid"
                     :error-message="v.lid.adres.gemeente.required.$message"
                   />
@@ -50,7 +49,6 @@
                     v-model="lid.adres"
                     :value="lid.adres.straat"
                     v-if="lid.adres.land === 'BE'"
-                    @clearInvalidForm="clearInvalidForm('straat')"
                     :invalidForm="v.lid.adres.$dirty && v.lid.adres.straat.$invalid"
                     :error-message="v.lid.adres.straat.required.$message"
                   />
@@ -122,9 +120,9 @@ import Contacten from "@/components/aanvraag/Contacten";
 import Loader from "@/components/global/Loader";
 import LidWorden from "@/components/buttons/LidWorden";
 import BaseInput from "@/components/input/BaseInput";
-import GemeenteZoekAutoComplete from "@/components/aanvraag/GemeenteZoekAutoComplete";
+import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
 import BaseDropdown from "@/components/input/BaseDropdown";
-import StraatZoekAutoComplete from "@/components/aanvraag/StraatZoekAutoComplete";
+import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import {toRefs} from "@vue/reactivity";
 import InschrijvingsService from "@/services/inschrijvingsFormulier/InschrijvingsService";
 
@@ -150,14 +148,12 @@ export default {
       v,
       opslaan,
       veranderLand,
-      clearInvalidForm,
     } = InschrijvingsService.inschrijvingsSpace();
     return {
       ...toRefs(state),
       v,
       opslaan,
       veranderLand,
-      clearInvalidForm,
     };
   },
 

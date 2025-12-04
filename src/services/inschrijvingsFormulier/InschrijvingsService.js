@@ -24,14 +24,15 @@ export default {
             },
             defaultLid: {
                 adres: {
-                    land: "BE",
+                    land: "BE"
                 },
                 email: "",
                 gebruikersnaam: "",
                 links: [],
                 contacten: [],
                 persoonsgegevens: {
-                    geslacht: "man"
+                    geslacht: "man",
+                    beperking: false
                 },
                 vgagegevens: {
                     voornaam: "",
@@ -66,7 +67,8 @@ export default {
                 gebruikersnaam: "",
                 links: [],
                 persoonsgegevens: {
-                    geslacht: "man"
+                    geslacht: "man",
+                    beperking: false
                 },
                 vgagegevens: {},
             },
@@ -110,6 +112,7 @@ export default {
                 state.aanvraag.groepsnummer = state.groepsnummer;
                 state.aanvraag.verminderdlidgeld = state.lid.vgagegevens.verminderdlidgeld;
                 state.aanvraag.persoonsgegevens.geslacht = state.lid.persoonsgegevens.geslacht;
+                state.aanvraag.beperking = state.lid.vgagegevens.beperking;
 
                 var geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
                 if (isNaN(geboortedatum)) {
@@ -155,20 +158,6 @@ export default {
             state.lid.adres.bus = "";
         }
 
-        const voegAdresToe = () => {
-            state.lid.adres = {
-                land: "BE",
-            };
-        }
-
-        const clearInvalidForm = (type) => {
-            if (type === 'gemeente') {
-                state.invalidGemeente = false;
-            } else {
-                state.invalidStraat = false;
-            }
-        }
-
         const getGroepData = () => {
             RestService.getGroepOpNummer(state.groepsnummer)
                 .then(res => {
@@ -184,7 +173,7 @@ export default {
                             console.log(error);
                         })
                     }
-                    state.groepseigenVelden = res.data.groepseigenGegevens
+                    state.groepseigenVelden = res.data.groepseigenGegevens;
                     state.loading = false;
                 }).catch(error => {
                 toast.add({
@@ -214,6 +203,9 @@ export default {
                     if (state.aanvraag.adres.bus) {
                         state.aanvraag.adres.bus = state.aanvraag.adres.bus.toUpperCase();
                     }
+                    if (state.aanvraag.adres.nummer) {
+                        state.aanvraag.adres.nummer = state.aanvraag.adres.nummer.toUpperCase();
+                    }
                     state.changes = true;
                 }
             }, {deep: true})
@@ -238,6 +230,12 @@ export default {
                 if (state.watchable) {
                     state.aanvraag.contacten = state.lid.contacten;
                     state.changes = true;
+                    if (state.aanvraag.contacten) {
+                        state.aanvraag.contacten.forEach(contact => {
+                            if (contact.adres.nummer) contact.adres.nummer = contact.adres.nummer.toUpperCase();
+                            if (contact.adres.bus) contact.adres.bus = contact.adres.bus.toUpperCase();
+                        });
+                    }
                 }
             }, {deep: true})
 
@@ -271,7 +269,6 @@ export default {
 
             setTimeout(() => {
                 state.lid = Object.assign({}, state.defaultLid);
-                voegAdresToe();
             }, 1000);
 
             setTimeout(() => {
@@ -280,17 +277,13 @@ export default {
             }, 2000);
         })
 
-
         const v = useVuelidate(rules, state);
-
 
         return {
             state,
             v,
             opslaan,
             veranderLand,
-            clearInvalidForm,
-
         }
     }
 }

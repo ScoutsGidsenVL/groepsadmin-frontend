@@ -173,6 +173,7 @@ export default {
           voornaam: aanvraag.voornaam,
           achternaam: aanvraag.achternaam,
           verminderdlidgeld: aanvraag.verminderdlidgeld,
+          beperking: aanvraag.beperking,
           geboortedatum: aanvraag.geboortedatum,
           verhoogdekinderbijslag: false,
         },
@@ -184,8 +185,9 @@ export default {
         id: aanvraag.id,
         adressen: aanvraag.adressen,
         contacten: aanvraag.contacten,
-        groepsnummer: aanvraag.groepsnummer,
-        groepseigenGegevens: aanvraag.groepseigenGegevens,
+        groepsnummer: aanvraag.groepsnummer, // TODO elegantere oplossing
+        groepseigenVeldenAanvraag: aanvraag.groepsEigenGegevens,
+        opmerkingen: aanvraag.opmerkingen
       }
       aanvraag.links.forEach(link => {
         if (link.rel === "goedkeuren") {
