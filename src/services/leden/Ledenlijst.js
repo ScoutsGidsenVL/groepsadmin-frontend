@@ -370,7 +370,6 @@ export default {
         }
 
         const setActieveKolom = (kolom) => {
-            console.log("setActieveKolom: ", kolom);
             if (kolom) {
                 let index = state.huidigeFilter.sortering.indexOf(kolom.id);
                 if (index > -1) {
@@ -407,12 +406,9 @@ export default {
                 actKolommen.push(kolom.id);
             })
             state.huidigeFilter.kolommen = actKolommen;
-            console.log("We're here now");
-            console.log("request", state.huidigeFilter.sortering);
             RestService.patchHuidigeFilter(state.huidigeFilter)
                 .then(res => {
                     state.huidigeFilter = res.data;
-                    console.log("response: ", res.data.sortering);
                     state.leden = [];
                     getLeden(0);
                     getFilters();
@@ -454,7 +450,7 @@ export default {
             } else {
                 // Add to beginning and keep only first 3
                 currentSortering.unshift(kolom.id);
-                currentSortering.splice(3);
+                currentSortering.splice(1); // Work around, set back to 3 when no longer needed.
             }
     
             // Assign the new array back
