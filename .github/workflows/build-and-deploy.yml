@@ -5,11 +5,9 @@ run-name: >
 on:
   push:
     branches:
-      - production
       - staging
       - kdv/dev
       - tvl/dev
-      - rokeppen/githubWorkflow
 
 jobs:
   build-and-deploy:
@@ -50,13 +48,14 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         with:
-          proxy_host: ${{ secrets.SSHHOST }}
-          proxy_username: ${{ secrets.SSHUSER }}
-          proxy_key: ${{ secrets.SSHKEY }}
-          proxy_port: ${{ secrets.SSHPORT }}
-          host: az-deb-mgmt
-          username: ${{ secrets.SSHUSER }}
-          key: ${{ secrets.SSHKEY }}
+          proxy_host: ${{ secrets.PROXYHOST }}
+          proxy_username: ${{ secrets.USER }}
+          proxy_key: ${{ secrets.KEY }}
+          proxy_port: ${{ secrets.PROXYPORT }}
+          host: ${{ secrets.SSHHOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.SSHPORT }}
           envs: BRANCH_NAME
           script: |
             echo "Github trigger for branch $BRANCH_NAME"
