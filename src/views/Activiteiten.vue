@@ -89,13 +89,13 @@
                   </div>                
               </template>
             </column>
-            <!--<column field="werkjaar" header="Werkjaar">
+            <column field="jaar" header="Jaar">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">
-                  {{ slotProps.data.werkjaar }}
+                  {{ slotProps.data.van.substring(0, 4) }}
                 </div>
               </template>
-            </column>-->
+            </column>
             <column field="periode" header="Periode">
               <template #body="slotProps">
                 <div @click="registreerAanwezigheden(slotProps.data.id)" class="cursor-pointer">

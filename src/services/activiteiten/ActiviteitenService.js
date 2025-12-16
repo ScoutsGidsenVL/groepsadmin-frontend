@@ -311,6 +311,13 @@ export default {
                         life: 2000,
                     });
                 }
+            }).catch((error) => {
+                toast.add({
+                    severity: "warn",
+                    summary: "Nieuwe activiteit",
+                    detail: error.response.data.beschrijving,
+                    life: 8000,
+                });
             }).finally(() => {
                 state.activiteitOpslaan = false;
                 emitter.emit('activiteitenOphalen')
@@ -325,11 +332,18 @@ export default {
                 if (res.status === 200) {
                     toast.add({
                         severity: "success",
-                        summary: "Wijzigingen",
+                        summary: "Activiteit wijzigingen",
                         detail: "Wijzigingen activiteit opgeslagen",
                         life: 2000,
                     });
                 }
+            }).catch((error) => {
+                toast.add({
+                    severity: "warn",
+                    summary: "Activiteit wijzigingen",
+                    detail: error.response.data.beschrijving,
+                    life: 8000,
+                });
             }).finally(() => {
                 state.activiteitOpslaan = false;
                 emitter.emit('activiteitenOphalen')
