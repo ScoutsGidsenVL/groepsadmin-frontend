@@ -366,7 +366,7 @@ export default {
         const rules = {
             attest: {
                 kbo: {
-                    required: helpers.withMessage('Pseudeo-KBO-nummer is verplicht', required)
+                    required: helpers.withMessage('Pseudo-KBO-nummer is verplicht', required)
                 },
                 certnaam: {
                     required: helpers.withMessage('Naam certificerende instantie is verplicht', required)
@@ -392,14 +392,9 @@ export default {
 
         watch(
             () => props.dialogVisible,
-            () => {
-                state.group = props.groep;
-            },
-            {deep: true}
         )
 
         const genereerAttest = () => {
-            console.log("genereerAttest");
             v.value.$touch();
             if (v.value.$invalid) {
                 state.loading = false;

@@ -16,47 +16,36 @@
     </template>
     <div class="activiteit-content">
       <h4>Groep</h4>
+      <div>Vul hier de toegangscode in die je van Belcotax ontving:</div><br/>
       <BaseInput
         v-model="attest.kbo"
-        label="KBO"
+        label="Pseudo-KBO-nummer"
         type="text"
         :invalid="v.attest.kbo.$dirty && v.attest.kbo.$invalid"
         :error-message="v.attest.kbo.required.$message"
       />
-      <h4>Certificerende instantie</h4>
-      <BaseInput
-        v-model="attest.certnaam"
-        label="Naam"
-        type="text"
-        :invalid="v.attest.certnaam.$dirty && v.attest.certnaam.$invalid"
-        :error-message="v.attest.certnaam.required.$message"
-      />
-      <BaseInput
-        v-model="attest.certadres"
-        label="Straat + nr"
-        type="text"
-        :invalid="v.attest.certadres.$dirty && v.attest.certadres.$invalid"
-        :error-message="v.attest.certadres.required.$message"
-      />
-      <BaseInput
-        v-model="attest.certpostcode"
-        label="Postcode"
-        type="text"
-        :invalid="v.attest.certpostcode.$dirty && v.attest.certpostcode.$invalid"
-        :error-message="v.attest.certpostcode.required.$message"
-      />
-      <BaseInput
-        v-model="attest.certgemeente"
-        label="Gemeente"
-        type="text"
-        :invalid="v.attest.certgemeente.$dirty && v.attest.certgemeente.$invalid"
-        :error-message="v.attest.certgemeente.required.$message"
-      />
-      <BaseInput
-        v-model="attest.certkbo"
-        label="KBO (optioneel)"
-        type="text"
-      />
+      <hr/>
+      <h4>Erkenings instantie</h4>
+      <div>
+        <div style="float: right;">
+          <Button
+            label="Aanpassen"
+            @click="aanpassen"
+            class="p-button-text approve-button"
+          />
+        </div>
+        <div v-if="groep.instantie">
+          <div>Julie erkenings instantie is momenteel:<br/><br/>
+          <b>Naam:</b> {{ attest.certnaam }}<br/>
+          <b>KBO:</b>  {{ attest.certkbo }}<br/><br/>
+          <b>Adres:</b><br/>{{ attest.certadres }}<br/>
+          {{ attest.certpostcode + " " + attest.certgemeente}}</div>
+        </div>
+        <div v-else>
+          Voeg eerst de gegevens van je Erkenings Instelling toe.
+        </div>
+      </div>
+      <hr/>
     </div>
     <template #footer>
       <Button
@@ -67,6 +56,7 @@
       />
       <Button
         label="Genereer Attest"
+        v-if=groep.instantie
         @click="genereer"
         class="p-button-text approve-button"
       />
@@ -75,48 +65,56 @@
 </template>
 
 <script>
-import BaseInput from "@/components/input/BaseInput.vue";
-import {toRefs} from "@vue/reactivity";
-import Loader from "@/components/global/Loader.vue";
-import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
+  import BaseInput from "@/components/input/BaseInput.vue";
+  import {toRefs, watch } from 'vue';
+  import Loader from "@/components/global/Loader.vue";
+  import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
 
-export default {
-  name: "MessageDialog",
-  components: {
-    Loader,
-    BaseInput
-  },
-  props: {
-    dialogVisible: {
-      type: Boolean,
-      default: false,
+  export default {
+    name: "MessageDialog",
+    components: { Loader, BaseInput },
+    props: {
+      dialogVisible: { type: Boolean, default: false },
+      groep: { type: Object },
     },
-    groep: {
-      type: Object
-    }
-  },
-  methods: {
-    genereer() {
-      this.genereerAttest();
+    methods: {
+      genereer() {
+        this.genereerAttest();
+      },
+      aanpassen() {
+        this.$router.push({ path: 'groepsinstellingen' });
+      },
     },
-  },
+    setup(props) {
+      const {
+        state,
+        v,
+        openDialog,
+        genereerAttest,
+      } = ActiviteitenService.attestenDialogSpace(props);
 
-  setup(props) {
-    const {
-      state,
-      v,
-      openDialog,
-      genereerAttest,
-    } = ActiviteitenService.attestenDialogSpace(props);
+      watch(
+        () => props.groep,
+        (nieuweGroep) => {
+          if (nieuweGroep?.instantie && state?.attest) {
+            state.attest.certnaam = nieuweGroep.instantie.naam;
+            state.attest.certadres = nieuweGroep.instantie.adres.straat + " " + nieuweGroep.instantie.adres.nummer + " " + nieuweGroep.instantie.adres.bus;
+            state.attest.certpostcode = nieuweGroep.instantie.adres.postcode;
+            state.attest.certgemeente = nieuweGroep.instantie.adres.gemeente;
+            state.attest.certkbo = nieuweGroep.instantie.kbo;
+          }
+        },
+        { immediate: true, deep: true }
+      );
 
-    return {
-      ...toRefs(state),
-      v,
-      openDialog,
-      genereerAttest,
-    }
-  }
-};
+      return {
+        ...toRefs(state),
+        v,
+        openDialog,
+        genereerAttest,
+      };
+    },
+  };
 </script>
 
 <style scoped>

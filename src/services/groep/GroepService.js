@@ -95,6 +95,7 @@ export default {
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
+                        console.log("opslaan");
                         state.selectedGroep.groepseigenFuncties = res.data.groepseigenFuncties;
                         state.laden = false;
                         store.dispatch("getGroepen");
