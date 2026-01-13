@@ -179,6 +179,7 @@ export default {
         opgericht: "",
         facturatieLeidingCheck: false,
         facturatieLedenCheck: false,
+        instantie: {},
         adressen: [],
         email: "",
         website: "",

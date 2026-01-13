@@ -317,8 +317,7 @@ export default {
       setHeader
     };
   }
-}
-  ;
+};
 </script>
 
 <style scoped></style>
