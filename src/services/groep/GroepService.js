@@ -95,7 +95,6 @@ export default {
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
                     if (res.status === 200) {
-                        console.log("opslaan");
                         state.selectedGroep.groepseigenFuncties = res.data.groepseigenFuncties;
                         state.laden = false;
                         store.dispatch("getGroepen");
@@ -203,6 +202,21 @@ export default {
         const veranderGroep = (groep) => {
             state.watchable = false;
             state.selectedGroep = groep;
+            if (!state.selectedGroep.instantie) {
+                state.selectedGroep.instantie = {
+                    naam: "",
+                    kbo: "",
+                    adres: {
+                        bus: "",
+                        gemeente: "",
+                        land: "BE",
+                        nummer: "",
+                        postcode: "",
+                        straat: ""
+                    }
+                };
+            }
+
             state.selectedGroep.opgericht = new Date(groep.opgericht);
             getContacten();
             getGroepseigenFuncties(groep);
@@ -230,6 +244,20 @@ export default {
 
         onMounted(() => {
             state.selectedGroep = store.getters.groepen[0];
+            if (!state.selectedGroep.instantie) {
+                state.selectedGroep.instantie = {
+                    naam: "",
+                    kbo: "",
+                    adres: {
+                        bus: "",
+                        gemeente: "",
+                        land: "BE",
+                        nummer: "",
+                        postcode: "",
+                        straat: ""
+                    }
+                };
+            }
             getContacten();
             store.getters.groepen.forEach((groep) => {
                 state.groepenArray.push({
@@ -252,7 +280,6 @@ export default {
         emitter.on('updateGroep', () => {
             opslaan();
         } )
-
 
         return {
             state,
