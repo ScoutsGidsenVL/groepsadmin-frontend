@@ -120,14 +120,14 @@
             :invalid="v.lid.persoonsgegevens.rekeningnummer.$dirty && v.lid.persoonsgegevens.rekeningnummer.$invalid"
             error-message="Geen geldig rekeningnummer"
           ></BaseInput>
-          <BaseCheckbox
+          <!--<BaseCheckbox
             v-if="!nieuwLid"
             type="checkbox"
             v-model="lid.verbondsgegevens.lidgeldbetaald"
             label="Lidgeld betaald aan Scouts en Gidsen Vlaanderen"
             multiple="false"
             :disabled="true"
-          ></BaseCheckbox>
+          ></BaseCheckbox>-->
           <BaseCheckbox
             v-if="nieuwLid"
             type="checkbox"
