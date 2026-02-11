@@ -46,8 +46,6 @@
                 ></Contacten>
                 <Erkenningsinstantie
                   v-model="selectedGroep.instantie"
-                  :groep="selectedGroep"
-                  :instantie="selectedGroep.instantie"
                   :bewerkbaar="kanGroepWijzigen"
                 ></Erkenningsinstantie>
               </div>

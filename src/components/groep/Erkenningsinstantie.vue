@@ -58,8 +58,7 @@
 <script>
 import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import {reactive, toRefs, watch} from "@vue/reactivity";
 import BaseInput from "@/components/input/BaseInput";
 
 export default {
@@ -99,23 +98,21 @@ export default {
       }
     });
 
-    onUpdated(() => {
-      if(props.modelValue)
-        state.instantie = props.modelValue;
-      else
-        state.instantie = {
-          naam: "",
-          kbo: "",
-          adres: {
-            bus: "",
-            gemeente: "",
-            land: "BE",
-            nummer: "",
-            postcode: "",
-            straat: ""
-          }
-        };
-    });
+    // Initialize with modelValue if available
+    if (props.modelValue) {
+      state.instantie = props.modelValue;
+    }
+
+    // Watch for prop changes and only update when modelValue has actual data
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        if (newValue && (newValue.naam || newValue.kbo || newValue.adres)) {
+          state.instantie = newValue;
+        }
+      },
+      { deep: true }
+    );
 
     const capitalize = () => {
       if (state.instantie.adres.bus) {
