@@ -526,6 +526,12 @@ export default {
             }
         })
 
+        const heeftFiscaalAttest = computed({
+            get() {
+                return true;
+            }
+        })
+
         const wijzigingen = computed({
             get() {
                 return state.changes
@@ -599,6 +605,7 @@ export default {
             volledigeNaam,
             magFunctiesToevoegen,
             isEigenProfiel,
+            heeftFiscaalAttest,
             wijzigingen,
             teBekijkenLid,
             lidkaartAfdrukken,

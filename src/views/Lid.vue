@@ -36,6 +36,7 @@
           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
           v-model="lid"
           :eigenProfiel="isEigenProfiel"
+          :heeftFiscaalAttest="heeftFiscaalAttest"
           :changes="changes"
           @stopAlleFuncties="stopAlleFuncties"
           @lidkaartAfdrukken="lidkaartAfdrukken"
@@ -132,6 +133,7 @@ export default {
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
+      heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
       lidkaartAfdrukken,
@@ -146,6 +148,7 @@ export default {
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
+      heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
       resetWatchable,

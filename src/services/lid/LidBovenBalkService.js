@@ -13,6 +13,7 @@ export default {
         const state = reactive({
             lid: props.modelValue,
             eigenProfiel: props.eigenProfiel,
+            heeftFiscaalAttest: props.heeftFiscaalAttest,
             changes: props.changes,
             nieuwLid: props.nieuwLid,
             filteredMenuItems: [],
@@ -26,6 +27,11 @@ export default {
                     label: "Lidkaart afdrukken",
                     icon: "fal fa-address-card",
                     link: "Lidkaart",
+                },
+                {
+                    label: "Fiscaal Attest afdrukken",
+                    icon: "fal fa-file-alt",
+                    link: "attest",
                 },
                 {
                     label: "Nieuw Lid",
@@ -56,6 +62,8 @@ export default {
                     return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
                 case "Lidkaart afdrukken":
                     return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
+                case "Fiscaal Attest afdrukken":
+                    return state.eigenProfiel && state.heeftFiscaalAttest;
                 case "Nieuw Lid":
                     return rechtenService.hasAccess("nieuw lid");
                 case "Broer/Zus toevoegen":

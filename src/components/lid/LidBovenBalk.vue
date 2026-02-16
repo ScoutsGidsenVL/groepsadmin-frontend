@@ -93,6 +93,9 @@ export default {
     eigenProfiel: {
       type: Boolean
     },
+    heeftFiscaalAttest: {
+      type: Boolean
+    },
     changes: {
       type: Boolean
     },
