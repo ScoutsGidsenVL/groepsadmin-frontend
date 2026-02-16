@@ -58,7 +58,8 @@
 <script>
 import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
-import {reactive, toRefs, watch} from "@vue/reactivity";
+import {reactive, toRefs} from "@vue/reactivity";
+import {watch} from "vue";
 import BaseInput from "@/components/input/BaseInput";
 
 export default {
