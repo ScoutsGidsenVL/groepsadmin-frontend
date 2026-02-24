@@ -1,4 +1,4 @@
-name: Build and deploy to Ansible
+name: Build and deploy
 run-name: >
   "${{ github.event.head_commit.message }}" ${{ github.event_name }}ed by ${{ github.actor }}
 
@@ -6,20 +6,24 @@ on:
   push:
     branches:
       - staging
-      - kdv/dev
       - tvl/dev
+      - kdv/dev
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
 
+    steps:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
           node-version: '12'
+
+      - name: Checkout code
+        uses: actions/checkout@v5
 
       - name: Install dependencies
         run: |
@@ -43,7 +47,30 @@ jobs:
           name: frontend-build
           path: frontend.zip
 
-      - name: Activate deploy
+      - name: Generate branch-specific tag
+        id: tag
+        run: |
+          BRANCH=${{ github.ref_name }}
+          TAG="${BRANCH//\//-}-latest"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Delete existing tag (if exists)
+        run: |
+          git push origin :refs/tags/${{ steps.tag.outputs.tag }} || true
+
+      - name: Zzzz...
+        uses: GuillaumeFalourd/wait-sleep-action@v1
+        with:
+          time: '60' # for 60 seconds
+
+      - name: Create a release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/libs/groepsadmin.jar"
+          makeLatest: true
+          tag: ${{ steps.tag.outputs.tag }}
+
+      - name: Deploy
         uses: appleboy/ssh-action@v1
         env:
           BRANCH_NAME: ${{ github.ref_name }}
@@ -58,5 +85,5 @@ jobs:
           port: ${{ secrets.SSHPORT }}
           envs: BRANCH_NAME
           script: |
-            echo "Github trigger for branch $BRANCH_NAME"
-            sudo -u ansible /opt/deploy-ga.sh frontend ${BRANCH_NAME}
+            echo "Branch $BRANCH_NAME"
+            sudo -u ansible /opt/deploy-github-ga.sh frontend $BRANCH_NAME
