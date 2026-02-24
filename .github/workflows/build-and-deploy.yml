@@ -39,10 +39,7 @@ jobs:
           cp -r node_modules/tinymce/*.min.js node_modules/tinymce/*/ dist/js/ || true
 
       - name: Create frontend.zip
-        run: | 
-          pwd
-          ls dist          
-          zip -r frontend.zip dist/*
+        run: zip -r frontend.zip dist/*
 
       - name: Generate branch-specific tag
         id: tag
@@ -67,20 +64,20 @@ jobs:
           makeLatest: true
           tag: ${{ steps.tag.outputs.tag }}
 
-      # - name: Deploy
-      #   uses: appleboy/ssh-action@v1
-      #   env:
-      #     BRANCH_NAME: ${{ github.ref_name }}
-      #   with:
-      #     proxy_host: ${{ secrets.PROXYHOST }}
-      #     proxy_username: ${{ secrets.USER }}
-      #     proxy_key: ${{ secrets.KEY }}
-      #     proxy_port: ${{ secrets.PROXYPORT }}
-      #     host: ${{ secrets.SSHHOST }}
-      #     username: ${{ secrets.USER }}
-      #     key: ${{ secrets.KEY }}
-      #     port: ${{ secrets.SSHPORT }}
-      #     envs: BRANCH_NAME
-      #     script: |
-      #       echo "Branch $BRANCH_NAME"
-      #       sudo -u ansible /opt/deploy-github-ga.sh frontend $BRANCH_NAME
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        with:
+          proxy_host: ${{ secrets.PROXYHOST }}
+          proxy_username: ${{ secrets.USER }}
+          proxy_key: ${{ secrets.KEY }}
+          proxy_port: ${{ secrets.PROXYPORT }}
+          host: ${{ secrets.SSHHOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.SSHPORT }}
+          envs: BRANCH_NAME
+          script: |
+            echo "Branch $BRANCH_NAME"
+            sudo -u ansible /opt/deploy-github-ga.sh frontend $BRANCH_NAME
