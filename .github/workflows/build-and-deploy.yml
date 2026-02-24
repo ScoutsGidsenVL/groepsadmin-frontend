@@ -41,17 +41,11 @@ jobs:
       - name: Create frontend.zip
         run: zip -r frontend.zip dist/*
 
-      - name: Upload zip to Github
-        uses: actions/upload-artifact@v5
-        with:
-          name: frontend-build
-          path: frontend.zip
-
       - name: Generate branch-specific tag
         id: tag
         run: |
           BRANCH=${{ github.ref_name }}
-          TAG="${BRANCH//\//-}-latest"
+          TAG="frontend-${BRANCH//\//-}-latest"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Delete existing tag (if exists)
