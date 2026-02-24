@@ -63,7 +63,7 @@ jobs:
       - name: Create a release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/libs/groepsadmin.jar"
+          artifacts: "frontend.zip"
           makeLatest: true
           tag: ${{ steps.tag.outputs.tag }}
 
