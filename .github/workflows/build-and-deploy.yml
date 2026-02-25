@@ -5,6 +5,7 @@ run-name: >
 on:
   push:
     branches:
+      - production
       - staging
       - tvl/dev
       - kdv/dev
