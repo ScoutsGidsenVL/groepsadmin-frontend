@@ -91,6 +91,11 @@ export default {
             let opgerichtDatum = new Date(state.selectedGroep.opgericht);
             opgerichtDatum.setHours(2);
             state.selectedGroep.opgericht = opgerichtDatum.toISOString();
+            if(state.selectedGroep.instantie.naam == "") {
+                delete state.selectedGroep.instantie;
+            } else if (state.selectedGroep.instantie.adres.gemeente == "") {
+                delete state.selectedGroep.instantie.adres;
+            }
             state.watchable = false;
             RestService.updateGroep(state.selectedGroep)
                 .then(res => {
@@ -108,6 +113,22 @@ export default {
                             });
                         }
                         state.selectedGroep.opgericht = DateUtil.formatteerDatum(state.selectedGroep.opgericht);
+                        if (!state.selectedGroep.instantie) {
+                            state.selectedGroep.instantie = {
+                                naam: "",
+                                kbo: "",
+                            };
+                        }
+                        if (!state.selectedGroep.instantie.adres) {
+                            state.selectedGroep.instantie.adres = {
+                                bus: "",
+                                gemeente: "",
+                                land: "BE",
+                                nummer: "",
+                                postcode: "",
+                                straat: ""
+                            };
+                        }
                     }
                 }).catch((error) => {
                 toast.add({
@@ -206,14 +227,16 @@ export default {
                 state.selectedGroep.instantie = {
                     naam: "",
                     kbo: "",
-                    adres: {
-                        bus: "",
-                        gemeente: "",
-                        land: "BE",
-                        nummer: "",
-                        postcode: "",
-                        straat: ""
-                    }
+                };
+            }
+            if (!state.selectedGroep.instantie.adres) {
+                state.selectedGroep.instantie.adres = {
+                    bus: "",
+                    gemeente: "",
+                    land: "BE",
+                    nummer: "",
+                    postcode: "",
+                    straat: ""
                 };
             }
 
@@ -248,14 +271,16 @@ export default {
                 state.selectedGroep.instantie = {
                     naam: "",
                     kbo: "",
-                    adres: {
-                        bus: "",
-                        gemeente: "",
-                        land: "BE",
-                        nummer: "",
-                        postcode: "",
-                        straat: ""
-                    }
+                };
+            }
+            if (!state.selectedGroep.instantie.adres) {
+                state.selectedGroep.instantie.adres = {
+                    bus: "",
+                    gemeente: "",
+                    land: "BE",
+                    nummer: "",
+                    postcode: "",
+                    straat: ""
                 };
             }
             getContacten();

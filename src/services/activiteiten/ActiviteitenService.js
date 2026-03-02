@@ -439,7 +439,7 @@ export default {
                 }).catch((error) => {
                     console.log(error);
                 }).finally(() => {
-                    emitter.emit('close')
+                    emitter.emit('close');
                 })
             } 
         }
