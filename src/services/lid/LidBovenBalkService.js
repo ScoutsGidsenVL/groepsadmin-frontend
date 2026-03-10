@@ -127,6 +127,8 @@ export default {
                 broerZusToevoegen();
             } else if (link === 'Lidkaart') {
                 context.emit('lidkaartAfdrukken');
+            } else if (link === 'attest') {
+                context.emit('attestAfdrukken');
             } else {
                 router.push({name: link})
             }

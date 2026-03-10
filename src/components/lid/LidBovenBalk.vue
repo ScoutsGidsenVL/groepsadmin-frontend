@@ -94,7 +94,8 @@ export default {
       type: Boolean
     },
     heeftFiscaalAttest: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     changes: {
       type: Boolean

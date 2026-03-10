@@ -222,6 +222,14 @@ export default {
         return apiClient().post(baseUrl + "lidkaart/beschikbaarheid", ledenIds);
     },
 
+    controleerBeschikbaarheidAttest(lidId) {
+        return apiClient().get(baseUrl + "attest/beschikbaar?lidId=" + lidId);
+    },
+
+    downloadAttest(lidId) {
+        return apiClientPdf().get(baseUrl + "attest/download?lidId=" + lidId);
+    },
+
     activiteitOpslaan(activiteit) {
         return apiClient().post(baseUrl + "activiteit", activiteit)
     },

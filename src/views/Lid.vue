@@ -40,6 +40,7 @@
           :changes="changes"
           @stopAlleFuncties="stopAlleFuncties"
           @lidkaartAfdrukken="lidkaartAfdrukken"
+          @attestAfdrukken="attestAfdrukken"
           @opslaan="opslaan"
         ></lid-boven-balk>
         <div class="lg:ml-2">
@@ -136,6 +137,7 @@ export default {
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
+      attestAfdrukken,
       lidkaartAfdrukken,
       voegFunctieToe
     } = LidService.lidSpace();
@@ -154,6 +156,7 @@ export default {
       resetWatchable,
       changeGeg,
       updateFuncties,
+      attestAfdrukken,
       lidkaartAfdrukken,
       voegFunctieToe
     }
