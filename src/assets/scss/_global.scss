@@ -450,6 +450,11 @@ a.clean-link:hover {
   justify-content: flex-start;
 }
 
+.activiteitentabel .p-column-header-content,
+.aanwezighedenTabel .p-column-header-content {
+  justify-content: flex-end;
+}
+
 .standard-order-icon {
   width: -webkit-fill-available;
   .fa-caret-down {
