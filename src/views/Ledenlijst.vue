@@ -109,15 +109,19 @@
                 Geen leden gevonden op basis van de huidige filter.
               </template>
               <template #loading> Leden laden. Even geduld aub...</template>
-              <column>
+              <column headerClass="checkbox-kolom-header" style="width: 2rem">
                 <template #header>
-                  <checkbox @click="selecteerOfDeselecteerAlleleden" v-model="alleLeden" :binary="true"></checkbox>
+                  <div class="w-full flex justify-content-center">
+                    <checkbox @click="selecteerOfDeselecteerAlleleden" v-model="alleLeden" :binary="true"></checkbox>
+                  </div>
                 </template>
                 <template #body="slotProps">
-                  <checkbox @click="$event.stopPropagation();
-                                    voegLidToe(slotProps.data)"
-                            v-model="geselecteerdeLeden"
-                            :value="slotProps.data"></checkbox>
+                  <div class="flex justify-content-center">
+                    <checkbox @click="$event.stopPropagation();
+                                      voegLidToe(slotProps.data)"
+                              v-model="geselecteerdeLeden"
+                              :value="slotProps.data"></checkbox>
+                  </div>
                 </template>
               </column>
               <column
