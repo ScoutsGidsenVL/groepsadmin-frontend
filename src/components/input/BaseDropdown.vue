@@ -7,7 +7,7 @@
         v-if="label"
       >
       </label>
-      <div class="col-12 col-sm-7 p-md-8" :class="!label ? 'ml-4' : ''">
+      <div class="col-12 col-sm-11 p-md-8" :class="!label ? 'ml-4' : ''">
         <dropdown
           class="w-100"
           :options="options"

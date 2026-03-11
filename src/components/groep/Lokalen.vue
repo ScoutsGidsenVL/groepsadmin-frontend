@@ -1,11 +1,11 @@
 <template>
-  <div class="lokalen-card lg:ml-4 mb-4">
+  <div class="lokalen-card mb-4">
         <adressen
           v-model="geselecteerdeGroep"
           @showMarker="toonMarker"
           :bewerkbaar="kanGroepWijzigen"
           title="Lokalen"
-          class="mb-5"
+          class="mb-4"
         ></adressen>
         <google-maps
           :groep="geselecteerdeGroep"

@@ -11,9 +11,9 @@
       <Loader
         :showLoader="laden"
       ></Loader>
-      <div class="lg:ml-8">
-        <div class="lg:ml-6">
-          <div class="row bovenbalk mt-7 mb-4">
+      <div>
+        <div class="lg:ml-2">
+          <div class="row bovenbalk mt-7 mb-4 lg:ml-8">
             <div class="col-12 col-lg-6 col-xl-4 groep-select" v-if="!groepenLaden">
               <BaseDropdown
                 :options="groepenArray"
@@ -25,16 +25,14 @@
               class="col-12 col-lg-6 col-xl-4 d-flex justify-content-start"
               v-if="groepenLaden"
             >
-        <span class="mt-1"
-        >Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i
-        ></span>
+              <span class="mt-1">Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i></span>
             </div>
             <div class="col-1 absolute right-0 mr-6">
               <opslaan-met-tekst @opslaan="opslaan" v-if="kanGroepWijzigen" :changes="changes"></opslaan-met-tekst>
             </div>
           </div>
           <form @submit.prevent="opslaan" autocomplete="off">
-            <div class="row">
+            <div class="row lg:ml-8">
               <div class="col-12 col-lg-6 col-xl-4">
                 <Algemeen v-model="selectedGroep"></Algemeen>
                 <groepseigen-functies v-model="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></groepseigen-functies>
