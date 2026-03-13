@@ -9,7 +9,7 @@
           <Indicator :is-loading="laden" :full-page="false" :height=55 :width=55></Indicator>
         </div>
       </template>
-      <template #content><accordion :multiple="true">
+      <template #content><accordion :multiple="true" v-model:activeIndex="activeIndex">
           <accordionTab v-for="(groep, index) in groepEnfuncties" :key="index"
                         :header="groep.naam + ' - ' + groep.groepsnummer">
             <div class="row" v-if="gesorteerdeFuncties(groep.functies, 'verbond')">
@@ -52,7 +52,7 @@
 
 <script>
 import FunctieToevoegenService from "@/services/functies/FunctieToevoegenService";
-import {toRefs} from "@vue/reactivity";
+import {computed, toRefs} from "@vue/reactivity";
 
 export default {
   name: "FunctiesToevoegen",
@@ -61,6 +61,10 @@ export default {
     modelValue: {
       type: Object
     },
+    nieuwLid: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, context) {
     const {
@@ -70,8 +74,13 @@ export default {
       voegToeOfVerwijderFunctie
     } = FunctieToevoegenService.functieToevoegenSpace(props, context);
 
+    const activeIndex = computed(() =>
+      props.nieuwLid && state.groepEnfuncties.length === 1 ? [0] : []
+    );
+
     return {
       ...toRefs(state),
+      activeIndex,
       gesorteerdeFuncties,
       groepsNaam,
       voegToeOfVerwijderFunctie
