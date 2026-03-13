@@ -50,10 +50,6 @@
         </div>
       </div>
       <div v-if="!gevuldeLedenLijst || eigenProfiel" class="col-6 col-sm-4">
-        <div class="flex justify-content-end mb-2">
-          <opslaan class="md:ml-2" :disabled="!changes" @click="$emit('opslaan')"
-                   v-if="(kanOpslaan || kanNieuwLidAanmaken)"></opslaan>
-        </div>
         <div class="flex justify-content-end">
           <Button type="button" @click="toggle" aria-haspopup="true"
                   aria-controls="overlay_menu"
@@ -71,6 +67,8 @@
               </div>
             </template>
           </Menu>
+          <opslaan class="ml-2" :disabled="!changes" @click="$emit('opslaan')"
+                   v-if="(kanOpslaan || kanNieuwLidAanmaken)"></opslaan>
         </div>
       </div>
     </div>
