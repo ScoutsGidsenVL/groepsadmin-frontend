@@ -48,15 +48,15 @@
             label="Rekeningnummer"
             type="text"
             :disabled="!kanGroepWijzigen"
-          />
+          ></BaseInput>
           <BaseCheckbox
             type="checkbox"
             v-model="facturatieLeidingCheck"
             label="Leiding verbeterd"
             multiple="false"
-            @check="check('leidingVerbeterd')"
-            :beschrijving="leidingVerbeterd"
-            :disabled="!kanGroepWijzigen || facturatieLeidingCheck"
+            @check="check('leidingverbeterd')"
+            :beschrijving="leidingVerbeterdBeschrijving"
+            :disabled="!kanGroepWijzigen || !leidingVerbeterdEnabled"
           ></BaseCheckbox>
           <BaseCheckbox
             v-if="groep.ledenVerbeterdTonen"
@@ -65,8 +65,8 @@
             label="Leden verbeterd"
             multiple="false"
             @check="check('ledenverbeterd')"
-            :beschrijving="ledenVerbeterd"
-            :disabled="!kanGroepWijzigen || facturatieLedenCheck"
+            :beschrijving="ledenVerbeterdBeschrijving"
+            :disabled="!kanGroepWijzigen || !ledenVerbeterdEnabled"
           ></BaseCheckbox>
           <BaseCheckbox
             type="checkbox"
@@ -104,7 +104,6 @@ import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
-import DateUtil from "@/services/dates/DateUtil";
 
 export default {
   name: "Algemeen",
@@ -133,24 +132,24 @@ export default {
     formulierUrl() {
       return this.baseUrl + this.groep.groepsnummer;
     },
-    leidingVerbeterd() {
-      if (this.facturatieLeidingCheck) {
-        return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeiding)
-      }
-      return "<b>Deadline: 1 september</b>";
+    leidingVerbeterdBeschrijving() {
+      return this.groep.leidingVerbeterdBeschrijving;
     },
-    ledenVerbeterd() {
-      if (this.facturatieLedenCheck) {
-        return "Aangevinkt op " + DateUtil.formatteerDatum(this.groep.facturatieLeden)
-      }
-      return "<b>Deadline: 15 oktober</b>";
+    leidingVerbeterdEnabled() {
+      return this.groep.leidingVerbeterdEnabled;
+    },
+    ledenVerbeterdBeschrijving() {
+      return this.groep.ledenVerbeterdBeschrijving;
+    },
+    ledenVerbeterdEnabled() {
+      return this.groep.ledenVerbeterdEnabled;
     }
   },
 
   methods: {
     check(type) {
       switch (type) {
-        case 'leidingVerbeterd':
+        case 'leidingverbeterd':
           if (!this.groep.facturatieLeiding) {
             this.groep.facturatieLeiding = new Date().toISOString()
           } else {

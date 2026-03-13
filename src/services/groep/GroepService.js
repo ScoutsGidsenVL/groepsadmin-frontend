@@ -102,6 +102,7 @@ export default {
                     if (res.status === 200) {
                         state.selectedGroep.groepseigenFuncties = res.data.groepseigenFuncties;
                         state.laden = false;
+                        updateFacturatieBeschrijvingen();
                         store.dispatch("getGroepen");
                         store.dispatch("getFuncties");
                         if (!state.changesFuncties) {
@@ -242,6 +243,7 @@ export default {
 
             state.selectedGroep.opgericht = new Date(groep.opgericht);
             getContacten();
+            updateFacturatieBeschrijvingen();
             getGroepseigenFuncties(groep);
             setTimeout(() => {
                 state.watchable = true
@@ -255,6 +257,23 @@ export default {
                     // state.selectedGroep.groepseigenFuncties = res.data.functies; Is this correct???
                 }
             })
+        }
+
+        const updateFacturatieBeschrijvingen = () => {
+            if (state.selectedGroep.facturatieLeiding) {
+                state.selectedGroep.leidingVerbeterdBeschrijving = "Aangevinkt op " + DateUtil.formatteerDatum(state.selectedGroep.facturatieLeiding);
+                state.selectedGroep.leidingVerbeterdEnabled = false;
+            } else {
+                state.selectedGroep.leidingVerbeterdBeschrijving = "<b>Deadline: 1 september</b>";
+                state.selectedGroep.leidingVerbeterdEnabled = true;
+            }
+            if (state.selectedGroep.facturatieLeden) {
+                state.selectedGroep.ledenVerbeterdBeschrijving = "Aangevinkt op " + DateUtil.formatteerDatum(state.selectedGroep.facturatieLeden);
+                state.selectedGroep.ledenVerbeterdEnabled = false;
+            } else {
+                state.selectedGroep.ledenVerbeterdBeschrijving = "<b>Deadline: 15 oktober</b>";
+                state.selectedGroep.ledenVerbeterdEnabled = true;
+            }
         }
 
         const kanGroepWijzigen = computed(() => {
@@ -284,6 +303,7 @@ export default {
                 };
             }
             getContacten();
+            updateFacturatieBeschrijvingen();
             store.getters.groepen.forEach((groep) => {
                 state.groepenArray.push({
                     label: groep.naam + " - " + groep.id,
