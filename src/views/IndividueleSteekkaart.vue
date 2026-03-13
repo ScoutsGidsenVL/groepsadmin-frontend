@@ -4,7 +4,10 @@
     <ConfirmDialog/>
     <toast position="bottom-right"/>
     <ingelogd-lid></ingelogd-lid>
-    <div>
+    <div class="container-fluid md:w-90">
+      <div class="hidden lg:block md:ml-8 w-25">
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+      </div>
       <Loader
         :showLoader="isLoadingGegevens"
       ></Loader>
@@ -80,6 +83,7 @@ import IngelogdLid from "@/components/lid/IngelogdLid";
 import SteekkaartService from "@/services/individueleSteekkaart/SteekkaartService";
 import {toRefs} from "@vue/reactivity";
 import ConfirmDialog from "primevue/confirmdialog";
+import Breadcrumb from "primevue/breadcrumb";
 import DateUtil from "../services/dates/DateUtil";
 
 export default {
@@ -96,6 +100,7 @@ export default {
     SideMenu,
     IngelogdLid,
     ConfirmDialog,
+    Breadcrumb,
   },
   setup() {
     const {
@@ -109,7 +114,7 @@ export default {
       ...toRefs(state),
       save,
       changeValue,
-      setHeader
+      setHeader,
     }
   },
 };

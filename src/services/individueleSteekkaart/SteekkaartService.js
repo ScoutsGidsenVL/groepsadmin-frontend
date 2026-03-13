@@ -24,6 +24,8 @@ export default {
             error: false,
             steekkaart: null,
             activeIndex: [0],
+            home: {icon: 'pi pi-home', to: '/dashboard'},
+            breadcrumbItems: [{label: 'Individuele steekkaart'}],
             lid: {
                 voornaam: "",
                 achternaam: "",

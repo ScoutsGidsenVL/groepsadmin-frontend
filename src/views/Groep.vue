@@ -6,7 +6,7 @@
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 lg:ml-6"/>
+        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
       </div>
       <Loader
         :showLoader="laden"
