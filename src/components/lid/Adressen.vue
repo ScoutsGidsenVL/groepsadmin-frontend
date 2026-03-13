@@ -14,7 +14,7 @@
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true">
+        <accordion :multiple="true" v-model:activeIndex="activeIndex">
           <accordionTab v-for="(adres, index) in adressen" :key="index">
             <template #header>
               <div class="d-flex col-11 justify-content-between">
@@ -140,7 +140,7 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {toRefs} from "@vue/reactivity";
+import {ref, toRefs} from "@vue/reactivity";
 import AdresService from "@/services/adressen/AdresService";
 import {useVuelidate} from "@vuelidate/core";
 import {helpers, required} from "@vuelidate/validators";
@@ -172,6 +172,8 @@ export default {
   },
 
   setup(props) {
+    const activeIndex = ref(props.lidaanvraag ? [0] : []);
+
     const {
       state,
       remove,
@@ -225,6 +227,7 @@ export default {
 
     return {
       ...toRefs(state),
+      activeIndex,
       voegAdresToe,
       remove,
       zetPostadres,
