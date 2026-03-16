@@ -148,73 +148,44 @@ export default {
             getLid("profiel");
         }
 
-// const getLid = (id) => {
-//     state.loadingLid = true
-//     RestService.getLid(id).then((res) => {
-//         state.lid = res.data;
-//         store.commit('setGeselecteerdeLeden', []);
-//         store.getters.geselecteerdeLeden.push(state.lid);
-//         if (id === "profiel") {
-//             state.eigenProfiel = true;
-//             store.commit("setProfiel", res.data);
-//         }
-//         sorteerFuncties();
-//         filterGroepsEigenVelden();
-//         setGeboorteDatum();
-//     }).catch(error => {
-//         if (error.response.status === 403) {
-//             toast.add({
-//                 severity: "warn",
-//                 summary: error.response.data.titel,
-//                 detail: error.response.data.beschrijving,
-//                 life: 3000,
-//             });
-//             setTimeout(() => {
-//                 router.push({name: 'Ledenlijst'})
-//             }, 2000)
-//         }
-//     }).finally(() => {
-//         state.loadingLid = false;
-//     })
-// }
+        const heeftFiscaalAttest = ref(false);
 
-const heeftFiscaalAttest = ref(false);
-
-const getLid = (id) => {
-    state.loadingLid = true
-    RestService.getLid(id).then(async (res) => {
-        state.lid = res.data;
-        store.commit('setGeselecteerdeLeden', []);
-        store.getters.geselecteerdeLeden.push(state.lid);
-        if (id === "profiel") {
-            state.eigenProfiel = true;
-            store.commit("setProfiel", res.data);
+        const getLid = (id) => {
+            state.loadingLid = true
+            RestService.getLid(id).then(async (res) => {
+                state.lid = res.data;
+                store.commit('setGeselecteerdeLeden', []);
+                store.getters.geselecteerdeLeden.push(state.lid);
+                if (id === "profiel") {
+                    state.eigenProfiel = true;
+                    store.commit("setProfiel", res.data);
+                }
+                sorteerFuncties();
+                filterGroepsEigenVelden();
+                setGeboorteDatum();
+                try {
+                    const attestRes = await RestService.controleerBeschikbaarheidAttest(state.lid.id);
+                    console.log("attestRes", attestRes);
+                    heeftFiscaalAttest.value = attestRes.status >= 200 && attestRes.status < 300 && attestRes.data;
+                } catch (error) {
+                    heeftFiscaalAttest.value = false;
+                }
+            }).catch(error => {
+                if (error.response.status === 403) {
+                    toast.add({
+                        severity: "warn",
+                        summary: error.response.data.titel,
+                        detail: error.response.data.beschrijving,
+                        life: 3000,
+                    });
+                    setTimeout(() => {
+                        router.push({name: 'Ledenlijst'})
+                    }, 2000)
+                }
+            }).finally(() => {
+                state.loadingLid = false;
+            })
         }
-        sorteerFuncties();
-        filterGroepsEigenVelden();
-        setGeboorteDatum();
-        try {
-            const attestRes = await RestService.controleerBeschikbaarheidAttest(state.lid.id);
-            heeftFiscaalAttest.value = attestRes.status >= 200 && attestRes.status < 300 && attestRes.data;
-        } catch (error) {
-            heeftFiscaalAttest.value = false;
-        }
-    }).catch(error => {
-        if (error.response.status === 403) {
-            toast.add({
-                severity: "warn",
-                summary: error.response.data.titel,
-                detail: error.response.data.beschrijving,
-                life: 3000,
-            });
-            setTimeout(() => {
-                router.push({name: 'Ledenlijst'})
-            }, 2000)
-        }
-    }).finally(() => {
-        state.loadingLid = false;
-    })
-}
 
         const sorteerFuncties = () => {
             store.commit("setGroepenLaden", true);
@@ -563,44 +534,6 @@ const getLid = (id) => {
                 return route.params.id === "profiel" || store.getters.profiel.id === route.params.id
             }
         })
-
-        // const heeftFiscaalAttest = computed({
-        //     get() {
-        //         console.log("heeftFiscaalAttest");
-        //         console.log(state.lid.id);
-
-        //         return RestService.controleerBeschikbaarheidAttest(state.lid.id)
-        //             .then((res) => {
-        //                 console.log("after return: " + res);
-        //                 console.log(res);
-        //                 return res.data;
-        //             }).catch((error) => {
-        //                 if (error.response.status === 404) {
-        //                     console.log("404!!!!!!!!!!!!!!!!!!!!!!!");
-        //                     return false;
-        //                 } else {
-        //                     toast.add({
-        //                         severity: "warn",
-        //                         summary: "Functie",
-        //                         detail: error.response.data.beschrijving,
-        //                         life: 8000,
-        //                     });
-        //                     return false;
-        //                 }
-        //             });
-        //     }
-        // })
-
-        // const heeftFiscaalAttest = ref(false);
-
-        // onMounted(async () => {
-        //     try {
-        //         const res = await RestService.controleerBeschikbaarheidAttest(state.lid.id);
-        //         heeftFiscaalAttest.value = res.data;
-        //     } catch (error) {
-        //         heeftFiscaalAttest.value = false;
-        //     }
-        // });
 
         const wijzigingen = computed({
             get() {

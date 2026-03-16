@@ -192,6 +192,7 @@ export default {
         onBeforeUpdate(() => {
             if (!props.nieuwLid) {
                 state.lid = props.modelValue;
+                state.heeftFiscaalAttest = props.heeftFiscaalAttest;
                 filterMenuItems();
             }
         })
