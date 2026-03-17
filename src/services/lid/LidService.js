@@ -165,7 +165,6 @@ export default {
                 setGeboorteDatum();
                 try {
                     const attestRes = await RestService.controleerBeschikbaarheidAttest(state.lid.id);
-                    console.log("attestRes", attestRes);
                     heeftFiscaalAttest.value = attestRes.status >= 200 && attestRes.status < 300 && attestRes.data;
                 } catch (error) {
                     heeftFiscaalAttest.value = false;
