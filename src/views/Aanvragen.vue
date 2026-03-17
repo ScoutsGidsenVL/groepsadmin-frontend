@@ -17,9 +17,6 @@
                        :message="confirmMailingMessage" @bevestigMail="bevestigMail(true)"
                        @bevestigGeenMail="bevestigMail(false)"></confirm-mailing>
       <div class="lg:ml-6 md:mt-10 lg:mt-8">
-        <div class="d-flex justify-content-end">
-          <lid-zoek-auto-complete></lid-zoek-auto-complete>
-        </div>
         <data-table :value="aanvragen" v-model:expandedRows="expandedRows" dataKey="id" responsiveLayout="scroll"
                     class="lg:ml-8">
           <template #header>
@@ -88,12 +85,9 @@ import Loader from "@/components/global/Loader";
 import Breadcrumb from "primevue/breadcrumb";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
-
 export default {
   name: "Aanvragen",
   components: {
-    LidZoekAutoComplete,
     ConfirmMailing,
     Loader,
     Breadcrumb,
