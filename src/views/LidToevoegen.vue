@@ -7,36 +7,39 @@
     <Loader
       :showLoader="loadingLid"
     ></Loader>
-    <div class="container-fluid md:w-90 lg:ml-4 md:pl-8">
+    <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
         <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
       </div>
-      <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 md:mt-10" :eigenProfiel="false"
-                      :nieuwLid="true" :changes="changes" @opslaan="opslaan"></lid-boven-balk>
-      <div class="lg:ml-2">
-        <form @submit.prevent="opslaan" autocomplete="off">
-          <div class="row lg:ml-8">
-            <div class="col-12 col-lg-6 col-xl-4">
-              <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
+      <div>
+        <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-lg-4em mt-9" :eigenProfiel="false"
+                        :nieuwLid="true" :changes="changes" @opslaan="opslaan"></lid-boven-balk>
+        <div class="lg:ml-2">
+          <form @submit.prevent="opslaan" autocomplete="off">
+            <div class="row lg:ml-8">
+              <div class="col-12 col-lg-6 col-xl-4">
+                <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
+              </div>
+              <div class="col-12 col-lg-6 col-xl-4">
+                <adressen  v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
+                <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
+                <groepseigen-gegevens
+                  v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                  v-model="groepseigenVelden"
+                  :title="'Groepseigen gegevens'"
+                ></groepseigen-gegevens>
+              </div>
+              <div class="col-12 col-lg-12 col-xl-4">
+                <functies-toevoegen
+                  v-model="lid"
+                  v-if="magFunctiesToevoegen"
+                  :nieuwLid="true"
+                  @voegFunctieToe="voegFunctieToe"
+                ></functies-toevoegen>
+              </div>
             </div>
-            <div class="col-12 col-lg-6 col-xl-4">
-              <adressen  v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
-              <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
-              <groepseigen-gegevens
-                v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
-                v-model="groepseigenVelden"
-                :title="'Groepseigen gegevens'"
-              ></groepseigen-gegevens>
-            </div>
-            <div class="col-12 col-lg-12 col-xl-4">
-              <functies-toevoegen
-                v-model="lid"
-                v-if="magFunctiesToevoegen"
-                @voegFunctieToe="voegFunctieToe"
-              ></functies-toevoegen>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
