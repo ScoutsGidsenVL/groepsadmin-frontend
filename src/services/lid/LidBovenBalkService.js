@@ -193,6 +193,7 @@ export default {
             if (!props.nieuwLid) {
                 state.lid = props.modelValue;
                 state.heeftFiscaalAttest = props.heeftFiscaalAttest;
+                state.eigenProfiel = props.eigenProfiel;
                 filterMenuItems();
             }
         })
