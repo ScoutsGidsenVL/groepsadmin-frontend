@@ -27,7 +27,7 @@
             >
               <span class="mt-1">Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i></span>
             </div>
-            <div class="col-1 absolute right-0 mr-6">
+            <div class="col-auto ms-auto d-flex align-items-center">
               <opslaan-met-tekst @opslaan="opslaan" v-if="kanGroepWijzigen" :changes="changes"></opslaan-met-tekst>
             </div>
           </div>
