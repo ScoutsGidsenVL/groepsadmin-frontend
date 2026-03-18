@@ -157,6 +157,7 @@ export default {
                             detail: "Wijzigingen opgeslagen",
                             life: 3000,
                         });
+                        state.lid.vgagegevens.individueleSteekkaartDatumAangepast = new Date().toISOString();
                         state.isLoadingGegevens = false;
                     })
                     .catch(() => {

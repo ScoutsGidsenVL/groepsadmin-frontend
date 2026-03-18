@@ -20,17 +20,17 @@ export default {
             menuItems: [
                 {
                     label: "Individuele steekkaart",
-                    icon: "fal fa-notes-medical",
+                    icon: "far fa-notes-medical",
                     link: "IndividueleSteekkaart",
                 },
                 {
                     label: "Lidkaart afdrukken",
-                    icon: "fal fa-address-card",
+                    icon: "far fa-address-card",
                     link: "Lidkaart",
                 },
                 {
                     label: "Fiscaal Attest afdrukken",
-                    icon: "fal fa-file-alt",
+                    icon: "far fa-file-alt",
                     link: "attest",
                 },
                 {

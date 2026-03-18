@@ -13,19 +13,8 @@
       ></Loader>
       <div class="lg:ml-6">
         <div class="p-4 lg:ml-8 md:mt-10 lg:mt-4">
-          <Button
-            icon="pi pi-save"
-            class="p-button-rounded p-button-warning float-right mr-2 position-sticky save-button"
-            @click="save"
-            :class="[
-              changes ? '' : 'opacity-50',
-              {animate: changes}
-            ]"
-          />
-          <div class="row">
-            <div
-              class="pull-left d-flex flex-column float-left text-align-left lg:ml-3"
-            >
+          <div class="d-flex justify-content-between align-items-end mt-3">
+            <div class="d-flex flex-column text-align-left lg:ml-3">
               <h3 class="panel-title">Individuele steekkaart</h3>
               <p class="panel-subtitle">
                 {{ lid.vgagegevens.voornaam }}
@@ -34,13 +23,19 @@
               <p class="panel-subtitle">
                 Geboortedatum: {{ DateUtil.formatteerDatum(lid.vgagegevens.geboortedatum) }}
               </p>
-              <p class="panel-subtitle" v-if="lid.vgagegevens.individueleSteekkaartDatumAangepast != null">
+              <p class="panel-subtitle mb-0" v-if="lid.vgagegevens.individueleSteekkaartDatumAangepast != null">
                 Laatste aanpassing:
                 {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartDatumAangepast) }}
               </p>
             </div>
+            <Button
+              :icon="changes ? 'pi pi-save' : 'far fa-calendar-check'"
+              :class="changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'"
+              :label="changes ? 'Opslaan' : 'Nagekeken'"
+              @click="save"
+            />
           </div>
-          <div class="row mt-5">
+          <div class="row mt-3">
             <div class="col-12">
               <form>
                 <accordion :multiple="true" v-model:activeIndex="activeIndex">
@@ -70,6 +65,14 @@
                 </accordion>
               </form>
             </div>
+          </div>
+          <div class="d-flex justify-content-end mt-3">
+            <Button
+              :icon="changes ? 'pi pi-save' : 'fal fa-calendar-check'"
+              :class="changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'"
+              :label="changes ? 'Opslaan' : 'Nagekeken'"
+              @click="save"
+            />
           </div>
         </div>
       </div>
