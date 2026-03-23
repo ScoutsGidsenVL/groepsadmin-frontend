@@ -99,11 +99,14 @@ export default {
         }
 
         const getActiviteit = () => {
+            state.isLoadingAanwezigheden = true;
             restService.getActiviteit(route.params.activiteit)
                 .then((res) => {
                     state.activiteit = res.data;
                     getAlleInAanmerkingKomendeLeden(res.data.id);
                     berekenMagActivteitBeheren(res.data.groep);
+                }).catch(() => {
+                    state.isLoadingAanwezigheden = false;
                 })
         };
 
@@ -116,8 +119,10 @@ export default {
         const getAlleInAanmerkingKomendeLeden = (activiteitId) => {
             restService.getAlleInAanmerkingKomendeLeden(activiteitId)
                 .then(res => {
-                    state.leden = res.data.aanwezigen;     
+                    state.leden = res.data.aanwezigen;
                     berekenDagprijs();
+                }).finally(() => {
+                    state.isLoadingAanwezigheden = false;
                 })
         }
         
