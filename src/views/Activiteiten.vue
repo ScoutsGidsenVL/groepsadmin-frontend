@@ -72,21 +72,14 @@
             class="p-datatable-sm activiteitentabel"
           >
 
-            <column v-if="leden.length > 0">
+            <column v-if="leden.length > 0" headerClass="checkbox-kolom-header" style="width: 2rem">
+              <template #header>
+                <div class="w-full flex justify-content-center"></div>
+              </template>
               <template #body="slotProps">
-                <div class="table-checkbox cursor-pointer">
-                    <i
-                      class="pi"
-                      :class="{
-                  'true-icon pi-check-circle': isWaardeTrue(
-                    slotProps.data.werkjaar
-                  ),
-                  'false-icon pi-times-circle': isWaardeFalse(
-                    slotProps.data.werkjaar
-                  ),
-                }"
-                    ><input v-model="geselecteerdeActiviteiten" :value="slotProps.data" type="checkbox"/></i>
-                  </div>                
+                <div class="flex justify-content-center">
+                  <checkbox v-model="geselecteerdeActiviteiten" :value="slotProps.data"></checkbox>
+                </div>
               </template>
             </column>
             <column field="jaar" header="Jaar">
