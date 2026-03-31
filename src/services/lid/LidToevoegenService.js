@@ -143,10 +143,10 @@ export default {
 
         const v = useVuelidate(rules, state);
 
-        onBeforeRouteLeave((to, from, next) => {
+        onBeforeRouteLeave(() => {
             store.commit('setGoedTeKeurenLid', null)
             store.commit('setBroerZusLid', null)
-            next();
+            return true;
         })
 
         const opslaan = () => {

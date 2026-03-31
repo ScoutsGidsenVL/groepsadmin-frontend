@@ -10,7 +10,7 @@ export default {
         break;
       case "https://ga-dev-tvl.scoutsengidsenvlaanderen.be":
         googleMapsKey = "AIzaSyBiKzCCqMUyu4mW0rKk777CU3pW86FZiJ8";
-        break;        
+        break;
       case "https://ga-dev-kdv.scoutsengidsenvlaanderen.be":
         googleMapsKey = "AIzaSyBiKzCCqMUyu4mW0rKk777CU3pW86FZiJ8";
         break;

@@ -23,7 +23,6 @@ import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 import Loading from "vue3-loading-overlay";
 import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup";
-import VueRouter from 'vue-router'; // TODO warning on localhost fixed with import { createRouter, createWebHistory } from 'vue-router'
 import Breadcrumb from "primevue/breadcrumb";
 import "./assets/fonts/Museo Sans/stylesheet.css";
 import Menu from "primevue/menu";
@@ -52,7 +51,6 @@ library.add(fas, faUser);
 
 // add primevue components
 const app = createApp(App);
-app.use(VueRouter);
 app.use(fas);
 app.use(library);
 app.use(ToastService);

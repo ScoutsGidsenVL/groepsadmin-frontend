@@ -491,23 +491,24 @@ export default {
             }, 2000);
         }
 
-        onBeforeRouteLeave((to, from, next) => {
+        onBeforeRouteLeave(() => {
             if (state.changes) {
-                confirm.require({
-                    message:
-                        "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
-                    header: "Wijzigingen",
-                    icon: "pi pi-exclamation-triangle",
-                    accept: () => {
-                        next();
-                    },
-                    reject: () => {
-                        next(false);
-                    },
+                return new Promise((resolve) => {
+                    confirm.require({
+                        message:
+                            "Je hebt niet opgeslagen wijzigingen. Ben je zeker dat je wil doorgaan?",
+                        header: "Wijzigingen",
+                        icon: "pi pi-exclamation-triangle",
+                        accept: () => {
+                            resolve(true);
+                        },
+                        reject: () => {
+                            resolve(false);
+                        },
+                    });
                 });
-            } else {
-                next();
             }
+            return true;
         })
 
         const volledigeNaam = computed({
