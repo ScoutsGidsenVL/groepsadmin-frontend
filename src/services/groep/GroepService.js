@@ -1,5 +1,5 @@
 import {reactive} from "@vue/reactivity";
-import {computed, onMounted, watch} from "vue";
+import {computed, nextTick, onMounted, watch} from "vue";
 import RestService from "@/services/api/RestService";
 import {useStore} from "vuex";
 import {useToast} from "primevue/usetoast";
@@ -144,9 +144,7 @@ export default {
                     state.changes = false;
                 }
                 store.commit("setGroepenLaden", false);
-                setTimeout(() => {
-                    state.watchable = true
-                }, 1500)
+                nextTick(() => { state.watchable = true; });
             })
 
             // indien er functieaanpassingen zijn gaan we deze allemaal overlopen en opslaan
@@ -245,16 +243,16 @@ export default {
             getContacten();
             updateFacturatieBeschrijvingen();
             getGroepseigenFuncties(groep);
-            setTimeout(() => {
-                state.watchable = true
-            }, 2000)
+            nextTick(() => { state.watchable = true; });
         }
 
         const getGroepseigenFuncties = (groep) => {
             RestService.getFunctiesVanGroep(groep.groepsnummer).then(res => {
                 if (res.status === 200) {
+                    state.watchable = false;
                     state.selectedGroep.groepseigenFunctie = res.data;
                     // state.selectedGroep.groepseigenFuncties = res.data.functies; Is this correct???
+                    nextTick(() => { state.watchable = true; });
                 }
             })
         }
@@ -313,9 +311,7 @@ export default {
             state.selectedGroep.publiekInschrijven = state.selectedGroep[
                 "publiek-inschrijven"
                 ];
-            setTimeout(() => {
-                state.watchable = true
-            }, 2000);
+            nextTick(() => { state.watchable = true; });
         })
 
         emitter.on('laden', () => {
