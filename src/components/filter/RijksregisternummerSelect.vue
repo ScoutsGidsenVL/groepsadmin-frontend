@@ -1,14 +1,20 @@
 <template>
   <div v-if="criteria && criteria.activated" v-click-outside="close">
-    <div class="col-12 type-select-button kolom-select cursor-pointer" @click="toggleMenu = !toggleMenu">
+    <div
+      class="col-12 type-select-button kolom-select cursor-pointer"
+      @click="toggleMenu = !toggleMenu"
+    >
       <div class="row mt--05">
-        <div class="col-10 ">
+        <div class="col-10">
           <div class="text-align-left d-flex">
             <div>
               <label>{{ criteria.title }}:</label>
             </div>
             <div class="row">
-              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
+              <label
+                class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter"
+                >{{ label }}</label
+              >
             </div>
           </div>
         </div>
@@ -17,59 +23,73 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
-      <div v-for="( item, index ) in criteria.items" :key="index" class="d-flex align-content-start">
+    <div
+      class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border"
+      v-if="toggleMenu"
+    >
+      <div
+        v-for="(item, index) in criteria.items"
+        :key="index"
+        class="d-flex align-content-start"
+      >
         <checkbox
           :id="index"
           v-model="selectedOptions"
           :value="item.value"
-          @change="$event.stopPropagation();
-                   checkSelectedOption()"
+          @change="
+            $event.stopPropagation();
+            checkSelectedOption();
+          "
         />
-        <label :for="index" class="ml-3 text-align-left">{{ item.label }} </label>
+        <label :for="index" class="ml-3 text-align-left"
+          >{{ item.label }}
+        </label>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
 
 export default {
   name: "RijksregisternummerSelect",
   components: {
-    VerwijderCriteria
+    VerwijderCriteria,
   },
   data() {
     return {
       toggleMenu: false,
       selecteerAlles: false,
       selectedOptions: [],
-    }
+    };
   },
   props: {
     criteria: {
-      type: Array
+      type: Array,
     },
     value: {
       type: Array,
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
   methods: {
-
     close() {
-      this.toggleMenu = false;    
-      this.emitter.emit('changeGeenRijksregisternummerCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
+      this.toggleMenu = false;
+      this.emitter.emit("changeGeenRijksregisternummerCriterium", {
+        criteria: this.criteria,
+        selectedOptions: this.selectedOptions,
+      });
     },
 
     checkSelectedOption() {
-      this.emitter.emit('changeGeenRijksregisternummerCriterium', {'criteria': this.criteria, 'selectedOptions': this.selectedOptions})
+      this.emitter.emit("changeGeenRijksregisternummerCriterium", {
+        criteria: this.criteria,
+        selectedOptions: this.selectedOptions,
+      });
     },
-
   },
   mounted() {
     if (this.criteria) {
@@ -77,7 +97,7 @@ export default {
         if (item.activated) {
           this.selectedOptions.push(item.value);
         }
-      })
+      });
     }
 
     if (this.criteria.value) {
@@ -86,7 +106,11 @@ export default {
   },
   computed: {
     label() {
-      if (this.criteria && this.selectedOptions && this.selectedOptions.length > 0) {
+      if (
+        this.criteria &&
+        this.selectedOptions &&
+        this.selectedOptions.length > 0
+      ) {
         let label = "";
         let counter = 0;
         this.criteria.items.forEach((item) => {
@@ -95,20 +119,17 @@ export default {
             if (item.value === value) {
               label += item.label;
               if (counter !== this.selectedOptions.length) {
-                label += ", "
+                label += ", ";
               }
             }
-          })
-        })
+          });
+        });
         return label;
       }
       return "";
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,28 +1,39 @@
 <template>
   <div>
-    <SideMenu/>
-    <confirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <confirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid">
       <div class="hidden lg:block w-50">
-        <Breadcrumb class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb class="ml-4 mt-4 md:ml-6" />
       </div>
       <div class="custom-divider"></div>
       <div class="lg:ml-8 lg:pl-8 mt-2">
         <div class="relative container lg:ml-8">
           <loader :show-loader="showLoader"></loader>
           <div class="d-flex lg:mt-8 sm:mt-4 mt-8">
-            <h1 class="text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-8 lg:mt-2 font-bold">Welkom {{
-                naam
-              }}</h1>
+            <h1
+              class="text-align-left md:text-center text-sm sm:text-lg md:text-3xl mt-8 lg:mt-2 font-bold"
+            >
+              Welkom {{ naam }}
+            </h1>
           </div>
           <div class="row container-block sm:mt-5">
             <div class="col-12 col-md-9">
               <div class="row">
-                <div v-for="menuItem in dashboardItems" :key="menuItem.label" class="col-lg-5 mb-4 dashboard-block">
-                  <dashboard-block :link="menuItem.link" :title="menuItem.label" :icoon="menuItem.icon"
-                                   :visible="menuItem.condition" :internal="menuItem.internal">
+                <div
+                  v-for="menuItem in dashboardItems"
+                  :key="menuItem.label"
+                  class="col-lg-5 mb-4 dashboard-block"
+                >
+                  <dashboard-block
+                    :link="menuItem.link"
+                    :title="menuItem.label"
+                    :icoon="menuItem.icon"
+                    :visible="menuItem.condition"
+                    :internal="menuItem.internal"
+                  >
                   </dashboard-block>
                 </div>
               </div>
@@ -32,12 +43,22 @@
                 <h5 class="text-align-left mb-4"><strong>Snel naar</strong></h5>
               </div>
               <div class="justify-content-start d-flex">
-                <ul style="list-style: none;" class="ml--1">
-                  <li class="text-decoration-none justify-content-start d-flex mb-3 text-align-left"
-                      v-for="(item, index) in snelNaarItems" :key="index">
-                    <i class="fal fa-arrow-right color-dark-green"><a :href="item.url" target="_blank"
-                                                                       class="text-decoration-none"><span
-                      class="text-black font ml-2 cursor-pointer">{{ item.naam }}</span></a></i>
+                <ul style="list-style: none" class="ml--1">
+                  <li
+                    class="text-decoration-none justify-content-start d-flex mb-3 text-align-left"
+                    v-for="(item, index) in snelNaarItems"
+                    :key="index"
+                  >
+                    <i class="fal fa-arrow-right color-dark-green"
+                      ><a
+                        :href="item.url"
+                        target="_blank"
+                        class="text-decoration-none"
+                        ><span class="text-black font ml-2 cursor-pointer">{{
+                          item.naam
+                        }}</span></a
+                      ></i
+                    >
                   </li>
                 </ul>
               </div>
@@ -47,7 +68,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -58,7 +79,7 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import DashboardService from "@/services/dashboard/DashboardService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "Dashboard",
@@ -68,22 +89,17 @@ export default {
     Loader,
     SideMenu,
     ConfirmDialog,
-    IngelogdLid
+    IngelogdLid,
   },
   setup() {
-
-    const {
-      state,
-      dashboardItems,
-      naam
-    } = DashboardService.dashboardSpace();
+    const { state, dashboardItems, naam } = DashboardService.dashboardSpace();
 
     return {
       ...toRefs(state),
       dashboardItems,
-      naam
-    }
-  }
+      naam,
+    };
+  },
 };
 </script>
 

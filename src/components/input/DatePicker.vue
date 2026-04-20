@@ -12,7 +12,7 @@
         :showIcon="true"
         dateFormat="dd/mm/yy"
         placeholder="../../...."
-        :manualInput=true
+        :manualInput="true"
         v-bind="$attrs"
         :modelValue="modelValue"
         :disabled="disabled"
@@ -24,7 +24,7 @@
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
         v-if="invalid"
-      >{{ errorMessage }}
+        >{{ errorMessage }}
       </small>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
     },
     modelValue: {
       type: Date,
-      default: new Date(new Date().setFullYear(new Date().getFullYear() - 5))
+      default: new Date(new Date().setFullYear(new Date().getFullYear() - 5)),
     },
     disabled: {
       type: Boolean,
@@ -52,11 +52,11 @@ export default {
     },
     invalid: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorMessage: {
-      type: String
-    }
+      type: String,
+    },
   },
 };
 </script>

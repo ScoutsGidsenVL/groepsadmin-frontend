@@ -1,13 +1,15 @@
 <template>
-  <Button icon="fas fa-user-plus" class="p-button-rounded algemene-knop custom-knop" title="Nieuw lid"/>
+  <Button
+    icon="fas fa-user-plus"
+    class="p-button-rounded algemene-knop custom-knop"
+    title="Nieuw lid"
+  />
 </template>
 
 <script>
 export default {
-  name: "NieuwLid"
-}
+  name: "NieuwLid",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

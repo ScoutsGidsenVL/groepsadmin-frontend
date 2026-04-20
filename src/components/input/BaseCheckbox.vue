@@ -1,7 +1,11 @@
 <template>
   <div class="custom-checkbox">
     <div class="row">
-      <div class="col-9 p-mb-2 p-mb-md-0" v-if="label" :class="voorkeuren ? 'col-md-5' : 'col-sm-5'">
+      <div
+        class="col-9 p-mb-2 p-mb-md-0"
+        v-if="label"
+        :class="voorkeuren ? 'col-md-5' : 'col-sm-5'"
+      >
         <label> {{ label }} </label>
       </div>
       <div class="col-2" :class="voorkeuren ? 'col-md-7' : 'col-sm-7'">
@@ -24,7 +28,11 @@
         </span>
       </div>
     </div>
-    <p class="beschrijving text-sm" v-html="beschrijving" v-if="beschrijving"></p>
+    <p
+      class="beschrijving text-sm"
+      v-html="beschrijving"
+      v-if="beschrijving"
+    ></p>
   </div>
 </template>
 
@@ -78,8 +86,7 @@ export default {
       this.$emit("changeValue");
     },
 
-    showMessage() {
-    },
+    showMessage() {},
   },
   setup(props, { emit }) {
     return {

@@ -1,16 +1,18 @@
 <template>
   <div>
-    <SideMenu/>
-    <ConfirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <ConfirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6"
+        />
       </div>
-      <Loader
-        :showLoader="isLoadingGegevens"
-      ></Loader>
+      <Loader :showLoader="isLoadingGegevens"></Loader>
       <div class="lg:ml-6">
         <div class="p-4 lg:ml-8 md:mt-10 lg:mt-4">
           <div class="d-flex justify-content-between align-items-end mt-3">
@@ -21,16 +23,28 @@
                 {{ lid.vgagegevens.achternaam }}
               </p>
               <p class="panel-subtitle">
-                Geboortedatum: {{ DateUtil.formatteerDatum(lid.vgagegevens.geboortedatum) }}
+                Geboortedatum:
+                {{ DateUtil.formatteerDatum(lid.vgagegevens.geboortedatum) }}
               </p>
-              <p class="panel-subtitle mb-0" v-if="lid.vgagegevens.individueleSteekkaartDatumAangepast != null">
+              <p
+                class="panel-subtitle mb-0"
+                v-if="
+                  lid.vgagegevens.individueleSteekkaartDatumAangepast != null
+                "
+              >
                 Laatste aanpassing:
-                {{ DateUtil.formatteerDatum(lid.vgagegevens.individueleSteekkaartDatumAangepast) }}
+                {{
+                  DateUtil.formatteerDatum(
+                    lid.vgagegevens.individueleSteekkaartDatumAangepast
+                  )
+                }}
               </p>
             </div>
             <Button
               :icon="changes ? 'pi pi-save' : 'far fa-calendar-check'"
-              :class="changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'"
+              :class="
+                changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'
+              "
               :label="changes ? 'Opslaan' : 'Nagekeken'"
               @click="save"
             />
@@ -45,7 +59,9 @@
                   >
                     <template #header>
                       <div class="d-flex col-12 justify-content-between">
-                        <span class="text-align-left">{{ groep[0].label }}</span>
+                        <span class="text-align-left">{{
+                          groep[0].label
+                        }}</span>
                       </div>
                     </template>
                     <p
@@ -69,7 +85,9 @@
           <div class="d-flex justify-content-end mt-3">
             <Button
               :icon="changes ? 'pi pi-save' : 'fal fa-calendar-check'"
-              :class="changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'"
+              :class="
+                changes ? 'p-button opslaan-knop' : 'p-button steekkaart-knop'
+              "
               :label="changes ? 'Opslaan' : 'Nagekeken'"
               @click="save"
             />
@@ -86,7 +104,7 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import SteekkaartService from "@/services/individueleSteekkaart/SteekkaartService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import ConfirmDialog from "primevue/confirmdialog";
 import Breadcrumb from "primevue/breadcrumb";
 import DateUtil from "../services/dates/DateUtil";
@@ -95,8 +113,8 @@ export default {
   name: "IndividueleSteekkaart",
   computed: {
     DateUtil() {
-      return DateUtil
-    }
+      return DateUtil;
+    },
   },
 
   components: {
@@ -112,7 +130,7 @@ export default {
       state,
       save,
       changeValue,
-      setHeader
+      setHeader,
     } = SteekkaartService.steekkaartSpace();
 
     return {
@@ -120,7 +138,7 @@ export default {
       save,
       changeValue,
       setHeader,
-    }
+    };
   },
 };
 </script>

@@ -1,19 +1,28 @@
 <template>
   <div>
-    <SideMenu/>
-    <confirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <confirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <Loader
-      :showLoader="loadingLid"
-    ></Loader>
+    <Loader :showLoader="loadingLid"></Loader>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6"
+        />
       </div>
       <div>
-        <lid-boven-balk :lid="lid" :id="id" class="lg:ml-8 mt-lg-4em mt-9" :eigenProfiel="false"
-                        :nieuwLid="true" :changes="changes" @opslaan="opslaan"></lid-boven-balk>
+        <lid-boven-balk
+          :lid="lid"
+          :id="id"
+          class="lg:ml-8 mt-lg-4em mt-9"
+          :eigenProfiel="false"
+          :nieuwLid="true"
+          :changes="changes"
+          @opslaan="opslaan"
+        ></lid-boven-balk>
         <div class="lg:ml-2">
           <form @submit.prevent="opslaan" autocomplete="off">
             <div class="row lg:ml-8">
@@ -21,10 +30,21 @@
                 <persoonlijk v-model="lid" :nieuwLid="true"></persoonlijk>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
-                <adressen  v-model="lid" :title="'Adressen'" :lidaanvraag="true"></adressen>
-                <contacten v-model="lid" :title="'Contacten'" :lidaanvraag="true"></contacten>
+                <adressen
+                  v-model="lid"
+                  :title="'Adressen'"
+                  :lidaanvraag="true"
+                ></adressen>
+                <contacten
+                  v-model="lid"
+                  :title="'Contacten'"
+                  :lidaanvraag="true"
+                ></contacten>
                 <groepseigen-gegevens
-                  v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                  v-if="
+                    groepseigenVelden &&
+                    Object.keys(groepseigenVelden).length > 0
+                  "
                   v-model="groepseigenVelden"
                   :title="'Groepseigen gegevens'"
                 ></groepseigen-gegevens>
@@ -43,7 +63,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -59,7 +79,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import LidToevoegenService from "@/services/lid/LidToevoegenService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "LidToevoegen",
@@ -70,10 +90,8 @@ export default {
       laden,
       magFunctiesToevoegen,
       opslaan,
-      voegFunctieToe
+      voegFunctieToe,
     } = LidToevoegenService.lidToevoegenSpace();
-
-
 
     return {
       ...toRefs(state),
@@ -81,8 +99,8 @@ export default {
       opslaan,
       voegFunctieToe,
       laden,
-      v
-    }
+      v,
+    };
   },
   components: {
     Footer,
@@ -95,7 +113,7 @@ export default {
     FunctiesToevoegen,
     ConfirmDialog,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
   },
 };
 </script>

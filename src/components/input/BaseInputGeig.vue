@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="p-grid row">
-      <div
-        class="col-8 p-md-8"
-        :class="bold ? 'font-weight-bolder' : ''"
-      >
+      <div class="col-8 p-md-8" :class="bold ? 'font-weight-bolder' : ''">
         <inputText
           class="w-100"
           v-bind="$attrs"
@@ -21,9 +18,9 @@
           icon="pi pi-trash"
           class="p-button-rounded p-button-outlined p-button-danger float-end mr-1"
           @click="
-                    $event.stopPropagation();
-                    remove(index);
-                  "
+            $event.stopPropagation();
+            remove(index);
+          "
           :title="'Verwijder groepseigen functie ' + value"
         />
       </div>
@@ -32,7 +29,7 @@
 </template>
 
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseInputGeig",
@@ -57,8 +54,8 @@ export default {
       type: String,
     },
     index: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     changeValue($event) {
@@ -67,9 +64,9 @@ export default {
     },
     remove(index) {
       this.$emit("remove", index);
-    }
+    },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
       value: useModelWrapper(props, emit, "modelValue"),
     };

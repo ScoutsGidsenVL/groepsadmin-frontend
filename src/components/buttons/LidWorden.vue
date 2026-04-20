@@ -1,5 +1,11 @@
 <template>
-  <Button class="algemene-lid-knop" title="Lid worden" @click="opslaan" :disabled="disabled" >Lid worden</Button>
+  <Button
+    class="algemene-lid-knop"
+    title="Lid worden"
+    @click="opslaan"
+    :disabled="disabled"
+    >Lid worden</Button
+  >
 </template>
 
 <script>
@@ -7,17 +13,15 @@ export default {
   name: "NieuwLid",
   props: {
     disabled: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   methods: {
     opslaan() {
-      this.$emit('opslaan');
-    }
-  }
-}
+      this.$emit("opslaan");
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,7 +1,5 @@
 <template>
-  <Loader
-    :showLoader="activiteitOpslaan"
-  ></Loader>
+  <Loader :showLoader="activiteitOpslaan"></Loader>
   <Dialog
     v-model:visible="openDialog"
     :style="{
@@ -12,7 +10,9 @@
     :closable="false"
   >
     <template #header>
-      <div class="inline-flex align-items-center justify-content-start gap-2 header-background">
+      <div
+        class="inline-flex align-items-center justify-content-start gap-2 header-background"
+      >
         <span class="font-bold white-space-nowrap">Activiteit toevoegen</span>
       </div>
     </template>
@@ -36,7 +36,7 @@
         type="text"
       />
       <div style="margin-top: 5px">
-        <label style="margin-right: 11.40rem">Prijs</label>
+        <label style="margin-right: 11.4rem">Prijs</label>
         <InputNumber
           v-model="activiteit.prijs"
           label="Prijs"
@@ -53,7 +53,6 @@
         icon="pi pi-times"
         @click="$emit('close')"
         class="p-button-text reject-button"
-
       />
       <Opslaan @opslaan="opslaan"></Opslaan>
     </template>
@@ -64,7 +63,7 @@
 import Opslaan from "@/components/buttons/Opslaan.vue";
 import DatePicker from "@/components/input/DatePicker.vue";
 import BaseInput from "@/components/input/BaseInput.vue";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import Loader from "@/components/global/Loader.vue";
 import InputNumber from "primevue/inputnumber";
 import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
@@ -76,7 +75,7 @@ export default {
     BaseInput,
     DatePicker,
     Opslaan,
-    InputNumber
+    InputNumber,
   },
   props: {
     dialogVisible: {
@@ -84,11 +83,11 @@ export default {
       default: false,
     },
     groep: {
-      type: Object
+      type: Object,
     },
     teBewerkenActiviteit: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   setup(props) {
@@ -106,11 +105,9 @@ export default {
       openDialog,
       formatteerDatum,
       opslaan,
-    }
-  }
+    };
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

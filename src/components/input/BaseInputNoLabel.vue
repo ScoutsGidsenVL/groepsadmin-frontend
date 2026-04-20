@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {useModelWrapper} from "@/utils/modelWrapper";
+import { useModelWrapper } from "@/utils/modelWrapper";
 
 export default {
   name: "BaseInputNoLabel",
@@ -38,9 +38,9 @@ export default {
     },
     keypress() {
       this.$emit("keypress");
-    }
+    },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
       value: useModelWrapper(props, emit, "modelValue"),
     };

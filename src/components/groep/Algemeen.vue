@@ -2,9 +2,7 @@
   <div class="mb-4">
     <card>
       <template #title>
-        <span class="font22">
-          Algemeen
-        </span>
+        <span class="font22"> Algemeen </span>
       </template>
       <template #content>
         <div class="p-fluid">
@@ -75,18 +73,27 @@
             multiple="false"
             :disabled="!kanGroepWijzigen"
           ></BaseCheckbox>
-          <div id="helpBlock" class="help-block mt-2" v-show="groep['publiek-inschrijven']">
+          <div
+            id="helpBlock"
+            class="help-block mt-2"
+            v-show="groep['publiek-inschrijven']"
+          >
             <div>
               <p>
-                Link naar jouw inschrijvingsformulier:<br>
-                <a :href="formulierUrl" target="_blank"
-                   class="icon-small clean-link color-dark-green group-link">{{ formulierUrl }}</a>
+                Link naar jouw inschrijvingsformulier:<br />
+                <a
+                  :href="formulierUrl"
+                  target="_blank"
+                  class="icon-small clean-link color-dark-green group-link"
+                  >{{ formulierUrl }}</a
+                >
               </p>
             </div>
             <p>
-              Inschrijvingsformulier insluiten in jouw website:<br>
+              Inschrijvingsformulier insluiten in jouw website:<br />
               <code>
-                &lt;iframe height="1200" width="950" src="{{ formulierUrl }}" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+                &lt;iframe height="1200" width="950" src="{{ formulierUrl }}"
+                frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
               </code>
             </p>
           </div>
@@ -97,8 +104,8 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import { reactive, toRefs } from "@vue/reactivity";
+import { onUpdated } from "@vue/runtime-core";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
@@ -143,20 +150,20 @@ export default {
     },
     ledenVerbeterdEnabled() {
       return this.groep.ledenVerbeterdEnabled;
-    }
+    },
   },
 
   methods: {
     check(type) {
       switch (type) {
-        case 'leidingverbeterd':
+        case "leidingverbeterd":
           if (!this.groep.facturatieLeiding) {
-            this.groep.facturatieLeiding = new Date().toISOString()
+            this.groep.facturatieLeiding = new Date().toISOString();
           } else {
             this.groep.facturatieLeiding = null;
           }
           break;
-        case 'ledenverbeterd':
+        case "ledenverbeterd":
           if (!this.groep.facturatieLeden) {
             this.groep.facturatieLeden = new Date().toISOString();
           } else {
@@ -169,7 +176,9 @@ export default {
 
   setup(props) {
     const state = reactive({
-      baseUrl: window.location.origin.split('#' + window.location.pathname)[0] + '/groepsadmin/frontend/formulier/lidworden/',
+      baseUrl:
+        window.location.origin.split("#" + window.location.pathname)[0] +
+        "/groepsadmin/frontend/formulier/lidworden/",
       groep: {
         naam: "",
         groepsnummer: "",
@@ -193,7 +202,7 @@ export default {
       state.groep.opgericht = new Date(props.modelValue.opgericht);
     });
 
-    return {...toRefs(state)};
+    return { ...toRefs(state) };
   },
 };
 </script>

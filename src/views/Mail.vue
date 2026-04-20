@@ -1,8 +1,8 @@
 <template>
   <div>
-    <SideMenu/>
-    <ConfirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <ConfirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
     <div class="lg:ml-8">
       <Loader :show-loader="laden"></Loader>
@@ -43,8 +43,14 @@
                   >
                   </dropdown>
                 </div>
-                <div class="ml-2 text-align-left"
-                     v-if="sjabloon && (sjabloon.naam !== 'blanco sjabloon' || sjabloon.links.length !== 0)">
+                <div
+                  class="ml-2 text-align-left"
+                  v-if="
+                    sjabloon &&
+                    (sjabloon.naam !== 'blanco sjabloon' ||
+                      sjabloon.links.length !== 0)
+                  "
+                >
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
@@ -64,21 +70,17 @@
               <div class="d-flex justify-content-start">
                 <label>Antwoorden naar:</label>
               </div>
-              <BaseInput
-                v-model="sjabloon.replyTo"
-              ></BaseInput>
+              <BaseInput v-model="sjabloon.replyTo"></BaseInput>
               <div class="d-flex justify-content-start">
                 <label>Bcc:</label>
               </div>
-              <BaseInput
-                v-model="sjabloon.bcc">
-              </BaseInput>
+              <BaseInput v-model="sjabloon.bcc"> </BaseInput>
               <div class="row">
                 <div class="text-align-left">
                   <label
-                  >Ontvangers:
+                    >Ontvangers:
                     <span v-if="leden.length > 0">
-                {{
+                      {{
                         leden.length === 1 ? "1 lid" : leden.length + " leden"
                       }}</span
                     ><span
@@ -86,30 +88,43 @@
                       @click="toonLeden"
                       class="cursor-pointer custom-title"
                     >
-                (details)</span
+                      (details)</span
                     >
                     <span v-if="isLoadingLeden" class="mt-1"
-                    >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
+                      >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
                     ></span>
                   </label>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-12 text-align-left">
-                  <checkbox :binary=true v-model="sjabloon.bestemming.lid" id="alleLeden" class="mt--3p"></checkbox>
-                  <label class="mt-1 ml-3" for="alleLeden">Stuur naar leden</label>
+                  <checkbox
+                    :binary="true"
+                    v-model="sjabloon.bestemming.lid"
+                    id="alleLeden"
+                    class="mt--3p"
+                  ></checkbox>
+                  <label class="mt-1 ml-3" for="alleLeden"
+                    >Stuur naar leden</label
+                  >
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-12 text-align-left">
-                  <checkbox :binary=true v-model="sjabloon.bestemming.contacten" id="alleContacten"
-                            class="mt--3p"></checkbox>
-                  <label class="mt-1 ml-3" for="alleContacten">Stuur naar de contacten van leden</label>
+                  <checkbox
+                    :binary="true"
+                    v-model="sjabloon.bestemming.contacten"
+                    id="alleContacten"
+                    class="mt--3p"
+                  ></checkbox>
+                  <label class="mt-1 ml-3" for="alleContacten"
+                    >Stuur naar de contacten van leden</label
+                  >
                 </div>
               </div>
               <div class="row mb-3">
                 <label class="col-4 text-align-left mt-1"
-                >Bijlage (max. 5MB)
+                  >Bijlage (max. 5MB)
                   <a
                     href="https://wiki.scoutsengidsenvlaanderen.be/doku.php?id=handleidingen:groepsadmin:paginas:email_ledenlijst#e-mail_verzonden"
                     target="_blank"
@@ -133,16 +148,20 @@
                   :showCancelButton="false"
                   class="d-flex justify-content-start md:w-4 lg:w-6 sm:max-w-full"
                 ></FileUpload>
-                <div v-for="(file, index) in files" :key="index" class="text-align-left">
+                <div
+                  v-for="(file, index) in files"
+                  :key="index"
+                  class="text-align-left"
+                >
                   <div class="d-flex justify-content-start">
                     <div class="cut-off-text bestandsnaam">{{ file.name }}</div>
                     <Button
                       icon="pi pi-trash"
                       class="p-button-rounded p-button-text p-button-danger mt--05"
                       @click="
-                                    $event.stopPropagation();
-                                    removeFile(index);
-                                  "
+                        $event.stopPropagation();
+                        removeFile(index);
+                      "
                       title="Verwijder bestand"
                     />
                   </div>
@@ -167,7 +186,7 @@
             </div>
           </div>
           <div class="col-12 col-lg-8 pl-lg-5em mt-2">
-            <div class="d-flex justify-content-start ">
+            <div class="d-flex justify-content-start">
               <label>Onderwerp:</label>
             </div>
             <BaseInput
@@ -196,15 +215,22 @@
                 <ul>
                   <li v-for="(lid, index) in leden" :key="index">
                     <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
-                    <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
-                    <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
-                    >&nbsp;{{ lid.volledigenaam }}
-              </span>
-                    <span
-                      v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
+                    <span v-if="lid.achternaam"
+                      >&nbsp;{{ lid.achternaam }}</span
                     >
-                - geen naam beschikbaar -
-              </span>
+                    <span
+                      v-if="
+                        !lid.voornaam && !lid.achternaam && lid.volledigenaam
+                      "
+                      >&nbsp;{{ lid.volledigenaam }}
+                    </span>
+                    <span
+                      v-if="
+                        !lid.voornaam && !lid.achternaam && !lid.volledigenaam
+                      "
+                    >
+                      - geen naam beschikbaar -
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -224,7 +250,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -240,9 +266,8 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import Footer from "@/components/global/Footer";
-import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmDialog from "primevue/confirmdialog";
 import MessageDialog from "@/components/dialog/MessageDialog";
-
 
 export default {
   name: "Mail",
@@ -258,7 +283,7 @@ export default {
     Loader,
     SideMenu,
     IngelogdLid,
-    confirm
+    confirm,
   },
   data() {
     return {
@@ -324,8 +349,8 @@ export default {
     this.getSjablonen("creating");
 
     setTimeout(() => {
-      this.watchable = true
-    }, 2000)
+      this.watchable = true;
+    }, 2000);
 
     window.setInterval(
       function () {
@@ -353,8 +378,6 @@ export default {
       this.$store.getters.geselecteerdeLeden.forEach((lid) => {
         this.geselecteerdeLeden.push(lid);
         if (lid.waarden) {
-
-
           this.leden.push({
             voornaam:
               lid.waarden["be.vvksm.groepsadmin.model.column.VoornaamColumn"],
@@ -363,14 +386,15 @@ export default {
             volledigenaam:
               lid.waarden[
                 "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-                ],
+              ],
           });
         } else {
           this.leden.push({
             voornaam: lid.vgagegevens.voornaam,
             achternaam: lid.vgagegevens.achternaam,
-            volledigenaam: lid.vgagegevens.voornaam + " " + lid.vgagegevens.achternaam
-          })
+            volledigenaam:
+              lid.vgagegevens.voornaam + " " + lid.vgagegevens.achternaam,
+          });
         }
       });
       this.filterLeden();
@@ -383,7 +407,7 @@ export default {
   watch: {
     sjabloon: {
       handler: function (oldValue, newValue) {
-        if ((newValue.naam === oldValue.naam) && this.watchable) {
+        if (newValue.naam === oldValue.naam && this.watchable) {
           this.changes = true;
           this.sjabloonIsValid();
           this.saved = false;
@@ -403,8 +427,8 @@ export default {
     },
     getOptions() {
       return {
-        selector: 'textarea',
-        images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
+        selector: "textarea",
+        images_file_types: "jpg,svg,webp,png,bmp,jpeg",
         plugins: [
           "advlist autolink lists link image charmap print preview hr anchor pagebreak",
           "searchreplace wordcount visualblocks visualchars code fullscreen",
@@ -458,7 +482,7 @@ export default {
         .then((res) => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
-            this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
+            this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
             if (
               sjabloon.naam.indexOf("blanco") > -1 &&
               lifecycle === "creating"
@@ -489,7 +513,7 @@ export default {
       this.openModal = !this.openModal;
     },
     opslaan(naam, value) {
-     this.sjabloonIsValid();
+      this.sjabloonIsValid();
       if (!this.error) {
         this.laden = true;
         if (value?.value.id) {
@@ -575,11 +599,11 @@ export default {
               achternaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.AchternaamColumn"
-                  ],
+                ],
               volledigenaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-                  ],
+                ],
             });
           });
           this.offset = this.leden.length;
@@ -675,7 +699,7 @@ export default {
           return 1;
         }
         return 0;
-      })
+      });
     },
 
     sendMail() {
@@ -720,7 +744,7 @@ export default {
           this.changes = false;
           this.bevestig = false;
           this.confirmationDialog = false;
-          this.laden = false
+          this.laden = false;
           this.messageDialog = true;
 
           if (res.data.gelukt && res.data.gelukt.length > 0) {
@@ -729,18 +753,25 @@ export default {
 
           let failedCounter = 0;
           if (res.data.mislukt && res.data.mislukt.length > 0) {
-            res.data.mislukt.forEach(mailadres => {
-              mislukteMails += mailadres + "<br>"
+            res.data.mislukt.forEach((mailadres) => {
+              mislukteMails += mailadres + "<br>";
               failedCounter++;
-            })
+            });
 
-            this.mailMessage += "Volgende mail(s) konden niet bezorgd worden: <br>" + mislukteMails;
+            this.mailMessage +=
+              "Volgende mail(s) konden niet bezorgd worden: <br>" +
+              mislukteMails;
           }
           let totalSent = ontvangenMails + failedCounter;
-          this.mailMessage = "Jouw e-mail werd succesvol verzonden naar " + ontvangenMails + " van de " + totalSent + " ontvangers. <br>"
+          this.mailMessage =
+            "Jouw e-mail werd succesvol verzonden naar " +
+            ontvangenMails +
+            " van de " +
+            totalSent +
+            " ontvangers. <br>";
         })
         .catch((error) => {
-          this.laden = false
+          this.laden = false;
           this.feedback.boodschap = error.response.data.boodschap;
           this.feedback.vraag = error.response.data.vraag;
           this.feedback.infoLink = error.response.data.infoLink;
@@ -772,7 +803,7 @@ export default {
     getOpgeslagenMailSjabloon() {
       let sjabloon = this.$store.getters.mailSjabloon;
       if (sjabloon) {
-        this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
+        this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
       }
     },
 

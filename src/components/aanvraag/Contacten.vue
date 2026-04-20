@@ -5,10 +5,18 @@
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span> {{ title }}</span>
-          <Button icon="pi pi-plus" class="p-button-rounded add-button mt-1" @click="voegContactToe"
-            v-if="contacten.length < 4" title="Voeg adres toe" />
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded add-button mt-1"
+            @click="voegContactToe"
+            v-if="contacten.length < 4"
+            title="Voeg adres toe"
+          />
         </div>
-        <div class="text-black ml-2 small-text font-light" v-if="contacten.length === 0">
+        <div
+          class="text-black ml-2 small-text font-light"
+          v-if="contacten.length === 0"
+        >
           <p class="small">Nog geen contacten toegevoegd.</p>
         </div>
       </template>
@@ -18,58 +26,159 @@
             <template #header>
               <div class="d-flex col-12 justify-content-between">
                 <span>{{ setHeader(contact) }}</span>
-                <Button icon="pi pi-trash" class="p-button-rounded p-button-outlined p-button-danger mr-1" @click="
-                  $event.stopPropagation();
-                remove(index);
-                " title="Verwijder contact" />
+                <Button
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-outlined p-button-danger mr-1"
+                  @click="
+                    $event.stopPropagation();
+                    remove(index);
+                  "
+                  title="Verwijder contact"
+                />
               </div>
             </template>
-            <base-dropdown :options="rollen" label="Rol" v-model="contacten[index].rol" />
-            <base-input label="Voornaam" v-model="contacten[index].voornaam" type="text" />
-            <base-input label="Achternaam" v-model="contacten[index].achternaam" type="text" />
-            <base-input label="Rijksregisternummer" placeholder="xx.xx.xx-xxx.xx"
-              v-model="contacten[index].rijksregisternummer" type="text" />
-            <BaseCheckbox type="checkbox" v-model="contacten[index].lidtenlaste" label="Lid ten laste" multiple="false"
+            <base-dropdown
+              :options="rollen"
+              label="Rol"
+              v-model="contacten[index].rol"
+            />
+            <base-input
+              label="Voornaam"
+              v-model="contacten[index].voornaam"
+              type="text"
+            />
+            <base-input
+              label="Achternaam"
+              v-model="contacten[index].achternaam"
+              type="text"
+            />
+            <base-input
+              label="Rijksregisternummer"
+              placeholder="xx.xx.xx-xxx.xx"
+              v-model="contacten[index].rijksregisternummer"
+              type="text"
+            />
+            <BaseCheckbox
+              type="checkbox"
+              v-model="contacten[index].lidtenlaste"
+              label="Lid ten laste"
+              multiple="false"
               @change="lidTenLasteClick(index)"
-              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk">
+              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            >
             </BaseCheckbox>
-            <base-input label="E-mail" v-model="contacten[index].email" type="text"
-              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].email && v.contacten.$each.$response.$errors[index].email.length > 0"
-              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
-                v.contacten.$each.$response.$errors[index].email.length > 0) ?
-                v.contacten.$each.$response.$errors[index].email[0].$message : ''" />
-            <BaseInputTelefoon v-model="contacten[index].gsm" label="GSM" type="text"
-              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].gsm && v.contacten.$each.$response.$errors[index].gsm.length > 0"
-              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
-                v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
-                v.contacten.$each.$response.$errors[index].gsm[0].$message : ''" @changeValue="formatNumber(index)">
+            <base-input
+              label="E-mail"
+              v-model="contacten[index].email"
+              type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].email &&
+                v.contacten.$each.$response.$errors[index].email.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].email &&
+                v.contacten.$each.$response.$errors[index].email.length > 0
+                  ? v.contacten.$each.$response.$errors[index].email[0].$message
+                  : ''
+              "
+            />
+            <BaseInputTelefoon
+              v-model="contacten[index].gsm"
+              label="GSM"
+              type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].gsm &&
+                v.contacten.$each.$response.$errors[index].gsm.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].gsm &&
+                v.contacten.$each.$response.$errors[index].gsm.length > 0
+                  ? v.contacten.$each.$response.$errors[index].gsm[0].$message
+                  : ''
+              "
+              @changeValue="formatNumber(index)"
+            >
             </BaseInputTelefoon>
-            <base-checkbox label="Zelfde adres als lid" v-model="contacten[index].zelfdeAdres"
-              @changeValue="changeCheckBox(index)" />
+            <base-checkbox
+              label="Zelfde adres als lid"
+              v-model="contacten[index].zelfdeAdres"
+              @changeValue="changeCheckBox(index)"
+            />
             <div v-if="!contacten[index].zelfdeAdres">
-              <base-dropdown :options="landen" label="Land" v-model="contacten[index].adres.land"
-                @changeValue="veranderLand(index)" />
-              <gemeente-zoek-auto-complete label="Woonplaats" v-model="contacten[index].adres"
-                v-if="contacten[index].adres.land === 'BE'" />
+              <base-dropdown
+                :options="landen"
+                label="Land"
+                v-model="contacten[index].adres.land"
+                @changeValue="veranderLand(index)"
+              />
+              <gemeente-zoek-auto-complete
+                label="Woonplaats"
+                v-model="contacten[index].adres"
+                v-if="contacten[index].adres.land === 'BE'"
+              />
               <straat-zoek-auto-complete
-                :disabled="!contacten[index].adres.postcode && !contacten[index].adres.gemeente" label="Straat"
-                v-model="contacten[index].adres" :value="contacten[index].adres.straat"
-                v-if="contacten[index].adres.land === 'BE'" />
-              <BaseInput v-if="contacten[index].adres && contacten[index].adres.land !== 'BE'" label="Postcode"
-                v-model="contacten[index].adres.postcode" type="text" :invalid="isPostcodeIngevuld(index)"
-                error-message="Gelieve een postcode in te vullen" />
-              <BaseInput v-if="contacten[index].adres && contacten[index].adres.land !== 'BE'" label="Gemeente"
-                v-model="contacten[index].adres.gemeente" type="text" :invalid="isGemeenteIngevuld(index)"
-                error-message="Gelieve een gemeente in te vullen" />
-              <BaseInput v-if="contacten[index].adres && contacten[index].adres.land !== 'BE'" label="Straat"
-                v-model="contacten[index].adres.straat" type="text" :invalid="isStraatIngevuld(index)"
-                error-message="Gelieve een straat in te vullen" />
-              <BaseInput label="Nummer" v-model="contacten[index].adres.nummer"
-                :disabled="!contacten[index].adres.straat" type="text" :invalid="isNummerIngevuld(index)"
-                error-message="Gelieve een nummer in te vullen" />
-              <BaseInput label="Bus" v-model="contacten[index].adres.bus" :disabled="!contacten[index].adres.straat"
-                type="text" />
-              <BaseInput label="Telefoon" v-model="contacten[index].adres.telefoon" type="text" />
+                :disabled="
+                  !contacten[index].adres.postcode &&
+                  !contacten[index].adres.gemeente
+                "
+                label="Straat"
+                v-model="contacten[index].adres"
+                :value="contacten[index].adres.straat"
+                v-if="contacten[index].adres.land === 'BE'"
+              />
+              <BaseInput
+                v-if="
+                  contacten[index].adres && contacten[index].adres.land !== 'BE'
+                "
+                label="Postcode"
+                v-model="contacten[index].adres.postcode"
+                type="text"
+                :invalid="isPostcodeIngevuld(index)"
+                error-message="Gelieve een postcode in te vullen"
+              />
+              <BaseInput
+                v-if="
+                  contacten[index].adres && contacten[index].adres.land !== 'BE'
+                "
+                label="Gemeente"
+                v-model="contacten[index].adres.gemeente"
+                type="text"
+                :invalid="isGemeenteIngevuld(index)"
+                error-message="Gelieve een gemeente in te vullen"
+              />
+              <BaseInput
+                v-if="
+                  contacten[index].adres && contacten[index].adres.land !== 'BE'
+                "
+                label="Straat"
+                v-model="contacten[index].adres.straat"
+                type="text"
+                :invalid="isStraatIngevuld(index)"
+                error-message="Gelieve een straat in te vullen"
+              />
+              <BaseInput
+                label="Nummer"
+                v-model="contacten[index].adres.nummer"
+                :disabled="!contacten[index].adres.straat"
+                type="text"
+                :invalid="isNummerIngevuld(index)"
+                error-message="Gelieve een nummer in te vullen"
+              />
+              <BaseInput
+                label="Bus"
+                v-model="contacten[index].adres.bus"
+                :disabled="!contacten[index].adres.straat"
+                type="text"
+              />
+              <BaseInput
+                label="Telefoon"
+                v-model="contacten[index].adres.telefoon"
+                type="text"
+              />
             </div>
           </accordionTab>
         </accordion>
@@ -95,7 +204,7 @@ import { useToast } from "primevue/usetoast";
 const isGeldigGsmNummer = (value) => {
   value = Telefoonnummer.formatNumber(value);
   return Telefoonnummer.validateNumber(value);
-}
+};
 
 export default {
   name: "Contacten",
@@ -105,7 +214,7 @@ export default {
     BaseDropdown,
     GemeenteZoekAutoComplete,
     StraatZoekAutoComplete,
-    BaseInputTelefoon
+    BaseInputTelefoon,
   },
 
   props: {
@@ -117,8 +226,8 @@ export default {
     },
     nieuwLid: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   setup(props) {
@@ -137,7 +246,7 @@ export default {
         { label: "Luxemburg", value: "LU" },
         { label: "Nederland", value: "NL" },
         { label: "Canada", value: "CA" },
-        { label: "Polen", value: "PL" }
+        { label: "Polen", value: "PL" },
       ],
       rollen: [
         {
@@ -165,35 +274,43 @@ export default {
 
     const lidTenLasteClick = (index) => {
       if (state.contacten[index].lidtenlaste) {
-        if ((state.contacten[index].voornaam.length == 0) || (state.contacten[index].achternaam.length == 0)) {
+        if (
+          state.contacten[index].voornaam.length == 0 ||
+          state.contacten[index].achternaam.length == 0
+        ) {
           toast.add({
             severity: "warn",
             summary: "Voor- en Achternaam",
-            detail: "Om correcte fiscale attesten te kunnen generen zijn zowel voor als achternaam verplicht.",
+            detail:
+              "Om correcte fiscale attesten te kunnen generen zijn zowel voor als achternaam verplicht.",
             life: 3000,
           });
         } else if (state.contacten[index].rijksregisternummer.length == 0) {
           toast.add({
             severity: "success",
             summary: "Rijksregisternummer",
-            detail: "Om vlotte verwerking van de fiscale attesten te kunnen garanderen is het aangeraden je rijksregisternummer in te vullen.",
+            detail:
+              "Om vlotte verwerking van de fiscale attesten te kunnen garanderen is het aangeraden je rijksregisternummer in te vullen.",
             life: 3000,
           });
         }
       }
-    }
+    };
 
     const rules = {
       contacten: {
         $each: helpers.forEach({
           gsm: {
-            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+            isGeldigGsmNummer: helpers.withMessage(
+              "Geen geldig telefoonnummer",
+              isGeldigGsmNummer
+            ),
           },
           email: {
-            email: helpers.withMessage("Geen geldig emailadres", email)
-          }
-        })
-      }
+            email: helpers.withMessage("Geen geldig emailadres", email),
+          },
+        }),
+      },
     };
 
     const veranderLand = (index) => {
@@ -202,23 +319,30 @@ export default {
       state.contacten[index].adres.straat = "";
       state.contacten[index].adres.nummer = "";
       state.contacten[index].adres.bus = "";
-    }
+    };
 
     const veldenNietGoedIngevuld = () => {
-      return !props.modelValue.adres.postcode || !props.modelValue.adres.gemeente || !props.modelValue.adres.straat || !props.modelValue.adres.nummer
-    }
+      return (
+        !props.modelValue.adres.postcode ||
+        !props.modelValue.adres.gemeente ||
+        !props.modelValue.adres.straat ||
+        !props.modelValue.adres.nummer
+      );
+    };
 
     const formatNumber = (index) => {
-      state.contacten[index].gsm = Telefoonnummer.formatNumber(state.contacten[index].gsm);
-    }
+      state.contacten[index].gsm = Telefoonnummer.formatNumber(
+        state.contacten[index].gsm
+      );
+    };
 
     const setHeader = (contact) => {
       return contact.rol + " " + contact.voornaam + " " + contact.achternaam;
-    }
+    };
 
     const remove = (index) => {
       state.contacten.splice(index, 1);
-    }
+    };
 
     const changeCheckBox = (index) => {
       if (state.contacten[index].zelfdeAdres) {
@@ -234,7 +358,7 @@ export default {
         state.contacten[index].adres.nummer = "";
         state.contacten[index].adres.bus = "";
       }
-    }
+    };
 
     const isStraatIngevuld = (index) => {
       if (!state.contacten[index].adres.straat) {
@@ -244,27 +368,28 @@ export default {
         state.invalid = false;
         return true;
       }
-    }
+    };
 
     const isNummerIngevuld = (index) => {
       return !state.contacten[index].adres.nummer;
-    }
+    };
 
     const isGemeenteIngevuld = (index) => {
       state.invalid = true;
       return !state.contacten[index].adres.gemeente;
-    }
+    };
 
     const isPostcodeIngevuld = (index) => {
       return !state.contacten[index].adres.postcode;
-    }
+    };
 
     const voegContactToe = () => {
       if (veldenNietGoedIngevuld()) {
         toast.add({
           severity: "warn",
           summary: "Contact toevoegen",
-          detail: "Er kunnen geen contacten toegevoegd worden als de andere velden niet correct zijn ingevuld.",
+          detail:
+            "Er kunnen geen contacten toegevoegd worden als de andere velden niet correct zijn ingevuld.",
           life: 3000,
         });
         return;
@@ -286,12 +411,12 @@ export default {
           postcode: "",
           straat: "",
           nummer: "",
-          bus: ""
-        }
+          bus: "",
+        },
       };
       state.contacten.push(nieuwContact);
       state.contacts.push(state.contacten.length - 1);
-    }
+    };
 
     onUpdated(() => {
       state.adresArray = [];
@@ -314,9 +439,9 @@ export default {
       veranderLand,
       changeCheckBox,
       remove,
-      setHeader
+      setHeader,
     };
-  }
+  },
 };
 </script>
 

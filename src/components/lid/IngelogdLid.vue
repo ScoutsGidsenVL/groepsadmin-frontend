@@ -5,13 +5,16 @@
         <div class="flex justify-content-end">
           <lid-zoek-auto-complete></lid-zoek-auto-complete>
         </div>
-        <label class="h-1rem float-start sm:ml-4 h-2rem cursor-pointer"
-               @click="gaNaarProfiel">{{ getVolledigeNaam }}</label>
+        <label
+          class="h-1rem float-start sm:ml-4 h-2rem cursor-pointer"
+          @click="gaNaarProfiel"
+          >{{ getVolledigeNaam }}</label
+        >
         <div class="ml-4 cursor-pointer" @click="gaNaarAccount" v-show="false">
-          <i class="fas fa-user-circle menu-icon" title="Account"/>
+          <i class="fas fa-user-circle menu-icon" title="Account" />
         </div>
         <div class="ml-5 cursor-pointer mr--23px" @click="logout">
-          <i class="fas fa-sign-out-alt menu-icon " title="Uitloggen"/>
+          <i class="fas fa-sign-out-alt menu-icon" title="Uitloggen" />
         </div>
       </div>
     </div>
@@ -24,17 +27,21 @@ import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
 export default {
   name: "IngelogdLid",
   components: {
-    LidZoekAutoComplete
+    LidZoekAutoComplete,
   },
   data() {
     return {
-      ingelogdLid: null
-    }
+      ingelogdLid: null,
+    };
   },
   computed: {
     getVolledigeNaam() {
       if (this.$store.getters.profiel) {
-        return this.$store.getters.profiel.vgagegevens.voornaam + " " + this.$store.getters.profiel.vgagegevens.achternaam;
+        return (
+          this.$store.getters.profiel.vgagegevens.voornaam +
+          " " +
+          this.$store.getters.profiel.vgagegevens.achternaam
+        );
       } else {
         return "";
       }
@@ -50,15 +57,13 @@ export default {
       });
     },
     gaNaarProfiel() {
-      this.$router.push({name: "Lid", params: {id: "profiel"}});
+      this.$router.push({ name: "Lid", params: { id: "profiel" } });
     },
     logout() {
       this.$keycloak.logout();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

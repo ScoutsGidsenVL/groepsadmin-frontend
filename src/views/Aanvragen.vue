@@ -1,33 +1,60 @@
 <template>
   <div>
-    <SideMenu/>
-    <confirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <confirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90 ">
+    <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6"
+        />
       </div>
-      <Loader
-        :showLoader="isLoadingAanvragen"
-      ></Loader>
-      <confirm-dialog :dialog-visible="confirmDialog" :header="confirmHeader" :message="confirmMessage" :type="type"
-                      @confirm="bevestig" @cancel="annuleer"></confirm-dialog>
-      <confirm-mailing :dialog-visible="confirmMailingDialog" :header="confirmMailingHeader"
-                       :message="confirmMailingMessage" @bevestigMail="bevestigMail(true)"
-                       @bevestigGeenMail="bevestigMail(false)"></confirm-mailing>
+      <Loader :showLoader="isLoadingAanvragen"></Loader>
+      <confirm-dialog
+        :dialog-visible="confirmDialog"
+        :header="confirmHeader"
+        :message="confirmMessage"
+        :type="type"
+        @confirm="bevestig"
+        @cancel="annuleer"
+      ></confirm-dialog>
+      <confirm-mailing
+        :dialog-visible="confirmMailingDialog"
+        :header="confirmMailingHeader"
+        :message="confirmMailingMessage"
+        @bevestigMail="bevestigMail(true)"
+        @bevestigGeenMail="bevestigMail(false)"
+      ></confirm-mailing>
       <div class="lg:ml-6 md:mt-10 lg:mt-8">
-        <data-table :value="aanvragen" v-model:expandedRows="expandedRows" dataKey="id" responsiveLayout="scroll"
-                    class="lg:ml-8">
+        <data-table
+          :value="aanvragen"
+          v-model:expandedRows="expandedRows"
+          dataKey="id"
+          responsiveLayout="scroll"
+          class="lg:ml-8"
+        >
           <template #header>
             <div class="table-header-container d-flex">
-              <Button v-show="!openDetails" icon="pi pi-plus" label="Alles openvouwen" @click="expandAll"
-                      class="p-mr-2 approve-button"/>
-              <Button v-show="openDetails" icon="pi pi-minus" label="Alles dichtvouwen" @click="collapseAll"
-                      class="p-mr-2 approve-button"/>
+              <Button
+                v-show="!openDetails"
+                icon="pi pi-plus"
+                label="Alles openvouwen"
+                @click="expandAll"
+                class="p-mr-2 approve-button"
+              />
+              <Button
+                v-show="openDetails"
+                icon="pi pi-minus"
+                label="Alles dichtvouwen"
+                @click="collapseAll"
+                class="p-mr-2 approve-button"
+              />
             </div>
           </template>
-          <column :expander="true" headerStyle="width: 3rem"/>
+          <column :expander="true" headerStyle="width: 3rem" />
           <column field="aangepast" header="Aangevraagd op" sortable>
             <template #body="slotProps">
               {{ formatDate(slotProps.data.aangepast) }}
@@ -46,14 +73,32 @@
           </column>
           <template #expansion="slotProps">
             <div class="pl-4em col-12">
-              <p class="mb-0">{{ slotProps.data.adres.straat }} {{ slotProps.data.adres.nummer }}</p>
-              <p class="mb-0">{{ slotProps.data.adres.land }} {{ slotProps.data.adres.postcode }}
-                {{ slotProps.data.adres.gemeente }}</p>
-              <p class="mb-0"><a :href="'tel:' + slotProps.data.gsmnummer"
-                                 class="cursor-pointer clean-link custom-title">{{ slotProps.data.gsmnummer }}</a></p>
-              <p class="mb-0"><a :href="'mailto:' + slotProps.data.email"
-                                 class="cursor-pointer clean-link custom-title">{{ slotProps.data.email }}</a></p>
-              <p class="mb-0 p-text-italic"><strong>{{ slotProps.data.opmerkingen }}</strong></p>
+              <p class="mb-0">
+                {{ slotProps.data.adres.straat }}
+                {{ slotProps.data.adres.nummer }}
+              </p>
+              <p class="mb-0">
+                {{ slotProps.data.adres.land }}
+                {{ slotProps.data.adres.postcode }}
+                {{ slotProps.data.adres.gemeente }}
+              </p>
+              <p class="mb-0">
+                <a
+                  :href="'tel:' + slotProps.data.gsmnummer"
+                  class="cursor-pointer clean-link custom-title"
+                  >{{ slotProps.data.gsmnummer }}</a
+                >
+              </p>
+              <p class="mb-0">
+                <a
+                  :href="'mailto:' + slotProps.data.email"
+                  class="cursor-pointer clean-link custom-title"
+                  >{{ slotProps.data.email }}</a
+                >
+              </p>
+              <p class="mb-0 p-text-italic">
+                <strong>{{ slotProps.data.opmerkingen }}</strong>
+              </p>
               <div class="d-flex justify-content-start mt-3">
                 <Button
                   label="Afkeuren"
@@ -93,14 +138,14 @@ export default {
     Breadcrumb,
     ConfirmDialog,
     SideMenu,
-    IngelogdLid
+    IngelogdLid,
   },
   data() {
     return {
-      home: {icon: 'pi pi-home', to: '/dashboard'},
+      home: { icon: "pi pi-home", to: "/dashboard" },
       breadcrumbItems: [
         {
-          label: 'aanvragen'
+          label: "aanvragen",
         },
       ],
       aanvragen: [],
@@ -116,7 +161,7 @@ export default {
       confirmMailingDialog: false,
       confirmMailingMessage: "",
       defaultLid: null,
-    }
+    };
   },
 
   created() {
@@ -127,15 +172,15 @@ export default {
     getAanvragen() {
       this.isLoadingAanvragen = true;
       RestService.getAanvragen()
-        .then(res => {
+        .then((res) => {
           this.aanvragen = res.data.aanvragen;
         })
-        .catch(error => {
-          console.log(error)
+        .catch((error) => {
+          console.log(error);
         })
         .finally(() => {
           this.isLoadingAanvragen = false;
-        })
+        });
     },
 
     collapseAll() {
@@ -144,7 +189,7 @@ export default {
     },
 
     expandAll() {
-      this.expandedRows = this.aanvragen.filter(a => a.id);
+      this.expandedRows = this.aanvragen.filter((a) => a.id);
       this.openDetails = true;
     },
 
@@ -153,7 +198,7 @@ export default {
     },
 
     formatGeboorteDatum(geboortedatum) {
-      return DateUtil.formatGeboortedatum(geboortedatum)
+      return DateUtil.formatGeboortedatum(geboortedatum);
     },
 
     toonVolledigeNaam(row) {
@@ -161,7 +206,7 @@ export default {
     },
 
     goedkeuren(aanvraag) {
-      this.$store.commit("setGoedTeKeurenLid", null)
+      this.$store.commit("setGoedTeKeurenLid", null);
       this.defaultLid = {
         vgagegevens: {
           voornaam: aanvraag.voornaam,
@@ -174,22 +219,22 @@ export default {
         persoonsgegevens: aanvraag.persoonsgegevens,
         email: aanvraag.email,
         verbondsgegevens: {
-          lidgeldbetaald: false
+          lidgeldbetaald: false,
         },
         id: aanvraag.id,
         adressen: aanvraag.adressen,
         contacten: aanvraag.contacten,
         groepsnummer: aanvraag.groepsnummer, // TODO elegantere oplossing
         groepseigenVeldenAanvraag: aanvraag.groepsEigenGegevens,
-        opmerkingen: aanvraag.opmerkingen
-      }
-      aanvraag.links.forEach(link => {
+        opmerkingen: aanvraag.opmerkingen,
+      };
+      aanvraag.links.forEach((link) => {
         if (link.rel === "goedkeuren") {
           this.defaultLid.lidaanvraag = link;
         }
-      })
+      });
       this.$store.commit("setGoedTeKeurenLid", this.defaultLid);
-      this.$router.push({name: "lidToevoegen"});
+      this.$router.push({ name: "lidToevoegen" });
     },
 
     afkeuren(aanvraag) {
@@ -204,7 +249,10 @@ export default {
       if (type === "afkeuren") {
         this.confirmMailingHeader = "Lidaanvraag verwijderen";
         this.confirmMailingDialog = true;
-        this.confirmMailingMessage = "Wil je deze persoon mailen via <strong>" + this.selectedAanvraag.email + "</strong>?";
+        this.confirmMailingMessage =
+          "Wil je deze persoon mailen via <strong>" +
+          this.selectedAanvraag.email +
+          "</strong>?";
       }
     },
 
@@ -233,7 +281,7 @@ export default {
             life: 3000,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.$toast.add({
             severity: "error",
             summary: "Wijzigingen",
@@ -243,12 +291,10 @@ export default {
         })
         .finally(() => {
           this.isLoadingAanvragen = false;
-        })
-    }
-  }
-}
+        });
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

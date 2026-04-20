@@ -22,7 +22,7 @@ export default {
     }
 
     splitpath.forEach((val, key) => {
-      if (val === "groepsadmin" || val === "frontend"){
+      if (val === "groepsadmin" || val === "frontend") {
         return;
       }
 

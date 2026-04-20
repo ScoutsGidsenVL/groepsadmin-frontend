@@ -8,7 +8,7 @@
           v-model="zoekTerm"
           field="gemeente"
           forceSelection
-          minLength=2
+          minLength="2"
           :suggestions="gefilterdeGemeentes"
           @complete="zoekGemeente"
           @itemSelect="kiesGemeente"
@@ -17,7 +17,7 @@
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
           :disabled="disabled"
-          :class="(v$.$dirty && v$.adres.gemeente.$invalid) ? 'p-invalid' : ''"
+          :class="v$.$dirty && v$.adres.gemeente.$invalid ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -42,25 +42,24 @@
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
 import useVuelidate from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
+import { helpers, required } from "@vuelidate/validators";
 
 export default {
   components: {
     AutoComplete,
   },
   name: "LidZoekAutoComplete",
-  setup: () => (
-    {
-      v$: useVuelidate()
-    }),
+  setup: () => ({
+    v$: useVuelidate(),
+  }),
   validations() {
     return {
       adres: {
-        gemeente : {
-          required: helpers.withMessage('Gemeente is verplicht', required)
-        }
+        gemeente: {
+          required: helpers.withMessage("Gemeente is verplicht", required),
+        },
       },
-    }
+    };
   },
   data() {
     return {
@@ -86,7 +85,7 @@ export default {
     errorMessage: {
       type: String,
     },
-    index: {}
+    index: {},
   },
   mounted() {
     this.zoekTerm =
@@ -119,8 +118,9 @@ export default {
     this.$watch(
       () => this.modelValue,
       () => {
-        if (this.modelValue.postcode && this.modelValue.gemeente){
-          this.zoekTerm = this.modelValue.postcode + " " + this.modelValue.gemeente;
+        if (this.modelValue.postcode && this.modelValue.gemeente) {
+          this.zoekTerm =
+            this.modelValue.postcode + " " + this.modelValue.gemeente;
         } else {
           this.zoekTerm = null;
         }

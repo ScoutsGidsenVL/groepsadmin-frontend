@@ -1,8 +1,11 @@
 <template>
   <div v-if="criteria && criteria.activated">
-    <div class="col-12 type-select-button kolom-select" @click="toggleMenu = !toggleMenu">
+    <div
+      class="col-12 type-select-button kolom-select"
+      @click="toggleMenu = !toggleMenu"
+    >
       <div class="row mt--05">
-        <div class="col-10 ">
+        <div class="col-10">
           <div class="text-align-left d-flex">
             <div>
               <label class="label-width">{{ criteria.title }} </label>
@@ -14,7 +17,10 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
+    <div
+      class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border"
+      v-if="toggleMenu"
+    >
       <div class="d-flex justify-content-between ml-2 mr-7px">
         <label class="mt-2">Aangepast</label>
         <dropdown
@@ -54,7 +60,7 @@ export default {
   name: "IndividueleSteekkaartSelect",
   components: {
     Calendar,
-    VerwijderCriteria
+    VerwijderCriteria,
   },
   data() {
     return {
@@ -63,11 +69,11 @@ export default {
       aangepastOptions: [],
       aangepast: "jonger",
       datum: new Date(),
-    }
+    };
   },
   props: {
     criteria: {
-      type: Array
+      type: Array,
     },
   },
   methods: {
@@ -75,13 +81,17 @@ export default {
       this.toggleMenu = false;
     },
     change() {
-      this.emitter.emit('changeSteekkaartCriterium', { 'criteria': this.criteria, 'aangepast': this.aangepast, 'datum': this.datum })
-    }
+      this.emitter.emit("changeSteekkaartCriterium", {
+        criteria: this.criteria,
+        aangepast: this.aangepast,
+        datum: this.datum,
+      });
+    },
   },
   mounted() {
     this.criteria.operator.values.forEach((value) => {
-      this.aangepastOptions.push({label: value[0], value: value[1]})
-    })
+      this.aangepastOptions.push({ label: value[0], value: value[1] });
+    });
     if (this.criteria && this.criteria.value) {
       this.aangepast = this.criteria.value.operator;
       this.datum = this.criteria.value.datum;
@@ -90,12 +100,14 @@ export default {
   },
   computed: {
     label() {
-      return "Aangepast " + (this.aangepast === "ouder" ? "voor " : "na ") + DateUtil.formatteerDatum(this.datum);
-    }
-  }
-}
+      return (
+        "Aangepast " +
+        (this.aangepast === "ouder" ? "voor " : "na ") +
+        DateUtil.formatteerDatum(this.datum)
+      );
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,11 +1,15 @@
 <template>
   <div>
-    <SideMenu/>
+    <SideMenu />
     <toast position="bottom-right">
       <template #message="slotProps">
         <div class="flex flex-column">
           <div class="text-center">
-            <i class="pi pi-exclamation-triangle" style="font-size: 3rem" v-if="slotProps.severity === 'success'"></i>
+            <i
+              class="pi pi-exclamation-triangle"
+              style="font-size: 3rem"
+              v-if="slotProps.severity === 'success'"
+            ></i>
             <h4>{{ slotProps.message.summary }}</h4>
             <p v-html="slotProps.message.detail"></p>
           </div>
@@ -21,15 +25,21 @@
         </div>
       </template>
     </ConfirmDialog>
-    <MessageDialog :dialog-visible="messageDialog" :message="messageDialogMessage" :header="messageDialogHeader"
-                   @close="messageDialog = false"/>
+    <MessageDialog
+      :dialog-visible="messageDialog"
+      :message="messageDialogMessage"
+      :header="messageDialogHeader"
+      @close="messageDialog = false"
+    />
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6"
+        />
       </div>
-      <Loader
-        :showLoader="loadingLid"
-      ></Loader>
+      <Loader :showLoader="loadingLid"></Loader>
       <div>
         <lid-boven-balk
           class="lg:ml-8 mt-lg-4em mt-9"
@@ -46,20 +56,36 @@
         <div class="lg:ml-2">
           <form @submit.prevent="opslaan" autocomplete="off">
             <div class="row lg:ml-8">
-              <Message severity="warn" v-if="!loadingLid && !lid.isActiefVvksmLid">
+              <Message
+                severity="warn"
+                v-if="!loadingLid && !lid.isActiefVvksmLid"
+              >
                 {{ lid.nietVerzekerdReden }}
               </Message>
               <div class="col-12 col-lg-6 col-xl-4">
-                <persoonlijk v-model="lid" :eigenProfiel="isEigenProfiel"
-                             v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></persoonlijk>
+                <persoonlijk
+                  v-model="lid"
+                  :eigenProfiel="isEigenProfiel"
+                  v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+                ></persoonlijk>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
-                <adressen v-model="lid" :title="'Adressen'"
-                          v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></adressen>
-                <contacten v-model="lid" :title="'Contacten'" :eigenProfiel="isEigenProfiel"
-                           v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"></contacten>
+                <adressen
+                  v-model="lid"
+                  :title="'Adressen'"
+                  v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+                ></adressen>
+                <contacten
+                  v-model="lid"
+                  :title="'Contacten'"
+                  :eigenProfiel="isEigenProfiel"
+                  v-if="lid.vgagegevens.voornaam || lid.vgagegevens.achternaam"
+                ></contacten>
                 <groepseigen-gegevens
-                  v-if="groepseigenVelden && Object.keys(groepseigenVelden).length > 0"
+                  v-if="
+                    groepseigenVelden &&
+                    Object.keys(groepseigenVelden).length > 0
+                  "
                   v-model="groepseigenVelden"
                   :title="'Groepseigen gegevens'"
                 ></groepseigen-gegevens>
@@ -74,7 +100,10 @@
                 ></functies>
                 <functies-toevoegen
                   v-model="lid"
-                  v-if="magFunctiesToevoegen && (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)"
+                  v-if="
+                    magFunctiesToevoegen &&
+                    (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)
+                  "
                   @voegFunctieToe="voegFunctieToe"
                 ></functies-toevoegen>
               </div>
@@ -84,7 +113,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -93,7 +122,7 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import Adressen from "@/components/lid/Adressen";
@@ -121,7 +150,7 @@ export default {
     FunctiesToevoegen,
     GroepseigenGegevens,
     LidBovenBalk,
-    Message
+    Message,
   },
   setup() {
     const {
@@ -139,9 +168,8 @@ export default {
       teBekijkenLid,
       attestAfdrukken,
       lidkaartAfdrukken,
-      voegFunctieToe
+      voegFunctieToe,
     } = LidService.lidSpace();
-
 
     return {
       ...toRefs(state),
@@ -158,11 +186,10 @@ export default {
       updateFuncties,
       attestAfdrukken,
       lidkaartAfdrukken,
-      voegFunctieToe
-    }
+      voegFunctieToe,
+    };
   },
-}
-
+};
 </script>
 
 <style scoped></style>

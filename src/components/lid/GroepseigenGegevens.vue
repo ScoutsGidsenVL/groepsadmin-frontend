@@ -5,7 +5,12 @@
         <div class="d-flex col-12 justify-content-between">
           <span class="font18"> {{ title }}</span>
           <div :class="groepenLaden ? 'functies-loader' : ''">
-            <Indicator :is-loading="groepenLaden" :full-page="false" :height=55 :width=55></Indicator>
+            <Indicator
+              :is-loading="groepenLaden"
+              :full-page="false"
+              :height="55"
+              :width="55"
+            ></Indicator>
           </div>
         </div>
       </template>
@@ -36,38 +41,39 @@
 import DynamischVeld from "@/components/input/DynamischVeld";
 import Indicator from "@/components/global/Indicator";
 import GroepseigenGegevensService from "@/services/groepseigengegevens/GroepseigenGegevensService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "GroepseigenGegevens",
   components: {
     DynamischVeld,
-    Indicator
+    Indicator,
   },
   props: {
     title: {
       type: String,
     },
     modelValue: {
-      type: Object, Array
+      type: Object,
+      Array,
     },
   },
 
-  setup (props) {
+  setup(props) {
     const {
       state,
       groepNaam,
       groepenLaden,
-      groepen
+      groepen,
     } = GroepseigenGegevensService.lidSpace(props);
 
     return {
       ...toRefs(state),
       groepNaam,
       groepenLaden,
-      groepen
-    }
-  }
+      groepen,
+    };
+  },
 };
 </script>
 

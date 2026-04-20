@@ -6,7 +6,7 @@
       v-model="zoekTerm"
       :suggestions="gefilterdeLeden"
       @complete="zoekLid"
-      minLength=2
+      minLength="2"
       @itemSelect="gaNaarLid"
       placeholder="Zoek op naam, gsm of e-mail"
       inputClass="lid-autocomplete-input"
@@ -31,8 +31,8 @@ export default {
   props: {
     sectie: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   components: {
     AutoComplete,
@@ -43,7 +43,7 @@ export default {
       leden: null,
       gefilterdeLeden: null,
       zoekTerm: null,
-      searching: false
+      searching: false,
     };
   },
   methods: {
@@ -52,7 +52,8 @@ export default {
       RestService.zoeken(this.zoekTerm)
         .then((response) => {
           this.gefilterdeLeden = response.data.leden;
-        }).finally(() => {
+        })
+        .finally(() => {
           this.searching = false;
         });
     },

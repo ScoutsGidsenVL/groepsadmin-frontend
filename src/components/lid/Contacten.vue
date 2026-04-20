@@ -4,8 +4,13 @@
       <template #title>
         <div class="d-flex col-12 justify-content-between">
           <span class="font22"> {{ title }}</span>
-          <Button icon="pi pi-plus" class="p-button-rounded add-button mt-1" @click="voegContactToe"
-            title="Voeg adres toe" v-if="heeftToegang('contacten') || lidaanvraag" />
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded add-button mt-1"
+            @click="voegContactToe"
+            title="Voeg adres toe"
+            v-if="heeftToegang('contacten') || lidaanvraag"
+          />
         </div>
       </template>
       <template #content>
@@ -13,49 +18,116 @@
           <accordionTab v-for="(contact, index) in contacten" :key="index">
             <template #header>
               <div class="d-flex col-11 justify-content-between">
-                <span style="margin-top: 5px;">{{ setHeader(contact) }}</span>
-                <Button v-if="heeftToegang('contacten') || lidaanvraag" icon="pi pi-trash"
-                  class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1" @click="
+                <span style="margin-top: 5px">{{ setHeader(contact) }}</span>
+                <Button
+                  v-if="heeftToegang('contacten') || lidaanvraag"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-outlined p-button-danger remove-button mr-1"
+                  @click="
                     $event.stopPropagation();
-                  remove($event, index);
-                  " title="Verwijder contact" />
+                    remove($event, index);
+                  "
+                  title="Verwijder contact"
+                />
               </div>
             </template>
-            <base-dropdown :options="rollen" label="Rol" v-model="contacten[index].rol"
-              :disabled="!heeftToegang('contacten')" />
-            <base-input label="Voornaam" v-model="contacten[index].voornaam" type="text"
-              :disabled="!heeftToegang('contacten')" />
-            <base-input label="Achternaam" v-model="contacten[index].achternaam" type="text"
-              :disabled="!heeftToegang('contacten')" />
-            <base-input v-if="eigenProfiel" label="Rijksregisternummer"
-              placeholder="xx.xx.xx-xxx.xx" v-model="contacten[index].rijksregisternummer" type="text" />
-            <BaseCheckbox v-if="!eigenProfiel" :disabled="true"
-              type="checkbox" v-model="contacten[index].rijksregisternummeringevuld"
-              label="Rijksregisternummer ingevuld" multiple="false"
-              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk">
+            <base-dropdown
+              :options="rollen"
+              label="Rol"
+              v-model="contacten[index].rol"
+              :disabled="!heeftToegang('contacten')"
+            />
+            <base-input
+              label="Voornaam"
+              v-model="contacten[index].voornaam"
+              type="text"
+              :disabled="!heeftToegang('contacten')"
+            />
+            <base-input
+              label="Achternaam"
+              v-model="contacten[index].achternaam"
+              type="text"
+              :disabled="!heeftToegang('contacten')"
+            />
+            <base-input
+              v-if="eigenProfiel"
+              label="Rijksregisternummer"
+              placeholder="xx.xx.xx-xxx.xx"
+              v-model="contacten[index].rijksregisternummer"
+              type="text"
+            />
+            <BaseCheckbox
+              v-if="!eigenProfiel"
+              :disabled="true"
+              type="checkbox"
+              v-model="contacten[index].rijksregisternummeringevuld"
+              label="Rijksregisternummer ingevuld"
+              multiple="false"
+              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            >
             </BaseCheckbox>
-            <BaseCheckbox type="checkbox" :disabled="!contacten[index].hasOwnProperty('rijksregisternummer')"
-              v-model="contacten[index].lidtenlaste" label="Lid ten laste" multiple="false"
+            <BaseCheckbox
+              type="checkbox"
+              :disabled="
+                !contacten[index].hasOwnProperty('rijksregisternummer')
+              "
+              v-model="contacten[index].lidtenlaste"
+              label="Lid ten laste"
+              multiple="false"
               @change="lidTenLasteClick(index)"
-              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk">
+              help-link="https://wiki.scoutsengidsenvlaanderen.be/handleidingen:groepsadmin:paginas:lid_toevoegen#persoonlijk"
+            >
             </BaseCheckbox>
-            <base-input label="E-mail" v-model="contacten[index].email" type="text"
-              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].email && v.contacten.$each.$response.$errors[index].email.length > 0"
-              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].email &&
-                v.contacten.$each.$response.$errors[index].email.length > 0) ?
-                v.contacten.$each.$response.$errors[index].email[0].$message : ''"
-              :disabled="!heeftToegang('contacten')" />
-            <BaseInputTelefoon v-model="contacten[index].gsm" label="GSM" type="text"
-              :invalid="v.$dirty && v.contacten.$each.$response.$errors[index].gsm && v.contacten.$each.$response.$errors[index].gsm.length > 0"
-              :error-message="(v.$dirty && v.contacten.$each.$response.$errors[index].gsm &&
-                v.contacten.$each.$response.$errors[index].gsm.length > 0) ?
-                v.contacten.$each.$response.$errors[index].gsm[0].$message : ''"
-              :disabled="!heeftToegang('contacten')"></BaseInputTelefoon>
-            <base-dropdown :options="adresArray" label="Adres" v-model="contacten[index].adres"
-              :disabled="!heeftToegang('contacten')" />
+            <base-input
+              label="E-mail"
+              v-model="contacten[index].email"
+              type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].email &&
+                v.contacten.$each.$response.$errors[index].email.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].email &&
+                v.contacten.$each.$response.$errors[index].email.length > 0
+                  ? v.contacten.$each.$response.$errors[index].email[0].$message
+                  : ''
+              "
+              :disabled="!heeftToegang('contacten')"
+            />
+            <BaseInputTelefoon
+              v-model="contacten[index].gsm"
+              label="GSM"
+              type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].gsm &&
+                v.contacten.$each.$response.$errors[index].gsm.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index].gsm &&
+                v.contacten.$each.$response.$errors[index].gsm.length > 0
+                  ? v.contacten.$each.$response.$errors[index].gsm[0].$message
+                  : ''
+              "
+              :disabled="!heeftToegang('contacten')"
+            ></BaseInputTelefoon>
+            <base-dropdown
+              :options="adresArray"
+              label="Adres"
+              v-model="contacten[index].adres"
+              :disabled="!heeftToegang('contacten')"
+            />
             <template v-for="(adres, index2) in adressen" :key="index2">
-              <base-input label="Telefoon" v-model="adressen[index2].telefoon" type="text"
-                v-if="contacten[index] && adres.id === contacten[index].adres" :disabled="!heeftToegang('contacten')" />
+              <base-input
+                label="Telefoon"
+                v-model="adressen[index2].telefoon"
+                type="text"
+                v-if="contacten[index] && adres.id === contacten[index].adres"
+                :disabled="!heeftToegang('contacten')"
+              />
             </template>
           </accordionTab>
         </accordion>
@@ -88,7 +160,7 @@ export default {
       type: String,
     },
     eigenProfiel: {
-      type: Boolean
+      type: Boolean,
     },
     modelValue: {
       type: Object,
@@ -96,7 +168,7 @@ export default {
     lidaanvraag: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup(props) {
     const confirm = useConfirm();
@@ -115,7 +187,7 @@ export default {
         {
           value: "ouder",
           label: "Ouder",
-        },        
+        },
         {
           value: "voogd",
           label: "Voogd",
@@ -132,27 +204,33 @@ export default {
 
     const lidTenLasteClick = (index) => {
       if (state.contacten[index].lidtenlaste) {
-        if ((state.contacten[index].voornaam.length == 0) || (state.contacten[index].achternaam.length == 0)) {
+        if (
+          state.contacten[index].voornaam.length == 0 ||
+          state.contacten[index].achternaam.length == 0
+        ) {
           toast.add({
             severity: "warn",
             summary: "Voor- en Achternaam",
-            detail: "Om correcte fiscale attesten te kunnen generen zijn zowel voor- als achternaam verplicht.",
+            detail:
+              "Om correcte fiscale attesten te kunnen generen zijn zowel voor- als achternaam verplicht.",
             life: 3000,
           });
         } else if (state.contacten[index].rijksregisternummer.length == 0) {
           toast.add({
             severity: "success",
             summary: "Rijksregisternummer",
-            detail: "Om vlotte verwerking van de fiscale attesten te kunnen garanderen is het aangeraden je rijksregisternummer in te vullen.",
+            detail:
+              "Om vlotte verwerking van de fiscale attesten te kunnen garanderen is het aangeraden je rijksregisternummer in te vullen.",
             life: 3000,
           });
         }
       }
-    }
+    };
 
     const voegContactToe = () => {
       // Wanneer er geen adressen bestaan mag er geen contact toegevoegd kunnen worden
-      if (props.modelValue.persoonsgegevens.rijksregisternummer) console.log('heeft toegang rijksregister nummer');
+      if (props.modelValue.persoonsgegevens.rijksregisternummer)
+        console.log("heeft toegang rijksregister nummer");
       if (state.adressen && state.adressen.length > 0) {
         let nieuwContact = {
           rol: "moeder",
@@ -163,24 +241,26 @@ export default {
           adres: state.adressen[0].id,
           id: "" + Date.now(),
         };
-        if (props.modelValue.persoonsgegevens.rijksregisternummer) nieuwContact.rijksregisternummer = "";
+        if (props.modelValue.persoonsgegevens.rijksregisternummer)
+          nieuwContact.rijksregisternummer = "";
         state.contacten.push(nieuwContact);
       } else {
         toast.add({
           severity: "warn",
           summary: "Contacten toevoegen",
-          detail: "Nieuwe contacten kunnen pas worden toegevoegd wanneer alle andere formuliervelden correct werden ingevuld.",
+          detail:
+            "Nieuwe contacten kunnen pas worden toegevoegd wanneer alle andere formuliervelden correct werden ingevuld.",
           life: 8000,
         });
       }
-    }
+    };
 
     const heeftToegang = (sectie) => {
       if (props.lidaanvraag) {
         return true;
       }
       return rechtenService.canBeShowed(props.modelValue, sectie);
-    }
+    };
 
     const remove = (event, index) => {
       confirm.require({
@@ -195,11 +275,15 @@ export default {
           confirm.close();
         },
       });
-    }
+    };
 
     const setHeader = (contact) => {
-      return contact.rol + (contact.voornaam ? " " + contact.voornaam : "") + (contact.achternaam ? " " + contact.achternaam : "");
-    }
+      return (
+        contact.rol +
+        (contact.voornaam ? " " + contact.voornaam : "") +
+        (contact.achternaam ? " " + contact.achternaam : "")
+      );
+    };
 
     const resetData = () => {
       state.adresArray = [];
@@ -227,7 +311,7 @@ export default {
           });
         });
       }
-    }
+    };
 
     watch(
       () => props.modelValue.adressen,
@@ -235,28 +319,30 @@ export default {
         resetData();
       },
       {
-        deep: true
+        deep: true,
       }
-
-    )
+    );
 
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);
       return Telefoonnummer.validateNumber(value);
-    }
+    };
 
     const rules = {
-      "contacten": {
+      contacten: {
         $each: helpers.forEach({
           gsm: {
-            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+            isGeldigGsmNummer: helpers.withMessage(
+              "Geen geldig telefoonnummer",
+              isGeldigGsmNummer
+            ),
           },
           email: {
-            email: helpers.withMessage("Geen geldig emailadres", email)
-          }
-        })
-      }
-    }
+            email: helpers.withMessage("Geen geldig emailadres", email),
+          },
+        }),
+      },
+    };
 
     const v = useVuelidate(rules, state);
 
@@ -266,7 +352,7 @@ export default {
 
     onUpdated(() => {
       resetData();
-    })
+    });
 
     return {
       ...toRefs(state),
@@ -275,7 +361,7 @@ export default {
       heeftToegang,
       setHeader,
       remove,
-      v
+      v,
     };
   },
 };

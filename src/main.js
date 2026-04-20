@@ -1,4 +1,4 @@
-import {createApp} from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -15,8 +15,8 @@ import ConfirmationService from "primevue/confirmationservice";
 import InputText from "primevue/inputtext";
 import Keycloak from "keycloak-js";
 import getClient from "./services/keycloak/keycloak-config";
-import {library} from "@fortawesome/fontawesome-svg-core";
-import {fas, faUser} from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas, faUser } from "@fortawesome/free-solid-svg-icons";
 import mitt from "mitt";
 import VueGoogleMaps from "@fawmi/vue-google-maps";
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
@@ -26,10 +26,9 @@ import ColumnGroup from "primevue/columngroup";
 import Breadcrumb from "primevue/breadcrumb";
 import "./assets/fonts/Museo Sans/stylesheet.css";
 import Menu from "primevue/menu";
-import SplitButton from 'primevue/splitbutton';
+import SplitButton from "primevue/splitbutton";
 
-
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
 import "primevue/resources/primevue.min.css"; //core css
 import "primeicons/primeicons.css"; //icons
@@ -41,11 +40,10 @@ import ToastService from "primevue/toastservice";
 import GoogleMaps from "@/services/google/GoogleMaps";
 import DataTable from "primevue/datatable";
 import ProgressSpinner from "primevue/progressspinner";
-import InputSwitch from 'primevue/inputswitch';
+import InputSwitch from "primevue/inputswitch";
 import RadioButton from "primevue/radiobutton";
-import VueClickOutsideElement from 'vue-click-outside-element'
+import VueClickOutsideElement from "vue-click-outside-element";
 import Divider from "primevue/divider";
-
 
 library.add(fas, faUser);
 
@@ -60,54 +58,54 @@ app.use(Loading);
 app.use(router);
 app.use(VueClickOutsideElement);
 app.use(VueGoogleMaps, {
-    load: {
-        key: GoogleMaps.getKey(),
-    },
+  load: {
+    key: GoogleMaps.getKey(),
+  },
 });
 app.use(PrimeVue, {
-    locale: {
-        accept: "Ja",
-        reject: "Nee",
-        dayNames: [
-            "Zondag",
-            "Maandag",
-            "Dinsdag",
-            "Woensdag",
-            "Donderdag",
-            "Vrijdag",
-            "Zaterdag",
-        ],
-        dayNamesShort: ["Zon", "Maa", "Din", "Woe", "Don", "Vri", "Zat"],
-        dayNamesMin: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
-        monthNames: [
-            "Januari",
-            "Februari",
-            "Maart",
-            "April",
-            "Mei",
-            "Juni",
-            "Juli",
-            "Augustus",
-            "September",
-            "Oktober",
-            "November",
-            "December",
-        ],
-        monthNamesShort: [
-            "Jan",
-            "Feb",
-            "Maa",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Okt",
-            "Nov",
-            "Dec",
-        ],
-    },
+  locale: {
+    accept: "Ja",
+    reject: "Nee",
+    dayNames: [
+      "Zondag",
+      "Maandag",
+      "Dinsdag",
+      "Woensdag",
+      "Donderdag",
+      "Vrijdag",
+      "Zaterdag",
+    ],
+    dayNamesShort: ["Zon", "Maa", "Din", "Woe", "Don", "Vri", "Zat"],
+    dayNamesMin: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
+    monthNames: [
+      "Januari",
+      "Februari",
+      "Maart",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Augustus",
+      "September",
+      "Oktober",
+      "November",
+      "December",
+    ],
+    monthNamesShort: [
+      "Jan",
+      "Feb",
+      "Maa",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec",
+    ],
+  },
 });
 
 app.component("icon", FontAwesomeIcon);
@@ -131,18 +129,18 @@ app.component("RadioButton", RadioButton);
 app.component("Divider", Divider);
 app.component("SplitButton", SplitButton);
 
-app.directive('click-outside', {
-    mounted(el, binding) {
-        el.clickOutsideEvent = function(event) {
-            if (!(el === event.target || el.contains(event.target))) {
-                binding.value(event, el);
-            }
-        };
-        document.body.addEventListener('click', el.clickOutsideEvent);
-    },
-    unmounted(el) {
-        document.body.removeEventListener('click', el.clickOutsideEvent);
-    }
+app.directive("click-outside", {
+  mounted(el, binding) {
+    el.clickOutsideEvent = function (event) {
+      if (!(el === event.target || el.contains(event.target))) {
+        binding.value(event, el);
+      }
+    };
+    document.body.addEventListener("click", el.clickOutsideEvent);
+  },
+  unmounted(el) {
+    document.body.removeEventListener("click", el.clickOutsideEvent);
+  },
 });
 
 const emitter = mitt();
@@ -152,40 +150,41 @@ app.config.globalProperties.emitter = emitter;
 if (window.location.pathname.includes("formulier")) {
   app.mount("#app");
 } else {
-    let initOptions = getClient();
-    const keycloak = Keycloak(initOptions);
-    app.config.globalProperties.$keycloak = keycloak;
+  let initOptions = getClient();
+  const keycloak = Keycloak(initOptions);
+  app.config.globalProperties.$keycloak = keycloak;
 
-    keycloak.init({onLoad: initOptions.onLoad}).then((auth) => {
-        if (!auth) {
-            window.location.reload();
-        } else {
-            store.commit("resetLeden");
+  keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
+    if (!auth) {
+      window.location.reload();
+    } else {
+      store.commit("resetLeden");
+      store.commit("setToken", keycloak.token);
+      store.commit("setNaam", keycloak.idTokenParsed.name);
+      store.commit(
+        "setGebruikersnaam",
+        keycloak.idTokenParsed.preferred_username
+      );
+      store.dispatch("getProfiel");
+      store.dispatch("getGroepen");
+      store.dispatch("getFuncties");
+      store.dispatch("getKolommen");
+      store.dispatch("getLinks");
+      app.mount("#app");
+    }
+
+    //Token Refresh
+    setInterval(() => {
+      keycloak
+        .updateToken(70)
+        .then((refreshed) => {
+          if (refreshed) {
             store.commit("setToken", keycloak.token);
-            store.commit("setNaam", keycloak.idTokenParsed.name);
-            store.commit(
-                "setGebruikersnaam",
-                keycloak.idTokenParsed.preferred_username
-            );
-            store.dispatch("getProfiel");
-            store.dispatch("getGroepen");
-            store.dispatch("getFuncties");
-            store.dispatch("getKolommen");
-            store.dispatch("getLinks");
-            app.mount("#app");
-        }
-
-        //Token Refresh
-        setInterval(() => {
-            keycloak
-                .updateToken(70)
-                .then((refreshed) => {
-                    if (refreshed) {
-                        store.commit("setToken", keycloak.token);
-                    }
-                }).catch(() => {
-                    console.log("Failed to refresh token");
-                });
-        }, 6000);
-    });
+          }
+        })
+        .catch(() => {
+          console.log("Failed to refresh token");
+        });
+    }, 6000);
+  });
 }

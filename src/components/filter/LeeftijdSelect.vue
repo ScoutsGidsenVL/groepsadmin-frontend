@@ -1,14 +1,20 @@
 <template>
   <div v-if="criteria && criteria.activated">
-    <div class="col-12 type-select-button kolom-select" @click="toggleMenu = !toggleMenu">
+    <div
+      class="col-12 type-select-button kolom-select"
+      @click="toggleMenu = !toggleMenu"
+    >
       <div class="row mt--05">
-        <div class="col-10 ">
+        <div class="col-10">
           <div class="text-align-left d-flex">
             <div>
               <label>{{ criteria.title }}: </label>
             </div>
             <div class="row">
-              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
+              <label
+                class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter"
+                >{{ label }}</label
+              >
             </div>
           </div>
         </div>
@@ -17,7 +23,10 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border" v-if="toggleMenu">
+    <div
+      class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border"
+      v-if="toggleMenu"
+    >
       <div class="d-flex align-content-start">
         <dropdown
           class="w-100"
@@ -31,14 +40,14 @@
       </div>
       <div class="d-flex justify-content-between ml-1">
         <label class="mt-2">Ouder dan</label>
-          <dropdown
-            class="width-50"
-            :options="ouderDanOptions"
-            v-model="ouderDan"
-            optionLabel="label"
-            optionValue="value"
-            @change="change"
-          />
+        <dropdown
+          class="width-50"
+          :options="ouderDanOptions"
+          v-model="ouderDan"
+          optionLabel="label"
+          optionValue="value"
+          @change="change"
+        />
       </div>
       <div class="d-flex justify-content-between ml-1">
         <label class="mt-2">Jonger dan</label>
@@ -61,7 +70,7 @@ import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
 export default {
   name: "LeeftijdSelect",
   components: {
-    VerwijderCriteria
+    VerwijderCriteria,
   },
   data() {
     return {
@@ -72,39 +81,43 @@ export default {
       jongerDanOptions: [],
       ouderDanOptions: [],
       jongerDan: 49,
-      ouderDan: 5
-
-    }
+      ouderDan: 5,
+    };
   },
   props: {
     criteria: {
-      type: Array
+      type: Array,
     },
     value: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     deactivateCriterium(criteria) {
-      this.$emit('deactivateCriterium', criteria);
+      this.$emit("deactivateCriterium", criteria);
     },
     close() {
       this.toggleMenu = false;
     },
     change() {
-      this.emitter.emit('changeLeeftijd', {'criteria': this.criteria, 'leeftijdOpDatum': this.leeftijdOpDatum, 'ouderDan': this.ouderDan, 'jongerDan': this.jongerDan})
+      this.emitter.emit("changeLeeftijd", {
+        criteria: this.criteria,
+        leeftijdOpDatum: this.leeftijdOpDatum,
+        ouderDan: this.ouderDan,
+        jongerDan: this.jongerDan,
+      });
     },
   },
   mounted() {
     this.criteria.leeftijdOpDatum.values.forEach((value) => {
-      this.leeftijdOpDatumOptions.push({label: value[0], value: value[1]})
-    })
+      this.leeftijdOpDatumOptions.push({ label: value[0], value: value[1] });
+    });
     this.criteria.jongerDan.values.forEach((value) => {
-      this.jongerDanOptions.push({label: value[0], value: value[1]})
-    })
+      this.jongerDanOptions.push({ label: value[0], value: value[1] });
+    });
     this.criteria.ouderDan.values.forEach((value) => {
-      this.ouderDanOptions.push({label: value[0], value: value[1]})
-    })
+      this.ouderDanOptions.push({ label: value[0], value: value[1] });
+    });
     if (this.value) {
       this.leeftijdOpDatum = this.value.op31december;
       this.jongerDan = this.value.jongerdan;
@@ -115,14 +128,20 @@ export default {
 
   computed: {
     label() {
-      let leeftijdOpDatumKeuze = this.leeftijdOpDatum ? "Was op 31 december" : "is nu";
-      return leeftijdOpDatumKeuze + " > " + this.ouderDan + " jaar en < " + this.jongerDan
-        + " jaar";
-    }
-  }
-}
+      let leeftijdOpDatumKeuze = this.leeftijdOpDatum
+        ? "Was op 31 december"
+        : "is nu";
+      return (
+        leeftijdOpDatumKeuze +
+        " > " +
+        this.ouderDan +
+        " jaar en < " +
+        this.jongerDan +
+        " jaar"
+      );
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

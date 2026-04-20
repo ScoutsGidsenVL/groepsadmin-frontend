@@ -52,7 +52,10 @@
             />
             <straat-zoek-auto-complete
               :index="index"
-              :disabled="(!adressen[index].postcode && !adressen[index].gemeente) || !heeftToegang('adressen')"
+              :disabled="
+                (!adressen[index].postcode && !adressen[index].gemeente) ||
+                !heeftToegang('adressen')
+              "
               label="Straat"
               v-model="adressen[index]"
               :value="adressen[index].straat"
@@ -64,10 +67,17 @@
               label="Postcode"
               v-model="adressen[index].postcode"
               type="text"
-              :invalid="v.adressen.$each.$response.$errors[index].postcode && v.adressen.$each.$response.$errors[index].postcode.length > 0"
-              :error-message="(v.adressen.$each.$response.$errors[index].postcode &&
-                              v.adressen.$each.$response.$errors[index].postcode.length > 0) ?
-                              v.adressen.$each.$response.$errors[index].postcode[0].$message : ''"
+              :invalid="
+                v.adressen.$each.$response.$errors[index].postcode &&
+                v.adressen.$each.$response.$errors[index].postcode.length > 0
+              "
+              :error-message="
+                v.adressen.$each.$response.$errors[index].postcode &&
+                v.adressen.$each.$response.$errors[index].postcode.length > 0
+                  ? v.adressen.$each.$response.$errors[index].postcode[0]
+                      .$message
+                  : ''
+              "
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
@@ -75,10 +85,17 @@
               v-model="adressen[index].gemeente"
               type="text"
               :disabled="!heeftToegang('adressen')"
-              :invalid="v.adressen.$each.$response.$errors[index].gemeente && v.adressen.$each.$response.$errors[index].gemeente.length > 0"
-              :error-message="(v.adressen.$each.$response.$errors[index].gemeente &&
-                              v.adressen.$each.$response.$errors[index].gemeente.length > 0) ?
-                              v.adressen.$each.$response.$errors[index].gemeente[0].$message : ''"
+              :invalid="
+                v.adressen.$each.$response.$errors[index].gemeente &&
+                v.adressen.$each.$response.$errors[index].gemeente.length > 0
+              "
+              :error-message="
+                v.adressen.$each.$response.$errors[index].gemeente &&
+                v.adressen.$each.$response.$errors[index].gemeente.length > 0
+                  ? v.adressen.$each.$response.$errors[index].gemeente[0]
+                      .$message
+                  : ''
+              "
             />
             <BaseInput
               v-if="adressen[index] && adressen[index].land !== 'BE'"
@@ -86,20 +103,34 @@
               v-model="adressen[index].straat"
               :disabled="!heeftToegang('adressen')"
               type="text"
-              :invalid="v.adressen.$each.$response.$errors[index].straat && v.adressen.$each.$response.$errors[index].straat.length > 0"
-              :error-message="(v.adressen.$each.$response.$errors[index].straat &&
-                              v.adressen.$each.$response.$errors[index].straat.length > 0) ?
-                              v.adressen.$each.$response.$errors[index].straat[0].$message : ''"
+              :invalid="
+                v.adressen.$each.$response.$errors[index].straat &&
+                v.adressen.$each.$response.$errors[index].straat.length > 0
+              "
+              :error-message="
+                v.adressen.$each.$response.$errors[index].straat &&
+                v.adressen.$each.$response.$errors[index].straat.length > 0
+                  ? v.adressen.$each.$response.$errors[index].straat[0].$message
+                  : ''
+              "
             />
             <BaseInput
               label="Nummer"
               v-model="adressen[index].nummer"
               :disabled="!adressen[index].straat || !heeftToegang('adressen')"
               type="text"
-              :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].nummer && v.adressen.$each.$response.$errors[index].nummer.length > 0"
-              :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].nummer &&
-                              v.adressen.$each.$response.$errors[index].nummer.length > 0) ?
-                              v.adressen.$each.$response.$errors[index].nummer[0].$message : ''"
+              :invalid="
+                v.$dirty &&
+                v.adressen.$each.$response.$errors[index].nummer &&
+                v.adressen.$each.$response.$errors[index].nummer.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.adressen.$each.$response.$errors[index].nummer &&
+                v.adressen.$each.$response.$errors[index].nummer.length > 0
+                  ? v.adressen.$each.$response.$errors[index].nummer[0].$message
+                  : ''
+              "
               @keyup="capitalize(index)"
             />
             <BaseInput
@@ -114,10 +145,19 @@
               label="Telefoon"
               :disabled="!heeftToegang('adressen')"
               type="text"
-              :invalid="v.$dirty && v.adressen.$each.$response.$errors[index].telefoon && v.adressen.$each.$response.$errors[index].telefoon.length > 0"
-              :error-message="(v.$dirty && v.adressen.$each.$response.$errors[index].telefoon &&
-                              v.adressen.$each.$response.$errors[index].telefoon.length > 0) ?
-                              v.adressen.$each.$response.$errors[index].telefoon[0].$message : ''"
+              :invalid="
+                v.$dirty &&
+                v.adressen.$each.$response.$errors[index].telefoon &&
+                v.adressen.$each.$response.$errors[index].telefoon.length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.adressen.$each.$response.$errors[index].telefoon &&
+                v.adressen.$each.$response.$errors[index].telefoon.length > 0
+                  ? v.adressen.$each.$response.$errors[index].telefoon[0]
+                      .$message
+                  : ''
+              "
             ></BaseInputTelefoon>
             <BaseCheckbox
               v-if="!lidaanvraag"
@@ -140,10 +180,10 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {ref, toRefs} from "@vue/reactivity";
+import { ref, toRefs } from "@vue/reactivity";
 import AdresService from "@/services/adressen/AdresService";
-import {useVuelidate} from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
+import { helpers, required } from "@vuelidate/validators";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 
@@ -155,7 +195,7 @@ export default {
     BaseDropdown,
     GemeenteZoekAutoComplete,
     StraatZoekAutoComplete,
-    BaseInputTelefoon
+    BaseInputTelefoon,
   },
   props: {
     title: {
@@ -168,7 +208,7 @@ export default {
     lidaanvraag: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 
   setup(props) {
@@ -181,47 +221,52 @@ export default {
       setHeader,
       veranderLand,
       zetPostadres,
-      heeftToegang
+      heeftToegang,
     } = AdresService.adresSpace(props);
 
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);
       return Telefoonnummer.validateNumber(value);
-    }
+    };
 
     const rules = {
-      "adressen": {
+      adressen: {
         $each: helpers.forEach({
           land: {
-            required: helpers.withMessage('Land is verplicht', required)
+            required: helpers.withMessage("Land is verplicht", required),
           },
           postcode: {
-            required: helpers.withMessage('Postcode is verplicht', required)
+            required: helpers.withMessage("Postcode is verplicht", required),
           },
           gemeente: {
-            required: helpers.withMessage('Gemeente is verplicht', required)
+            required: helpers.withMessage("Gemeente is verplicht", required),
           },
           straat: {
-            required: helpers.withMessage('Straat is verplicht', required)
+            required: helpers.withMessage("Straat is verplicht", required),
           },
           nummer: {
-            required: helpers.withMessage('Nummer is verplicht', required)
+            required: helpers.withMessage("Nummer is verplicht", required),
           },
           telefoon: {
-            isGeldigGsmNummer: helpers.withMessage('Geen geldig telefoonnummer', isGeldigGsmNummer)
+            isGeldigGsmNummer: helpers.withMessage(
+              "Geen geldig telefoonnummer",
+              isGeldigGsmNummer
+            ),
           },
-        })
-      }
-    }
+        }),
+      },
+    };
 
     const capitalize = (index) => {
       if (state.adressen[index].bus) {
         state.adressen[index].bus = state.adressen[index].bus.toUpperCase();
       }
       if (state.adressen[index].nummer) {
-        state.adressen[index].nummer = state.adressen[index].nummer.toUpperCase();
+        state.adressen[index].nummer = state.adressen[
+          index
+        ].nummer.toUpperCase();
       }
-    }
+    };
 
     const v = useVuelidate(rules, state);
 
@@ -235,7 +280,7 @@ export default {
       setHeader,
       v,
       heeftToegang,
-      capitalize
+      capitalize,
     };
   },
 };

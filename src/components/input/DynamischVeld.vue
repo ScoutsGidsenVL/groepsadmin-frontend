@@ -4,18 +4,35 @@
       <BaseInput
         v-if="veld.type === 'tekst'"
         v-model="waarde[veld.id]"
-        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
+        :disabled="
+          (steekkaart && !eigenProfiel) ||
+          (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)
+        "
         :label="veld.label"
         @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
         class="text-align-left"
-        :error-message="errors && errors[veld.id] && errors[veld.id].message ? errors[veld.id].message : null"
+        :error-message="
+          errors && errors[veld.id] && errors[veld.id].message
+            ? errors[veld.id].message
+            : null
+        "
         :invalid="errors && errors[veld.id] && errors[veld.id].invalid"
       >
       </BaseInput>
-      <label v-if="veld.type === 'tekst'" class="text-align-left mb-4" :for="veld.id">{{ veld.beschrijving }}</label>
-      <div v-if="veld.type === 'vinkje'" class="d-flex justify-content-between mb-2">
-        <label class="text-align-left cursor-pointer" :for="veld.id">{{ veld.label }}</label>
+      <label
+        v-if="veld.type === 'tekst'"
+        class="text-align-left mb-4"
+        :for="veld.id"
+        >{{ veld.beschrijving }}</label
+      >
+      <div
+        v-if="veld.type === 'vinkje'"
+        class="d-flex justify-content-between mb-2"
+      >
+        <label class="text-align-left cursor-pointer" :for="veld.id">{{
+          veld.label
+        }}</label>
         <checkbox
           true-value="true"
           false-value="false"
@@ -23,16 +40,27 @@
           :input-id="veld.id"
           class="mr-2"
           v-model="waarde[veld.id]"
-          :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
+          :disabled="
+            (steekkaart && !eigenProfiel) ||
+            (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)
+          "
           @keyup="changeValue(veld.id, waarde[veld.id])"
           @change="changeValue(veld.id, waarde[veld.id])"
         ></checkbox>
       </div>
-      <label v-if="veld.type === 'vinkje'" class="text-align-left mb-4" :for="veld.id">{{ veld.beschrijving }}</label>
+      <label
+        v-if="veld.type === 'vinkje'"
+        class="text-align-left mb-4"
+        :for="veld.id"
+        >{{ veld.beschrijving }}</label
+      >
       <BaseDropdown
         v-if="veld.type === 'lijst'"
         v-model="waarde[veld.id]"
-        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
+        :disabled="
+          (steekkaart && !eigenProfiel) ||
+          (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)
+        "
         :label="veld.label"
         :beschrijving="veld.beschrijving"
         @keyup="changeValue(veld.id, waarde[veld.id])"
@@ -45,7 +73,10 @@
         v-if="veld.type === 'tekst_meerdere_lijnen'"
         v-model="waarde[veld.id]"
         :beschrijving="veld.beschrijving"
-        :disabled="(steekkaart && !eigenProfiel) || (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)"
+        :disabled="
+          (steekkaart && !eigenProfiel) ||
+          (!veld.kanLidWijzigen && !veld.kanGebruikerWijzigen)
+        "
         :label="veld.label"
         @keyup="changeValue(veld.id, waarde[veld.id])"
         @changeValue="changeValue(veld.id, waarde[veld.id])"
@@ -61,7 +92,7 @@ import BaseInput from "@/components/input/BaseInput";
 import BaseDropdown from "@/components/input/BaseDropdown";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import DynamischVeldService from "@/services/dynamischVeld/DynamischVeldService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "DynamischVeld",
@@ -83,12 +114,12 @@ export default {
     },
     steekkaart: {
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     eigenProfiel: {
       default: false,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
 
   setup(props) {
@@ -96,11 +127,14 @@ export default {
       state,
       isChecked,
       changeValue,
-      vulOpties
-    } = DynamischVeldService.dynamischVeldSpace(props)
+      vulOpties,
+    } = DynamischVeldService.dynamischVeldSpace(props);
 
     return {
-      ...toRefs(state), isChecked, changeValue, vulOpties
+      ...toRefs(state),
+      isChecked,
+      changeValue,
+      vulOpties,
     };
   },
 };

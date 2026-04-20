@@ -7,10 +7,7 @@
     :closable="false"
   >
     <div class="confirmation-content">
-      <img
-        :src="`${publicPath}static/img/etiketinfo.png`"
-        class="img-fluid"
-      />
+      <img :src="`${publicPath}static/img/etiketinfo.png`" class="img-fluid" />
     </div>
     <template #footer>
       <Button
@@ -34,13 +31,13 @@ export default {
       default: false,
     },
     type: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
-    }
+    };
   },
 
   methods: {

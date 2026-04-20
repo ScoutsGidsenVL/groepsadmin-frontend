@@ -1,215 +1,228 @@
-import {reactive} from "@vue/reactivity";
+import { reactive } from "@vue/reactivity";
 import rechtenService from "@/services/rechten/rechtenService";
-import {computed, onBeforeUpdate, onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
-import {useStore} from "vuex";
+import { computed, onBeforeUpdate, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
-    lidBovenBalkSpace(props, context) {
-        const router = useRouter();
-        const store = useStore();
-        const menu = ref(null);
+  lidBovenBalkSpace(props, context) {
+    const router = useRouter();
+    const store = useStore();
+    const menu = ref(null);
 
-        const state = reactive({
-            lid: props.modelValue,
-            eigenProfiel: props.eigenProfiel,
-            heeftFiscaalAttest: props.heeftFiscaalAttest,
-            changes: props.changes,
-            nieuwLid: props.nieuwLid,
-            filteredMenuItems: [],
-            menuItems: [
-                {
-                    label: "Individuele steekkaart",
-                    icon: "far fa-notes-medical",
-                    link: "IndividueleSteekkaart",
-                },
-                {
-                    label: "Lidkaart afdrukken",
-                    icon: "far fa-address-card",
-                    link: "Lidkaart",
-                },
-                {
-                    label: "Fiscaal Attest afdrukken",
-                    icon: "far fa-file-alt",
-                    link: "attest",
-                },
-                {
-                    label: "Nieuw Lid",
-                    icon: "far fa-user-plus",
-                    link: "lidToevoegen",
-                },
-                {
-                    label: "Broer/Zus toevoegen",
-                    icon: "far fa-user-friends",
-                    link: "broerZusToevoegen",
-                },
-                {
-                    label: "Mail lid",
-                    icon: "far fa-envelope",
-                    link: "Mail",
-                },
-                {
-                    label: "Stop alle functies",
-                    icon: "far fa-times",
-                    link: "stopAlleFuncties",
-                },
-            ],
-        })
+    const state = reactive({
+      lid: props.modelValue,
+      eigenProfiel: props.eigenProfiel,
+      heeftFiscaalAttest: props.heeftFiscaalAttest,
+      changes: props.changes,
+      nieuwLid: props.nieuwLid,
+      filteredMenuItems: [],
+      menuItems: [
+        {
+          label: "Individuele steekkaart",
+          icon: "far fa-notes-medical",
+          link: "IndividueleSteekkaart",
+        },
+        {
+          label: "Lidkaart afdrukken",
+          icon: "far fa-address-card",
+          link: "Lidkaart",
+        },
+        {
+          label: "Fiscaal Attest afdrukken",
+          icon: "far fa-file-alt",
+          link: "attest",
+        },
+        {
+          label: "Nieuw Lid",
+          icon: "far fa-user-plus",
+          link: "lidToevoegen",
+        },
+        {
+          label: "Broer/Zus toevoegen",
+          icon: "far fa-user-friends",
+          link: "broerZusToevoegen",
+        },
+        {
+          label: "Mail lid",
+          icon: "far fa-envelope",
+          link: "Mail",
+        },
+        {
+          label: "Stop alle functies",
+          icon: "far fa-times",
+          link: "stopAlleFuncties",
+        },
+      ],
+    });
 
-        const heeftToegang = (label) => {
-            switch (label) {
-                case "Individuele steekkaart":
-                    return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
-                case "Lidkaart afdrukken":
-                    return rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") || state.eigenProfiel && !state.nieuwLid;
-                case "Fiscaal Attest afdrukken":
-                    return state.eigenProfiel && state.heeftFiscaalAttest;
-                case "Nieuw Lid":
-                    return rechtenService.hasAccess("nieuw lid");
-                case "Broer/Zus toevoegen":
-                    return rechtenService.hasAccess("nieuw lid");
-                case "Mail lid":
-                    return !state.eigenProfiel;
-                case "Stop alle functies":
-                    return rechtenService.magAlleFunctiesStoppen(state.lid) || state.eigenProfiel;
-                default:
-                    return false;
-            }
+    const heeftToegang = (label) => {
+      switch (label) {
+        case "Individuele steekkaart":
+          return (
+            rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") ||
+            (state.eigenProfiel && !state.nieuwLid)
+          );
+        case "Lidkaart afdrukken":
+          return (
+            rechtenService.heeftSteekkaartLeesrecht(state.lid, "steekkaart") ||
+            (state.eigenProfiel && !state.nieuwLid)
+          );
+        case "Fiscaal Attest afdrukken":
+          return state.eigenProfiel && state.heeftFiscaalAttest;
+        case "Nieuw Lid":
+          return rechtenService.hasAccess("nieuw lid");
+        case "Broer/Zus toevoegen":
+          return rechtenService.hasAccess("nieuw lid");
+        case "Mail lid":
+          return !state.eigenProfiel;
+        case "Stop alle functies":
+          return (
+            rechtenService.magAlleFunctiesStoppen(state.lid) ||
+            state.eigenProfiel
+          );
+        default:
+          return false;
+      }
+    };
+
+    const toggle = (event) => {
+      menu.value.toggle(event);
+    };
+
+    const filterMenuItems = () => {
+      state.filteredMenuItems = [];
+      state.menuItems.forEach((item) => {
+        if (heeftToegang(item.label)) {
+          state.filteredMenuItems.push(item);
         }
+      });
+    };
 
-        const toggle = (event) => {
-            menu.value.toggle(event);
+    const broerZusToevoegen = () => {
+      let defaultLid = {
+        vgagegevens: {
+          achternaam: state.lid.vgagegevens.achternaam,
+        },
+        persoonsgegevens: {
+          verminderdlidgeld: state.lid.vgagegevens.verminderdlidgeld,
+          beperking: false,
+          geslacht: "vrouw",
+          gsm: state.lid.persoonsgegevens.gsm,
+          verhoogdekinderbijslag: state.lid.vgagegevens.verhoogdekinderbijslag,
+        },
+        verbondsgegevens: {
+          lidgeldbetaald: false,
+        },
+        email: state.lid.email,
+        adressen: state.lid.adressen,
+        contacten: state.lid.contacten,
+        functies: [],
+      };
+      store.commit("setBroerZusLid", defaultLid);
+      router.push({
+        name: "lidToevoegen",
+      });
+    };
+
+    const gaNaar = (link) => {
+      if (link === "profiel") {
+        router.push({ name: "Profiel", params: { id: "profiel" } });
+      } else if (link === "IndividueleSteekkaart") {
+        router.push({ name: link, params: { id: state.lid.id } });
+      } else if (link === "stopAlleFuncties") {
+        context.emit("stopAlleFuncties");
+      } else if (link === "broerZusToevoegen") {
+        broerZusToevoegen();
+      } else if (link === "Lidkaart") {
+        context.emit("lidkaartAfdrukken");
+      } else if (link === "attest") {
+        context.emit("attestAfdrukken");
+      } else {
+        router.push({ name: link });
+      }
+    };
+
+    const vorigLid = () => {
+      let index = store.getters.leden.indexOf(state.lid.id);
+      if (index === 0) {
+        index = store.getters.leden.length - 1;
+      } else {
+        index--;
+      }
+      router.push({ name: "Lid", params: { id: store.getters.leden[index] } });
+    };
+
+    const volgendLid = () => {
+      let index = store.getters.leden.indexOf(state.lid.id);
+      if (index === store.getters.leden.length - 1) {
+        index = 0;
+      } else {
+        index++;
+      }
+      router.push({ name: "Lid", params: { id: store.getters.leden[index] } });
+    };
+
+    const volledigeNaam = computed({
+      get() {
+        if (
+          state.lid.vgagegevens.voornaam &&
+          state.lid.vgagegevens.achternaam
+        ) {
+          return (
+            state.lid.vgagegevens.voornaam +
+            " " +
+            state.lid.vgagegevens.achternaam
+          );
+        } else {
+          return "";
         }
+      },
+    });
 
-        const filterMenuItems = () => {
-            state.filteredMenuItems = [];
-            state.menuItems.forEach(item => {
-                if (heeftToegang(item.label)) {
-                    state.filteredMenuItems.push(item);
-                }
-            })
-        }
+    const gevuldeLedenLijst = computed({
+      get() {
+        return store.getters.leden.length !== 0;
+      },
+    });
 
-        const broerZusToevoegen = () => {
-            let defaultLid = {
-                vgagegevens: {
-                    achternaam: state.lid.vgagegevens.achternaam
-                },
-                persoonsgegevens: {
-                    verminderdlidgeld: state.lid.vgagegevens.verminderdlidgeld,
-                    beperking: false,
-                    geslacht: 'vrouw',
-                    gsm: state.lid.persoonsgegevens.gsm,
-                    verhoogdekinderbijslag: state.lid.vgagegevens.verhoogdekinderbijslag,
-                },
-                verbondsgegevens: {
-                    lidgeldbetaald: false
-                },
-                email: state.lid.email,
-                adressen: state.lid.adressen,
-                contacten: state.lid.contacten,
-                functies: []
-            }
-            store.commit('setBroerZusLid', defaultLid);
-            router.push({
-                name: "lidToevoegen",
-            });
-        }
+    const kanOpslaan = computed({
+      get() {
+        return rechtenService.kanOpslaan(state.lid);
+      },
+    });
 
-        const gaNaar = (link) => {
-            if (link === 'profiel') {
-                router.push({name: 'Profiel', params: {id: "profiel"}})
-            } else if (link === 'IndividueleSteekkaart'){
-                router.push({name: link, params: {id: state.lid.id}})
-            } else if (link === 'stopAlleFuncties') {
-                context.emit('stopAlleFuncties');
-            } else if (link === 'broerZusToevoegen') {
-                broerZusToevoegen();
-            } else if (link === 'Lidkaart') {
-                context.emit('lidkaartAfdrukken');
-            } else if (link === 'attest') {
-                context.emit('attestAfdrukken');
-            } else {
-                router.push({name: link})
-            }
-        }
+    const kanNieuwLidAanmaken = computed({
+      get() {
+        return rechtenService.hasAccess("nieuw lid");
+      },
+    });
 
-        const vorigLid = () => {
-            let index = store.getters.leden.indexOf(state.lid.id);
-            if (index === 0) {
-                index = store.getters.leden.length - 1;
-            } else {
-                index--;
-            }
-            router.push({name: "Lid", params: {id: store.getters.leden[index]}})
-        }
+    onMounted(() => {
+      state.lid = props.modelValue;
+      filterMenuItems();
+    });
 
-        const volgendLid = () => {
-            let index = store.getters.leden.indexOf(state.lid.id);
-            if (index === store.getters.leden.length - 1) {
-                index = 0;
-            } else {
-                index++;
-            }
-            router.push({name: "Lid", params: {id: store.getters.leden[index]}})
-        }
+    onBeforeUpdate(() => {
+      if (!props.nieuwLid) {
+        state.lid = props.modelValue;
+        state.heeftFiscaalAttest = props.heeftFiscaalAttest;
+        state.eigenProfiel = props.eigenProfiel;
+        filterMenuItems();
+      }
+    });
 
-        const volledigeNaam = computed({
-            get() {
-                if (state.lid.vgagegevens.voornaam && state.lid.vgagegevens.achternaam) {
-                    return (
-                        state.lid.vgagegevens.voornaam + " " + state.lid.vgagegevens.achternaam
-                    );
-                } else {
-                    return ""
-                }
-            }
-        })
-
-        const gevuldeLedenLijst = computed({
-            get() {
-                return store.getters.leden.length !== 0
-            }
-        })
-
-        const kanOpslaan = computed({
-            get() {
-                return rechtenService.kanOpslaan(state.lid);
-            }
-        })
-
-        const kanNieuwLidAanmaken = computed({
-            get() {
-                return rechtenService.hasAccess("nieuw lid")
-            }
-        })
-
-        onMounted(() => {
-            state.lid = props.modelValue;
-            filterMenuItems();
-        })
-
-        onBeforeUpdate(() => {
-            if (!props.nieuwLid) {
-                state.lid = props.modelValue;
-                state.heeftFiscaalAttest = props.heeftFiscaalAttest;
-                state.eigenProfiel = props.eigenProfiel;
-                filterMenuItems();
-            }
-        })
-
-        return {
-            state,
-            volledigeNaam,
-            menu,
-            toggle,
-            gaNaar,
-            gevuldeLedenLijst,
-            kanOpslaan,
-            kanNieuwLidAanmaken,
-            volgendLid,
-            vorigLid
-        }
-
-    }
-}
+    return {
+      state,
+      volledigeNaam,
+      menu,
+      toggle,
+      gaNaar,
+      gevuldeLedenLijst,
+      kanOpslaan,
+      kanNieuwLidAanmaken,
+      volgendLid,
+      vorigLid,
+    };
+  },
+};

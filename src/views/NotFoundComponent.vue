@@ -6,10 +6,8 @@
 
 <script>
 export default {
-  name: "NotFoundComponent"
-}
+  name: "NotFoundComponent",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

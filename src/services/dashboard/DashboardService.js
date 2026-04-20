@@ -1,123 +1,123 @@
-import {reactive} from "@vue/reactivity";
-import {computed, onMounted} from "vue";
+import { reactive } from "@vue/reactivity";
+import { computed, onMounted } from "vue";
 import RestService from "@/services/api/RestService";
 import rechtenService from "@/services/rechten/rechtenService";
-import {useStore} from "vuex";
-import {useRouter} from "vue-router";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
+  dashboardSpace() {
+    const store = useStore();
+    const state = reactive({
+      showLoader: false,
+      gebruiker: null,
+      snelNaarItems: [],
+      menuItems: [
+        {
+          label: "Mijn gegevens",
+          condition: true,
+          icon: "far fa-user",
+          link: "Profiel",
+          internal: true,
+        },
+        {
+          label: "Mijn individuele steekkaart",
+          condition: true,
+          icon: "far fa-notes-medical",
+          link: "IndividueleSteekkaart",
+          internal: true,
+        },
+        {
+          label: "Ledenlijst",
+          condition: "ledenlijst",
+          icon: "far fa-users",
+          link: "Ledenlijst",
+          internal: true,
+        },
+        {
+          label: "Groep",
+          condition: "groepen",
+          icon: "far fa-cogs",
+          link: "Groepsinstellingen",
+          internal: true,
+        },
+        {
+          label: "Ledenaantallen",
+          condition: "groepen",
+          icon: "far fa-chart-area",
+          link: "Ledenaantallen",
+          internal: true,
+        },
+        {
+          label: "Lidaanvragen",
+          condition: "aanvragen",
+          icon: "far fa-address-book",
+          link: "Aanvragen",
+          internal: true,
+        },
+        {
+          label: "Betalende activiteiten",
+          condition: "ledenlijst",
+          icon: "fas fa-campground",
+          link: "Activiteiten",
+          internal: true,
+        },
+      ],
+    });
 
-    dashboardSpace() {
-        const store = useStore();
-        const state = reactive({
-            showLoader: false,
-            gebruiker: null,
-            snelNaarItems: [],
-            menuItems: [
-                {
-                    label: "Mijn gegevens",
-                    condition: true,
-                    icon: "far fa-user",
-                    link: "Profiel",
-                    internal: true,
-                },
-                {
-                    label: "Mijn individuele steekkaart",
-                    condition: true,
-                    icon: "far fa-notes-medical",
-                    link: "IndividueleSteekkaart",
-                    internal: true,
-                },
-                {
-                    label: "Ledenlijst",
-                    condition: "ledenlijst",
-                    icon: "far fa-users",
-                    link: "Ledenlijst",
-                    internal: true,
-                },
-                {
-                    label: "Groep",
-                    condition: "groepen",
-                    icon: "far fa-cogs",
-                    link: "Groepsinstellingen",
-                    internal: true,
-                },
-                {
-                    label: "Ledenaantallen",
-                    condition: "groepen",
-                    icon: "far fa-chart-area",
-                    link: "Ledenaantallen",
-                    internal: true,
-                },
-                {
-                    label: "Lidaanvragen",
-                    condition: "aanvragen",
-                    icon: "far fa-address-book",
-                    link: "Aanvragen",
-                    internal: true,
-                },
-                {
-                    label: "Betalende activiteiten",
-                    condition: "ledenlijst",
-                    icon: "fas fa-campground",
-                    link: "Activiteiten",
-                    internal: true,
-                },
-            ],
-        })
+    onMounted(() => {
+      RestService.getWebsites().then((res) => {
+        state.snelNaarItems = res.data.websites;
+      });
+    });
 
-        onMounted(() => {
-            RestService.getWebsites()
-                .then(res => {
-                    state.snelNaarItems = res.data.websites;
-                })
-        })
-
-        const dashboardItems = computed(() => {
-            return state.menuItems.filter(obj => {
-                if (obj.condition === "groepen") {
-                    return rechtenService.hasAccessToGroepen();
-                }
-                return obj.condition === true || rechtenService.hasPermission(obj.condition) || rechtenService.hasAccess(obj.condition);
-            });
-        })
-
-        const naam = computed(() => {
-            if (store.getters.profiel) {
-                return store.getters.profiel.vgagegevens.voornaam;
-            } else {
-                return "";
-            }
-        })
-
-
-        return {
-            state,
-            dashboardItems,
-            naam
+    const dashboardItems = computed(() => {
+      return state.menuItems.filter((obj) => {
+        if (obj.condition === "groepen") {
+          return rechtenService.hasAccessToGroepen();
         }
-    },
+        return (
+          obj.condition === true ||
+          rechtenService.hasPermission(obj.condition) ||
+          rechtenService.hasAccess(obj.condition)
+        );
+      });
+    });
 
-    dashBoardBlockSpace(props) {
+    const naam = computed(() => {
+      if (store.getters.profiel) {
+        return store.getters.profiel.vgagegevens.voornaam;
+      } else {
+        return "";
+      }
+    });
 
-        const router = useRouter();
-        const store = useStore();
+    return {
+      state,
+      dashboardItems,
+      naam,
+    };
+  },
 
-        const goto = (link) => {
-            top.window.onbeforeunload = null;
-            if (!props.internal) {
-                window.location.href = link;
-            } else if (link === "Profiel") {
-                router.push({name: "Lid", params: {id: "profiel"}});
-            } else if (link === "IndividueleSteekkaart") {
-                router.push({name: link, params: {id: store.getters.profiel.id}});
-            } else {
-                router.push({name: link});
-            }
-        }
+  dashBoardBlockSpace(props) {
+    const router = useRouter();
+    const store = useStore();
 
-        return {
-            goto
-        }
-    }
-}
+    const goto = (link) => {
+      top.window.onbeforeunload = null;
+      if (!props.internal) {
+        window.location.href = link;
+      } else if (link === "Profiel") {
+        router.push({ name: "Lid", params: { id: "profiel" } });
+      } else if (link === "IndividueleSteekkaart") {
+        router.push({ name: link, params: { id: store.getters.profiel.id } });
+      } else {
+        router.push({ name: link });
+      }
+    };
+
+    return {
+      goto,
+    };
+  },
+};

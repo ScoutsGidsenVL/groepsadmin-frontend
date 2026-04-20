@@ -1,5 +1,5 @@
 <template>
-  <router-view class="app-content"/>
+  <router-view class="app-content" />
 </template>
 
 <style>
@@ -15,5 +15,4 @@
   color: #42b983;
 }
 </style>
-<script>
-</script>
+<script></script>

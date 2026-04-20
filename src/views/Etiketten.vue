@@ -1,13 +1,16 @@
 <template>
   <div class="p-1">
-    <SideMenu/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <etiket-info-dialog :dialog-visible="openEtikettenFoto" @close="sluitInfodialog"/>
+    <etiket-info-dialog
+      :dialog-visible="openEtikettenFoto"
+      @close="sluitInfodialog"
+    />
     <div class="lg:ml-8">
-      <ConfirmDialog/>
+      <ConfirmDialog />
       <Loader :show-loader="laden"></Loader>
-      <div class="overflow-hidden  lg:ml-6">
+      <div class="overflow-hidden lg:ml-6">
         <div>
           <save-template-dialog
             :open="openModal"
@@ -38,8 +41,16 @@
               >
               </dropdown>
             </div>
-            <div class="col-lg-2 text-align-left"
-                 v-if="sjabloon && (sjabloon.naam !== 'deelnamebewijs' && sjabloon.naam !== 'blanco sjabloon' && sjabloon.naam !== 'STANDAARD' && sjabloon.naam !== 'standaard formaat')">
+            <div
+              class="col-lg-2 text-align-left"
+              v-if="
+                sjabloon &&
+                sjabloon.naam !== 'deelnamebewijs' &&
+                sjabloon.naam !== 'blanco sjabloon' &&
+                sjabloon.naam !== 'STANDAARD' &&
+                sjabloon.naam !== 'standaard formaat'
+              "
+            >
               <Button
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-alert mr-2 position-sticky verwijder-button"
@@ -51,9 +62,9 @@
           <div class="row mt-1">
             <div class="col-sm-2 text-align-left">
               <label
-              >Ontvangers:
+                >Ontvangers:
                 <span v-if="leden.length > 0">
-                {{
+                  {{
                     leden.length === 1 ? "1 lid" : leden.length + " leden"
                   }}</span
                 ><span
@@ -61,23 +72,33 @@
                   @click="toonLeden"
                   class="cursor-pointer custom-title"
                 >
-                (details)</span
+                  (details)</span
                 >
                 <span v-if="isLoadingLeden" class="mt-1"
-                >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
+                  >Leden ophalen &nbsp;<i class="fas fa-spinner fa-spin"></i
                 ></span>
               </label>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-8 text-align-left">
-              <checkbox :binary=true v-model="sjabloon.familie" id="familie" class="mt--3p"></checkbox>
+              <checkbox
+                :binary="true"
+                v-model="sjabloon.familie"
+                id="familie"
+                class="mt--3p"
+              ></checkbox>
               <label class="mt-1 ml-3" for="familie">Familie</label>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-8 text-align-left">
-              <checkbox :binary=true v-model="sjabloon.alleAdressen" id="alleAdressen" class="mt--3p"></checkbox>
+              <checkbox
+                :binary="true"
+                v-model="sjabloon.alleAdressen"
+                id="alleAdressen"
+                class="mt--3p"
+              ></checkbox>
               <label class="mt-1 ml-3" for="alleAdressen">Alle adressen</label>
             </div>
           </div>
@@ -108,8 +129,10 @@
         <div class="pl-lg-4em mt-5">
           <h4 class="text-align-left mt-5 custom-title font-weight-bold">
             Etiket eigenschappen
-            <span class="help-button-wrapper small cursor-pointer" @click="openFoto"
-            >&nbsp; (klik hier voor schema)</span
+            <span
+              class="help-button-wrapper small cursor-pointer"
+              @click="openFoto"
+              >&nbsp; (klik hier voor schema)</span
             >
           </h4>
           <div class="row">
@@ -184,7 +207,11 @@
         <Dialog
           header="Ontvangers"
           v-model:visible="openOntvangerDialog"
-          :style="{ width: '50vw', 'max-height': '30vw', 'min-height': 'fit-content' }"
+          :style="{
+            width: '50vw',
+            'max-height': '30vw',
+            'min-height': 'fit-content',
+          }"
           :modal="true"
         >
           <div class="email-leden col-xs-12">
@@ -192,14 +219,15 @@
               <li v-for="(lid, index) in leden" :key="index">
                 <span v-if="lid.voornaam"> &nbsp;{{ lid.voornaam }} </span>
                 <span v-if="lid.achternaam">&nbsp;{{ lid.achternaam }}</span>
-                <span v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
-                >&nbsp;{{ lid.volledigenaam }}
-              </span>
+                <span
+                  v-if="!lid.voornaam && !lid.achternaam && lid.volledigenaam"
+                  >&nbsp;{{ lid.volledigenaam }}
+                </span>
                 <span
                   v-if="!lid.voornaam && !lid.achternaam && !lid.volledigenaam"
                 >
-                - geen naam beschikbaar -
-              </span>
+                  - geen naam beschikbaar -
+                </span>
               </li>
             </ul>
           </div>
@@ -207,7 +235,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -222,7 +250,7 @@ import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import EtiketInfoDialog from "@/components/dialog/EtiketInfoDialog";
 import Footer from "@/components/global/Footer";
-import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "Etiketten",
@@ -236,7 +264,7 @@ export default {
     Dialog,
     SideMenu,
     IngelogdLid,
-    ConfirmDialog
+    ConfirmDialog,
   },
   data() {
     return {
@@ -342,7 +370,7 @@ export default {
           volledigenaam:
             lid.waarden[
               "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-              ],
+            ],
         });
       });
       this.sorteerLeden = false;
@@ -374,8 +402,8 @@ export default {
     },
     getOptions() {
       return {
-        selector: 'textarea',
-        images_file_types: 'jpg,svg,webp,png,bmp,jpeg',
+        selector: "textarea",
+        images_file_types: "jpg,svg,webp,png,bmp,jpeg",
         plugins: [
           "advlist autolink lists link image charmap print preview hr anchor pagebreak",
           "searchreplace wordcount visualblocks visualchars code fullscreen",
@@ -425,7 +453,7 @@ export default {
         .then((res) => {
           this.sjablonen = [];
           res.data.sjablonen.forEach((sjabloon) => {
-            this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
+            this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
           });
           this.getOpgeslagenEtiketSjabloon();
         })
@@ -437,10 +465,11 @@ export default {
             detail: error,
             life: 8000,
           });
-        }).finally(() => {
-        this.setStandaardSjabloon();
-        this.laden = false;
-      });
+        })
+        .finally(() => {
+          this.setStandaardSjabloon();
+          this.laden = false;
+        });
     },
     sluitInfodialog() {
       this.openEtikettenFoto = false;
@@ -472,20 +501,22 @@ export default {
                 detail: "Sjabloon opgeslagen",
                 life: 3000,
               });
-            }).catch((error) => {
-            this.error = true;
-            this.$toast.add({
-              severity: "error",
-              summary: "Wijzigingen",
-              detail: error.message,
-              life: 8000,
+            })
+            .catch((error) => {
+              this.error = true;
+              this.$toast.add({
+                severity: "error",
+                summary: "Wijzigingen",
+                detail: error.message,
+                life: 8000,
+              });
+            })
+            .finally(() => {
+              this.changes = false;
+              this.laden = false;
+              this.$store.commit("setEtiketSjabloon", null);
+              this.getSjablonen();
             });
-          }).finally(() => {
-            this.changes = false;
-            this.laden = false;
-            this.$store.commit("setEtiketSjabloon", null);
-            this.getSjablonen();
-          });
         } else {
           this.sjabloon.naam = naam;
           this.changes = true;
@@ -500,20 +531,22 @@ export default {
                 detail: "Sjabloon opgeslagen",
                 life: 3000,
               });
-            }).catch((error) => {
-            this.error = true;
-            this.$toast.add({
-              severity: "error",
-              summary: "Wijzigingen",
-              detail: error.message,
-              life: 8000,
+            })
+            .catch((error) => {
+              this.error = true;
+              this.$toast.add({
+                severity: "error",
+                summary: "Wijzigingen",
+                detail: error.message,
+                life: 8000,
+              });
+            })
+            .finally(() => {
+              this.changes = false;
+              this.laden = false;
+              this.$store.commit("setEtiketSjabloon", null);
+              this.getSjablonen();
             });
-          }).finally(() => {
-            this.changes = false;
-            this.laden = false;
-            this.$store.commit("setEtiketSjabloon", null);
-            this.getSjablonen();
-          });
         }
       }
       this.closeModal();
@@ -528,7 +561,7 @@ export default {
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           if (!this.sjabloon.id) {
-            this.verwijderStoredSjabloon(this.sjabloon.naam)
+            this.verwijderStoredSjabloon(this.sjabloon.naam);
           } else {
             RestService.verwijderSjabloon("etiket", this.sjabloon.id)
               .then(() => {
@@ -544,22 +577,22 @@ export default {
                   life: 3000,
                 });
                 this.setStandaardSjabloon("verwijderd");
-              }).catch((error) => {
-              this.error = true;
-              this.$toast.add({
-                severity: "error",
-                summary: "Wijzigingen",
-                detail: error,
-                life: 8000,
+              })
+              .catch((error) => {
+                this.error = true;
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Wijzigingen",
+                  detail: error,
+                  life: 8000,
+                });
               });
-            });
           }
         },
         reject: () => {
           this.$confirm.close();
         },
       });
-
     },
     print() {
       this.filterLeden();
@@ -591,14 +624,18 @@ export default {
       RestService.printEtiketten(0, payload)
         .then((res) => {
           let obj = {};
-          obj.fileUrl = window.URL.createObjectURL(new Blob([res.data], {type: "application/pdf"}));
+          obj.fileUrl = window.URL.createObjectURL(
+            new Blob([res.data], { type: "application/pdf" })
+          );
           obj.title = "etiketten.pdf";
           this.downloadFile(obj);
-        }).catch((error) => {
-        console.log(error);
-      }).finally(() => {
-        this.laden = false;
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.laden = false;
+        });
     },
 
     downloadFile(obj) {
@@ -624,7 +661,7 @@ export default {
           return 1;
         }
         return 0;
-      })
+      });
     },
 
     filterLeden() {
@@ -642,16 +679,16 @@ export default {
       let sjabloon = this.$store.getters.etiketSjabloon;
       if (sjabloon) {
         sjabloon.id = null;
-        this.sjablonen.push({label: sjabloon.naam, value: sjabloon});
+        this.sjablonen.push({ label: sjabloon.naam, value: sjabloon });
       }
     },
 
     verwijderStoredSjabloon(naam) {
       this.sjablonen.forEach((sjabloon, index) => {
         if (sjabloon.label === naam) {
-          this.sjablonen.splice(index, 1)
+          this.sjablonen.splice(index, 1);
         }
-      })
+      });
       this.$store.commit("setEtiketSjabloon", null);
       this.sjabloon = this.sjablonen[0].value;
       this.$toast.add({
@@ -670,13 +707,15 @@ export default {
     },
 
     setStandaardSjabloon() {
-        let geselecteerdeIndex = 0;
-        this.gesorteerdeSjablonen(this.sjablonen).forEach((sjabloon, index) => {
-          if (sjabloon && sjabloon.value.naam === this.sjabloon.naam) {
-            geselecteerdeIndex = index;
-          }
-        })
-        this.sjabloon = this.gesorteerdeSjablonen(this.sjablonen)[geselecteerdeIndex].value;
+      let geselecteerdeIndex = 0;
+      this.gesorteerdeSjablonen(this.sjablonen).forEach((sjabloon, index) => {
+        if (sjabloon && sjabloon.value.naam === this.sjabloon.naam) {
+          geselecteerdeIndex = index;
+        }
+      });
+      this.sjabloon = this.gesorteerdeSjablonen(this.sjablonen)[
+        geselecteerdeIndex
+      ].value;
     },
 
     getLeden() {
@@ -691,11 +730,11 @@ export default {
               achternaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.AchternaamColumn"
-                  ],
+                ],
               volledigenaam:
                 lid.waarden[
                   "be.vvksm.groepsadmin.model.column.VolledigeNaamColumn"
-                  ],
+                ],
             });
           });
           this.offset = this.leden.length;

@@ -8,7 +8,7 @@
           v-model="zoekTerm"
           :disabled="disabled"
           field="straat"
-          minLength=2
+          minLength="2"
           :suggestions="gefilterdeStraten"
           @complete="zoekStraat"
           @itemSelect="kiesStraat"
@@ -17,7 +17,11 @@
           placeholder="Straat..."
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
-          :class="(v$.$dirty || checked) && v$.adres.straat.$invalid ? 'p-invalid' : ''"
+          :class="
+            (v$.$dirty || checked) && v$.adres.straat.$invalid
+              ? 'p-invalid'
+              : ''
+          "
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -42,7 +46,7 @@
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
 import useVuelidate from "@vuelidate/core";
-import {helpers, required} from "@vuelidate/validators";
+import { helpers, required } from "@vuelidate/validators";
 
 export default {
   components: {
@@ -53,18 +57,18 @@ export default {
     return {
       gefilterdeStraten: null,
       zoekTerm: null,
-      checked: false
+      checked: false,
     };
   },
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
       adres: {
-        straat : {
-          required: helpers.withMessage('Straat is verplicht', required)
-        }
+        straat: {
+          required: helpers.withMessage("Straat is verplicht", required),
+        },
       },
-    }
+    };
   },
   props: {
     label: {
@@ -84,7 +88,7 @@ export default {
     errorMessage: {
       type: String,
     },
-    index: {}
+    index: {},
   },
   mounted() {
     this.zoekTerm = this.modelValue.straat;
@@ -119,8 +123,8 @@ export default {
     },
     checkValue() {
       this.adres.straat = this.zoekTerm;
-      this.checked = true
-    }
+      this.checked = true;
+    },
   },
   computed: {
     adres: {

@@ -7,129 +7,154 @@ import DateUtil from "@/services/dates/DateUtil";
 import moment from "moment";
 
 export default {
+  functieToevoegenSpace(props, context) {
+    const store = useStore();
+    const state = reactive({
+      huidigLid: props.modelValue,
+      laden: false,
+      functiesEnGroepenGeladen: false,
+      showFunctieToevoegen: false,
+      changes: false,
+      groepEnfuncties: [],
+      geselecteerdeFuncties: {},
+    });
 
-    functieToevoegenSpace(props, context) {
-        const store = useStore();
-        const state = reactive({
-            huidigLid: props.modelValue,
-            laden: false,
-            functiesEnGroepenGeladen: false,
-            showFunctieToevoegen: false,
-            changes: false,
-            groepEnfuncties: [],
-            geselecteerdeFuncties: {}
-        })
+    onUpdated(() => {
+      state.huidigLid = props.modelValue;
+      functiesEnGroepen();
+    });
 
-        onUpdated(() => {
-            state.huidigLid = props.modelValue;
-            functiesEnGroepen();
-        })
+    const gesorteerdeFuncties = (functies, type) => {
+      let relevanteFuncties = [];
 
-        const gesorteerdeFuncties = (functies, type) => {
-            let relevanteFuncties = [];
+      if (
+        state.huidigLid &&
+        state.huidigLid.vgagegevens &&
+        state.huidigLid.vgagegevens.geboortedatum
+      ) {
+        relevanteFuncties = functies.filter((functie) => {
+          let geboortedatum = moment(
+            state.huidigLid.vgagegevens.geboortedatum,
+            "DD/MM/YYYY"
+          ).format("YYYY-MM-DD");
+          return (
+            !functie.uiterstegeboortedatum ||
+            moment(geboortedatum).isBefore(
+              moment(
+                DateUtil.formatteerDatumVoorApi(functie.uiterstegeboortedatum)
+              )
+            )
+          );
+        });
+      } else {
+        relevanteFuncties = functies;
+      }
 
-            if (state.huidigLid && state.huidigLid.vgagegevens && state.huidigLid.vgagegevens.geboortedatum) {
-                relevanteFuncties = functies.filter(functie => {
-                    let geboortedatum = moment(state.huidigLid.vgagegevens.geboortedatum, 'DD/MM/YYYY').format('YYYY-MM-DD');
-                    return !functie.uiterstegeboortedatum || moment(geboortedatum).isBefore(moment(DateUtil.formatteerDatumVoorApi(functie.uiterstegeboortedatum)));
+      relevanteFuncties.sort(function (a, b) {
+        if (a.beschrijving < b.beschrijving) {
+          return -1;
+        }
+        if (a.beschrijving > b.beschrijving) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return relevanteFuncties.filter((obj) => {
+        return obj.type === type;
+      });
+    };
+
+    const functiesEnGroepen = () => {
+      state.groepEnfuncties = [];
+
+      store.getters.groepen.forEach((groep) => {
+        if (rechtenService.hasPermission("functies." + groep.groepsnummer)) {
+          if (!state.groepsnummer || state.groepsnummer == groep.groepsnummer) {
+            state.geselecteerdeFuncties[groep.groepsnummer] = [];
+            let tempGroep = groep;
+            tempGroep.functies = [];
+            store.getters.functies.forEach((functie) => {
+              let bestaandeFunctie = false;
+              if (state.huidigLid && state.huidigLid.functies) {
+                state.huidigLid.functies.forEach((lidFunctie) => {
+                  if (
+                    lidFunctie.groep === groep.groepsnummer &&
+                    lidFunctie.functie === functie.id &&
+                    !lidFunctie.einde
+                  ) {
+                    bestaandeFunctie = true;
+                  }
                 });
-            } else {
-                relevanteFuncties = functies;
-            }
-
-            relevanteFuncties.sort(function (a, b) {
-                if (a.beschrijving < b.beschrijving) {
-                    return -1;
-                }
-                if (a.beschrijving > b.beschrijving) {
-                    return 1;
-                }
-                return 0;
-            })
-
-            return relevanteFuncties.filter(obj => {
-                return obj.type === type;
+              }
+              if (
+                functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 &&
+                !bestaandeFunctie
+              ) {
+                tempGroep.functies.push(functie);
+              }
             });
-
+            state.groepEnfuncties.push(tempGroep);
+          }
         }
+      });
 
-        const functiesEnGroepen = () => {
-            state.groepEnfuncties = [];
+      state.functiesEnGroepenGeladen = true;
+      state.showFunctieToevoegen = false;
 
-            store.getters.groepen.forEach(groep => {
-                if (rechtenService.hasPermission('functies.' + groep.groepsnummer)) {
-                    if ((!state.groepsnummer) || (state.groepsnummer == groep.groepsnummer)) {
-                        state.geselecteerdeFuncties[groep.groepsnummer] = [];
-                        let tempGroep = groep;
-                        tempGroep.functies = [];
-                        store.getters.functies.forEach(functie => {
-                            let bestaandeFunctie = false;
-                            if (state.huidigLid && state.huidigLid.functies) {
-                                state.huidigLid.functies.forEach(lidFunctie => {
-                                    if (lidFunctie.groep === groep.groepsnummer && lidFunctie.functie === functie.id && !lidFunctie.einde) {
-                                        bestaandeFunctie = true;
-                                    }
-                                })
-                            }
-                            if (functie.groepen.indexOf(tempGroep.groepsnummer) !== -1 && !bestaandeFunctie) {
-                                tempGroep.functies.push(functie);
-                            }
-                        });
-                        state.groepEnfuncties.push(tempGroep);
-                    }
-                }
-            });
+      state.groepEnfuncties.forEach((groep) => {
+        state.showFunctieToevoegen |= rechtenService.hasPermission(
+          "functies." + groep.groepsnummer
+        );
+      });
+    };
 
-            state.functiesEnGroepenGeladen = true;
-            state.showFunctieToevoegen = false;
+    const groepsNaam = (index) => {
+      let groep = store.getters.groepen[index];
+      if (groep) {
+        return groep.naam + " - " + groep.groepsnummer;
+      }
+    };
 
-            state.groepEnfuncties.forEach(groep => {
-                state.showFunctieToevoegen |= rechtenService.hasPermission('functies.' + groep.groepsnummer);
-            });
-        }
+    const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
+      state.changes = true;
 
-        const groepsNaam = (index) => {
-            let groep = store.getters.groepen[index];
-            if (groep) {
-                return groep.naam + " - " + groep.groepsnummer;
-            }
-        }
+      let functieInstantie = {};
+      functieInstantie.functie = functie.id;
+      functieInstantie.groep = groepsnummer;
+      functieInstantie.begin = new Date(); // set static date
+      functieInstantie.temp = "tijdelijk";
 
-        const voegToeOfVerwijderFunctie = (functie, groepsnummer) => {
-            state.changes = true;
+      let bestaandeFunctie = false;
 
-            let functieInstantie = {};
-            functieInstantie.functie = functie.id;
-            functieInstantie.groep = groepsnummer;
-            functieInstantie.begin = new Date(); // set static date
-            functieInstantie.temp = "tijdelijk";
+      if (!bestaandeFunctie) {
+        context.emit("voegFunctieToe", {
+          functie: functieInstantie,
+          groepsnummer: groepsnummer,
+        });
+      }
+    };
 
-            let bestaandeFunctie = false;
+    onMounted(() => {
+      if (store.getters.goedTeKeurenLid) {
+        state.lid = store.getters.goedTeKeurenLid;
+        state.groepsnummer = store.getters.goedTeKeurenLid.groepsnummer;
+      } else if (
+        store.getters.broerZusLid &&
+        Object.keys(store.getters.broerZusLid).length !== 0
+      ) {
+        state.lid = store.getters.broerZusLid;
+        state.groepsnummer = store.getters.broerZusLid.groepsnummer;
+      }
+      functiesEnGroepen();
+    });
 
-            if (!bestaandeFunctie) {
-                context.emit('voegFunctieToe', { 'functie': functieInstantie, 'groepsnummer': groepsnummer });
-            }
-        }
-
-        onMounted(() => {
-            if (store.getters.goedTeKeurenLid) {
-                state.lid = store.getters.goedTeKeurenLid;
-                state.groepsnummer = store.getters.goedTeKeurenLid.groepsnummer;
-            } else if (store.getters.broerZusLid && Object.keys(store.getters.broerZusLid).length !== 0) {
-                state.lid = store.getters.broerZusLid;
-                state.groepsnummer = store.getters.broerZusLid.groepsnummer;
-            }
-            functiesEnGroepen()
-        })
-
-        return {
-            state,
-            gesorteerdeFuncties,
-            groepsNaam,
-            voegToeOfVerwijderFunctie,
-            functiesEnGroepen
-        }
-
-    }
-
-}
+    return {
+      state,
+      gesorteerdeFuncties,
+      groepsNaam,
+      voegToeOfVerwijderFunctie,
+      functiesEnGroepen,
+    };
+  },
+};

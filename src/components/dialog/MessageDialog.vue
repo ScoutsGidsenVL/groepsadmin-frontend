@@ -10,8 +10,9 @@
       <span v-html="message"></span>
       <div v-if="leden?.length > 0">
         <div v-for="(lid, index) in leden" :key="index">
-          <router-link :to="{ name:'Lid', params: { id: lid.id }}">
-            {{ lid.voornaam }} {{ lid.achternaam }} - {{ formatteerDatum(lid.geboortedatum) }}
+          <router-link :to="{ name: 'Lid', params: { id: lid.id } }">
+            {{ lid.voornaam }} {{ lid.achternaam }} -
+            {{ formatteerDatum(lid.geboortedatum) }}
           </router-link>
         </div>
       </div>
@@ -22,7 +23,6 @@
         icon="pi pi-check"
         @click="sluiten"
         class="p-button-text approve-button"
-
       />
     </template>
   </Dialog>
@@ -38,11 +38,11 @@ export default {
       type: String,
     },
     leden: {
-      type: Array
+      type: Array,
     },
     header: {
       type: String,
-      default: "Opgelet"
+      default: "Opgelet",
     },
     dialogVisible: {
       type: Boolean,

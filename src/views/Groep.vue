@@ -1,20 +1,25 @@
 <template>
   <div>
-    <SideMenu/>
-    <ConfirmDialog/>
-    <toast position="bottom-right"/>
+    <SideMenu />
+    <ConfirmDialog />
+    <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
     <div class="container-fluid md:w-90">
       <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6"/>
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6"
+        />
       </div>
-      <Loader
-        :showLoader="laden"
-      ></Loader>
+      <Loader :showLoader="laden"></Loader>
       <div>
         <div class="lg:ml-2">
           <div class="row bovenbalk mt-7 mb-4 lg:ml-8">
-            <div class="col-12 col-lg-6 col-xl-4 groep-select" v-if="!groepenLaden">
+            <div
+              class="col-12 col-lg-6 col-xl-4 groep-select"
+              v-if="!groepenLaden"
+            >
               <BaseDropdown
                 :options="groepenArray"
                 :model-value="selectedGroep"
@@ -25,17 +30,26 @@
               class="col-12 col-lg-6 col-xl-4 d-flex justify-content-start"
               v-if="groepenLaden"
             >
-              <span class="mt-1">Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i></span>
+              <span class="mt-1"
+                >Groepen laden &nbsp;<i class="fas fa-spinner fa-spin"></i
+              ></span>
             </div>
             <div class="col-auto ms-auto d-flex align-items-center">
-              <opslaan-met-tekst @opslaan="opslaan" v-if="kanGroepWijzigen" :changes="changes"></opslaan-met-tekst>
+              <opslaan-met-tekst
+                @opslaan="opslaan"
+                v-if="kanGroepWijzigen"
+                :changes="changes"
+              ></opslaan-met-tekst>
             </div>
           </div>
           <form @submit.prevent="opslaan" autocomplete="off">
             <div class="row lg:ml-8">
               <div class="col-12 col-lg-6 col-xl-4">
                 <Algemeen v-model="selectedGroep"></Algemeen>
-                <groepseigen-functies v-model="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></groepseigen-functies>
+                <groepseigen-functies
+                  v-model="selectedGroep"
+                  :kan-groep-wijzigen="kanGroepWijzigen"
+                ></groepseigen-functies>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
                 <Contacten
@@ -50,8 +64,14 @@
                 ></Erkenningsinstantie>
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
-                <Lokalen :groep="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></Lokalen>
-                <groepseigen-gegevens v-model="selectedGroep" :kan-groep-wijzigen="kanGroepWijzigen"></groepseigen-gegevens>
+                <Lokalen
+                  :groep="selectedGroep"
+                  :kan-groep-wijzigen="kanGroepWijzigen"
+                ></Lokalen>
+                <groepseigen-gegevens
+                  v-model="selectedGroep"
+                  :kan-groep-wijzigen="kanGroepWijzigen"
+                ></groepseigen-gegevens>
               </div>
             </div>
           </form>
@@ -59,7 +79,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>
@@ -76,7 +96,7 @@ import GroepseigenGegevens from "@/components/groep/GroepseigenGegevens";
 import Loader from "@/components/global/Loader";
 import Footer from "@/components/global/Footer";
 import GroepService from "@/services/groep/GroepService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import Erkenningsinstantie from "@/components/groep/Erkenningsinstantie.vue";
 
 export default {
@@ -94,7 +114,7 @@ export default {
     SideMenu,
     IngelogdLid,
     OpslaanMetTekst,
-    Loader
+    Loader,
   },
 
   setup() {
@@ -104,7 +124,7 @@ export default {
       changeLadenStatus,
       veranderGroep,
       kanGroepWijzigen,
-      groepenLaden
+      groepenLaden,
     } = GroepService.groepSpace();
 
     return {
@@ -113,10 +133,9 @@ export default {
       changeLadenStatus,
       veranderGroep,
       kanGroepWijzigen,
-      groepenLaden
-    }
-  }
-
+      groepenLaden,
+    };
+  },
 };
 </script>
 

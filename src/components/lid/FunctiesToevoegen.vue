@@ -6,42 +6,81 @@
           <span class="font18"> Functies toevoegen</span>
         </div>
         <div :class="laden ? 'functies-loader' : ''">
-          <Indicator :is-loading="laden" :full-page="false" :height=55 :width=55></Indicator>
+          <Indicator
+            :is-loading="laden"
+            :full-page="false"
+            :height="55"
+            :width="55"
+          ></Indicator>
         </div>
       </template>
-      <template #content><accordion :multiple="true" v-model:activeIndex="activeIndex">
-          <accordionTab v-for="(groep, index) in groepEnfuncties" :key="index"
-                        :header="groep.naam + ' - ' + groep.groepsnummer">
-            <div class="row" v-if="gesorteerdeFuncties(groep.functies, 'verbond')">
-              <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'verbond')" :key="index"
-                   class="col-md-6 flex justify-content-start">
+      <template #content
+        ><accordion :multiple="true" v-model:activeIndex="activeIndex">
+          <accordionTab
+            v-for="(groep, index) in groepEnfuncties"
+            :key="index"
+            :header="groep.naam + ' - ' + groep.groepsnummer"
+          >
+            <div
+              class="row"
+              v-if="gesorteerdeFuncties(groep.functies, 'verbond')"
+            >
+              <div
+                v-for="(functie, index) in gesorteerdeFuncties(
+                  groep.functies,
+                  'verbond'
+                )"
+                :key="index"
+                class="col-md-6 flex justify-content-start"
+              >
                 <checkbox
                   v-model="geselecteerdeFuncties[groep.groepsnummer]"
-                  @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                  @change="
+                    voegToeOfVerwijderFunctie(functie, groep.groepsnummer)
+                  "
                   :value="functie.beschrijving"
                   :input-id="functie.beschrijving"
                 ></checkbox>
-                <label class="small-text ml-2" :for="functie.beschrijving">{{functie.beschrijving}}</label>
+                <label class="small-text ml-2" :for="functie.beschrijving">{{
+                  functie.beschrijving
+                }}</label>
               </div>
             </div>
             <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length > 0">
               <div class="border mt-3 mb-2"></div>
               <label class="mb-2"><strong>Groepseigen functies</strong></label>
               <div class="row">
-                <div v-for="(functie, index) in gesorteerdeFuncties(groep.functies, 'groep')" :key="index"
-                     class="col-md-6 flex justify-content-start">
+                <div
+                  v-for="(functie, index) in gesorteerdeFuncties(
+                    groep.functies,
+                    'groep'
+                  )"
+                  :key="index"
+                  class="col-md-6 flex justify-content-start"
+                >
                   <checkbox
                     v-model="geselecteerdeFuncties[groep.groepsnummer]"
-                    @change="voegToeOfVerwijderFunctie(functie, groep.groepsnummer)"
+                    @change="
+                      voegToeOfVerwijderFunctie(functie, groep.groepsnummer)
+                    "
                     :value="functie.beschrijving"
                     :input-id="functie.beschrijving"
                   ></checkbox>
-                  <label class="small-text ml-2" :for="functie.beschrijving">{{functie.beschrijving}}</label>
+                  <label class="small-text ml-2" :for="functie.beschrijving">{{
+                    functie.beschrijving
+                  }}</label>
                 </div>
               </div>
             </div>
-            <div v-if="gesorteerdeFuncties(groep.functies, 'groep').length === 0 && gesorteerdeFuncties(groep.functies, 'verbond').length === 0">
-              <label class="mb-2"><strong>Geen functies beschikbaar</strong></label>
+            <div
+              v-if="
+                gesorteerdeFuncties(groep.functies, 'groep').length === 0 &&
+                gesorteerdeFuncties(groep.functies, 'verbond').length === 0
+              "
+            >
+              <label class="mb-2"
+                ><strong>Geen functies beschikbaar</strong></label
+              >
             </div>
           </accordionTab>
         </accordion>
@@ -52,26 +91,26 @@
 
 <script>
 import FunctieToevoegenService from "@/services/functies/FunctieToevoegenService";
-import {computed, toRefs} from "@vue/reactivity";
+import { computed, toRefs } from "@vue/reactivity";
 
 export default {
   name: "FunctiesToevoegen",
 
   props: {
     modelValue: {
-      type: Object
+      type: Object,
     },
     nieuwLid: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(props, context) {
     const {
       state,
       gesorteerdeFuncties,
       groepsNaam,
-      voegToeOfVerwijderFunctie
+      voegToeOfVerwijderFunctie,
     } = FunctieToevoegenService.functieToevoegenSpace(props, context);
 
     const activeIndex = computed(() =>
@@ -83,12 +122,10 @@ export default {
       activeIndex,
       gesorteerdeFuncties,
       groepsNaam,
-      voegToeOfVerwijderFunctie
-    }
-  }
-}
+      voegToeOfVerwijderFunctie,
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

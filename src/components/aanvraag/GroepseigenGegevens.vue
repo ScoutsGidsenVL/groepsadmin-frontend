@@ -7,15 +7,15 @@
         </div>
       </template>
       <template #content>
-          <div v-for="(geg, index) in gegVelden" :key="index" class="ml-2">
-            <dynamisch-veld
-              :veld="gegVelden[index]"
-              :model-value="gegVelden[index]"
-              :groepIndex="index"
-              @changeValue="changeValue"
-              class="groepseigengegevens"
-            ></dynamisch-veld>
-          </div>
+        <div v-for="(geg, index) in gegVelden" :key="index" class="ml-2">
+          <dynamisch-veld
+            :veld="gegVelden[index]"
+            :model-value="gegVelden[index]"
+            :groepIndex="index"
+            @changeValue="changeValue"
+            class="groepseigengegevens"
+          ></dynamisch-veld>
+        </div>
       </template>
     </card>
   </div>
@@ -31,19 +31,20 @@ export default {
   },
   data() {
     return {
-      gegevens: {}
-    }
+      gegevens: {},
+    };
   },
   props: {
     title: {
       type: String,
     },
     modelValue: {
-      type: Object, Array
+      type: Object,
+      Array,
     },
     groepsnummer: {
-      type: String
-    }
+      type: String,
+    },
   },
   computed: {
     gegVelden() {
@@ -56,9 +57,9 @@ export default {
 
   methods: {
     changeValue(veld, waarde) {
-      this.gegVelden.forEach(geig => {
-        if(geig.id == veld) geig.waarde = waarde;
-      })
+      this.gegVelden.forEach((geig) => {
+        if (geig.id == veld) geig.waarde = waarde;
+      });
     },
   },
 };

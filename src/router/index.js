@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory,} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import Ledenlijst from "@/views/Ledenlijst";
 import Ledenaantallen from "@/views/Ledenaantallen";
@@ -16,159 +16,161 @@ import Activiteiten from "@/views/Activiteiten.vue";
 import Aanwezigheden from "@/views/Aanwezigheden.vue";
 
 const routes = [
-    {
-        path: "/dashboard",
-        name: "Dashboard",
-        component: Dashboard,
-        meta: {
-            requiresAuth: false
-        }
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: {
+      requiresAuth: false,
     },
-    {
-        path: "/email/ledenlijst",
-        name: "Mail",
-        component: Mail,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "ledenlijst"
-        }
+  },
+  {
+    path: "/email/ledenlijst",
+    name: "Mail",
+    component: Mail,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "ledenlijst",
     },
-    {
-        path: "/etiketten",
-        name: "Etiket",
-        component: Etiketten,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "ledenlijst"
-        }
+  },
+  {
+    path: "/etiketten",
+    name: "Etiket",
+    component: Etiketten,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "ledenlijst",
     },
-    {
-        path: "/ledenlijst",
-        name: "Ledenlijst",
-        component: Ledenlijst,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "ledenlijst"
-        }
+  },
+  {
+    path: "/ledenlijst",
+    name: "Ledenlijst",
+    component: Ledenlijst,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "ledenlijst",
     },
-    {
-        path: "/ledenaantallen",
-        name: "Ledenaantallen",
-        component: Ledenaantallen,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "groepen"
-        }
+  },
+  {
+    path: "/ledenaantallen",
+    name: "Ledenaantallen",
+    component: Ledenaantallen,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "groepen",
     },
-    {
-        path: "/groepsinstellingen",
-        name: "Groepsinstellingen",
-        component: Groep,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "groepen"
-        }
+  },
+  {
+    path: "/groepsinstellingen",
+    name: "Groepsinstellingen",
+    component: Groep,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "groepen",
     },
-    {
-        path: "/aanvragen",
-        name: "Aanvragen",
-        component: Aanvragen,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "aanvragen"
-
-        }
+  },
+  {
+    path: "/aanvragen",
+    name: "Aanvragen",
+    component: Aanvragen,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "aanvragen",
     },
-    {
-        path: "/activiteiten",
-        name: "Activiteiten",
-        component: Activiteiten,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "ledenlijst"
-
-        }
+  },
+  {
+    path: "/activiteiten",
+    name: "Activiteiten",
+    component: Activiteiten,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "ledenlijst",
     },
-    {
-        path: "/aanwezigheden/:activiteit",
-        name: "Aanwezigheden",
-        component: Aanwezigheden,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "ledenlijst"
-
-        }
+  },
+  {
+    path: "/aanwezigheden/:activiteit",
+    name: "Aanwezigheden",
+    component: Aanwezigheden,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "ledenlijst",
     },
-    {
-        path: "/lid/toevoegen",
-        name: "lidToevoegen",
-        component: LidToevoegen,
-        meta: {
-            requiresAuth: true,
-            hasAccessTo: "nieuw lid"
-        }
+  },
+  {
+    path: "/lid/toevoegen",
+    name: "lidToevoegen",
+    component: LidToevoegen,
+    meta: {
+      requiresAuth: true,
+      hasAccessTo: "nieuw lid",
     },
-    {
-        path: "/lid/:id",
-        name: "Lid",
-        component: Lid,
-        meta: {
-            requiresAuth: false
-        }
+  },
+  {
+    path: "/lid/:id",
+    name: "Lid",
+    component: Lid,
+    meta: {
+      requiresAuth: false,
     },
-    {
-        path: "/formulier/lidworden/:groep",
-        name: "LidWorden",
-        component: InschrijvingsFormulier,
-        meta: {
-            requiresAuth: false
-        }
+  },
+  {
+    path: "/formulier/lidworden/:groep",
+    name: "LidWorden",
+    component: InschrijvingsFormulier,
+    meta: {
+      requiresAuth: false,
     },
-    {
-        path: "/formulier/lidworden/:groep/verstuurd",
-        name: "LidWordenVerstuurd",
-        component: InschrijvingsFormulierVerstuurd,
-        meta: {
-            requiresAuth: false
-        }
+  },
+  {
+    path: "/formulier/lidworden/:groep/verstuurd",
+    name: "LidWordenVerstuurd",
+    component: InschrijvingsFormulierVerstuurd,
+    meta: {
+      requiresAuth: false,
     },
-    {
-        path: "/",
-        redirect: {
-            name: "Dashboard",
-        },
+  },
+  {
+    path: "/",
+    redirect: {
+      name: "Dashboard",
     },
-    {
-        path: "/lid/individuelesteekkaart/:id",
-        name: "IndividueleSteekkaart",
-        component: IndividueleSteekkaart,
-        meta: {
-            requiresAuth: false
-        }
-    }
+  },
+  {
+    path: "/lid/individuelesteekkaart/:id",
+    name: "IndividueleSteekkaart",
+    component: IndividueleSteekkaart,
+    meta: {
+      requiresAuth: false,
+    },
+  },
 ];
 
 const router = createRouter({
-    history: createWebHistory("/groepsadmin/frontend/"),
-    routes,
-
+  history: createWebHistory("/groepsadmin/frontend/"),
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-    // Als gebruiker geen toegang heeft dan redirecten naar dashboard
-    if (to.meta.requiresAuth) {
-        if (to.meta.hasAccessTo === 'groepen' && rechtenService.hasAccessToGroepen()) {
-            next();
-        } else if (to.meta.hasAccessTo !== 'groepen' && rechtenService.hasAccess(to.meta.hasAccessTo)) {
-            next();
-        } else {
-            next({
-                name: "Dashboard",
-            })
-        }
+  // Als gebruiker geen toegang heeft dan redirecten naar dashboard
+  if (to.meta.requiresAuth) {
+    if (
+      to.meta.hasAccessTo === "groepen" &&
+      rechtenService.hasAccessToGroepen()
+    ) {
+      next();
+    } else if (
+      to.meta.hasAccessTo !== "groepen" &&
+      rechtenService.hasAccess(to.meta.hasAccessTo)
+    ) {
+      next();
     } else {
-        next()
+      next({
+        name: "Dashboard",
+      });
     }
-})
+  } else {
+    next();
+  }
+});
 
 export default router;

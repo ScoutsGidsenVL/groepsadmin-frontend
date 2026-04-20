@@ -36,7 +36,7 @@ export default {
     },
     header: {
       type: String,
-      default: "Bevestigen"
+      default: "Bevestigen",
     },
     dialogVisible: {
       type: Boolean,

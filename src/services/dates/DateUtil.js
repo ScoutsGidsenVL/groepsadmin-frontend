@@ -20,6 +20,6 @@ export default {
   },
 
   formatteerDatumVoorApi(datum) {
-    return moment(String(datum)).format("YYYY-MM-DD")
-  }
+    return moment(String(datum)).format("YYYY-MM-DD");
+  },
 };

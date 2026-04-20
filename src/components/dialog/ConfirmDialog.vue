@@ -15,7 +15,6 @@
         icon="pi pi-times"
         @click="annuleer"
         class="p-button-text reject-button"
-
       />
       <Button
         label="Ja"
@@ -37,15 +36,15 @@ export default {
     },
     header: {
       type: String,
-      default: "Bevestigen"
+      default: "Bevestigen",
     },
     dialogVisible: {
       type: Boolean,
       default: false,
     },
     type: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     bevestig() {

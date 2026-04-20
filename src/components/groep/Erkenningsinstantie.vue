@@ -7,49 +7,50 @@
         </div>
       </template>
       <template #content>
-          <div class="p-fluid">
-            <div>
-              <p>
-                Dit is de instantie/overheid die jou erkend en subsidieert als jeugdbeweging.
-                Normaal gaat het om jouw lokale gemeentebestuur, bij twijfel kan je dit best
-                navragen via jouw jeugdraad/jeugdconsulent/...
-              </p>
-            </div>
-            <base-input
-              v-model="instantie.naam"
-              :disabled="!bewerkbaar"
-              label="Naam instantie"
-            ></base-input>
-            <gemeente-zoek-auto-complete
-              v-model="instantie.adres"
-              :disabled="!bewerkbaar"
-              label="Woonplaats"
-            />
-            <straat-zoek-auto-complete
-              v-model="instantie.adres"
-              :disabled="!bewerkbaar"
-              label="Straat"
-            />
-            <BaseInput
-              label="Nummer"
-              v-model="instantie.adres.nummer"
-              :disabled="!bewerkbaar"
-              type="text"
-              @keyup="capitalize()"
-            />
-            <BaseInput
-              label="Bus"
-              v-model="instantie.adres.bus"
-              :disabled="!bewerkbaar"
-              type="text"
-              @keyup="capitalize()"
-            />
-            <base-input
-              v-model="instantie.kbo"
-              :disabled="!bewerkbaar"
-              label="KBO (optioneel)"
-            ></base-input>
+        <div class="p-fluid">
+          <div>
+            <p>
+              Dit is de instantie/overheid die jou erkend en subsidieert als
+              jeugdbeweging. Normaal gaat het om jouw lokale gemeentebestuur,
+              bij twijfel kan je dit best navragen via jouw
+              jeugdraad/jeugdconsulent/...
+            </p>
           </div>
+          <base-input
+            v-model="instantie.naam"
+            :disabled="!bewerkbaar"
+            label="Naam instantie"
+          ></base-input>
+          <gemeente-zoek-auto-complete
+            v-model="instantie.adres"
+            :disabled="!bewerkbaar"
+            label="Woonplaats"
+          />
+          <straat-zoek-auto-complete
+            v-model="instantie.adres"
+            :disabled="!bewerkbaar"
+            label="Straat"
+          />
+          <BaseInput
+            label="Nummer"
+            v-model="instantie.adres.nummer"
+            :disabled="!bewerkbaar"
+            type="text"
+            @keyup="capitalize()"
+          />
+          <BaseInput
+            label="Bus"
+            v-model="instantie.adres.bus"
+            :disabled="!bewerkbaar"
+            type="text"
+            @keyup="capitalize()"
+          />
+          <base-input
+            v-model="instantie.kbo"
+            :disabled="!bewerkbaar"
+            label="KBO (optioneel)"
+          ></base-input>
+        </div>
       </template>
     </card>
   </div>
@@ -58,8 +59,8 @@
 <script>
 import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
-import {reactive, toRefs} from "@vue/reactivity";
-import {onUpdated} from "@vue/runtime-core";
+import { reactive, toRefs } from "@vue/reactivity";
+import { onUpdated } from "@vue/runtime-core";
 import BaseInput from "@/components/input/BaseInput";
 
 export default {
@@ -67,7 +68,7 @@ export default {
   components: {
     BaseInput,
     GemeenteZoekAutoComplete,
-    StraatZoekAutoComplete
+    StraatZoekAutoComplete,
   },
   props: {
     modelValue: {
@@ -76,14 +77,11 @@ export default {
     },
     bewerkbaar: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  mounted() {
-
-  },
+  mounted() {},
   setup(props) {
-
     const state = reactive({
       instantie: {
         naam: "",
@@ -94,14 +92,13 @@ export default {
           land: "BE",
           nummer: "",
           postcode: "",
-          straat: ""
-        }
-      }
+          straat: "",
+        },
+      },
     });
 
     onUpdated(() => {
-      if(props.modelValue)
-        state.instantie = props.modelValue;
+      if (props.modelValue) state.instantie = props.modelValue;
       else
         state.instantie = {
           naam: "",
@@ -112,8 +109,8 @@ export default {
             land: "BE",
             nummer: "",
             postcode: "",
-            straat: ""
-          }
+            straat: "",
+          },
         };
     });
 
@@ -124,13 +121,13 @@ export default {
       if (state.instantie.adres.nummer) {
         state.instantie.adres.nummer = state.instantie.adres.nummer.toUpperCase();
       }
-    }
+    };
 
     return {
       ...toRefs(state),
-      capitalize
+      capitalize,
     };
-  }
+  },
 };
 </script>
 

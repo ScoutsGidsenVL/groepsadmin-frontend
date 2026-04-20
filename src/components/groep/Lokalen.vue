@@ -1,17 +1,17 @@
 <template>
   <div class="lokalen-card mb-4">
-        <adressen
-          v-model="geselecteerdeGroep"
-          @showMarker="toonMarker"
-          :bewerkbaar="kanGroepWijzigen"
-          title="Lokalen"
-          class="mb-4"
-        ></adressen>
-        <google-maps
-          :groep="geselecteerdeGroep"
-          :zichtbareMarker="zichtbareMarker"
-          class="mt-3"
-        />
+    <adressen
+      v-model="geselecteerdeGroep"
+      @showMarker="toonMarker"
+      :bewerkbaar="kanGroepWijzigen"
+      title="Lokalen"
+      class="mb-4"
+    ></adressen>
+    <google-maps
+      :groep="geselecteerdeGroep"
+      :zichtbareMarker="zichtbareMarker"
+      class="mt-3"
+    />
   </div>
 </template>
 
@@ -19,7 +19,7 @@
 import GoogleMaps from "@/components/groep/GoogleMaps";
 import Adressen from "@/components/groep/Adressen";
 import LokalenService from "@/services/groep/LokalenService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "Lokalen",
@@ -32,8 +32,8 @@ export default {
       type: Object,
     },
     kanGroepWijzigen: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   setup(props) {
     const {
@@ -41,7 +41,7 @@ export default {
       toonMarker,
       geselecteerdeGroep,
       heeftToegang,
-      voegAdresToe
+      voegAdresToe,
     } = LokalenService.lokalenSpace(props);
 
     return {
@@ -49,9 +49,9 @@ export default {
       toonMarker,
       geselecteerdeGroep,
       heeftToegang,
-      voegAdresToe
-    }
-  }
+      voegAdresToe,
+    };
+  },
 };
 </script>
 

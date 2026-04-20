@@ -1,35 +1,42 @@
 <template>
   <div class="row md:mt-3 z999">
-    <ConfirmDialog/>
+    <ConfirmDialog />
     <div class="col-12">
       <div class="">
         <div class="row">
           <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-start">
-            <dropdown @change="veranderFilter"
-                      v-model="geselecteerdeFilter"
-                      :options="filters"
-                      option-label="label"
-                      option-group-label="label"
-                      scrollHeight="500px"
-                      input-class="filter-select"
-                      option-group-children="items"
-                      placeholder="Huidige filter"
-                      class="col-12">
+            <dropdown
+              @change="veranderFilter"
+              v-model="geselecteerdeFilter"
+              :options="filters"
+              option-label="label"
+              option-group-label="label"
+              scrollHeight="500px"
+              input-class="filter-select"
+              option-group-children="items"
+              placeholder="Huidige filter"
+              class="col-12"
+            >
               <template #optiongroup="slotProps">
                 <div class="flex align-items-center filter-item">
-                  <div><strong>{{ slotProps.option.label }}</strong></div>
+                  <div>
+                    <strong>{{ slotProps.option.label }}</strong>
+                  </div>
                 </div>
               </template>
             </dropdown>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6 col-xl-4 flex justify-content-start" v-if="filterOpslaanMode">
+            <div
+              class="col-12 col-md-6 col-xl-4 flex justify-content-start"
+              v-if="filterOpslaanMode"
+            >
               <AutoComplete
                 class="custom-input-styling p-0 col-12"
                 v-model="zoekTerm"
                 dense
                 field="label"
-                minLength=2
+                minLength="2"
                 :suggestions="geselecteerdeFilters"
                 @complete="zoekBestaandefilter"
                 @itemSelect="kiesFilter"
@@ -45,33 +52,61 @@
                 </template>
               </AutoComplete>
             </div>
-            <div class="col-12 col-md-6 col-xl-4 flex justify-content-start"
-                 v-if="(!geselecteerdeFilter || (geselecteerdeFilter && !geselecteerdeFilter.value.id)) && kanFilterDelen && filterOpslaanMode">
+            <div
+              class="col-12 col-md-6 col-xl-4 flex justify-content-start"
+              v-if="
+                (!geselecteerdeFilter ||
+                  (geselecteerdeFilter && !geselecteerdeFilter.value.id)) &&
+                kanFilterDelen &&
+                filterOpslaanMode
+              "
+            >
               <div class="flex align-items-end ml-1">
-                <checkbox :binary="true" id="label" class="mr-2 ml--05" v-model="filterDelen"/>
-                <label class="text-align-left" for="label">Delen met je leidingsploeg</label>
+                <checkbox
+                  :binary="true"
+                  id="label"
+                  class="mr-2 ml--05"
+                  v-model="filterDelen"
+                />
+                <label class="text-align-left" for="label"
+                  >Delen met je leidingsploeg</label
+                >
               </div>
             </div>
             <div class="md:col-offset-6 xl:col-offset-8"></div>
-            <div class="col-12 col-md-6 col-xl-4  flex justify-content-start">
-
-              <Opslaan title="Filter opslaan" @opslaan="filterOpslaan" v-if="filterOpslaanMode"
-                       class="col-6 col-md-6"
-                       :label="opslaanLabel"/>
-              <Button :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
-                      :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'"
-                      class="actie-button w-92 col-6"
-                      :class="filterOpslaanMode ? 'ml-1' : ''"
-                      @click="filterOpslaanMode = !filterOpslaanMode; zoekTerm = ''"/>
-              <Button v-if="geselecteerdeFilter && !filterOpslaanMode"
-                      label="Filter verwijderen"
-                      :icon="'fas fa-trash'" class="verwijder-knop ml-2 text-nowrap col-6"
-                      @click="filterVerwijderen"/>
-              <Button v-if="!filterOpslaanMode"
-                      label="Filter toepassen"
-                      :icon="'fas fa-check'" class="opslaan-knop ml-2 text-nowrap col-6"
-                      :disabled="!changes"
-                      @click="filterToepassen"/>
+            <div class="col-12 col-md-6 col-xl-4 flex justify-content-start">
+              <Opslaan
+                title="Filter opslaan"
+                @opslaan="filterOpslaan"
+                v-if="filterOpslaanMode"
+                class="col-6 col-md-6"
+                :label="opslaanLabel"
+              />
+              <Button
+                :label="filterOpslaanMode ? 'Annuleren' : 'Filter opslaan'"
+                :icon="filterOpslaanMode ? 'fas fa-ban' : 'fas fa-plus'"
+                class="actie-button w-92 col-6"
+                :class="filterOpslaanMode ? 'ml-1' : ''"
+                @click="
+                  filterOpslaanMode = !filterOpslaanMode;
+                  zoekTerm = '';
+                "
+              />
+              <Button
+                v-if="geselecteerdeFilter && !filterOpslaanMode"
+                label="Filter verwijderen"
+                :icon="'fas fa-trash'"
+                class="verwijder-knop ml-2 text-nowrap col-6"
+                @click="filterVerwijderen"
+              />
+              <Button
+                v-if="!filterOpslaanMode"
+                label="Filter toepassen"
+                :icon="'fas fa-check'"
+                class="opslaan-knop ml-2 text-nowrap col-6"
+                :disabled="!changes"
+                @click="filterToepassen"
+              />
             </div>
           </div>
         </div>
@@ -79,38 +114,82 @@
     </div>
   </div>
   <div class="row">
-    <criteria-select :criteria="inActivecriteria" @activateCriterium="selecteerCriterium"
-                     v-if="inActivecriteria.length > 0"/>
-    <div v-for="(criteria, index) in activeCriteria" :key="index" class="col-12 col-sm-6 col-lg-4 col-xl-3">
-      <BoolFilter :activeCriteria="activeCriteria" :criteria-key="criteria.criteriaKey"
-                  @deactivateCriterium="deactivateCriterium"
-                  v-if="criteria.criteriaKey === 'adresgeblokkeerd' || criteria.criteriaKey === 'verminderdLidgeld'
-                  || criteria.criteriaKey === 'emailgeblokkeerd'    || criteria.criteriaKey === 'emailleeg'
-                  || criteria.criteriaKey === 'geenLidkaart'        || criteria.criteriaKey === 'geweigerdLid'
-                  || criteria.criteriaKey === 'geenLidTenLaste'"/>
-      <OudLedenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'oudleden'" :value="criteria.value"
-                      @deactivateCriterium="deactivateCriterium"/>
-      <GeslachtSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geslacht'" :value="criteria.value"
-                      @deactivateCriterium="deactivateCriterium"
+    <criteria-select
+      :criteria="inActivecriteria"
+      @activateCriterium="selecteerCriterium"
+      v-if="inActivecriteria.length > 0"
+    />
+    <div
+      v-for="(criteria, index) in activeCriteria"
+      :key="index"
+      class="col-12 col-sm-6 col-lg-4 col-xl-3"
+    >
+      <BoolFilter
+        :activeCriteria="activeCriteria"
+        :criteria-key="criteria.criteriaKey"
+        @deactivateCriterium="deactivateCriterium"
+        v-if="
+          criteria.criteriaKey === 'adresgeblokkeerd' ||
+          criteria.criteriaKey === 'verminderdLidgeld' ||
+          criteria.criteriaKey === 'emailgeblokkeerd' ||
+          criteria.criteriaKey === 'emailleeg' ||
+          criteria.criteriaKey === 'geenLidkaart' ||
+          criteria.criteriaKey === 'geweigerdLid' ||
+          criteria.criteriaKey === 'geenLidTenLaste'
+        "
+      />
+      <OudLedenSelect
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'oudleden'"
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
+      />
+      <GeslachtSelect
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'geslacht'"
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
       ></GeslachtSelect>
-      <GroepenSelect :criteria="criteria" v-if="criteria.criteriaKey === 'groepen'"
-                     @deactivateCriterium="deactivateCriterium"/>
-      <RijksregisternummerSelect :criteria="criteria" v-if="criteria.criteriaKey === 'geenRijksregisternummer'"
-                     @deactivateCriterium="deactivateCriterium"/>
-      <leeftijd-select :criteria="criteria" v-if="criteria.criteriaKey === 'leeftijd'" :value="criteria.value"
-                       @deactivateCriterium="deactivateCriterium"/>
-      <functie-select :criteria="criteria"
-                      v-if="criteria.criteriaKey === 'functies' && (criteria.criteriaSubKey === 'verbonds' || criteria.criteriaSubKey === 'groepspecifiek')"
-                      :value="criteria.value"
-                      @deactivateCriterium="deactivateCriterium"
-                      @activeerAlleFuncties="activeerAlleFuncties"
-                      @deactiveerAlleFuncties="deactiveerAlleFuncties"/>
-      <groepseigen-gegevens-select :criteria="criteria" v-if="criteria.criteriaKey === 'groepseigen'"
-                                   :value="criteria.value"
-                                   @deactivateCriterium="deactivateCriterium"/>
-      <individuele-steekkaart-select :criteria="criteria" v-if="criteria.criteriaKey === 'individuelesteekkaart'"
-                                     :value="criteria.value"
-                                     @deactivateCriterium="deactivateCriterium"/>
+      <GroepenSelect
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'groepen'"
+        @deactivateCriterium="deactivateCriterium"
+      />
+      <RijksregisternummerSelect
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'geenRijksregisternummer'"
+        @deactivateCriterium="deactivateCriterium"
+      />
+      <leeftijd-select
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'leeftijd'"
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
+      />
+      <functie-select
+        :criteria="criteria"
+        v-if="
+          criteria.criteriaKey === 'functies' &&
+          (criteria.criteriaSubKey === 'verbonds' ||
+            criteria.criteriaSubKey === 'groepspecifiek')
+        "
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
+        @activeerAlleFuncties="activeerAlleFuncties"
+        @deactiveerAlleFuncties="deactiveerAlleFuncties"
+      />
+      <groepseigen-gegevens-select
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'groepseigen'"
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
+      />
+      <individuele-steekkaart-select
+        :criteria="criteria"
+        v-if="criteria.criteriaKey === 'individuelesteekkaart'"
+        :value="criteria.value"
+        @deactivateCriterium="deactivateCriterium"
+      />
     </div>
     <KolommenSelect
       :actieveKolommen="actieveKolommen"
@@ -138,8 +217,7 @@ import RijksregisternummerSelect from "@/components/filter/RijksregisternummerSe
 import AutoComplete from "primevue/autocomplete";
 import rechtenService from "@/services/rechten/rechtenService";
 import restService from "@/services/api/RestService";
-import ConfirmDialog from 'primevue/confirmdialog';
-
+import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "LedenlijstFilterblok",
@@ -157,28 +235,28 @@ export default {
     GroepseigenGegevensSelect,
     RijksregisternummerSelect,
     AutoComplete,
-    ConfirmDialog
+    ConfirmDialog,
   },
 
   props: {
     actieveKolommen: {
-      type: Array
+      type: Array,
     },
     nonActieveKolommen: {
-      type: Array
+      type: Array,
     },
     filters: {
-      type: Array
+      type: Array,
     },
     huidigeFilter: {
-      type: Object
+      type: Object,
     },
     activeCriteria: {
-      type: Array
+      type: Array,
     },
     criteria: {
-      type: Array
-    }
+      type: Array,
+    },
   },
 
   data() {
@@ -187,18 +265,18 @@ export default {
       bestaandeNaam: false,
       filterDelen: false,
       changes: false,
-      nieuweFilternaam: '',
-      zoekTerm: '',
+      nieuweFilternaam: "",
+      zoekTerm: "",
       geselecteerdeFilter: null,
       geselecteerdeFilters: [],
       geselecteerdeFilterNaam: "Huidige filter",
       inActivecriteria: [],
-    }
+    };
   },
 
   methods: {
     veranderFilter(event) {
-      this.$emit('veranderFilter', event.value.value);
+      this.$emit("veranderFilter", event.value.value);
     },
 
     filterOpslaan() {
@@ -206,35 +284,41 @@ export default {
         this.changes = false;
         this.filterOpslaanMode = false;
       }
-      return this.$emit('filterOpslaan', this.zoekTerm, this.filterDelen, (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? this.geselecteerdeFilter.value.id : null);
+      return this.$emit(
+        "filterOpslaan",
+        this.zoekTerm,
+        this.filterDelen,
+        this.geselecteerdeFilter && this.geselecteerdeFilter.value.id
+          ? this.geselecteerdeFilter.value.id
+          : null
+      );
     },
 
     selecteerCriterium(criterium) {
       this.filterOpslaanMode = false;
       this.changes = true;
-      this.$emit('activateCriterium', criterium);
+      this.$emit("activateCriterium", criterium);
       this.defineInactiveCriteria();
     },
 
     deactivateCriterium(criterium) {
       this.changes = true;
-      this.$emit('deactivateCriterium', criterium)
+      this.$emit("deactivateCriterium", criterium);
     },
 
     changeGegKeuzeCriterium(criterium) {
       this.changes = true;
-      this.$emit('changeGegKeuzeCriterium', criterium)
-
+      this.$emit("changeGegKeuzeCriterium", criterium);
     },
 
     setNonActieveKolom() {
       this.changes = true;
-      this.$emit('setNonActieveKolom');
+      this.$emit("setNonActieveKolom");
     },
 
     setActieveKolom() {
       this.changes = true;
-      this.$emit('setActieveKolom');
+      this.$emit("setActieveKolom");
     },
 
     kolomVolgordeVeranderd() {
@@ -243,15 +327,17 @@ export default {
 
     filterToepassen() {
       this.changes = false;
-      this.$emit('filterToepassen');
+      this.$emit("filterToepassen");
     },
 
     zoekBestaandefilter() {
       this.zoekTerm.trim();
       this.geselecteerdeFilters = [];
-      this.filters.forEach(filter => {
+      this.filters.forEach((filter) => {
         filter.items.forEach((item) => {
-          if (item.label.toLowerCase().indexOf(this.zoekTerm.toLowerCase()) > -1) {
+          if (
+            item.label.toLowerCase().indexOf(this.zoekTerm.toLowerCase()) > -1
+          ) {
             this.geselecteerdeFilters.push(item);
           }
         });
@@ -260,12 +346,12 @@ export default {
 
     activeerAlleFuncties(event) {
       this.changes = true;
-      this.$emit('activeerAlleFuncties', event);
+      this.$emit("activeerAlleFuncties", event);
     },
 
     deactiveerAlleFuncties(event) {
       this.changes = true;
-      this.$emit('deactiveerAlleFuncties', event);
+      this.$emit("deactiveerAlleFuncties", event);
     },
 
     clearSelectedFilter() {
@@ -283,11 +369,11 @@ export default {
     checkBestaandeFilter() {
       this.bestaandeNaam = false;
       this.filters.forEach((filter) => {
-        filter.items.forEach(item => {
+        filter.items.forEach((item) => {
           if (item.label === this.zoekTerm) {
             this.bestaandeNaam = true;
           }
-        })
+        });
       });
       if (!this.bestaandeNaam) {
         this.geselecteerdeFilter = null;
@@ -296,25 +382,25 @@ export default {
 
     kanFilterDelen() {
       setTimeout(() => {
-        return rechtenService.hasAccess("filter delen")
+        return rechtenService.hasAccess("filter delen");
       }, 2000);
     },
 
     selecteerFilter() {
       this.zoekTerm.trim();
       this.filters.forEach((filter) => {
-        filter.items.forEach(item => {
+        filter.items.forEach((item) => {
           if (item.label === this.zoekTerm) {
             this.geselecteerdeFilter = item;
           }
-        })
+        });
       });
     },
 
     defineInactiveCriteria() {
       if (this.criteria && this.criteria.arrCriteria) {
-        this.inActivecriteria = this.criteria.arrCriteria.filter(crit => {
-          return !crit.activated
+        this.inActivecriteria = this.criteria.arrCriteria.filter((crit) => {
+          return !crit.activated;
         });
       }
     },
@@ -322,16 +408,16 @@ export default {
     filterVerwijderen() {
       if (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) {
         this.$confirm.require({
-          message:
-            "Ben je zeker dat je deze filter wil verwijderen?",
+          message: "Ben je zeker dat je deze filter wil verwijderen?",
           header: "Filter verwijderen",
           icon: "pi pi-exclamation-triangle",
           accept: () => {
-            restService.verwijderFilter(this.geselecteerdeFilter.value.id)
-              .then(res => {
-                this.$emit("onLoading")
+            restService
+              .verwijderFilter(this.geselecteerdeFilter.value.id)
+              .then((res) => {
+                this.$emit("onLoading");
                 if (res.status === 204) {
-                  this.$emit("getHuidigeFilter")
+                  this.$emit("getHuidigeFilter");
                   this.$toast.add({
                     severity: "success",
                     summary: "Filter",
@@ -339,85 +425,72 @@ export default {
                     life: 3000,
                   });
                 }
-              }).finally(() => {
-              this.$emit("offLoading")
-            })
+              })
+              .finally(() => {
+                this.$emit("offLoading");
+              });
           },
           reject: () => {
             this.$confirm.close();
-          }
-        })
+          },
+        });
       }
-    }
+    },
   },
 
   created() {
-    this.emitter.on('deactivateCriterium', (event) => {
+    this.emitter.on("deactivateCriterium", (event) => {
       this.changes = true;
       this.deactivateCriterium(event.criteria);
-    })
-    this.emitter.on(
-      'activeerAlleFuncties', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeOudLidCriterium', () => {
-        this.changes = true;
-      })  
-    this.emitter.on(
-      'changeGeslachtCriterium', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'deactiveerAlleFuncties', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'activeerFunctie', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeGegKeuzeCriterium', (criterium) => {
-        this.changeGegKeuzeCriterium(criterium)
-        this.changes = true;
-      })
-    this.emitter.on(
-      'activeerAlleGroepFuncties', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'deactiveerAlleGroepFuncties', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'deactiveerGroepseigenGegeven', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeSteekkaartCriterium', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeLeeftijd', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeGroepCriterium', () => {
-        this.changes = true;
-      })
-    this.emitter.on(
-      'changeGeenRijksregisternummerCriterium', () => {
-        this.changes = true;
-      })       
-    this.emitter.on(
-      "activeerFunctie", () => {
-        this.changes = true;
-      })
+    });
+    this.emitter.on("activeerAlleFuncties", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeOudLidCriterium", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeGeslachtCriterium", () => {
+      this.changes = true;
+    });
+    this.emitter.on("deactiveerAlleFuncties", () => {
+      this.changes = true;
+    });
+    this.emitter.on("activeerFunctie", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeGegKeuzeCriterium", (criterium) => {
+      this.changeGegKeuzeCriterium(criterium);
+      this.changes = true;
+    });
+    this.emitter.on("activeerAlleGroepFuncties", () => {
+      this.changes = true;
+    });
+    this.emitter.on("deactiveerAlleGroepFuncties", () => {
+      this.changes = true;
+    });
+    this.emitter.on("deactiveerGroepseigenGegeven", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeSteekkaartCriterium", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeLeeftijd", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeGroepCriterium", () => {
+      this.changes = true;
+    });
+    this.emitter.on("changeGeenRijksregisternummerCriterium", () => {
+      this.changes = true;
+    });
+    this.emitter.on("activeerFunctie", () => {
+      this.changes = true;
+    });
 
     this.$watch(
       "criteria.arrCriteria",
       () => {
-        this.defineInactiveCriteria()
+        this.defineInactiveCriteria();
       },
       {
         immediate: true,
@@ -428,16 +501,16 @@ export default {
   computed: {
     inActiveCriteriaComputed: {
       get() {
-        return this.inActivecriteria
+        return this.inActivecriteria;
       },
     },
     opslaanLabel() {
-      return (this.geselecteerdeFilter && this.geselecteerdeFilter.value.id) ? 'Overschrijven' : 'Opslaan';
-    }
+      return this.geselecteerdeFilter && this.geselecteerdeFilter.value.id
+        ? "Overschrijven"
+        : "Opslaan";
+    },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

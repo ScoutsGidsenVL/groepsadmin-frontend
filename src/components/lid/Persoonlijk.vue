@@ -9,9 +9,7 @@
     />
     <card>
       <template #title>
-        <span class="font22">
-          Persoonlijk
-        </span>
+        <span class="font22"> Persoonlijk </span>
       </template>
       <template #content>
         <div class="p-fluid mt-2">
@@ -21,7 +19,10 @@
             type="text"
             @blur="checkBestaandLid"
             :disabled="!hasPermission('vgagegevens') && !nieuwLid"
-            :invalid="v.lid.vgagegevens.voornaam.$dirty && v.lid.vgagegevens.voornaam.$invalid"
+            :invalid="
+              v.lid.vgagegevens.voornaam.$dirty &&
+              v.lid.vgagegevens.voornaam.$invalid
+            "
             :error-message="v.lid.vgagegevens.voornaam.required.$message"
           />
           <BaseInput
@@ -30,15 +31,21 @@
             type="text"
             @blur="checkBestaandLid"
             :disabled="!hasPermission('vgagegevens') && !nieuwLid"
-            :invalid="v.lid.vgagegevens.achternaam.$dirty && v.lid.vgagegevens.achternaam.$invalid"
+            :invalid="
+              v.lid.vgagegevens.achternaam.$dirty &&
+              v.lid.vgagegevens.achternaam.$invalid
+            "
             :error-message="v.lid.vgagegevens.achternaam.required.$message"
           />
           <date-picker
             v-model="lid.vgagegevens.geboortedatum"
             label="Geboortedatum"
-            :disabled="!hasPermission('vgagegevens')  && !nieuwLid"
+            :disabled="!hasPermission('vgagegevens') && !nieuwLid"
             :error-message="v.lid.vgagegevens.geboortedatum.required.$message"
-            :invalid="v.lid.vgagegevens.geboortedatum.$dirty && v.lid.vgagegevens.geboortedatum.$invalid"
+            :invalid="
+              v.lid.vgagegevens.geboortedatum.$dirty &&
+              v.lid.vgagegevens.geboortedatum.$invalid
+            "
           />
           <BaseInput
             v-model="lid.persoonsgegevens.rijksregisternummer"
@@ -65,10 +72,10 @@
             v-model="lid.persoonsgegevens.geslacht"
             :options="geslacht"
             label="Gender"
-            :disabled="!hasPermission('persoonsgegevens')  && !nieuwLid"
+            :disabled="!hasPermission('persoonsgegevens') && !nieuwLid"
           />
           <BaseCheckbox
-            :disabled="!hasPermission('vgagegevens')  && !nieuwLid"
+            :disabled="!hasPermission('vgagegevens') && !nieuwLid"
             type="checkbox"
             v-model="lid.vgagegevens.beperking"
             label="Persoon met beperking"
@@ -77,7 +84,9 @@
           ></BaseCheckbox>
           <BaseCheckbox
             v-if="!nieuwLid"
-            :disabled="!hasPermission('vgagegevens') && !nieuwLid && !eigenProfiel"
+            :disabled="
+              !hasPermission('vgagegevens') && !nieuwLid && !eigenProfiel
+            "
             type="checkbox"
             v-model="lid.vgagegevens.verhoogdekinderbijslag"
             label="Verhoogde kinderbijslag"
@@ -108,7 +117,10 @@
             v-model="v.lid.persoonsgegevens.gsm.$model"
             label="GSM"
             type="text"
-            :invalid="v.lid.persoonsgegevens.gsm.$dirty && v.lid.persoonsgegevens.gsm.$invalid"
+            :invalid="
+              v.lid.persoonsgegevens.gsm.$dirty &&
+              v.lid.persoonsgegevens.gsm.$invalid
+            "
             error-message="Geen geldig gsm nummer"
             @changeValue="formatNumber"
           ></BaseInputTelefoon>
@@ -117,7 +129,10 @@
             v-model="v.lid.persoonsgegevens.rekeningnummer.$model"
             label="Rekeningnummer"
             type="text"
-            :invalid="v.lid.persoonsgegevens.rekeningnummer.$dirty && v.lid.persoonsgegevens.rekeningnummer.$invalid"
+            :invalid="
+              v.lid.persoonsgegevens.rekeningnummer.$dirty &&
+              v.lid.persoonsgegevens.rekeningnummer.$invalid
+            "
             error-message="Geen geldig rekeningnummer"
           ></BaseInput>
           <!--<BaseCheckbox
@@ -153,29 +168,29 @@ import DatePicker from "@/components/input/DatePicker";
 import BaseDropDown from "@/components/input/BaseDropdown";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import {reactive, toRefs} from "@vue/reactivity";
-import {useVuelidate} from '@vuelidate/core'
-import {email, helpers, required} from '@vuelidate/validators'
+import { reactive, toRefs } from "@vue/reactivity";
+import { useVuelidate } from "@vuelidate/core";
+import { email, helpers, required } from "@vuelidate/validators";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
-import {onUpdated} from "@vue/runtime-core";
+import { onUpdated } from "@vue/runtime-core";
 import DateUtil from "@/services/dates/DateUtil";
 import restService from "@/services/api/RestService";
 import MessageDialog from "@/components/dialog/MessageDialog.vue";
 
-const ibantools = require('ibantools');
+const ibantools = require("ibantools");
 const isGeldigRekeningnummer = (value) => {
   if (!value || value.isEmpty) {
     return true;
   }
-  let trimmedValue = value.replace(/\s+/g, '');
-  if (trimmedValue && trimmedValue.length === 0 || !value) {
+  let trimmedValue = value.replace(/\s+/g, "");
+  if ((trimmedValue && trimmedValue.length === 0) || !value) {
     return true;
   }
   return ibantools.isValidIBAN(trimmedValue);
-}
+};
 
 const isGeldigGsmNummer = (value) => {
   if (value && !value.isEmpty) {
@@ -184,11 +199,19 @@ const isGeldigGsmNummer = (value) => {
   } else {
     return true;
   }
-}
+};
 
 export default {
   name: "Persoonlijk",
-  components: {MessageDialog, DatePicker, BaseInput, BaseCheckbox, BaseDropDown, BaseInputTelefoon, BaseTextArea, },
+  components: {
+    MessageDialog,
+    DatePicker,
+    BaseInput,
+    BaseCheckbox,
+    BaseDropDown,
+    BaseInputTelefoon,
+    BaseTextArea,
+  },
   data() {
     return {
       messageDialog: false,
@@ -196,25 +219,28 @@ export default {
       messageDialogHeader: "",
       messageDialogLeden: [],
       geslacht: [
-        {label: "Mannelijk", value: "man"},
-        {label: "Vrouwelijk", value: "vrouw"},
-        {label: "Andere", value: "andere"},
+        { label: "Mannelijk", value: "man" },
+        { label: "Vrouwelijk", value: "vrouw" },
+        { label: "Andere", value: "andere" },
       ],
-      omschrijvingNieuwLid: "We willen ieder kind de kans geven om lid te worden van scouting. " +
+      omschrijvingNieuwLid:
+        "We willen ieder kind de kans geven om lid te worden van scouting. " +
         "Geld mag daarbij geen rol spelen. Voor wie het financieel wat moeilijker is, bestaat het verminderd lidgeld. " +
         "Je betaalt dan 11,6 euro lidgeld (en mogelijk een extra bijdrage voor de groep zelf). " +
         "Je kan het vakje hierboven aanvinken of hierover iemand van de leiding aanspreken. " +
         "We verzekeren jullie dat dit alles in het volste vertrouwen zal gebeuren. Voor meer info " +
         "<a href='https://www.scoutsengidsenvlaanderen.be/scouting-op-maat' target='_blank'>klik hier</a>.",
 
-      omschrijvingBestaandLid: "Leden zijn niet alleen maar lid van Scouts en Gidsen Vlaanderen vzw, maar gaan ook mee op weekend, kamp, ...<br> " +
+      omschrijvingBestaandLid:
+        "Leden zijn niet alleen maar lid van Scouts en Gidsen Vlaanderen vzw, maar gaan ook mee op weekend, kamp, ...<br> " +
         " Naast verminderd lidgeld, kan je daarom als groep ook beroep doen op 'Fonds op Maat': " +
         " hiermee kan je de deelnameprijs aan activiteiten voor leden en hun gezin verlagen.<br> " +
-        " Als je <a href=\"https://www.scoutsengidsenvlaanderen.be/aanvraagformulier-voor-fonds-op-maat\" target=\"_blank\">dit formulier</a> " +
+        ' Als je <a href="https://www.scoutsengidsenvlaanderen.be/aanvraagformulier-voor-fonds-op-maat" target="_blank">dit formulier</a> ' +
         " invult (let op: je moet ingelogd zijn op de website), " +
         " komt Scouts en Gidsen Vlaanderen vzw voor 1/3 tussen in de deelnameprijs.<br> " +
         " Het formulier vul je als (groeps)leiding in, de ouders hoeven niets te doen.",
-      uitleg: "Zoals bepaald door de <a href=\"https://fin.belgium.be/nl/particulieren/belastingvoordelen/kinderopvang/belastingvermindering\" target=\"_blank\">overheid</a>."
+      uitleg:
+        'Zoals bepaald door de <a href="https://fin.belgium.be/nl/particulieren/belastingvoordelen/kinderopvang/belastingvermindering" target="_blank">overheid</a>.',
     };
   },
   methods: {
@@ -223,7 +249,7 @@ export default {
     },
     hasPermission(type) {
       if (this.nieuwLid) {
-        return true
+        return true;
       }
       if (this.lid.vgagegevens.voornaam || this.lid.vgagegevens.achternaam) {
         return rechtenService.canBeShowed(this.lid, type);
@@ -233,24 +259,33 @@ export default {
     },
     checkBestaandLid() {
       if (this.lid.vgagegevens.voornaam && this.lid.vgagegevens.achternaam) {
-        restService.zoekGelijkaardig(this.lid.vgagegevens.voornaam, this.lid.vgagegevens.achternaam)
-          .then(res => {
+        restService
+          .zoekGelijkaardig(
+            this.lid.vgagegevens.voornaam,
+            this.lid.vgagegevens.achternaam
+          )
+          .then((res) => {
             const leden = res.data.leden.filter((lid) => lid.id != this.lid.id);
             if (leden.length > 0) {
               this.messageDialog = true;
-              this.messageDialogHeader = leden.length > 1 ? "Bestaande leden?" : "Bestaand lid?";
-              this.messageDialogMessage = "Er zijn leden gevonden met een gelijkaardige naam. Ga naar het juiste lid of sluit dit venster.</br>";
+              this.messageDialogHeader =
+                leden.length > 1 ? "Bestaande leden?" : "Bestaand lid?";
+              this.messageDialogMessage =
+                "Er zijn leden gevonden met een gelijkaardige naam. Ga naar het juiste lid of sluit dit venster.</br>";
               this.messageDialogLeden = leden;
             }
-          }).catch (error => {
+          })
+          .catch((error) => {
             console.log(error);
-        })
+          });
       }
-    }
+    },
   },
   computed: {
     omschrijving() {
-      return this.inschrijving ? this.omschrijvingNieuwLid : this.omschrijvingBestaandLid;
+      return this.inschrijving
+        ? this.omschrijvingNieuwLid
+        : this.omschrijvingBestaandLid;
     },
     formattedDate() {
       return DateUtil.formatGeboortedatum(this.lid.vgagegevens.geboortedatum);
@@ -263,71 +298,77 @@ export default {
       if (this.nieuwLid) {
         nietBewerkbaar = false;
       }
-      if (this.hasPermission('vgagegevens') && !this.lid.gebruikersnaam) {
+      if (this.hasPermission("vgagegevens") && !this.lid.gebruikersnaam) {
         nietBewerkbaar = false;
       }
       return nietBewerkbaar;
-    }
+    },
   },
   props: {
     modelValue: {
       type: Object,
     },
     eigenProfiel: {
-      type: Boolean
+      type: Boolean,
     },
     nieuwLid: {
       type: Boolean,
-      default: false
+      default: false,
     },
     inschrijving: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   setup(props) {
     const state = reactive({
-      lid: props.modelValue
+      lid: props.modelValue,
     });
 
     let rules = {
       lid: {
         email: {
-          email: helpers.withMessage('Geen geldig emailadres', email)
+          email: helpers.withMessage("Geen geldig emailadres", email),
         },
         persoonsgegevens: {
           gsm: {
-            isGeldigGsmNummer
+            isGeldigGsmNummer,
           },
           rekeningnummer: {
-            isGeldigRekeningnummer
+            isGeldigRekeningnummer,
           },
         },
         vgagegevens: {
           voornaam: {
-            required: helpers.withMessage('Voornaam is verplicht', required)
+            required: helpers.withMessage("Voornaam is verplicht", required),
           },
           achternaam: {
-            required: helpers.withMessage('Achternaam is verplicht', required)
+            required: helpers.withMessage("Achternaam is verplicht", required),
           },
           geboortedatum: {
-            required: helpers.withMessage('Geboortedatum is verplicht', required)
-          }
-        }
+            required: helpers.withMessage(
+              "Geboortedatum is verplicht",
+              required
+            ),
+          },
+        },
       },
-    }
-    
+    };
+
     // Verplicht voor lidaanvragen
     if (props.inschrijving) {
-        rules.lid.email.required = helpers.withMessage('E-mailadres is verplicht', required);
+      rules.lid.email.required = helpers.withMessage(
+        "E-mailadres is verplicht",
+        required
+      );
     }
 
     onUpdated(() => {
       state.lid = props.modelValue;
-    })
+    });
 
     const v = useVuelidate(rules, state);
-    return {...toRefs(state), v};
+    return { ...toRefs(state), v };
   },
 };
 </script>

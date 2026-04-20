@@ -1,5 +1,5 @@
 <template>
-  <div class="container ">
+  <div class="container">
     <div class="row">
       <div class="">
         <div class="col-xs-3 col-sm-3 col-md-1 image-box col-md-offset-3">
@@ -7,43 +7,40 @@
         </div>
         <div class="request-box col-xs-7 col-sm-9 col-md-6 message-box">
           <div class="request-title">
-            Je aanvraag om lid te worden van {{ groep ? groep.naam : '' }} <br/><br/>
+            Je aanvraag om lid te worden van {{ groep ? groep.naam : "" }}
+            <br /><br />
           </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="text-box col-xs-10 col-sm-12 col-md-7 col-md-offset-3">
-        <br/>
-        Beste {{voornaam}},<br/><br/>
-        Fijn dat je wil aansluiten bij Scouts en Gidsen Vlaanderen.<br/>
-        Je aanvraag om lid te worden is verzonden naar de verantwoordelijke.<br/>
+        <br />
+        Beste {{ voornaam }},<br /><br />
+        Fijn dat je wil aansluiten bij Scouts en Gidsen Vlaanderen.<br />
+        Je aanvraag om lid te worden is verzonden naar de verantwoordelijke.<br />
         Je zal een bericht ontvangen van de groep als je aanvraag verwerkt is.
-        <br/><br/>Met vriendelijke scouts- en gidsen groeten.<br/><br/>
+        <br /><br />Met vriendelijke scouts- en gidsen groeten.<br /><br />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import InschrijvingVerstuurdService from "@/services/inschrijvingsFormulier/InschrijvingVerstuurdService";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 
 export default {
   name: "InschrijvingsFormulier",
 
   setup() {
-    const {
-      state
-    } = InschrijvingVerstuurdService.inschrijvingVerstuurdSpace();
+    const { state } = InschrijvingVerstuurdService.inschrijvingVerstuurdSpace();
 
     return {
-      ...toRefs(state)
-    }
-  }
+      ...toRefs(state),
+    };
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

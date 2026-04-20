@@ -1,56 +1,102 @@
 <template>
   <div v-if="criteria && criteria.activated" v-click-outside="close">
-    <div class="col-12 type-select-button kolom-select cursor-pointer" @click="toggleMenu = !toggleMenu">
+    <div
+      class="col-12 type-select-button kolom-select cursor-pointer"
+      @click="toggleMenu = !toggleMenu"
+    >
       <div class="row mt--05">
-        <div class="col-10 ">
+        <div class="col-10">
           <div class="text-align-left d-flex">
             <div>
               <label class="cursor-pointer">{{ criteria.title }} </label>
             </div>
             <div class="row">
-              <label class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter">{{ label }}</label>
+              <label
+                class="subtitle cursor-pointer text-align-left criteria-label cut-off-text-filter"
+                >{{ label }}</label
+              >
             </div>
           </div>
         </div>
         <div class="col-2">
-          <verwijder-criteria :criteria="criteria"/>
+          <verwijder-criteria :criteria="criteria" />
         </div>
       </div>
     </div>
     <div
       class="position-absolute z999 bg-white col-11 col-sm-6 col-lg-3 col-xl-2 filter-border filter-height-select overflow-x-hidden"
-      v-if="toggleMenu">
+      v-if="toggleMenu"
+    >
       <div class="d-flex align-content-start pt-2">
         <checkbox
           :binary="true"
           id="label"
           class="mr-2"
           v-model="allesGeselecteerd"
-          @change="$event.stopPropagation();
-          activeerAlleFuncties()"
+          @change="
+            $event.stopPropagation();
+            activeerAlleFuncties();
+          "
         />
-        <label class="text-align-left" for="label">Selecteer alle functies</label>
+        <label class="text-align-left" for="label"
+          >Selecteer alle functies</label
+        >
       </div>
       <divider></divider>
-      <div v-for="(item, key) in criteria.itemgroups" :key="key" class="border-white border-solid border-1">
-        <div class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 cursor-pointer">
-          <checkbox :id="item.label" class="mr-2" v-model="selectedGroups" :value="item.label"
-                    @change="$event.stopPropagation();
-                    activeerAlleGroepFuncties(item.label)"/>
-          <label class="text-align-left vw90 cursor-pointer" @click="openSection(item.label)">{{ item.label }}</label>
-          <div class="full-width d-flex justify-content-center" @click="openSection(item.label)">
-            <i :class="opened(item.label) ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
-               class="text-white "
+      <div
+        v-for="(item, key) in criteria.itemgroups"
+        :key="key"
+        class="border-white border-solid border-1"
+      >
+        <div
+          class="d-flex align-content-start select-kolom-header pt-1 pb-1 pr-1 cursor-pointer"
+        >
+          <checkbox
+            :id="item.label"
+            class="mr-2"
+            v-model="selectedGroups"
+            :value="item.label"
+            @change="
+              $event.stopPropagation();
+              activeerAlleGroepFuncties(item.label);
+            "
+          />
+          <label
+            class="text-align-left vw90 cursor-pointer"
+            @click="openSection(item.label)"
+            >{{ item.label }}</label
+          >
+          <div
+            class="full-width d-flex justify-content-center"
+            @click="openSection(item.label)"
+          >
+            <i
+              :class="
+                opened(item.label) ? 'fas fa-chevron-up' : 'fas fa-chevron-down'
+              "
+              class="text-white"
             />
           </div>
         </div>
         <div v-show="opened(item.label)">
-          <div v-for="(functie, key2) in gesorteerdeFuncties(item.items)" :key="key2"
-               class="d-flex align-content-start mt-1 ml-1">
-            <checkbox :binary="true" :id="functie.label" class="mr-2 ml-1" v-model="functie.activated"
-                      @change="$event.stopPropagation();
-                      activeerFunctie(functie)"/>
-            <label class="text-align-left" :for="item.label">{{ functie.label }}</label>
+          <div
+            v-for="(functie, key2) in gesorteerdeFuncties(item.items)"
+            :key="key2"
+            class="d-flex align-content-start mt-1 ml-1"
+          >
+            <checkbox
+              :binary="true"
+              :id="functie.label"
+              class="mr-2 ml-1"
+              v-model="functie.activated"
+              @change="
+                $event.stopPropagation();
+                activeerFunctie(functie);
+              "
+            />
+            <label class="text-align-left" :for="item.label">{{
+              functie.label
+            }}</label>
           </div>
         </div>
       </div>
@@ -60,22 +106,22 @@
 
 <script>
 import VerwijderCriteria from "@/components/buttons/VerwijderCriteria";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import FunctieFilterService from "@/services/leden/FunctieFilterService";
 
 export default {
   name: "FunctieSelect",
   components: {
-    VerwijderCriteria
+    VerwijderCriteria,
   },
 
   props: {
     criteria: {
-      type: Array
+      type: Array,
     },
     criteriaKey: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   setup(props, context) {
@@ -89,7 +135,7 @@ export default {
       close,
       activeerFunctie,
       activeerAlleGroepFuncties,
-      activeerAlleFuncties
+      activeerAlleFuncties,
     } = FunctieFilterService.functieFilterSpace(props, context);
 
     return {
@@ -103,8 +149,8 @@ export default {
       close,
       activeerFunctie,
       activeerAlleGroepFuncties,
-      activeerAlleFuncties
-    }
+      activeerAlleFuncties,
+    };
   },
-}
+};
 </script>

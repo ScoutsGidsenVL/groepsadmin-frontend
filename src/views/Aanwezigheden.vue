@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SideMenu/>
+    <SideMenu />
     <confirmDialog
       :message="dialogMessage"
       :header="dialogHeader"
@@ -8,80 +8,110 @@
       @confirm="bevestigVerwijderen"
       @cancel="annuleerVerwijderen"
     />
-    <toast position="bottom-right"/>
+    <toast position="bottom-right" />
     <div>
       <ingelogd-lid></ingelogd-lid>
     </div>
-      <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-        <div class="hidden lg:block md:ml-8 w-25">
-          <Breadcrumb :home="home" :model="breadcrumbItems" class="ml-4 mt-4 md:ml-6 mb-8"/>
-        </div>
-        <Loader
-          :showLoader="isLoadingAanwezigheden"
-        ></Loader>
-        <div class="lg:ml-8">
-          <div class="lg:ml-6">
-            <label class="d-flex justify-content-start">Aanwezigheden bewerken</label>
-            <label class="d-flex justify-content-start text-gray-500">{{ activiteit.omschrijving }} </label>
-            <label class="d-flex justify-content-start text-gray-500">  {{ formatteerDatum(activiteit.van) }} - {{ formatteerDatum(activiteit.tot) }}</label>
-            <data-table
-              ref="ledenlijst"
-              :value="sorteerLeden"
-              v-model:selection="aanwezigeLeden"
-              dataKey="id"
-              :editMode="magActivteitBeheren ? 'cell' : 'none'"
-              @cell-edit-complete="bewerkCell"
-              rowGroupMode="subheader"
-              sortMode="single"
-              :sortOrder="1"
-              stripedRows
-              showGridlines
-              responsiveLayout="stack"
-              class="p-datatable-sm mt-4 aanwezighedenTabel"
+    <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
+      <div class="hidden lg:block md:ml-8 w-25">
+        <Breadcrumb
+          :home="home"
+          :model="breadcrumbItems"
+          class="ml-4 mt-4 md:ml-6 mb-8"
+        />
+      </div>
+      <Loader :showLoader="isLoadingAanwezigheden"></Loader>
+      <div class="lg:ml-8">
+        <div class="lg:ml-6">
+          <label class="d-flex justify-content-start"
+            >Aanwezigheden bewerken</label
+          >
+          <label class="d-flex justify-content-start text-gray-500"
+            >{{ activiteit.omschrijving }}
+          </label>
+          <label class="d-flex justify-content-start text-gray-500">
+            {{ formatteerDatum(activiteit.van) }} -
+            {{ formatteerDatum(activiteit.tot) }}</label
+          >
+          <data-table
+            ref="ledenlijst"
+            :value="sorteerLeden"
+            v-model:selection="aanwezigeLeden"
+            dataKey="id"
+            :editMode="magActivteitBeheren ? 'cell' : 'none'"
+            @cell-edit-complete="bewerkCell"
+            rowGroupMode="subheader"
+            sortMode="single"
+            :sortOrder="1"
+            stripedRows
+            showGridlines
+            responsiveLayout="stack"
+            class="p-datatable-sm mt-4 aanwezighedenTabel"
+          >
+            <column
+              v-for="col of columns"
+              :key="col.field"
+              :field="col.field"
+              :header="col.header"
+              style="width: 20%"
             >
-              <column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 20%">
-                <template #body="{ data, field }">
-                  {{ field === 'prijs' ? formatteerBedrag(data[field]) : data[field] }}
-                </template>
-                <template #editor="{ data, field }">
-                  <template v-if="field === 'aantaldagen'">
-                    <input-number v-model="data[field]" autofocus />
-                  </template>
-                  <template v-if="field === 'prijs'">
-                    <input-number v-model="data[field]" mode="currency" currency="EUR" locale="de-DE" autofocus />
-                  </template>
-                </template>
-              </column>
-              <column v-if="magActivteitBeheren" field="acties" header="Acties" style="width: 150px">
-                <template #body="slotProps">
-                  <div class="flex justify-content-between">
-                    <i class="fas fa-trash cursor-pointer" style="font-size: 1.5rem"
-                       title="Aanwezigheid verwijderen" @click="verwijderAanwezigheid(slotProps.data.id)"></i>
-                  </div>
-                </template>
-              </column>
-              <template #empty>
-                Geen leden gevonden.
+              <template #body="{ data, field }">
+                {{
+                  field === "prijs"
+                    ? formatteerBedrag(data[field])
+                    : data[field]
+                }}
               </template>
-            </data-table>
-          </div>
+              <template #editor="{ data, field }">
+                <template v-if="field === 'aantaldagen'">
+                  <input-number v-model="data[field]" autofocus />
+                </template>
+                <template v-if="field === 'prijs'">
+                  <input-number
+                    v-model="data[field]"
+                    mode="currency"
+                    currency="EUR"
+                    locale="de-DE"
+                    autofocus
+                  />
+                </template>
+              </template>
+            </column>
+            <column
+              v-if="magActivteitBeheren"
+              field="acties"
+              header="Acties"
+              style="width: 150px"
+            >
+              <template #body="slotProps">
+                <div class="flex justify-content-between">
+                  <i
+                    class="fas fa-trash cursor-pointer"
+                    style="font-size: 1.5rem"
+                    title="Aanwezigheid verwijderen"
+                    @click="verwijderAanwezigheid(slotProps.data.id)"
+                  ></i>
+                </div>
+              </template>
+            </column>
+            <template #empty> Geen leden gevonden. </template>
+          </data-table>
         </div>
       </div>
+    </div>
   </div>
-  <Footer/>
+  <Footer />
 </template>
-
 
 <script>
 import IngelogdLid from "@/components/lid/IngelogdLid.vue";
 import SideMenu from "@/components/global/Menu.vue";
 import Loader from "@/components/global/Loader.vue";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog.vue";
-import {toRefs} from "@vue/reactivity";
+import { toRefs } from "@vue/reactivity";
 import Footer from "@/components/global/Footer.vue";
 import AanwezighedenService from "@/services/aanwezigheden/AanwezighedenService";
 import InputNumber from "primevue/inputnumber";
-
 
 export default {
   name: "Aanwezigheden",
@@ -91,7 +121,7 @@ export default {
     ConfirmDialog,
     SideMenu,
     IngelogdLid,
-    InputNumber
+    InputNumber,
   },
 
   setup() {
@@ -103,7 +133,7 @@ export default {
       formatteerDatum,
       verwijderAanwezigheid,
       bevestigVerwijderen,
-      annuleerVerwijderen
+      annuleerVerwijderen,
     } = AanwezighedenService.aanwezighedenSpace();
 
     return {
@@ -114,13 +144,10 @@ export default {
       verwijderAanwezigheid,
       bevestigVerwijderen,
       annuleerVerwijderen,
-      ...toRefs(state)
-    }
-  }
-}
-
+      ...toRefs(state),
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
