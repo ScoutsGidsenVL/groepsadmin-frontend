@@ -12,14 +12,7 @@
     <div>
       <ingelogd-lid></ingelogd-lid>
     </div>
-    <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6 mb-8"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="isLoadingAanwezigheden"></Loader>
       <div class="lg:ml-8">
         <div class="lg:ml-6">
@@ -98,9 +91,8 @@
           </data-table>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -109,14 +101,14 @@ import SideMenu from "@/components/global/Menu.vue";
 import Loader from "@/components/global/Loader.vue";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog.vue";
 import { toRefs } from "@vue/reactivity";
-import Footer from "@/components/global/Footer.vue";
+import PageLayout from "@/components/global/PageLayout";
 import AanwezighedenService from "@/services/aanwezigheden/AanwezighedenService";
 import InputNumber from "primevue/inputnumber";
 
 export default {
   name: "Aanwezigheden",
   components: {
-    Footer,
+    PageLayout,
     Loader,
     ConfirmDialog,
     SideMenu,

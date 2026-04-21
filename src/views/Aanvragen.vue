@@ -4,14 +4,7 @@
     <confirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="isLoadingAanvragen"></Loader>
       <confirm-dialog
         :dialog-visible="confirmDialog"
@@ -117,7 +110,7 @@
           </template>
         </data-table>
       </div>
-    </div>
+    </PageLayout>
   </div>
 </template>
 
@@ -127,7 +120,7 @@ import DateUtil from "@/services/dates/DateUtil";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import ConfirmMailing from "@/components/aanvraag/ConfirmMailing";
 import Loader from "@/components/global/Loader";
-import Breadcrumb from "primevue/breadcrumb";
+import PageLayout from "@/components/global/PageLayout";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 export default {
@@ -135,7 +128,7 @@ export default {
   components: {
     ConfirmMailing,
     Loader,
-    Breadcrumb,
+    PageLayout,
     ConfirmDialog,
     SideMenu,
     IngelogdLid,

@@ -4,14 +4,7 @@
     <ConfirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="laden"></Loader>
       <div>
         <div class="lg:ml-2">
@@ -77,9 +70,8 @@
           </form>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -94,7 +86,7 @@ import OpslaanMetTekst from "@/components/buttons/OpslaanMetTekst";
 import ConfirmDialog from "primevue/confirmdialog";
 import GroepseigenGegevens from "@/components/groep/GroepseigenGegevens";
 import Loader from "@/components/global/Loader";
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import GroepService from "@/services/groep/GroepService";
 import { toRefs } from "@vue/reactivity";
 import Erkenningsinstantie from "@/components/groep/Erkenningsinstantie.vue";
@@ -102,7 +94,7 @@ import Erkenningsinstantie from "@/components/groep/Erkenningsinstantie.vue";
 export default {
   name: "Groep",
   components: {
-    Footer,
+    PageLayout,
     GroepseigenGegevens,
     GroepseigenFuncties,
     BaseDropdown,

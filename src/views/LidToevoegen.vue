@@ -4,15 +4,8 @@
     <confirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <Loader :showLoader="loadingLid"></Loader>
-    <div class="container-fluid md:w-90">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
+      <Loader :showLoader="loadingLid"></Loader>
       <div>
         <lid-boven-balk
           :lid="lid"
@@ -61,13 +54,12 @@
           </form>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import Contacten from "@/components/lid/Contacten";
 import Persoonlijk from "@/components/lid/Persoonlijk";
@@ -103,7 +95,7 @@ export default {
     };
   },
   components: {
-    Footer,
+    PageLayout,
     GroepseigenGegevens,
     Contacten,
     Persoonlijk,

@@ -4,7 +4,7 @@
     <ConfirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="lg:ml-8">
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :show-loader="laden"></Loader>
       <div class="overflow-hidden lg:ml-6 p-2">
         <div>
@@ -248,9 +248,8 @@
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -265,7 +264,7 @@ import confirm from "@/components/dialog/ConfirmDialog";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import ConfirmDialog from "primevue/confirmdialog";
 import MessageDialog from "@/components/dialog/MessageDialog";
 
@@ -273,7 +272,7 @@ export default {
   name: "Mail",
   components: {
     MessageDialog,
-    Footer,
+    PageLayout,
     BaseInput,
     Editor,
     FileUpload,
@@ -287,6 +286,8 @@ export default {
   },
   data() {
     return {
+      home: { icon: "pi pi-home", to: "/dashboard" },
+      breadcrumbItems: [{ label: "E-mail" }],
       kolommenLaden: false,
       bevestig: false,
       sorteerLeden: false,

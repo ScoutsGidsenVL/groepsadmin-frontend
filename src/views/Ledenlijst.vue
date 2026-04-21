@@ -17,256 +17,243 @@
 
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div>
-      <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-        <div class="hidden lg:block md:ml-8 w-25">
-          <Breadcrumb
-            :home="home"
-            :model="breadcrumbItems"
-            class="ml-4 mt-4 md:ml-6"
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
+      <Loader
+        :showLoader="isLoading || isLoadingFilters || isLoadingHuidigeFilter"
+        :title="loadingText"
+      ></Loader>
+      <div class="lg:ml-8">
+        <div class="lg:ml-6">
+          <div class="mt-9 flex justify-content-end lg:hidden">
+            <lid-zoek-auto-complete></lid-zoek-auto-complete>
+          </div>
+          <LedenlijstFilterblok
+            class="mt-6 mb-3"
+            v-if="!isLoadingFilters"
+            :actieveKolommen="actieveKolommen"
+            :nonActieveKolommen="nonActieveKolommen"
+            :filters="filters"
+            @veranderFilter="veranderFilter"
+            @setActieveKolom="setActieveKolom"
+            @setNonActieveKolom="setNonActieveKolom"
+            @filterToepassen="filterToepassen"
+            @filterOpslaan="filterOpslaan"
+            @activateCriterium="activateCriterium"
+            @deactivateCriterium="deactivateCriterium"
+            @getHuidigeFilter="getHuidigeFilter"
+            @onLoading="isLoading = true"
+            @offLoading="isLoading = false"
+            @activeerAlleFuncties="triggerActiveerAlleFuncties"
+            @deactiveerAlleFuncties="triggerDeactiveerAlleFuncties"
+            :huidigeFilter="huidigeFilter"
+            :criteria="criteria"
+            :active-criteria="activeCriteria"
           />
-        </div>
-        <Loader
-          :showLoader="isLoading || isLoadingFilters || isLoadingHuidigeFilter"
-          :title="loadingText"
-        ></Loader>
-        <div class="lg:ml-8">
-          <div class="lg:ml-6">
-            <div class="mt-9 flex justify-content-end lg:hidden">
-              <lid-zoek-auto-complete></lid-zoek-auto-complete>
-            </div>
-            <LedenlijstFilterblok
-              class="mt-6 mb-3"
-              v-if="!isLoadingFilters"
-              :actieveKolommen="actieveKolommen"
-              :nonActieveKolommen="nonActieveKolommen"
-              :filters="filters"
-              @veranderFilter="veranderFilter"
-              @setActieveKolom="setActieveKolom"
-              @setNonActieveKolom="setNonActieveKolom"
-              @filterToepassen="filterToepassen"
-              @filterOpslaan="filterOpslaan"
-              @activateCriterium="activateCriterium"
-              @deactivateCriterium="deactivateCriterium"
-              @getHuidigeFilter="getHuidigeFilter"
-              @onLoading="isLoading = true"
-              @offLoading="isLoading = false"
-              @activeerAlleFuncties="triggerActiveerAlleFuncties"
-              @deactiveerAlleFuncties="triggerDeactiveerAlleFuncties"
-              :huidigeFilter="huidigeFilter"
-              :criteria="criteria"
-              :active-criteria="activeCriteria"
-            />
-            <data-table
-              ref="ledenlijst"
-              :value="leden"
-              stripedRows
-              :loading="isLoading"
-              showGridlines
-              responsiveLayout="scroll"
-              @row-click="selectLid"
-              @sort="addSort"
-              @colum-click="addSort"
-              class="p-datatable-sm mt-4 ledentabel"
-            >
-              <template #header>
-                <div
-                  class="relative d-flex justify-content-end align-content-center h-auto"
-                >
-                  <div class="block md:hidden">
-                    <Button
-                      type="button"
-                      icon="pi pi-chevron-down"
-                      @click="toggle"
-                      aria-haspopup="true"
-                      aria-controls="overlay_menu"
-                      label="Acties"
-                      class="actie-button"
-                    />
-                    <Menu
-                      id="overlay_menu"
-                      ref="menu"
-                      :model="filteredMenuItems"
-                      :popup="true"
-                    >
-                    </Menu>
-                  </div>
-                  <div class="hidden md:block">
-                    <Button
-                      type="button"
-                      label="Nieuw lid"
-                      @click="gaNaar('lidToevoegen')"
-                      icon="far fa-user-plus"
-                      class="actie-button mr-1"
-                      v-if="magNieuwLidAanmaken()"
-                    />
-                    <Button
-                      type="button"
-                      label="Activiteiten"
-                      @click="gaNaar('activiteit')"
-                      icon="far fa-campground"
-                      class="actie-button mr-1"
-                    />
-                    <Button
-                      type="button"
-                      label="Etiketten"
-                      @click="gaNaar('etiket')"
-                      icon="pi pi-tags"
-                      class="actie-button mr-1"
-                    />
-                    <Button
-                      type="button"
-                      label="Mail"
-                      @click="gaNaar('email')"
-                      icon="pi pi-envelope"
-                      class="actie-button mr-1"
-                    />
-                    <Button
-                      type="button"
-                      label="Export"
-                      @click="toggleExport"
-                      aria-haspopup="true"
-                      aria-controls="overlay_menu_export"
-                      class="actie-button"
-                    >
-                      <i class="pi pi-file-export"></i>
-                      <span class="px-3">Export</span>
-                      <i class="pi pi-chevron-down"></i>
-                    </Button>
-                    <Menu
-                      id="overlay_menu_export"
-                      ref="exportMenu"
-                      :model="filteredexportMenuItems"
-                      :popup="true"
-                    />
-                  </div>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <label class="float-start mt--25">
-                    {{ totaalAantalLeden }}
-                    {{ totaalAantalLeden > 1 ? "rijen" : "rij" }}
-                  </label>
-                  <label
-                    v-if="aantalIds > 0"
-                    class="float-left mt--25 hidden md:block"
-                    >&nbsp;( {{ this.aantalIds }}
-                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
-                  </label>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <label
-                    v-if="aantalIds > 0"
-                    class="float-left mt--08 md:hidden"
-                    >&nbsp;( {{ this.aantalIds }}
-                    {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
-                  </label>
-                </div>
-              </template>
-              <template #empty>
-                Geen leden gevonden op basis van de huidige filter.
-              </template>
-              <template #loading> Leden laden. Even geduld aub...</template>
-              <column headerClass="checkbox-kolom-header" style="width: 2rem">
-                <template #header>
-                  <div class="w-full flex justify-content-center">
-                    <checkbox
-                      @click="selecteerOfDeselecteerAlleleden"
-                      v-model="alleLeden"
-                      :binary="true"
-                    ></checkbox>
-                  </div>
-                </template>
-                <template #body="slotProps">
-                  <div class="flex justify-content-center">
-                    <checkbox
-                      @click="
-                        $event.stopPropagation();
-                        voegLidToe(slotProps.data);
-                      "
-                      v-model="geselecteerdeLeden"
-                      :value="slotProps.data"
-                    ></checkbox>
-                  </div>
-                </template>
-              </column>
-              <column
-                v-for="kolom of actieveKolommen"
-                :field="kolom.id"
-                :header="kolom.label"
-                :key="kolom.id"
-                class="cursor-pointer cut-off-text-table"
+          <data-table
+            ref="ledenlijst"
+            :value="leden"
+            stripedRows
+            :loading="isLoading"
+            showGridlines
+            responsiveLayout="scroll"
+            @row-click="selectLid"
+            @sort="addSort"
+            @colum-click="addSort"
+            class="p-datatable-sm mt-4 ledentabel"
+          >
+            <template #header>
+              <div
+                class="relative d-flex justify-content-end align-content-center h-auto"
               >
-                <template #header class="sticky-top position-sticky sticky">
-                  <div
-                    class="w-full"
-                    @click="addSort(kolom)"
-                    v-if="kolom.label !== 'Lidgeld betaald aan SGV'"
+                <div class="block md:hidden">
+                  <Button
+                    type="button"
+                    icon="pi pi-chevron-down"
+                    @click="toggle"
+                    aria-haspopup="true"
+                    aria-controls="overlay_menu"
+                    label="Acties"
+                    class="actie-button"
+                  />
+                  <Menu
+                    id="overlay_menu"
+                    ref="menu"
+                    :model="filteredMenuItems"
+                    :popup="true"
                   >
-                    <div
-                      class="standard-order-icon ml-1"
-                      v-if="checkSortering(kolom) === -1"
-                    >
-                      <i class="fas fa-caret-down"></i>
-                    </div>
-                    <div class="standard-order-icon ml-1" v-else>
-                      <i
-                        class="fas fa-sort-alpha-down"
-                        :class="
-                          checkSortering(kolom) === 0
-                            ? 'icon-large'
-                            : checkSortering(kolom) === 2
-                            ? 'icon-small'
-                            : ''
-                        "
-                      ></i>
-                    </div>
-                  </div>
-                </template>
-                <template #body="slotProps">
-                  <div v-if="!kolom.isLoaded" class="data-placeholder"></div>
-                  <div v-if="kolom.type !== 'vinkje'" class="cursor-pointer">
-                    {{ slotProps.data.waarden[kolom.id] }}
-                  </div>
-                  <div
-                    v-if="kolom.type === 'vinkje'"
-                    class="table-checkbox cursor-pointer"
+                  </Menu>
+                </div>
+                <div class="hidden md:block">
+                  <Button
+                    type="button"
+                    label="Nieuw lid"
+                    @click="gaNaar('lidToevoegen')"
+                    icon="far fa-user-plus"
+                    class="actie-button mr-1"
+                    v-if="magNieuwLidAanmaken()"
+                  />
+                  <Button
+                    type="button"
+                    label="Activiteiten"
+                    @click="gaNaar('activiteit')"
+                    icon="far fa-campground"
+                    class="actie-button mr-1"
+                  />
+                  <Button
+                    type="button"
+                    label="Etiketten"
+                    @click="gaNaar('etiket')"
+                    icon="pi pi-tags"
+                    class="actie-button mr-1"
+                  />
+                  <Button
+                    type="button"
+                    label="Mail"
+                    @click="gaNaar('email')"
+                    icon="pi pi-envelope"
+                    class="actie-button mr-1"
+                  />
+                  <Button
+                    type="button"
+                    label="Export"
+                    @click="toggleExport"
+                    aria-haspopup="true"
+                    aria-controls="overlay_menu_export"
+                    class="actie-button"
                   >
+                    <i class="pi pi-file-export"></i>
+                    <span class="px-3">Export</span>
+                    <i class="pi pi-chevron-down"></i>
+                  </Button>
+                  <Menu
+                    id="overlay_menu_export"
+                    ref="exportMenu"
+                    :model="filteredexportMenuItems"
+                    :popup="true"
+                  />
+                </div>
+              </div>
+              <div class="d-flex justify-content-start">
+                <label class="float-start mt--25">
+                  {{ totaalAantalLeden }}
+                  {{ totaalAantalLeden > 1 ? "rijen" : "rij" }}
+                </label>
+                <label
+                  v-if="aantalIds > 0"
+                  class="float-left mt--25 hidden md:block"
+                  >&nbsp;( {{ this.aantalIds }}
+                  {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
+                </label>
+              </div>
+              <div class="d-flex justify-content-start">
+                <label v-if="aantalIds > 0" class="float-left mt--08 md:hidden"
+                  >&nbsp;( {{ this.aantalIds }}
+                  {{ this.aantalIds === 1 ? "lid" : "leden" }} geselecteerd )
+                </label>
+              </div>
+            </template>
+            <template #empty>
+              Geen leden gevonden op basis van de huidige filter.
+            </template>
+            <template #loading> Leden laden. Even geduld aub...</template>
+            <column headerClass="checkbox-kolom-header" style="width: 2rem">
+              <template #header>
+                <div class="w-full flex justify-content-center">
+                  <checkbox
+                    @click="selecteerOfDeselecteerAlleleden"
+                    v-model="alleLeden"
+                    :binary="true"
+                  ></checkbox>
+                </div>
+              </template>
+              <template #body="slotProps">
+                <div class="flex justify-content-center">
+                  <checkbox
+                    @click="
+                      $event.stopPropagation();
+                      voegLidToe(slotProps.data);
+                    "
+                    v-model="geselecteerdeLeden"
+                    :value="slotProps.data"
+                  ></checkbox>
+                </div>
+              </template>
+            </column>
+            <column
+              v-for="kolom of actieveKolommen"
+              :field="kolom.id"
+              :header="kolom.label"
+              :key="kolom.id"
+              class="cursor-pointer cut-off-text-table"
+            >
+              <template #header class="sticky-top position-sticky sticky">
+                <div
+                  class="w-full"
+                  @click="addSort(kolom)"
+                  v-if="kolom.label !== 'Lidgeld betaald aan SGV'"
+                >
+                  <div
+                    class="standard-order-icon ml-1"
+                    v-if="checkSortering(kolom) === -1"
+                  >
+                    <i class="fas fa-caret-down"></i>
+                  </div>
+                  <div class="standard-order-icon ml-1" v-else>
                     <i
-                      class="pi"
-                      :class="{
-                        'true-icon pi-check-circle': isWaardeTrue(
-                          slotProps.data.waarden[kolom.id]
-                        ),
-                        'false-icon pi-times-circle': isWaardeFalse(
-                          slotProps.data.waarden[kolom.id]
-                        ),
-                      }"
+                      class="fas fa-sort-alpha-down"
+                      :class="
+                        checkSortering(kolom) === 0
+                          ? 'icon-large'
+                          : checkSortering(kolom) === 2
+                          ? 'icon-small'
+                          : ''
+                      "
                     ></i>
                   </div>
-                </template>
-              </column>
-              <template #footer v-if="isLoadingMore">
-                <span class="small mt-1"
-                  >Meer leden laden &nbsp;<i class="fas fa-spinner fa-spin"></i
-                ></span>
+                </div>
               </template>
-            </data-table>
-          </div>
+              <template #body="slotProps">
+                <div v-if="!kolom.isLoaded" class="data-placeholder"></div>
+                <div v-if="kolom.type !== 'vinkje'" class="cursor-pointer">
+                  {{ slotProps.data.waarden[kolom.id] }}
+                </div>
+                <div
+                  v-if="kolom.type === 'vinkje'"
+                  class="table-checkbox cursor-pointer"
+                >
+                  <i
+                    class="pi"
+                    :class="{
+                      'true-icon pi-check-circle': isWaardeTrue(
+                        slotProps.data.waarden[kolom.id]
+                      ),
+                      'false-icon pi-times-circle': isWaardeFalse(
+                        slotProps.data.waarden[kolom.id]
+                      ),
+                    }"
+                  ></i>
+                </div>
+              </template>
+            </column>
+            <template #footer v-if="isLoadingMore">
+              <span class="small mt-1"
+                >Meer leden laden &nbsp;<i class="fas fa-spinner fa-spin"></i
+              ></span>
+            </template>
+          </data-table>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
 import LedenlijstFilterblok from "@/components/filter/LedenlijstFilterblok";
 import Loader from "@/components/global/Loader";
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
-import Breadcrumb from "primevue/breadcrumb";
 import MessageDialog from "@/components/dialog/MessageDialog";
 import Ledenlijst from "@/services/leden/Ledenlijst";
 import { toRefs } from "@vue/reactivity";
@@ -277,12 +264,11 @@ export default {
   name: "Ledenlijst",
   components: {
     LidZoekAutoComplete,
-    Footer,
+    PageLayout,
     Loader,
     LedenlijstFilterblok,
     ConfirmDialog,
     SideMenu,
-    Breadcrumb,
     IngelogdLid,
     MessageDialog,
   },

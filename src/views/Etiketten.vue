@@ -1,5 +1,5 @@
 <template>
-  <div class="p-1">
+  <div>
     <SideMenu />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
@@ -7,8 +7,8 @@
       :dialog-visible="openEtikettenFoto"
       @close="sluitInfodialog"
     />
-    <div class="lg:ml-8">
-      <ConfirmDialog />
+    <ConfirmDialog />
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :show-loader="laden"></Loader>
       <div class="overflow-hidden lg:ml-6">
         <div>
@@ -233,9 +233,8 @@
           </div>
         </Dialog>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -249,13 +248,13 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import EtiketInfoDialog from "@/components/dialog/EtiketInfoDialog";
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "Etiketten",
   components: {
-    Footer,
+    PageLayout,
     EtiketInfoDialog,
     BaseInput,
     Editor,
@@ -268,6 +267,8 @@ export default {
   },
   data() {
     return {
+      home: { icon: "pi pi-home", to: "/dashboard" },
+      breadcrumbItems: [{ label: "Etiketten" }],
       changes: false,
       error: false,
       errors: [],

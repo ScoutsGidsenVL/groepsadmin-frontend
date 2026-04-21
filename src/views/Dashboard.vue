@@ -4,10 +4,7 @@
     <confirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid">
-      <div class="hidden lg:block w-50">
-        <Breadcrumb class="ml-4 mt-4 md:ml-6" />
-      </div>
+    <PageLayout>
       <div class="custom-divider"></div>
       <div class="lg:ml-8 lg:pl-8 mt-2">
         <div class="relative container lg:ml-8">
@@ -66,15 +63,14 @@
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
 import Loader from "@/components/global/Loader";
 import DashboardBlock from "@/components/global/DashboardBlock";
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
@@ -84,7 +80,7 @@ import { toRefs } from "@vue/reactivity";
 export default {
   name: "Dashboard",
   components: {
-    Footer,
+    PageLayout,
     DashboardBlock,
     Loader,
     SideMenu,

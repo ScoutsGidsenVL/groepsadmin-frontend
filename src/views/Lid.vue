@@ -31,14 +31,7 @@
       :header="messageDialogHeader"
       @close="messageDialog = false"
     />
-    <div class="container-fluid md:w-90">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="loadingLid"></Loader>
       <div>
         <lid-boven-balk
@@ -111,13 +104,12 @@
           </form>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
-import Footer from "@/components/global/Footer";
+import PageLayout from "@/components/global/PageLayout";
 import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
@@ -138,7 +130,7 @@ export default {
   name: "Lid",
   components: {
     MessageDialog,
-    Footer,
+    PageLayout,
     Loader,
     SideMenu,
     IngelogdLid,

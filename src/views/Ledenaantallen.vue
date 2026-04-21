@@ -4,14 +4,7 @@
     <confirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
-    <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="isLoadingData"></Loader>
       <div class="lg:ml-8">
         <div class="lg:ml-8">
@@ -222,9 +215,8 @@
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -233,11 +225,10 @@ import BaseDropdown from "@/components/input/BaseDropdown";
 import RestService from "@/services/api/RestService";
 import Loader from "@/components/global/Loader";
 import LedenAantallenService from "@/services/aantallen/LedenAantallenService";
-import Breadcrumb from "primevue/breadcrumb";
+import PageLayout from "@/components/global/PageLayout";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
-import Footer from "@/components/global/Footer";
 
 export default {
   name: "LedenAantallen",
@@ -245,11 +236,10 @@ export default {
     Chart,
     BaseDropdown,
     Loader,
-    Breadcrumb,
     SideMenu,
     ConfirmDialog,
     IngelogdLid,
-    Footer,
+    PageLayout,
   },
   data() {
     return {

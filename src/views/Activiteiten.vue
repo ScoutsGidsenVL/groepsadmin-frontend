@@ -30,14 +30,7 @@
     <div>
       <ingelogd-lid></ingelogd-lid>
     </div>
-    <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-      <div class="hidden lg:block md:ml-8 w-25">
-        <Breadcrumb
-          :home="home"
-          :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6 mb-8"
-        />
-      </div>
+    <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="isLoadingActiviteiten"></Loader>
 
       <div class="lg:ml-8">
@@ -212,9 +205,8 @@
           </data-table>
         </div>
       </div>
-    </div>
+    </PageLayout>
   </div>
-  <Footer />
 </template>
 
 <script>
@@ -224,7 +216,7 @@ import Loader from "@/components/global/Loader.vue";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog.vue";
 import { toRefs } from "@vue/reactivity";
 import ActiviteitenService from "@/services/activiteiten/ActiviteitenService";
-import Footer from "@/components/global/Footer.vue";
+import PageLayout from "@/components/global/PageLayout";
 import ActiviteitDialog from "@/components/dialog/ActiviteitDialog.vue";
 import AttestDialog from "@/components/dialog/AttestDialog.vue";
 import MessageDialog from "@/components/dialog/MessageDialog";
@@ -235,7 +227,7 @@ export default {
   name: "Aanvragen",
   components: {
     BaseDropdown,
-    Footer,
+    PageLayout,
     Loader,
     ConfirmDialog,
     SideMenu,
