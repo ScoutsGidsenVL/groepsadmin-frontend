@@ -35,9 +35,9 @@
 
       <div class="lg:ml-8">
         <div class="lg:ml-6">
-          <label class="d-flex justify-content-start"
-            >Betalende activiteiten</label
-          >
+          <h4 class="text-align-left mt-5 custom-title font-weight-bold">
+            Betalende activiteiten
+          </h4>
           <div class="flex justify-content-between">
             <div
               class="col-12 col-lg-6 col-xl-4 groep-select justify-content-start ml--2"

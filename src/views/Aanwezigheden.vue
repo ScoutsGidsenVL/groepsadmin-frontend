@@ -16,9 +16,9 @@
       <Loader :showLoader="isLoadingAanwezigheden"></Loader>
       <div class="lg:ml-8">
         <div class="lg:ml-6">
-          <label class="d-flex justify-content-start"
-            >Aanwezigheden bewerken</label
-          >
+          <h4 class="text-align-left mt-5 custom-title font-weight-bold">
+            Aanwezigheden bewerken
+          </h4>
           <label class="d-flex justify-content-start text-gray-500"
             >{{ activiteit.omschrijving }}
           </label>
