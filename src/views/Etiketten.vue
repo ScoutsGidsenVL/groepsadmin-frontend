@@ -121,7 +121,7 @@
           <div class="col-12 pl-lg-5em pr-lg-5em">
             <Editor
               :init="getOptions"
-              tinymce-script-src="/groepsadmin/frontend/js/tinymce.min.js"
+              :tinymce-script-src="tinymceSrc"
               v-model="sjabloon.inhoud"
             ></Editor>
           </div>
@@ -393,6 +393,10 @@ export default {
   },
 
   computed: {
+    tinymceSrc() {
+      return process.env.BASE_URL + "js/tinymce.min.js";
+    },
+
     groepenLaden() {
       return this.$store.getters.groepenLaden;
     },
