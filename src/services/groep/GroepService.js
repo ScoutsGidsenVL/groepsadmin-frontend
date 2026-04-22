@@ -126,9 +126,7 @@ export default {
                 life: 3000,
               });
             }
-            state.selectedGroep.opgericht = DateUtil.formatteerDatum(
-              state.selectedGroep.opgericht
-            );
+            state.selectedGroep.opgericht = opgerichtDatum;
             if (!state.selectedGroep.instantie) {
               state.selectedGroep.instantie = {
                 naam: "",
