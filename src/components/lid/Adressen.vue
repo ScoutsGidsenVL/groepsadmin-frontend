@@ -181,6 +181,7 @@ import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
 import { ref, toRefs } from "@vue/reactivity";
+import { nextTick, onMounted } from "vue";
 import AdresService from "@/services/adressen/AdresService";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
@@ -212,7 +213,19 @@ export default {
   },
 
   setup(props) {
-    const activeIndex = ref(props.lidaanvraag ? [0] : []);
+    const activeIndex = ref([]);
+
+    if (props.lidaanvraag) {
+      onMounted(() => {
+        nextTick(() => {
+          const adressen = props.modelValue.adressen;
+          const heeftBestaandAdres = adressen && adressen.some((a) => a.gemeente);
+          if (!heeftBestaandAdres) {
+            activeIndex.value = [0];
+          }
+        });
+      });
+    }
 
     const {
       state,
