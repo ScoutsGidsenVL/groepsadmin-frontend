@@ -235,8 +235,8 @@ export default {
 
     const state = reactive({
       contacts: [],
-      contacten: [],
-      adres: [],
+      contacten: props.modelValue.contacten || [],
+      adres: props.modelValue.adres || {},
       adresArray: [],
       landen: [
         { label: "België", value: "BE" },

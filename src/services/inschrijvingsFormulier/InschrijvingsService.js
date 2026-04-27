@@ -1,7 +1,7 @@
 import { computed, reactive } from "@vue/reactivity";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
-import { onMounted, watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import RestService from "@/services/api/RestService";
 import { useToast } from "primevue/usetoast";
@@ -21,31 +21,10 @@ export default {
         vgagegevens: {},
         persoonsgegevens: {},
       },
-      defaultLid: {
-        adres: {
-          land: "BE",
-        },
-        email: "",
-        gebruikersnaam: "",
-        links: [],
-        contacten: [],
-        persoonsgegevens: {
-          geslacht: "man",
-          beperking: false,
-        },
-        vgagegevens: {
-          voornaam: "",
-          achternaam: "",
-        },
-      },
       groepseigenVelden: {},
       groep: null,
       groepsnummer: null,
       loading: false,
-      invalidGemeente: false,
-      invalidStraat: false,
-      invalidNummer: false,
-      invalidPostcode: false,
       watchable: false,
       changes: false,
       landen: [
@@ -65,11 +44,15 @@ export default {
         email: "",
         gebruikersnaam: "",
         links: [],
+        contacten: [],
         persoonsgegevens: {
           geslacht: "man",
           beperking: false,
         },
-        vgagegevens: {},
+        vgagegevens: {
+          voornaam: "",
+          achternaam: "",
+        },
       },
     });
 
@@ -128,7 +111,6 @@ export default {
         RestService.saveAanvraag(state.aanvraag)
           .then((res) => {
             if (res.status === 204) {
-              state.loading = false;
               store.commit("setNaamKandidaatLid", state.aanvraag.voornaam);
               router.push({
                 name: "LidWordenVerstuurd",
@@ -174,26 +156,27 @@ export default {
           if (res.data["publiek-inschrijven"] && !res.data["beeindigd"]) {
             state.groep = res.data;
           }
-          if (state.groep) {
-            RestService.getGroepseigenGegevens(state.groepsnummer)
-              .then((res) => {
-                state.groepseigenVelden = res.data;
-              })
-              .catch((error) => {
-                state.loading = false;
-                console.log(error);
-              });
-          }
           state.groepseigenVelden = res.data.groepseigenGegevens;
-          state.loading = false;
+          if (state.groep) {
+            return RestService.getGroepseigenGegevens(state.groepsnummer).then(
+              (res) => {
+                state.groepseigenVelden = res.data;
+              }
+            );
+          }
         })
         .catch((error) => {
+          const data = error && error.response && error.response.data;
           toast.add({
             severity: "warn",
-            summary: error.response.data.titel,
-            detail: error.response.data.beschrijving,
+            summary: (data && data.titel) || "Fout",
+            detail:
+              (data && data.beschrijving) ||
+              "Kon de groepsgegevens niet laden.",
             life: 3000,
           });
+        })
+        .finally(() => {
           state.loading = false;
         });
     };
@@ -301,14 +284,9 @@ export default {
         getGroepData();
       }
 
-      setTimeout(() => {
-        state.lid = Object.assign({}, state.defaultLid);
-      }, 1000);
-
-      setTimeout(() => {
+      nextTick(() => {
         state.watchable = true;
-        state.loading = false;
-      }, 2000);
+      });
     });
 
     const v = useVuelidate(rules, state);

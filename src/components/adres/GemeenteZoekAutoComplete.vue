@@ -6,7 +6,6 @@
         <AutoComplete
           class="adres-autocomplete d-flex custom-input-styling"
           v-model="zoekTerm"
-          field="gemeente"
           forceSelection
           minLength="2"
           :suggestions="gefilterdeGemeentes"

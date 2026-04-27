@@ -7,7 +7,6 @@
           class="adres-autocomplete d-flex custom-input-styling"
           v-model="zoekTerm"
           :disabled="disabled"
-          field="straat"
           minLength="2"
           :suggestions="gefilterdeStraten"
           @complete="zoekStraat"
