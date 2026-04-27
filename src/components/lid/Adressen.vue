@@ -219,7 +219,8 @@ export default {
       onMounted(() => {
         nextTick(() => {
           const adressen = props.modelValue.adressen;
-          const heeftBestaandAdres = adressen && adressen.some((a) => a.gemeente);
+          const heeftBestaandAdres =
+            adressen && adressen.some((a) => a.gemeente);
           if (!heeftBestaandAdres) {
             activeIndex.value = [0];
           }
