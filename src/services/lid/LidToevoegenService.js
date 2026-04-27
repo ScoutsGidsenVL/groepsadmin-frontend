@@ -164,30 +164,31 @@ export default {
     const opslaan = () => {
       state.loadingLid = true;
 
+      const idMap = {};
       let counter = 0;
       _.forEach(state.lid.adressen, function (adres) {
-        let adresId = adres.id;
         counter++;
-        _.forEach(state.lid.contacten, function (contact) {
-          if (
-            adres.straat === contact.adres.straat &&
-            adres.nummer === contact.adres.nummer &&
-            adres.postcode === contact.adres.postcode &&
-            adres.gemeente === contact.adres.gemeente &&
-            adres.bus === contact.adres.bus
-          ) {
-            adres.id = "tempadres_" + counter;
-            contact.adres = adres.id;
-          } else if (adresId === contact.adres) {
-            adres.id = "tempadres_" + counter;
-            contact.adres = adres.id;
-          }
-        });
+        const newId = "tempadres_" + counter;
+        idMap[adres.id] = newId;
+        adres.id = newId;
       });
 
-      _.forEach(state.lid.adressen, function (adres) {
-        if (adres.id.length > 28) {
-          adres.id = "tempadres";
+      _.forEach(state.lid.contacten, function (contact) {
+        if (typeof contact.adres === "object" && contact.adres !== null) {
+          const match = _.find(state.lid.adressen, function (a) {
+            return (
+              a.straat === contact.adres.straat &&
+              a.nummer === contact.adres.nummer &&
+              a.postcode === contact.adres.postcode &&
+              a.gemeente === contact.adres.gemeente
+            );
+          });
+          contact.adres =
+            (match && match.id) ||
+            (state.lid.adressen[0] && state.lid.adressen[0].id) ||
+            null;
+        } else if (idMap[contact.adres]) {
+          contact.adres = idMap[contact.adres];
         }
       });
 

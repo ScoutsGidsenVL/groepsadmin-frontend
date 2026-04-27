@@ -293,7 +293,23 @@ export default {
         state.contacten = [];
       } else {
         state.contacten.forEach((contact) => {
-          if (contact.adresId) contact.adres = contact.adresId;
+          if (contact.adresId) {
+            contact.adres = contact.adresId;
+          } else if (contact.adres && typeof contact.adres === "object") {
+            const match = state.adressen
+              ? state.adressen.find(
+                  (a) =>
+                    a.straat === contact.adres.straat &&
+                    a.nummer === contact.adres.nummer &&
+                    a.postcode === contact.adres.postcode &&
+                    a.gemeente === contact.adres.gemeente
+                )
+              : null;
+            contact.adres =
+              (match && match.id) ||
+              (state.adressen && state.adressen[0] && state.adressen[0].id) ||
+              null;
+          }
         });
       }
       if (state.adressen && state.adressen.length > 0) {
