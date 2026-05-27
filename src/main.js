@@ -151,7 +151,7 @@ if (window.location.pathname.includes("formulier")) {
   app.mount("#app");
 } else {
   let initOptions = getClient();
-  const keycloak = Keycloak(initOptions);
+  const keycloak = new Keycloak(initOptions);
   app.config.globalProperties.$keycloak = keycloak;
 
   keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {

@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
 module.exports = {
+  transpileDependencies: ["keycloak-js"],
   devServer: {
     port: 3000,
     proxy: "http://localhost:8080",
