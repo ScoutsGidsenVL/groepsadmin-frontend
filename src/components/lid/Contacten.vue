@@ -55,6 +55,23 @@
               placeholder="xx.xx.xx-xxx.xx"
               v-model="contacten[index].rijksregisternummer"
               type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index]
+                  .rijksregisternummer &&
+                v.contacten.$each.$response.$errors[index].rijksregisternummer
+                  .length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index]
+                  .rijksregisternummer &&
+                v.contacten.$each.$response.$errors[index].rijksregisternummer
+                  .length > 0
+                  ? v.contacten.$each.$response.$errors[index]
+                      .rijksregisternummer[0].$message
+                  : ''
+              "
             />
             <BaseCheckbox
               v-if="!eigenProfiel"
@@ -150,6 +167,7 @@ import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import { useVuelidate } from "@vuelidate/core";
 import { email, helpers } from "@vuelidate/validators";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import Rijksregisternummer from "@/services/rijksregister/Rijksregisternummer";
 import rechtenService from "@/services/rechten/rechtenService";
 
 export default {
@@ -344,6 +362,10 @@ export default {
       return Telefoonnummer.validateNumber(value);
     };
 
+    const isGeldigRijksregisternummer = (value) => {
+      return Rijksregisternummer.validateNumber(value);
+    };
+
     const rules = {
       contacten: {
         $each: helpers.forEach({
@@ -355,6 +377,12 @@ export default {
           },
           email: {
             email: helpers.withMessage("Geen geldig emailadres", email),
+          },
+          rijksregisternummer: {
+            isGeldigRijksregisternummer: helpers.withMessage(
+              "Ongeldig rijksregisternummer",
+              isGeldigRijksregisternummer
+            ),
           },
         }),
       },

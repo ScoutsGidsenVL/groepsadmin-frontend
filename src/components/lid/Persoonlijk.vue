@@ -48,11 +48,16 @@
             "
           />
           <BaseInput
-            v-model="lid.persoonsgegevens.rijksregisternummer"
+            v-model="v.lid.persoonsgegevens.rijksregisternummer.$model"
             label="Rijksregisternummer"
             placeholder="xx.xx.xx-xxx.xx"
             type="text"
             v-if="eigenProfiel || inschrijving"
+            :invalid="
+              v.lid.persoonsgegevens.rijksregisternummer.$dirty &&
+              v.lid.persoonsgegevens.rijksregisternummer.$invalid
+            "
+            error-message="Ongeldig rijksregisternummer"
           ></BaseInput>
           <BaseCheckbox
             v-if="!eigenProfiel && !inschrijving"
@@ -173,6 +178,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { email, helpers, required } from "@vuelidate/validators";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import Rijksregisternummer from "@/services/rijksregister/Rijksregisternummer";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
 import { onUpdated } from "@vue/runtime-core";
@@ -199,6 +205,10 @@ const isGeldigGsmNummer = (value) => {
   } else {
     return true;
   }
+};
+
+const isGeldigRijksregisternummer = (value) => {
+  return Rijksregisternummer.validateNumber(value);
 };
 
 export default {
@@ -336,6 +346,9 @@ export default {
           },
           rekeningnummer: {
             isGeldigRekeningnummer,
+          },
+          rijksregisternummer: {
+            isGeldigRijksregisternummer,
           },
         },
         vgagegevens: {

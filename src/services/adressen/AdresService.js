@@ -54,7 +54,7 @@ export default {
       const adres = state.adressen[index];
       const contacten = (props.modelValue && props.modelValue.contacten) || [];
       const gekoppeldeContacten = contacten.filter((contact) =>
-        contactHoortBijAdres(contact, adres),
+        contactHoortBijAdres(contact, adres)
       );
 
       if (gekoppeldeContacten.length > 0) {

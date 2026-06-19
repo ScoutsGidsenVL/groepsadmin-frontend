@@ -57,6 +57,23 @@
               placeholder="xx.xx.xx-xxx.xx"
               v-model="contacten[index].rijksregisternummer"
               type="text"
+              :invalid="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index]
+                  .rijksregisternummer &&
+                v.contacten.$each.$response.$errors[index].rijksregisternummer
+                  .length > 0
+              "
+              :error-message="
+                v.$dirty &&
+                v.contacten.$each.$response.$errors[index]
+                  .rijksregisternummer &&
+                v.contacten.$each.$response.$errors[index].rijksregisternummer
+                  .length > 0
+                  ? v.contacten.$each.$response.$errors[index]
+                      .rijksregisternummer[0].$message
+                  : ''
+              "
             />
             <BaseCheckbox
               type="checkbox"
@@ -197,6 +214,7 @@ import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplet
 import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
+import Rijksregisternummer from "@/services/rijksregister/Rijksregisternummer";
 import useVuelidate from "@vuelidate/core";
 import { email, helpers } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
@@ -204,6 +222,10 @@ import { useToast } from "primevue/usetoast";
 const isGeldigGsmNummer = (value) => {
   value = Telefoonnummer.formatNumber(value);
   return Telefoonnummer.validateNumber(value);
+};
+
+const isGeldigRijksregisternummer = (value) => {
+  return Rijksregisternummer.validateNumber(value);
 };
 
 export default {
@@ -308,6 +330,12 @@ export default {
           },
           email: {
             email: helpers.withMessage("Geen geldig emailadres", email),
+          },
+          rijksregisternummer: {
+            isGeldigRijksregisternummer: helpers.withMessage(
+              "Ongeldig rijksregisternummer",
+              isGeldigRijksregisternummer
+            ),
           },
         }),
       },
