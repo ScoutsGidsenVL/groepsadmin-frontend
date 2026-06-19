@@ -1,11 +1,13 @@
 import { reactive } from "@vue/reactivity";
 import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 import rechtenService from "@/services/rechten/rechtenService";
 import { onUpdated } from "@vue/runtime-core";
 
 export default {
   adresSpace(props) {
     const confirm = useConfirm();
+    const toast = useToast();
     const state = reactive({
       adressen: props.modelValue.adressen,
       invalid: false,
@@ -25,7 +27,54 @@ export default {
       state.adressen = props.modelValue.adressen;
     });
 
+    const contactHoortBijAdres = (contact, adres) => {
+      if (!contact || !adres) {
+        return false;
+      }
+      if (typeof contact.adres === "object" && contact.adres !== null) {
+        return (
+          contact.adres.straat === adres.straat &&
+          contact.adres.nummer === adres.nummer &&
+          contact.adres.postcode === adres.postcode &&
+          contact.adres.gemeente === adres.gemeente
+        );
+      }
+      return contact.adres === adres.id || contact.adresId === adres.id;
+    };
+
+    const contactNaam = (contact) => {
+      const naam = [contact.voornaam, contact.achternaam]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      return naam || contact.rol || "een contact";
+    };
+
     const remove = (index) => {
+      const adres = state.adressen[index];
+      const contacten = (props.modelValue && props.modelValue.contacten) || [];
+      const gekoppeldeContacten = contacten.filter((contact) =>
+        contactHoortBijAdres(contact, adres),
+      );
+
+      if (gekoppeldeContacten.length > 0) {
+        const namen = gekoppeldeContacten.map(contactNaam).join(", ");
+        const meervoud = gekoppeldeContacten.length > 1;
+        toast.add({
+          severity: "warn",
+          summary: "Adres nog in gebruik",
+          detail:
+            "Dit adres is nog gekoppeld aan " +
+            (meervoud ? "de contacten " : "het contact ") +
+            namen +
+            ". Als je dit adres toch wilt verwijderen, moet je eerst een ander adres aan  " +
+            (meervoud ? "deze contacten" : "dit contact") +
+            " toewijzen.",
+          life: 8000,
+        });
+        return;
+      }
+
       confirm.require({
         message: "Ben je zeker dat je dit adres wil verwijderen?",
         header: "Adres verwijderen",
