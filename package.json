@@ -3,8 +3,8 @@
   "version": "3.0.4",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
@@ -50,6 +50,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
@@ -58,7 +59,6 @@
     "sass": "^1.32.10",
     "sass-loader": "8.0.2",
     "typescript": "~3.9.3",
-    "vue-jest": "^5.0.0-0",
-    "cross-env": "^7.0.3"
+    "vue-jest": "^5.0.0-0"
   }
 }
