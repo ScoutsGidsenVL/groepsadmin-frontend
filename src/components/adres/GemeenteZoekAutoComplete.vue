@@ -12,11 +12,12 @@
           @complete="zoekGemeente"
           @itemSelect="kiesGemeente"
           @clear="verwijderGemeente"
+          @blur="$emit('blur')"
           placeholder="Vul postcode in en selecteer uw gemeente..."
           inputClass="adres-autocomplete-input"
           panelClass="adres-autocomplete-panel"
           :disabled="disabled"
-          :class="v$.$dirty && v$.adres.gemeente.$invalid ? 'p-invalid' : ''"
+          :class="invalid ? 'p-invalid' : ''"
         >
           <template #item="slotProps">
             <div class="ml-2">
@@ -29,9 +30,9 @@
     <div class="row">
       <small
         class="p-invalid col-12 col-sm-8 p-error offset-sm-5"
-        v-if="v$.$dirty && v$.adres.gemeente.$invalid"
+        v-if="invalid"
       >
-        {{ v$.adres.gemeente.required.$message }}
+        {{ errorMessage }}
       </small>
     </div>
   </div>
@@ -40,26 +41,13 @@
 <script>
 import AutoComplete from "primevue/autocomplete";
 import RestService from "@/services/api/RestService";
-import useVuelidate from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
 
 export default {
   components: {
     AutoComplete,
   },
-  name: "LidZoekAutoComplete",
-  setup: () => ({
-    v$: useVuelidate(),
-  }),
-  validations() {
-    return {
-      adres: {
-        gemeente: {
-          required: helpers.withMessage("Gemeente is verplicht", required),
-        },
-      },
-    };
-  },
+  name: "GemeenteZoekAutoComplete",
+  emits: ["blur"],
   data() {
     return {
       gefilterdeGemeentes: null,
@@ -83,8 +71,8 @@ export default {
     },
     errorMessage: {
       type: String,
+      default: "",
     },
-    index: {},
   },
   mounted() {
     this.zoekTerm =

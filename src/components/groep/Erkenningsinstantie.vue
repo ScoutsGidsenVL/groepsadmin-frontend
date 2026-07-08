@@ -21,29 +21,11 @@
             :disabled="!bewerkbaar"
             label="Naam instantie"
           ></base-input>
-          <gemeente-zoek-auto-complete
+          <AdresVelden
             v-model="instantie.adres"
             :disabled="!bewerkbaar"
-            label="Woonplaats"
-          />
-          <straat-zoek-auto-complete
-            v-model="instantie.adres"
-            :disabled="!bewerkbaar"
-            label="Straat"
-          />
-          <BaseInput
-            label="Nummer"
-            v-model="instantie.adres.nummer"
-            :disabled="!bewerkbaar"
-            type="text"
-            @keyup="capitalize()"
-          />
-          <BaseInput
-            label="Bus"
-            v-model="instantie.adres.bus"
-            :disabled="!bewerkbaar"
-            type="text"
-            @keyup="capitalize()"
+            :showLand="false"
+            :required="false"
           />
           <base-input
             v-model="instantie.kbo"
@@ -57,18 +39,16 @@
 </template>
 
 <script>
-import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
-import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
+import AdresVelden from "@/components/adres/AdresVelden";
+import BaseInput from "@/components/input/BaseInput";
 import { reactive, toRefs } from "@vue/reactivity";
 import { onUpdated } from "@vue/runtime-core";
-import BaseInput from "@/components/input/BaseInput";
 
 export default {
   name: "instantie",
   components: {
+    AdresVelden,
     BaseInput,
-    GemeenteZoekAutoComplete,
-    StraatZoekAutoComplete,
   },
   props: {
     modelValue: {
@@ -114,18 +94,8 @@ export default {
         };
     });
 
-    const capitalize = () => {
-      if (state.instantie.adres.bus) {
-        state.instantie.adres.bus = state.instantie.adres.bus.toUpperCase();
-      }
-      if (state.instantie.adres.nummer) {
-        state.instantie.adres.nummer = state.instantie.adres.nummer.toUpperCase();
-      }
-    };
-
     return {
       ...toRefs(state),
-      capitalize,
     };
   },
 };

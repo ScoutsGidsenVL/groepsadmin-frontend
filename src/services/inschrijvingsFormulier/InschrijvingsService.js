@@ -1,6 +1,5 @@
-import { computed, reactive } from "@vue/reactivity";
+import { reactive } from "@vue/reactivity";
 import useVuelidate from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
 import { nextTick, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import RestService from "@/services/api/RestService";
@@ -27,16 +26,6 @@ export default {
       loading: false,
       watchable: false,
       changes: false,
-      landen: [
-        { label: "België", value: "BE" },
-        { label: "Duitsland", value: "DE" },
-        { label: "Frankrijk", value: "FR" },
-        { label: "Groot-Brittannië", value: "GB" },
-        { label: "Luxemburg", value: "LU" },
-        { label: "Nederland", value: "NL" },
-        { label: "Canada", value: "CA" },
-        { label: "Polen", value: "PL" },
-      ],
       lid: {
         adres: {
           land: "BE",
@@ -56,26 +45,7 @@ export default {
       },
     });
 
-    const rules = computed(() => {
-      return {
-        lid: {
-          adres: {
-            gemeente: {
-              required: helpers.withMessage("Gemeente is verplicht", required),
-            },
-            straat: {
-              required: helpers.withMessage("Straat is verplicht", required),
-            },
-            postcode: {
-              required: helpers.withMessage("Postcode is verplicht", required),
-            },
-            nummer: {
-              required: helpers.withMessage("Nummer is verplicht", required),
-            },
-          },
-        },
-      };
-    });
+    const rules = {};
 
     const opslaan = () => {
       state.loading = true;
@@ -142,14 +112,6 @@ export default {
       }
     };
 
-    const veranderLand = () => {
-      state.lid.adres.postcode = "";
-      state.lid.adres.gemeente = "";
-      state.lid.adres.straat = "";
-      state.lid.adres.nummer = "";
-      state.lid.adres.bus = "";
-    };
-
     const getGroepData = () => {
       RestService.getGroepOpNummer(state.groepsnummer)
         .then((res) => {
@@ -197,12 +159,6 @@ export default {
       () => {
         if (state.watchable) {
           state.aanvraag.adres = state.lid.adres;
-          if (state.aanvraag.adres.bus) {
-            state.aanvraag.adres.bus = state.aanvraag.adres.bus.toUpperCase();
-          }
-          if (state.aanvraag.adres.nummer) {
-            state.aanvraag.adres.nummer = state.aanvraag.adres.nummer.toUpperCase();
-          }
           state.changes = true;
         }
       },
@@ -235,14 +191,6 @@ export default {
         if (state.watchable) {
           state.aanvraag.contacten = state.lid.contacten;
           state.changes = true;
-          if (state.aanvraag.contacten) {
-            state.aanvraag.contacten.forEach((contact) => {
-              if (contact.adres.nummer)
-                contact.adres.nummer = contact.adres.nummer.toUpperCase();
-              if (contact.adres.bus)
-                contact.adres.bus = contact.adres.bus.toUpperCase();
-            });
-          }
         }
       },
       { deep: true }
@@ -295,7 +243,6 @@ export default {
       state,
       v,
       opslaan,
-      veranderLand,
     };
   },
 };

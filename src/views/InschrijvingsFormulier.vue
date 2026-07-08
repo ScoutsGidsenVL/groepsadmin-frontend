@@ -36,80 +36,7 @@
                   </div>
                 </template>
                 <template #content>
-                  <base-dropdown
-                    :options="landen"
-                    label="Land"
-                    v-model="lid.adres.land"
-                    @changeValue="veranderLand()"
-                  />
-                  <gemeente-zoek-auto-complete
-                    label="Woonplaats"
-                    v-model="lid.adres"
-                    v-if="lid.adres.land === 'BE'"
-                    :invalidForm="
-                      v.lid.adres.$dirty && v.lid.adres.gemeente.$invalid
-                    "
-                    :error-message="v.lid.adres.gemeente.required.$message"
-                  />
-                  <straat-zoek-auto-complete
-                    :disabled="!lid.adres.postcode && !lid.adres.gemeente"
-                    label="Straat"
-                    v-model="lid.adres"
-                    :value="lid.adres.straat"
-                    v-if="lid.adres.land === 'BE'"
-                    :invalidForm="
-                      v.lid.adres.$dirty && v.lid.adres.straat.$invalid
-                    "
-                    :error-message="v.lid.adres.straat.required.$message"
-                  />
-                  <BaseInput
-                    v-if="lid.adres && lid.adres.land !== 'BE'"
-                    label="Postcode"
-                    v-model="lid.adres.postcode"
-                    type="text"
-                    :invalid="
-                      v.lid.adres.$dirty && v.lid.adres.postcode.$invalid
-                    "
-                    :error-message="v.lid.adres.postcode.required.$message"
-                  />
-                  <BaseInput
-                    v-if="lid.adres && lid.adres.land !== 'BE'"
-                    label="Gemeente"
-                    v-model="lid.adres.gemeente"
-                    :invalid="
-                      v.lid.adres.gemeente.$dirty &&
-                      v.lid.adres.gemeente.$invalid
-                    "
-                    :error-message="v.lid.adres.gemeente.required.$message"
-                  />
-                  <BaseInput
-                    v-if="lid.adres && lid.adres.land !== 'BE'"
-                    label="Straat"
-                    v-model="lid.adres.straat"
-                    type="text"
-                    :invalid="
-                      v.lid.adres.straat.$dirty && v.lid.adres.straat.$invalid
-                    "
-                    :error-message="v.lid.adres.straat.required.$message"
-                  />
-                  <BaseInput
-                    label="Nummer"
-                    placeholder="Nummer"
-                    v-model="lid.adres.nummer"
-                    :disabled="!lid.adres.straat"
-                    type="text"
-                    :invalid="
-                      v.lid.adres.nummer.$dirty && v.lid.adres.nummer.$invalid
-                    "
-                    :error-message="v.lid.adres.nummer.required.$message"
-                  />
-                  <BaseInput
-                    label="Bus"
-                    placeholder="Bus"
-                    v-model="lid.adres.bus"
-                    :disabled="!lid.adres.straat"
-                    type="text"
-                  />
+                  <AdresVelden v-model="lid.adres" />
                 </template>
               </card>
             </div>
@@ -143,10 +70,7 @@ import GroepseigenGegevens from "@/components/aanvraag/GroepseigenGegevens";
 import Contacten from "@/components/aanvraag/Contacten";
 import Loader from "@/components/global/Loader";
 import LidWorden from "@/components/buttons/LidWorden";
-import BaseInput from "@/components/input/BaseInput";
-import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
-import BaseDropdown from "@/components/input/BaseDropdown";
-import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
+import AdresVelden from "@/components/adres/AdresVelden";
 import { toRefs } from "@vue/reactivity";
 import InschrijvingsService from "@/services/inschrijvingsFormulier/InschrijvingsService";
 
@@ -159,24 +83,15 @@ export default {
     LidWorden,
     Contacten,
     GroepseigenGegevens,
-    BaseInput,
-    BaseDropdown,
-    GemeenteZoekAutoComplete,
-    StraatZoekAutoComplete,
+    AdresVelden,
   },
 
   setup() {
-    const {
-      state,
-      v,
-      opslaan,
-      veranderLand,
-    } = InschrijvingsService.inschrijvingsSpace();
+    const { state, v, opslaan } = InschrijvingsService.inschrijvingsSpace();
     return {
       ...toRefs(state),
       v,
       opslaan,
-      veranderLand,
     };
   },
 };

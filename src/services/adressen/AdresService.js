@@ -11,16 +11,6 @@ export default {
     const state = reactive({
       adressen: props.modelValue.adressen,
       invalid: false,
-      landen: [
-        { label: "België", value: "BE" },
-        { label: "Duitsland", value: "DE" },
-        { label: "Frankrijk", value: "FR" },
-        { label: "Groot-Brittannië", value: "GB" },
-        { label: "Luxemburg", value: "LU" },
-        { label: "Nederland", value: "NL" },
-        { label: "Canada", value: "CA" },
-        { label: "Polen", value: "PL" },
-      ],
     });
 
     onUpdated(() => {

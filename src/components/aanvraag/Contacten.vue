@@ -126,71 +126,7 @@
               @changeValue="changeCheckBox(index)"
             />
             <div v-if="!contacten[index].zelfdeAdres">
-              <base-dropdown
-                :options="landen"
-                label="Land"
-                v-model="contacten[index].adres.land"
-                @changeValue="veranderLand(index)"
-              />
-              <gemeente-zoek-auto-complete
-                label="Woonplaats"
-                v-model="contacten[index].adres"
-                v-if="contacten[index].adres.land === 'BE'"
-              />
-              <straat-zoek-auto-complete
-                :disabled="
-                  !contacten[index].adres.postcode &&
-                  !contacten[index].adres.gemeente
-                "
-                label="Straat"
-                v-model="contacten[index].adres"
-                :value="contacten[index].adres.straat"
-                v-if="contacten[index].adres.land === 'BE'"
-              />
-              <BaseInput
-                v-if="
-                  contacten[index].adres && contacten[index].adres.land !== 'BE'
-                "
-                label="Postcode"
-                v-model="contacten[index].adres.postcode"
-                type="text"
-                :invalid="isPostcodeIngevuld(index)"
-                error-message="Gelieve een postcode in te vullen"
-              />
-              <BaseInput
-                v-if="
-                  contacten[index].adres && contacten[index].adres.land !== 'BE'
-                "
-                label="Gemeente"
-                v-model="contacten[index].adres.gemeente"
-                type="text"
-                :invalid="isGemeenteIngevuld(index)"
-                error-message="Gelieve een gemeente in te vullen"
-              />
-              <BaseInput
-                v-if="
-                  contacten[index].adres && contacten[index].adres.land !== 'BE'
-                "
-                label="Straat"
-                v-model="contacten[index].adres.straat"
-                type="text"
-                :invalid="isStraatIngevuld(index)"
-                error-message="Gelieve een straat in te vullen"
-              />
-              <BaseInput
-                label="Nummer"
-                v-model="contacten[index].adres.nummer"
-                :disabled="!contacten[index].adres.straat"
-                type="text"
-                :invalid="isNummerIngevuld(index)"
-                error-message="Gelieve een nummer in te vullen"
-              />
-              <BaseInput
-                label="Bus"
-                v-model="contacten[index].adres.bus"
-                :disabled="!contacten[index].adres.straat"
-                type="text"
-              />
+              <AdresVelden v-model="contacten[index].adres" />
               <BaseInput
                 label="Telefoon"
                 v-model="contacten[index].adres.telefoon"
@@ -206,12 +142,10 @@
 
 <script>
 import BaseInput from "@/components/input/BaseInput";
-import BaseDropdown from "@/components/input/BaseDropdown";
 import { onUpdated } from "@vue/runtime-core";
 import { reactive, toRefs } from "@vue/reactivity";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import GemeenteZoekAutoComplete from "@/components/adres/GemeenteZoekAutoComplete";
-import StraatZoekAutoComplete from "@/components/adres/StraatZoekAutoComplete";
+import AdresVelden from "@/components/adres/AdresVelden";
 import BaseInputTelefoon from "@/components/input/BaseInputTelefoon";
 import Telefoonnummer from "@/services/google/Telefoonnummer";
 import Rijksregisternummer from "@/services/rijksregister/Rijksregisternummer";
@@ -233,9 +167,7 @@ export default {
   components: {
     BaseCheckbox,
     BaseInput,
-    BaseDropdown,
-    GemeenteZoekAutoComplete,
-    StraatZoekAutoComplete,
+    AdresVelden,
     BaseInputTelefoon,
   },
 
@@ -260,16 +192,6 @@ export default {
       contacten: props.modelValue.contacten || [],
       adres: props.modelValue.adres || {},
       adresArray: [],
-      landen: [
-        { label: "België", value: "BE" },
-        { label: "Duitsland", value: "DE" },
-        { label: "Frankrijk", value: "FR" },
-        { label: "Groot-Brittannië", value: "GB" },
-        { label: "Luxemburg", value: "LU" },
-        { label: "Nederland", value: "NL" },
-        { label: "Canada", value: "CA" },
-        { label: "Polen", value: "PL" },
-      ],
       rollen: [
         {
           value: "moeder",
@@ -341,14 +263,6 @@ export default {
       },
     };
 
-    const veranderLand = (index) => {
-      state.contacten[index].adres.postcode = "";
-      state.contacten[index].adres.gemeente = "";
-      state.contacten[index].adres.straat = "";
-      state.contacten[index].adres.nummer = "";
-      state.contacten[index].adres.bus = "";
-    };
-
     const veldenNietGoedIngevuld = () => {
       return (
         !props.modelValue.adres.postcode ||
@@ -386,29 +300,6 @@ export default {
         state.contacten[index].adres.nummer = "";
         state.contacten[index].adres.bus = "";
       }
-    };
-
-    const isStraatIngevuld = (index) => {
-      if (!state.contacten[index].adres.straat) {
-        state.invalid = true;
-        return !state.contacten[index].adres.straat;
-      } else {
-        state.invalid = false;
-        return true;
-      }
-    };
-
-    const isNummerIngevuld = (index) => {
-      return !state.contacten[index].adres.nummer;
-    };
-
-    const isGemeenteIngevuld = (index) => {
-      state.invalid = true;
-      return !state.contacten[index].adres.gemeente;
-    };
-
-    const isPostcodeIngevuld = (index) => {
-      return !state.contacten[index].adres.postcode;
     };
 
     const voegContactToe = () => {
@@ -459,12 +350,7 @@ export default {
       v,
       formatNumber,
       voegContactToe,
-      isNummerIngevuld,
-      isGemeenteIngevuld,
-      isPostcodeIngevuld,
-      isStraatIngevuld,
       isGeldigGsmNummer,
-      veranderLand,
       changeCheckBox,
       remove,
       setHeader,
