@@ -41,12 +41,12 @@ export default {
     });
   },
 
-  // Externe api zonder token, verwacht "postcode straat" of "gemeente straat"
+  // Externe api zonder token, verwacht "straat postcode" of "straat gemeente"
   zoekStraat(zoekTerm, postcodeOfGemeente) {
     return axios.get(
       "https://geo.api.vlaanderen.be/geolocation/v4/Suggestion",
       {
-        params: { q: postcodeOfGemeente + " " + zoekTerm },
+        params: { q: zoekTerm + " " + postcodeOfGemeente },
       }
     );
   },
