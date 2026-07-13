@@ -641,6 +641,21 @@ a.clean-link:hover {
   height: 20px !important;
 }
 
+// Bovenste rij: breadcrumb links, zoekbalk + ingelogd lid rechts op gelijke hoogte
+.ingelogd-lid-balk,
+.breadcrumb-balk {
+  height: calc(35px + 1.5rem);
+  padding-top: 1.5rem;
+}
+
+.ingelogd-lid-balk .lid-search {
+  margin-bottom: 0;
+}
+
+.ingelogd-lid-balk .menu-icon {
+  position: static;
+}
+
 .p-datatable .p-datatable-tbody > tr:focus {
   outline: 0.15rem solid $sgv-donkergroen;
   outline-offset: -0.15rem;

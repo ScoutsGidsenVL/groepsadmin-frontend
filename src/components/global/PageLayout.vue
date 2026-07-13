@@ -1,11 +1,13 @@
 <template>
   <div>
     <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
-      <div class="hidden lg:block md:ml-8 w-25">
+      <div
+        class="hidden lg:flex align-items-center md:ml-8 w-25 breadcrumb-balk"
+      >
         <Breadcrumb
           :home="home"
           :model="breadcrumbItems"
-          class="ml-4 mt-4 md:ml-6"
+          class="ml-4 md:ml-6"
         />
       </div>
       <slot />

@@ -1,15 +1,15 @@
 <template>
   <div class="hidden lg:block">
     <div class="container-fluid md:w-90 position-absolute">
-      <div class="d-flex justify-content-md-end z999">
+      <div
+        class="d-flex justify-content-md-end align-items-center z999 ingelogd-lid-balk"
+      >
         <div class="flex justify-content-end">
           <lid-zoek-auto-complete></lid-zoek-auto-complete>
         </div>
-        <label
-          class="h-1rem float-start sm:ml-4 h-2rem cursor-pointer"
-          @click="gaNaarProfiel"
-          >{{ getVolledigeNaam }}</label
-        >
+        <label class="sm:ml-4 cursor-pointer" @click="gaNaarProfiel">{{
+          getVolledigeNaam
+        }}</label>
         <div class="ml-4 cursor-pointer" @click="gaNaarAccount" v-show="false">
           <i class="fas fa-user-circle menu-icon" title="Account" />
         </div>
