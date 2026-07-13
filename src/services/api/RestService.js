@@ -1,3 +1,4 @@
+import axios from "axios";
 import apiClient from "@/services/api/ApiClient";
 import apiConfig from "@/services/api/ApiConfig";
 import apiClientCsv from "@/services/api/ApiClientCsv";
@@ -40,10 +41,14 @@ export default {
     });
   },
 
-  zoekStraat(zoekTerm, postcode) {
-    return apiClient().get(baseUrl + "gis/straat", {
-      params: { term: zoekTerm, postcode: postcode },
-    });
+  // Externe api zonder token, verwacht "postcode straat" of "gemeente straat"
+  zoekStraat(zoekTerm, postcodeOfGemeente) {
+    return axios.get(
+      "https://geo.api.vlaanderen.be/geolocation/v4/Suggestion",
+      {
+        params: { q: postcodeOfGemeente + " " + zoekTerm },
+      }
+    );
   },
 
   getGroepen() {

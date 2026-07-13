@@ -8,6 +8,7 @@
           v-model="zoekTerm"
           :disabled="disabled"
           minLength="2"
+          optionLabel="straat"
           :suggestions="gefilterdeStraten"
           @complete="zoekStraat"
           @itemSelect="kiesStraat"
@@ -20,7 +21,7 @@
         >
           <template #item="slotProps">
             <div class="ml-2">
-              {{ slotProps.item }}
+              {{ slotProps.item.straat }}, {{ slotProps.item.gemeente }}
             </div>
           </template>
         </AutoComplete>
@@ -86,21 +87,34 @@ export default {
   },
   methods: {
     zoekStraat() {
-      RestService.zoekStraat(this.zoekTerm, this.modelValue.postcode).then(
-        (response) => {
-          this.gefilterdeStraten = response.data;
-        }
-      );
+      RestService.zoekStraat(
+        this.zoekTerm,
+        this.modelValue.postcode || this.modelValue.gemeente
+      ).then((response) => {
+        // Suggesties hebben het formaat "Straat, Gemeente"
+        this.gefilterdeStraten = (response.data.SuggestionResult || []).map(
+          (suggestie) => {
+            const index = suggestie.lastIndexOf(",");
+            return {
+              straat: index > -1 ? suggestie.substring(0, index) : suggestie,
+              gemeente: index > -1 ? suggestie.substring(index + 1).trim() : "",
+            };
+          }
+        );
+      });
     },
     kiesStraat(event) {
-      this.adres.straat = event.value;
+      this.adres.straat = event.value.straat;
     },
     verwijderStraat() {
       this.adres.straat = "";
       this.zoekTerm = "";
     },
     checkValue() {
-      this.adres.straat = this.zoekTerm;
+      this.adres.straat =
+        this.zoekTerm && typeof this.zoekTerm === "object"
+          ? this.zoekTerm.straat
+          : this.zoekTerm;
       this.$emit("blur");
     },
   },
