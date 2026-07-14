@@ -102,31 +102,31 @@
 }
 
 .ml--05 {
-  margin-left: - 0.5rem !important;
+  margin-left: -0.5rem !important;
 }
 
 .ml--07 {
-  margin-left: - 0.7rem !important;
+  margin-left: -0.7rem !important;
 }
 
 .ml--1 {
-  margin-left: - 1rem !important;
+  margin-left: -1rem !important;
 }
 
 .ml--2 {
-  margin-left: - 2rem !important;
+  margin-left: -2rem !important;
 }
 
 .mt--05 {
-  margin-top: - 0.5rem !important;
+  margin-top: -0.5rem !important;
 }
 
 .mt--3 {
-  margin-top: - 3rem !important;
+  margin-top: -3rem !important;
 }
 
 .mt--08 {
-  margin-top: - 0.8rem !important;
+  margin-top: -0.8rem !important;
 }
 
 .mt-07 {
@@ -142,7 +142,11 @@
 }
 
 .mr--23px {
- margin-right: -23px;
+  margin-right: -23px;
+}
+
+.ml-35px {
+  margin-left: 10px;
 }
 
 .mt09 {
@@ -175,11 +179,10 @@
   overflow-wrap: anywhere;
 }
 
-.p-splitbutton  {
+.p-splitbutton {
   .p-button {
     background-color: $sgv-donkergroen;
-    border-color: white
-
+    border-color: white;
   }
 
   .p-button:enabled:focus {
@@ -225,7 +228,6 @@
 .padding-left-5em {
   padding-left: 5em !important;
 }
-
 
 .padding-right-5em {
   padding-right: 5em !important;
@@ -277,7 +279,6 @@
     padding-left: 5em !important;
   }
 
-
   .pr-lg-5em {
     padding-right: 5em !important;
   }
@@ -300,7 +301,7 @@
 }
 
 .mt--1 {
- margin-top: -1em !important;
+  margin-top: -1em !important;
 }
 
 .mt--15 {
@@ -311,9 +312,9 @@
   padding-left: 4em !important;
 }
 
-.table-checkbox input[type=checkbox] {
+.table-checkbox input[type="checkbox"] {
   height: 20px !important;
-  width:  20px !important;
+  width: 20px !important;
 }
 
 .true-icon {
@@ -321,7 +322,7 @@
 }
 
 .false-icon {
-  color: $sgv-rood
+  color: $sgv-rood;
 }
 
 @keyframes p-progress-spinner-custom-color {
@@ -430,10 +431,10 @@ a.clean-link:hover {
   align-items: center;
 }
 
-.data-placeholder{
+.data-placeholder {
   padding-top: 8px;
   padding-bottom: 8px;
-  height:14px;
+  height: 14px;
   background-color: rgba(131, 127, 127, 0.26);
   width: 100%;
   border-radius: 10px;
@@ -577,7 +578,7 @@ a.clean-link:hover {
 
 @media screen and (max-width: 333px) {
   .sm\:ml--2 {
-    margin-left: - 2rem !important;
+    margin-left: -2rem !important;
   }
 }
 
@@ -646,6 +647,11 @@ a.clean-link:hover {
 .breadcrumb-balk {
   height: calc(35px + 1.5rem);
   padding-top: 1.5rem;
+}
+
+// Ruimte rechts voorbehouden voor zoekbalk, naam en iconen (IngelogdLid)
+.breadcrumb-balk {
+  width: calc(100% - 550px);
 }
 
 .ingelogd-lid-balk .lid-search {

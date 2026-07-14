@@ -1,24 +1,27 @@
 <template>
   <div class="lid-search mb-1">
-    <AutoComplete
-      class="lid-autocomplete custom-input-styling"
-      :class="sectie === 'ledenlijst' ? 'zoekbalk-styling-ledenlijst' : ''"
-      v-model="zoekTerm"
-      :suggestions="gefilterdeLeden"
-      @complete="zoekLid"
-      minLength="2"
-      @itemSelect="gaNaarLid"
-      placeholder="Zoek op naam, gsm of e-mail"
-      inputClass="lid-autocomplete-input"
-      panelClass="lid-autocomplete-panel"
-      :autoOptionFocus="false"
-    >
-      <template #item="slotProps">
-        <div class="ml-2">
-          {{ showLidGegevens(slotProps.item) }}
-        </div>
-      </template>
-    </AutoComplete>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search" />
+      <AutoComplete
+        class="lid-autocomplete custom-input-styling"
+        :class="sectie === 'ledenlijst' ? 'zoekbalk-styling-ledenlijst' : ''"
+        v-model="zoekTerm"
+        :suggestions="gefilterdeLeden"
+        @complete="zoekLid"
+        minLength="2"
+        @itemSelect="gaNaarLid"
+        placeholder="Zoek op naam, gsm of e-mail"
+        inputClass="lid-autocomplete-input"
+        panelClass="lid-autocomplete-panel"
+        :autoOptionFocus="false"
+      >
+        <template #item="slotProps">
+          <div class="ml-2">
+            {{ showLidGegevens(slotProps.item) }}
+          </div>
+        </template>
+      </AutoComplete>
+    </span>
   </div>
 </template>
 

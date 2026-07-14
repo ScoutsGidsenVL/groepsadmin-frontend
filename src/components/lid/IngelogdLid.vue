@@ -10,10 +10,14 @@
         <label class="sm:ml-4 cursor-pointer" @click="gaNaarProfiel">{{
           getVolledigeNaam
         }}</label>
-        <div class="ml-4 cursor-pointer" @click="gaNaarAccount" v-show="false">
+        <div
+          class="ml-35px cursor-pointer"
+          @click="gaNaarAccount"
+          v-show="false"
+        >
           <i class="fas fa-user-circle menu-icon" title="Account" />
         </div>
-        <div class="ml-5 cursor-pointer mr--23px" @click="logout">
+        <div class="ml-35px cursor-pointer mr--23px" @click="logout">
           <i class="fas fa-sign-out-alt menu-icon" title="Uitloggen" />
         </div>
       </div>

@@ -170,6 +170,13 @@
 
 .lid-autocomplete-input {
   width: 298px;
+  // Ruimte voor het zoekicoon links in het invoerveld
+  padding-left: 2.25rem !important;
+}
+
+// Zoekicoon boven het (relatief gepositioneerde) autocomplete-veld tillen
+.lid-search .p-input-icon-left > i {
+  z-index: 1;
 }
 
 .p-menu-list li {
