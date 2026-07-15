@@ -3,10 +3,17 @@
   display: block;
   position: relative;
   width: 100%;
-  bottom: -55px;
+  flex-shrink: 0;
   overflow: hidden;
   color: $font-white !important;
   z-index: 88;
+}
+
+// Inhoud vrijhouden van het vaste zijmenu (80px breed)
+@media screen and (min-width: 992px) {
+  .footer {
+    padding-left: 80px;
+  }
 }
 
 .footer a {

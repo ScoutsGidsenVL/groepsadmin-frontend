@@ -317,9 +317,10 @@ export default {
 
     const handleScroll = () => {
       let element = scrollComponent.value;
+      // Extra leden laden zodra de onderkant minder dan 300px onder het scherm zit
       if (
         element &&
-        element.getBoundingClientRect().bottom < window.innerHeight &&
+        element.getBoundingClientRect().bottom < window.innerHeight + 300 &&
         !state.isLoadingMore
       ) {
         if (aantalLedenGeladen.value >= state.totaalAantalLeden) {

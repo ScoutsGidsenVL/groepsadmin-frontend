@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-layout">
     <div class="container-fluid md:w-90 min-height-67vh mt-7em lg:mt-0">
       <div class="hidden lg:flex align-items-center md:ml-8 breadcrumb-balk">
         <Breadcrumb

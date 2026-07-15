@@ -528,6 +528,18 @@ a.clean-link:hover {
   min-height: 67vh !important;
 }
 
+// Footer onderaan het scherm houden, ook bij weinig inhoud
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-layout > .container-fluid {
+  flex: 1 0 auto;
+  padding-bottom: 3rem;
+}
+
 .vw90 {
   width: 90vw;
 }
