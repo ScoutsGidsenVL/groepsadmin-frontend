@@ -23,3 +23,61 @@
     box-shadow: 0 0 0 0.2rem $sgv-oranje !important;
   }
 }
+// Alle invoervelden in de linkerkolom minstens zo breed als het sjabloon-dropdown (285px).
+// Enkel op brede schermen, waar de linkerkolom naast Onderwerp staat.
+// Het label in het dropdown is zelf ook een p-inputtext en valt hier bewust buiten,
+// anders wordt het dropdown 285px label + pijlknop en dus breder dan de rest.
+@media (min-width: 992px) {
+  .mail-kolom-links .p-inputtext:not(.p-dropdown-label),
+  .mail-kolom-links .p-dropdown,
+  .mail-kolom-links .p-fileupload {
+    min-width: 285px;
+  }
+
+  // Van, Antwoorden naar en Bcc groeien mee met de kolom.
+  // BaseInput beperkt het veld standaard tot col-sm-7 (58%).
+  .mail-kolom-links .p-grid .col-sm-7 {
+    width: 100%;
+  }
+
+  // Ontvangers, de checkboxen en Bijlage volgen dezelfde minimumbreedte
+  .mail-kolom-links .row .text-align-left {
+    min-width: 285px;
+  }
+}
+
+// Uniform verticaal ritme voor de veldlabels (Opgeslagen sjablonen, Van,
+// Antwoorden naar, Bcc en Onderwerp): boven elk label evenveel ruimte,
+// en een kleine vaste afstand tussen label en veld
+.veld-label {
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+
+  label {
+    margin: 0;
+  }
+}
+
+// De knop 'Bestanden kiezen' altijd op zijn natuurlijke breedte houden.
+// De FileUpload-wrapper is op md/lg maar 33%/50% breed en drukt de knop anders plat.
+.mail-kolom-links .p-fileupload-choose {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+// Checkbox en label naast elkaar op één lijn houden, het label springt anders
+// bij weinig ruimte onder de checkbox
+.mail-kolom-links .col-lg-12.text-align-left {
+  display: flex;
+  align-items: center;
+
+  .p-checkbox {
+    flex-shrink: 0;
+  }
+
+  label {
+    white-space: nowrap;
+    // mt-1 van het label verstoort de verticale centrering
+    margin-top: 0 !important;
+  }
+}

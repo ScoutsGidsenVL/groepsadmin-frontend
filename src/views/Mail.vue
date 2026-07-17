@@ -28,8 +28,8 @@
         </h4>
         <div class="row">
           <div class="col-12 col-lg-4">
-            <div class="pl-lg-4em mt-2">
-              <div class="d-flex justify-content-start">
+            <div class="pl-lg-4em mt-2 mail-kolom-links">
+              <div class="d-flex justify-content-start veld-label">
                 <label>Opgeslagen sjablonen:</label>
               </div>
               <div class="d-flex justify-content-start">
@@ -59,7 +59,7 @@
                   />
                 </div>
               </div>
-              <div class="d-flex justify-content-start">
+              <div class="d-flex justify-content-start veld-label">
                 <label>Van:</label>
               </div>
               <BaseInput
@@ -67,11 +67,11 @@
                 :invalid="errors['van']"
                 error-message="Dit veld is verplicht"
               ></BaseInput>
-              <div class="d-flex justify-content-start">
+              <div class="d-flex justify-content-start veld-label">
                 <label>Antwoorden naar:</label>
               </div>
               <BaseInput v-model="sjabloon.replyTo"></BaseInput>
-              <div class="d-flex justify-content-start">
+              <div class="d-flex justify-content-start veld-label">
                 <label>Bcc:</label>
               </div>
               <BaseInput v-model="sjabloon.bcc"> </BaseInput>
@@ -118,7 +118,7 @@
                     class="mt--3p"
                   ></checkbox>
                   <label class="mt-1 ml-3" for="alleContacten"
-                    >Stuur naar de contacten van leden</label
+                    >Stuur naar contacten van leden</label
                   >
                 </div>
               </div>
@@ -146,7 +146,7 @@
                   chooseLabel="Bestanden kiezen"
                   :showUploadButton="false"
                   :showCancelButton="false"
-                  class="d-flex justify-content-start md:w-4 lg:w-6 sm:max-w-full"
+                  class="d-flex justify-content-start sm:max-w-full"
                 ></FileUpload>
                 <div
                   v-for="(file, index) in files"
@@ -186,7 +186,7 @@
             </div>
           </div>
           <div class="col-12 col-lg-8 pl-lg-5em mt-2">
-            <div class="d-flex justify-content-start">
+            <div class="d-flex justify-content-start veld-label">
               <label>Onderwerp:</label>
             </div>
             <BaseInput
