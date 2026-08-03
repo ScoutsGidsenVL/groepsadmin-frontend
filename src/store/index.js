@@ -10,6 +10,7 @@ export default createStore({
     gebruikersnaam: "",
     kandidaatLid: "",
     token: "",
+    justRegistered: false,
     profiel: null,
     indexedGroepen: {},
     groepen: {},
@@ -44,6 +45,9 @@ export default createStore({
     },
     setToken(state, token) {
       state.token = token;
+    },
+    setJustRegistered(state, justRegistered) {
+      state.justRegistered = justRegistered;
     },
     setProfiel(state, profiel) {
       state.profiel = profiel;
@@ -130,6 +134,12 @@ export default createStore({
     },
     token(state) {
       return state.token;
+    },
+    justRegistered(state) {
+      return state.justRegistered;
+    },
+    gebruikersnaam(state) {
+      return state.gebruikersnaam;
     },
     profiel(state) {
       return state.profiel;

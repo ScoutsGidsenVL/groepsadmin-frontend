@@ -1,22 +1,23 @@
 <template>
   <Dialog
-    :header="header"
     v-model:visible="openDialog"
     :style="{ width: '550px' }"
-    class="message-dialog"
+    class="message-dialog welkom-dialog"
     :modal="true"
     :closable="false"
   >
+    <template #header>
+      <div class="welkom-dialog-header">
+        <img
+          :src="`${publicPath}static/img/ga-logo.svg`"
+          alt="ga logo"
+          class="welkom-dialog-logo"
+        />
+        <div class="welkom-dialog-titel">{{ header }}</div>
+      </div>
+    </template>
     <div class="confirmation-content">
       <span v-html="message"></span>
-      <div v-if="leden?.length > 0">
-        <div v-for="(lid, index) in leden" :key="index">
-          <router-link :to="{ name: 'Lid', params: { id: lid.id } }">
-            {{ lid.voornaam }} {{ lid.achternaam }} -
-            {{ formatteerDatum(lid.geboortedatum) }}
-          </router-link>
-        </div>
-      </div>
     </div>
     <template #footer>
       <Button
@@ -30,32 +31,29 @@
 </template>
 
 <script>
-import DateUtil from "@/services/dates/DateUtil";
-
 export default {
-  name: "MessageDialog",
+  name: "WelkomDialog",
   props: {
     message: {
       type: String,
     },
-    leden: {
-      type: Array,
-    },
     header: {
       type: String,
-      default: "Opgelet",
+      default: "Welkom!",
     },
     dialogVisible: {
       type: Boolean,
       default: false,
     },
   },
+  data() {
+    return {
+      publicPath: process.env.BASE_URL,
+    };
+  },
   methods: {
     sluiten() {
       this.$emit("close");
-    },
-    formatteerDatum(datum) {
-      return DateUtil.formatteerDatum(datum);
     },
   },
   computed: {

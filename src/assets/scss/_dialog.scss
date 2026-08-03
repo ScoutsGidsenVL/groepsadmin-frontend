@@ -2,15 +2,24 @@
   max-width: 50%;
 }
 
+// De algemene max-width:50% laat op smalle schermen te weinig ruimte over,
+// message-dialog krijgt daar meer plaats
+@media screen and (max-width: 576px) {
+  .p-dialog.message-dialog {
+    width: 92vw !important;
+    max-width: 92vw !important;
+  }
+}
+
 .pi-exclamation-triangle {
   color: $sgv-oranje !important;
 }
 
 .header-background {
   color: white !important;
-  z-index:999;
+  z-index: 999;
   position: absolute;
-  top: 1px
+  top: 1px;
 }
 
 .activiteit-dialog {
@@ -33,4 +42,52 @@
   background: $sgv-donkergroen;
   border-top-left-radius: 13px;
   border-top-right-radius: 13px;
+}
+
+.welkom-dialog .p-dialog-header {
+  background: $sgv-donkergroen;
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+// Grotere witruimte tussen de groene header en de inhoud van de dialoog
+.welkom-dialog .p-dialog-content {
+  padding-top: 2rem;
+}
+
+.welkom-dialog-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.welkom-dialog-logo {
+  width: 95px;
+  height: auto;
+  align-self: center;
+}
+
+.welkom-dialog-titel {
+  width: 100%;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+// Zelfde iconen als in de sidebar, inline in de tekst van de welkomsttekst
+.welkom-dialog-tekst-icoon {
+  color: $sgv-donkergroen;
+  margin-right: 0.4rem;
+}
+
+.welkom-dialog-link {
+  color: $sgv-donkergroen !important;
+}
+
+// Icoon en tekst samen houden, geen regelbreuk ertussen
+.welkom-dialog-nowrap {
+  white-space: nowrap;
 }

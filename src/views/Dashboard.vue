@@ -4,6 +4,12 @@
     <confirmDialog />
     <toast position="bottom-right" />
     <ingelogd-lid></ingelogd-lid>
+    <WelkomDialog
+      :dialog-visible="toonWelkomstpopup"
+      :header="welkomstheader"
+      :message="welkomstboodschap"
+      @close="sluitWelkomstpopup"
+    />
     <PageLayout>
       <div class="custom-divider"></div>
       <div class="lg:ml-8 lg:pl-8 mt-2">
@@ -74,6 +80,7 @@ import PageLayout from "@/components/global/PageLayout";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import WelkomDialog from "@/components/dialog/WelkomDialog";
 import DashboardService from "@/services/dashboard/DashboardService";
 import { toRefs } from "@vue/reactivity";
 
@@ -86,14 +93,27 @@ export default {
     SideMenu,
     ConfirmDialog,
     IngelogdLid,
+    WelkomDialog,
   },
   setup() {
-    const { state, dashboardItems, naam } = DashboardService.dashboardSpace();
+    const {
+      state,
+      dashboardItems,
+      naam,
+      toonWelkomstpopup,
+      welkomstheader,
+      welkomstboodschap,
+      sluitWelkomstpopup,
+    } = DashboardService.dashboardSpace();
 
     return {
       ...toRefs(state),
       dashboardItems,
       naam,
+      toonWelkomstpopup,
+      welkomstheader,
+      welkomstboodschap,
+      sluitWelkomstpopup,
     };
   },
 };

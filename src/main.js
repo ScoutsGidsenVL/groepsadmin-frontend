@@ -165,6 +165,14 @@ if (window.location.pathname.includes("formulier")) {
         "setGebruikersnaam",
         keycloak.idTokenParsed.preferred_username
       );
+      // De claim kan op het access- of het id-token staan, afhankelijk van de mapper in Keycloak
+      store.commit(
+        "setJustRegistered",
+        !!(
+          keycloak.tokenParsed?.just_registered ||
+          keycloak.idTokenParsed?.just_registered
+        )
+      );
       store.dispatch("getProfiel");
       store.dispatch("getGroepen");
       store.dispatch("getFuncties");
