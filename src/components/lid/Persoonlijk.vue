@@ -112,7 +112,7 @@
           <BaseInput
             v-model="lid.email"
             :disabled="kanNietBewerken"
-            label="Email"
+            label="E-mail"
             type="email"
             :invalid="v.lid.email.$dirty && v.lid.email.$invalid"
             :error-message="v.lid.email.email.$message"
