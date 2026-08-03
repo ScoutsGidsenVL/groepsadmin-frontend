@@ -55,7 +55,10 @@
                     : data[field]
                 }}
               </template>
-              <template #editor="{ data, field }">
+              <template
+                v-if="col.field === 'aantaldagen' || col.field === 'prijs'"
+                #editor="{ data, field }"
+              >
                 <template v-if="field === 'aantaldagen'">
                   <input-number v-model="data[field]" autofocus />
                 </template>
