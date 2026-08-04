@@ -87,6 +87,16 @@
   color: $sgv-donkergroen !important;
 }
 
+// Waarschuwing wanneer er noch e-mail noch gsm gekend is
+.welkom-dialog-waarschuwing {
+  color: $sgv-rood;
+  font-weight: 600;
+
+  i {
+    margin-right: 0.4rem;
+  }
+}
+
 // Icoon en tekst samen houden, geen regelbreuk ertussen
 .welkom-dialog-nowrap {
   white-space: nowrap;
