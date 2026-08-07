@@ -41,9 +41,7 @@
               </card>
             </div>
             <groepseigen-gegevens
-              v-if="
-                groepseigenVelden && Object.keys(groepseigenVelden).length > 0
-              "
+              v-if="heeftZichtbareGroepseigenVelden"
               v-model="groepseigenVelden"
               :title="'Groepseigen gegevens'"
               :groepsnummer="groepsnummer"
@@ -87,11 +85,17 @@ export default {
   },
 
   setup() {
-    const { state, v, opslaan } = InschrijvingsService.inschrijvingsSpace();
+    const {
+      state,
+      v,
+      opslaan,
+      heeftZichtbareGroepseigenVelden,
+    } = InschrijvingsService.inschrijvingsSpace();
     return {
       ...toRefs(state),
       v,
       opslaan,
+      heeftZichtbareGroepseigenVelden,
     };
   },
 };

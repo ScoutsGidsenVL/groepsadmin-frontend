@@ -1,6 +1,6 @@
 import { reactive } from "@vue/reactivity";
 import useVuelidate from "@vuelidate/core";
-import { nextTick, onMounted, watch } from "vue";
+import { computed, nextTick, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import RestService from "@/services/api/RestService";
 import { useToast } from "primevue/usetoast";
@@ -239,10 +239,30 @@ export default {
 
     const v = useVuelidate(rules, state);
 
+    // Types die DynamischVeldVoorAanvraag effectief rendert; een veld dat
+    // niet in de lijst staat of dat het lid niet mag wijzigen toont niets
+    const ONDERSTEUNDE_VELDTYPES = [
+      "tekst",
+      "vinkje",
+      "lijst",
+      "tekst_meerdere_lijnen",
+    ];
+
+    const heeftZichtbareGroepseigenVelden = computed(() => {
+      if (!Array.isArray(state.groepseigenVelden)) {
+        return false;
+      }
+      return state.groepseigenVelden.some(
+        (veld) =>
+          veld.kanLidWijzigen && ONDERSTEUNDE_VELDTYPES.includes(veld.type)
+      );
+    });
+
     return {
       state,
       v,
       opslaan,
+      heeftZichtbareGroepseigenVelden,
     };
   },
 };
