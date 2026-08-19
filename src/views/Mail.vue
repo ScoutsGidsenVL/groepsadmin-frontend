@@ -289,6 +289,7 @@ export default {
       home: { icon: "pi pi-home", to: "/dashboard" },
       breadcrumbItems: [{ label: "E-mail" }],
       kolommenLaden: false,
+      laden: false,
       bevestig: false,
       sorteerLeden: false,
       watchable: false,
@@ -777,10 +778,33 @@ export default {
         })
         .catch((error) => {
           this.laden = false;
-          this.feedback.boodschap = error.response.data.boodschap;
-          this.feedback.vraag = error.response.data.vraag;
-          this.feedback.infoLink = error.response.data.infoLink;
-          this.openDialog();
+          const data = error.response?.data;
+          const fouten = data?.fouten;
+          if (error.response?.status === 400 && fouten?.length > 0) {
+            const fout = fouten[0];
+            const veld = fout.veld.charAt(0).toUpperCase() + fout.veld.slice(1);
+            this.$toast.add({
+              severity: "error",
+              summary: data.titel || "Fout",
+              detail: `${veld}: ${fout.waarde}\n${fout.beschrijving}`,
+              life: 8000,
+            });
+            return;
+          }
+          if (data?.boodschap) {
+            this.feedback.boodschap = data.boodschap;
+            this.feedback.vraag = data.vraag;
+            this.feedback.infoLink = data.infoLink;
+            this.openDialog();
+            return;
+          }
+          console.error("Onverwachte foutrespons bij het verzenden", error);
+          this.$toast.add({
+            severity: "error",
+            summary: "Fout",
+            detail: "Er is iets fout gelopen bij het versturen van de mail.",
+            life: 8000,
+          });
         });
     },
 
