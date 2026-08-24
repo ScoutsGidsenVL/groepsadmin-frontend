@@ -15,7 +15,7 @@
           :modelValue="value"
           :disabled="disabled"
           :binary="multiple"
-          @change="check"
+          @update:modelValue="check"
         />
         <span class="help-button-wrapper">
           <a :href="helpLink" target="_blank"
@@ -81,7 +81,8 @@ export default {
     },
   },
   methods: {
-    check() {
+    check(newValue) {
+      this.$emit("update:modelValue", newValue);
       this.$emit("check");
       this.$emit("changeValue");
     },

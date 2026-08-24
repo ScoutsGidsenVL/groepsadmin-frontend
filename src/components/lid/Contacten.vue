@@ -211,7 +211,7 @@ export default {
           label: "Voogd",
         },
         {
-          value: "Opvoedingsverantwoordelijke",
+          value: "opvoedingsverantwoordelijke",
           label: "Opvoedingsverantwoordelijke",
         },
       ],

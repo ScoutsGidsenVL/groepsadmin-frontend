@@ -7,7 +7,7 @@
           :modelValue="value"
           :disabled="disabled"
           :binary="multiple"
-          @change="check"
+          @update:modelValue="check"
         />
       </div>
       <div class="flex-1 mt-1">
@@ -67,7 +67,8 @@ export default {
     },
   },
   methods: {
-    check() {
+    check(newValue) {
+      this.$emit("update:modelValue", newValue);
       this.$emit("check");
       this.$emit("changeValue");
     },

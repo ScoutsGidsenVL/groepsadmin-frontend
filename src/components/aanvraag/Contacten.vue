@@ -142,6 +142,7 @@
 
 <script>
 import BaseInput from "@/components/input/BaseInput";
+import BaseDropdown from "@/components/input/BaseDropdown";
 import { onUpdated } from "@vue/runtime-core";
 import { reactive, toRefs } from "@vue/reactivity";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
@@ -167,6 +168,7 @@ export default {
   components: {
     BaseCheckbox,
     BaseInput,
+    BaseDropdown,
     AdresVelden,
     BaseInputTelefoon,
   },
@@ -210,7 +212,7 @@ export default {
           label: "Voogd",
         },
         {
-          value: "Opvoedingsverantwoordelijke",
+          value: "opvoedingsverantwoordelijke",
           label: "Opvoedingsverantwoordelijke",
         },
       ],
