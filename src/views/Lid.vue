@@ -49,12 +49,11 @@
         <div class="lg:ml-2">
           <form @submit.prevent="opslaan" autocomplete="off">
             <div class="row lg:ml-8">
-              <Message
-                severity="warn"
-                v-if="!loadingLid && !lid.isActiefVvksmLid"
-              >
-                {{ lid.nietVerzekerdReden }}
-              </Message>
+              <div class="col-12" v-if="!loadingLid && !lid.isActiefVvksmLid">
+                <Message severity="warn" class="niet-verzekerd-balk">
+                  {{ lid.nietVerzekerdReden }}
+                </Message>
+              </div>
               <div class="col-12 col-lg-6 col-xl-4">
                 <persoonlijk
                   v-model="lid"
