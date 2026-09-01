@@ -227,6 +227,10 @@ export default {
         return;
       }
 
+      // Bewaar de originele (Date-)waarde: bij een mislukte opslag moet de
+      // datepicker terug het normale weergaveformaat tonen i.p.v. het
+      // API-formaat (YYYY-MM-DD) waarin hieronder omgezet wordt
+      const originaleGeboortedatum = state.lid.vgagegevens.geboortedatum;
       if (state.lid.vgagegevens.geboortedatum) {
         let geboortedatum = new Date(state.lid.vgagegevens.geboortedatum);
         geboortedatum.setHours(2);
@@ -286,6 +290,7 @@ export default {
           }
         })
         .catch((error) => {
+          state.lid.vgagegevens.geboortedatum = originaleGeboortedatum;
           toast.add({
             severity: "warn",
             summary: error.response.data.titel,
