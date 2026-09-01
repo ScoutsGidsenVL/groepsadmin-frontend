@@ -312,7 +312,11 @@ export default {
       } else {
         state.contacten.forEach((contact) => {
           if (contact.adresId) {
+            // Eenmalige conversie: adresId nadien wissen, anders overschrijft
+            // een volgende resetData() (bv. via onUpdated) telkens opnieuw een
+            // adreswijziging die de gebruiker net via het dropdown maakte
             contact.adres = contact.adresId;
+            delete contact.adresId;
           } else if (contact.adres && typeof contact.adres === "object") {
             const match = state.adressen
               ? state.adressen.find(
