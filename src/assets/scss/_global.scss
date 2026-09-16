@@ -45,6 +45,13 @@
   border-color: $sgv-lichtgroen !important;
 }
 
+// Dit thema geeft (anders dan bv. p-dropdown-empty-message) geen padding mee
+// voor de "geen resultaten"-melding van AutoComplete, waardoor de tekst
+// zonder enige ruimte tegen de rand van het paneel stond
+.p-autocomplete-panel .p-autocomplete-empty-message {
+  padding: 0.5rem 1rem;
+}
+
 .p-inputtext:enabled:focus {
   box-shadow: 0 0 0 0.2rem transparent !important;
   border-color: $sgv-lichtgroen !important;

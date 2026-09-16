@@ -14,6 +14,7 @@
         inputClass="lid-autocomplete-input"
         panelClass="lid-autocomplete-panel"
         :autoOptionFocus="false"
+        emptySearchMessage="Geen zoekresultaat"
       >
         <template #item="slotProps">
           <div class="ml-2">
