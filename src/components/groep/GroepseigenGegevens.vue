@@ -35,7 +35,7 @@
             handle=".handle"
           >
             <template #item="{ element, index }">
-              <accordion>
+              <accordion :active-index="element.status === 'nieuw' ? 0 : null">
                 <accordionTab>
                   <template #header>
                     <div class="row custom-height w-100">

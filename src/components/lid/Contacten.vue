@@ -14,7 +14,7 @@
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true">
+        <accordion :multiple="true" v-model:activeIndex="activeIndex">
           <accordionTab v-for="(contact, index) in contacten" :key="index">
             <template #header>
               <div class="d-flex col-11 justify-content-between">
@@ -218,6 +218,7 @@ export default {
       contacten: [],
       adressen: null,
       adresArray: [],
+      activeIndex: [],
     });
 
     const lidTenLasteClick = (index) => {
@@ -262,6 +263,7 @@ export default {
         if (props.modelValue.persoonsgegevens.rijksregisternummer)
           nieuwContact.rijksregisternummer = "";
         state.contacten.push(nieuwContact);
+        state.activeIndex = [...state.activeIndex, state.contacten.length - 1];
       } else {
         toast.add({
           severity: "warn",
