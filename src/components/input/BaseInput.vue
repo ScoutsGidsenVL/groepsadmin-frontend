@@ -6,9 +6,9 @@
         <span class="help-button-wrapper">
           <a :href="helpLink" target="_blank"
             ><i
-              class="fas fa-question-circle help-button ml-2"
+              :class="helpIcon + ' help-button ml-2'"
               v-if="helpLink"
-              title="Meer info..."
+              :title="helpTitle"
             ></i></a
         ></span>
       </label>
@@ -81,6 +81,14 @@ export default {
     helpLink: {
       type: String,
       default: null,
+    },
+    helpIcon: {
+      type: String,
+      default: "fas fa-question-circle",
+    },
+    helpTitle: {
+      type: String,
+      default: "Meer info...",
     },
   },
   methods: {

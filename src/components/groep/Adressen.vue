@@ -17,7 +17,7 @@
         <accordion :multiple="true">
           <accordionTab v-for="(adres, index) in adressen" :key="index">
             <template #header>
-              <div class="d-flex col-12 justify-content-between">
+              <div class="d-flex col-11 justify-content-between">
                 <span>{{ setHeader(adres) }}</span>
                 <i
                   class="pi pi-envelope mr-3"

@@ -55,6 +55,10 @@
                   :instantie="selectedGroep.instantie"
                   :bewerkbaar="kanGroepWijzigen"
                 ></Erkenningsinstantie>
+                <ondersteunende-vzw
+                  v-model="selectedGroep"
+                  :kan-groep-wijzigen="kanGroepWijzigen"
+                ></ondersteunende-vzw>
               </div>
               <div class="col-12 col-lg-12 col-xl-4">
                 <Lokalen
@@ -90,6 +94,7 @@ import PageLayout from "@/components/global/PageLayout";
 import GroepService from "@/services/groep/GroepService";
 import { toRefs } from "@vue/reactivity";
 import Erkenningsinstantie from "@/components/groep/Erkenningsinstantie.vue";
+import OndersteunendeVzw from "@/components/groep/OndersteunendeVzw.vue";
 
 export default {
   name: "Groep",
@@ -101,6 +106,7 @@ export default {
     Algemeen,
     Contacten,
     Erkenningsinstantie,
+    OndersteunendeVzw,
     Lokalen,
     ConfirmDialog,
     SideMenu,
