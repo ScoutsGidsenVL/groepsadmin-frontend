@@ -24,7 +24,7 @@
         <accordion :multiple="true" :activeIndex="contacts">
           <accordionTab v-for="(contact, index) in contacten" :key="index">
             <template #header>
-              <div class="d-flex col-12 justify-content-between">
+              <div class="d-flex col-11 justify-content-between">
                 <span>{{ setHeader(contact) }}</span>
                 <Button
                   icon="pi pi-trash"
