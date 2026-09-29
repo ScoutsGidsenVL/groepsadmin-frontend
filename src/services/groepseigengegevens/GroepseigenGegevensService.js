@@ -58,7 +58,6 @@ export default {
     const state = reactive({
       groep: props.modelValue,
       drag: false,
-      activeIndex: null,
     });
 
     const kanGroepWijzigen = () => {
@@ -139,7 +138,6 @@ export default {
         keuzes: [""],
       };
       state.groep.groepseigenGegevens.push(newGegeven);
-      state.activeIndex = 0;
     };
 
     const verwijderGegeven = (index) => {

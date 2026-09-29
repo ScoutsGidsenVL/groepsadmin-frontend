@@ -33,7 +33,7 @@
             groep.ondersteunendeVzws.length > 0
           "
         >
-          <accordion :multiple="true">
+          <accordion :multiple="true" v-model:activeIndex="activeIndex">
             <accordionTab
               v-for="(vzw, index) in groep.ondersteunendeVzws"
               :key="index"

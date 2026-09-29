@@ -15,18 +15,23 @@ export default {
 
     const state = reactive({
       groep: props.modelValue,
+      activeIndex: [],
     });
 
     const voegVzwToe = () => {
       if (!state.groep.ondersteunendeVzws) {
         state.groep.ondersteunendeVzws = [];
       }
-      state.groep.ondersteunendeVzws.unshift({
+      state.groep.ondersteunendeVzws.push({
         naam: "",
         kbo: "",
         email: "",
         doel: "",
       });
+      state.activeIndex = [
+        ...state.activeIndex,
+        state.groep.ondersteunendeVzws.length - 1,
+      ];
     };
 
     const verwijderVzw = (index) => {
@@ -88,7 +93,7 @@ export default {
             kbo: {
               isGeldigKboNummer: helpers.withMessage(
                 "Geen geldig KBO nummer",
-                isGeldigKboNummer,
+                isGeldigKboNummer
               ),
             },
           }),

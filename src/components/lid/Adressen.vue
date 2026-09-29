@@ -7,7 +7,7 @@
           <Button
             icon="pi pi-plus"
             class="p-button-rounded p-button-outlined mt-1 add-button"
-            @click="voegAdresToe"
+            @click="voegAdresToeEnOpen"
             title="Voeg adres toe"
             v-if="lidaanvraag || heeftToegang('adressen')"
           />
@@ -131,6 +131,11 @@ export default {
       heeftToegang,
     } = AdresService.adresSpace(props);
 
+    const voegAdresToeEnOpen = () => {
+      voegAdresToe();
+      activeIndex.value = [...activeIndex.value, state.adressen.length - 1];
+    };
+
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);
       return Telefoonnummer.validateNumber(value);
@@ -154,7 +159,7 @@ export default {
     return {
       ...toRefs(state),
       activeIndex,
-      voegAdresToe,
+      voegAdresToeEnOpen,
       remove,
       zetPostadres,
       setHeader,
