@@ -7,17 +7,17 @@
           <Button
             icon="pi pi-plus"
             class="p-button-rounded p-button-outlined mt-1 add-button"
-            @click="voegAdresToe"
+            @click="voegAdresToeEnOpen"
             title="Voeg adres toe"
             v-if="bewerkbaar"
           />
         </div>
       </template>
       <template #content>
-        <accordion :multiple="true">
+        <accordion :multiple="true" v-model:activeIndex="activeIndex">
           <accordionTab v-for="(adres, index) in adressen" :key="index">
             <template #header>
-              <div class="d-flex col-12 justify-content-between">
+              <div class="d-flex col-11 justify-content-between">
                 <span>{{ setHeader(adres) }}</span>
                 <i
                   class="pi pi-envelope mr-3"
@@ -82,7 +82,7 @@
 import AdresVelden from "@/components/adres/AdresVelden";
 import BaseInput from "@/components/input/BaseInput";
 import BaseCheckbox from "@/components/input/BaseCheckbox";
-import { toRefs } from "@vue/reactivity";
+import { ref, toRefs } from "@vue/reactivity";
 import AdresService from "@/services/adressen/AdresService";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
@@ -121,6 +121,13 @@ export default {
       heeftToegang,
     } = AdresService.adresSpace(props);
 
+    const activeIndex = ref([]);
+
+    const voegAdresToeEnOpen = () => {
+      voegAdresToe();
+      activeIndex.value = [...activeIndex.value, state.adressen.length - 1];
+    };
+
     const isGeldigGsmNummer = (value) => {
       value = Telefoonnummer.formatNumber(value);
       return Telefoonnummer.validateNumber(value);
@@ -158,7 +165,8 @@ export default {
 
     return {
       ...toRefs(state),
-      voegAdresToe,
+      activeIndex,
+      voegAdresToeEnOpen,
       remove,
       zetPostadres,
       setHeader,
