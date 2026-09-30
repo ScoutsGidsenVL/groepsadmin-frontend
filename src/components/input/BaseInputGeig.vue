@@ -1,29 +1,38 @@
 <template>
-  <div>
-    <div class="p-grid row">
-      <div class="col-8 p-md-8" :class="bold ? 'font-weight-bolder' : ''">
-        <inputText
-          class="w-100"
-          v-bind="$attrs"
-          v-model="value"
-          :disabled="disabled"
-          :placeholder="placeholder"
-          @change="changeValue"
-          :class="invalid ? 'p-invalid' : ''"
-        />
-      </div>
-      <div class="col-4">
-        <Button
-          v-if="!disabled"
-          icon="pi pi-trash"
-          class="p-button-rounded p-button-outlined p-button-danger float-end mr-1"
-          @click="
-            $event.stopPropagation();
-            remove(index);
-          "
-          :title="'Verwijder groepseigen functie ' + value"
-        />
-      </div>
+  <div class="geig-rij">
+    <div class="flex-grow-1" :class="bold ? 'font-weight-bolder' : ''">
+      <inputText
+        class="w-100"
+        v-bind="$attrs"
+        v-model="value"
+        :disabled="disabled"
+        :placeholder="placeholder"
+        @change="changeValue"
+        :class="invalid ? 'p-invalid' : ''"
+      />
+    </div>
+    <div class="geig-iconen">
+      <Button
+        v-if="toonOpslaan"
+        icon="pi pi-save"
+        :loading="bezigMetOpslaan"
+        class="p-button-rounded p-button-outlined geig-opslaan-knop geig-icoon-knop"
+        @click="
+          $event.stopPropagation();
+          opslaan();
+        "
+        :title="'Bewaar groepseigen functie ' + value"
+      />
+      <Button
+        v-if="!disabled"
+        icon="pi pi-trash"
+        class="p-button-rounded p-button-outlined p-button-danger geig-icoon-knop"
+        @click="
+          $event.stopPropagation();
+          remove(index);
+        "
+        :title="'Verwijder groepseigen functie ' + value"
+      />
     </div>
   </div>
 </template>
@@ -56,6 +65,14 @@ export default {
     index: {
       type: String,
     },
+    toonOpslaan: {
+      type: Boolean,
+      default: false,
+    },
+    bezigMetOpslaan: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     changeValue($event) {
@@ -64,6 +81,9 @@ export default {
     },
     remove(index) {
       this.$emit("remove", index);
+    },
+    opslaan() {
+      this.$emit("opslaan", this.index);
     },
   },
   setup(props, { emit }) {
