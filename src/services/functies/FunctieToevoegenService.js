@@ -39,7 +39,11 @@ export default {
           ).format("YYYY-MM-DD");
           return (
             !functie.uiterstegeboortedatum ||
-            moment(geboortedatum).isBefore(
+            // isSameOrBefore (i.p.v. isBefore): een geboortedatum die exact
+            // op de uiterste geboortedatum valt, telt nog mee. Met de
+            // strikte isBefore viel bv. 31/12 net buiten de grens terwijl
+            // 30/12 wel doorging, een off-by-one op de grensdatum.
+            moment(geboortedatum).isSameOrBefore(
               moment(
                 DateUtil.formatteerDatumVoorApi(functie.uiterstegeboortedatum)
               )
