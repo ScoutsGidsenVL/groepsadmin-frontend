@@ -20,7 +20,6 @@ export default {
       contactenLaden: false,
       magFunctiesToevoegen: false,
       changes: false,
-      changesFuncties: false,
       watchable: false,
       laden: false,
       home: { icon: "pi pi-home", to: "/dashboard" },
@@ -36,16 +35,6 @@ export default {
       () => {
         if (state.watchable) {
           state.changes = true;
-        }
-      },
-      { deep: true }
-    );
-
-    watch(
-      () => state.selectedGroep.groepseigenFuncties,
-      () => {
-        if (state.watchable) {
-          state.changesFuncties = true;
         }
       },
       { deep: true }
@@ -109,23 +98,27 @@ export default {
         delete state.selectedGroep.instantie.adres;
       }
       state.watchable = false;
-      RestService.updateGroep(state.selectedGroep)
+      // Groepseigen functies worden niet langer via deze algemene opslaan
+      // beheerd: elke functie heeft haar eigen opslaan-icoon (zie
+      // GroepseigenFunctieService), volledig los van deze aanroep. Daarom
+      // wordt groepseigenFuncties hier ook niet meer meegestuurd, noch
+      // overgenomen uit de respons: dat zou een net individueel opgeslagen
+      // functie kunnen overschrijven met een verouderde serverstand.
+      const teVersturenGroep = { ...state.selectedGroep };
+      delete teVersturenGroep.groepseigenFuncties;
+      RestService.updateGroep(teVersturenGroep)
         .then((res) => {
           if (res.status === 200) {
-            state.selectedGroep.groepseigenFuncties =
-              res.data.groepseigenFuncties;
             state.laden = false;
             updateFacturatieBeschrijvingen();
             store.dispatch("getGroepen");
             store.dispatch("getFuncties");
-            if (!state.changesFuncties) {
-              toast.add({
-                severity: "success",
-                summary: "Wijzigingen",
-                detail: "Wijzigingen opgeslagen.",
-                life: 3000,
-              });
-            }
+            toast.add({
+              severity: "success",
+              summary: "Wijzigingen",
+              detail: "Wijzigingen opgeslagen.",
+              life: 3000,
+            });
             state.selectedGroep.opgericht = opgerichtDatum;
             if (!state.selectedGroep.instantie) {
               state.selectedGroep.instantie = {
@@ -154,92 +147,13 @@ export default {
           });
         })
         .finally(() => {
-          if (!state.changesFuncties) {
-            state.laden = false;
-            state.changes = false;
-          }
+          state.laden = false;
+          state.changes = false;
           store.commit("setGroepenLaden", false);
           nextTick(() => {
             state.watchable = true;
           });
         });
-
-      // indien er functieaanpassingen zijn gaan we deze allemaal overlopen en opslaan
-      if (state.changesFuncties) {
-        let showMessage = false;
-        state.selectedGroep.groepseigenFuncties.forEach((functie) => {
-          let index = functie.id.indexOf("tempFunctie");
-          if (functie.id.indexOf("tempFunctie") !== -1) {
-            RestService.postFuncties(functie)
-              .then((res) => {
-                if (res.status === 201) {
-                  state.selectedGroep.groepseigenFuncties.splice(
-                    index,
-                    1,
-                    res.data
-                  );
-
-                  if (!showMessage) {
-                    showMessage = true;
-                    toast.add({
-                      severity: "success",
-                      summary: "Wijzigingen",
-                      detail: "Wijzigingen opgeslagen.",
-                      life: 3000,
-                    });
-                  }
-                }
-              })
-              .catch((error) => {
-                if (!showMessage) {
-                  showMessage = true;
-                  toast.add({
-                    severity: "warn",
-                    summary: error.response.data.titel,
-                    detail: error.response.data.beschrijving,
-                    life: 8000,
-                  });
-                }
-              })
-              .finally(() => {
-                state.laden = false;
-                state.changes = false;
-                state.changesFuncties = false;
-              });
-          } else {
-            RestService.pasFunctieAan(functie.id, functie)
-              .then((res) => {
-                if (res.status === 200) {
-                  if (!showMessage) {
-                    showMessage = true;
-                    toast.add({
-                      severity: "success",
-                      summary: "Wijzigingen",
-                      detail: "Wijzigingen opgeslagen.",
-                      life: 3000,
-                    });
-                  }
-                }
-              })
-              .catch((error) => {
-                if (!showMessage) {
-                  showMessage = true;
-                  toast.add({
-                    severity: "warn",
-                    summary: error.response.data.titel,
-                    detail: error.response.data.beschrijving,
-                    life: 8000,
-                  });
-                }
-              })
-              .finally(() => {
-                state.laden = false;
-                state.changes = false;
-                state.changesFuncties = false;
-              });
-          }
-        });
-      }
     };
 
     const changeLadenStatus = () => {

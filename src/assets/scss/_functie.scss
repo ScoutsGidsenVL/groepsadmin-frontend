@@ -6,3 +6,33 @@
   height: 60px !important;
   width: 60px !important;
 }
+
+// Groepseigen functies: rij met invoerveld + iconen
+.geig-rij {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+// Vaste breedte en rechts uitgelijnd, zodat de prullenbak altijd op dezelfde
+// plaats staat (onder het plus-icoon), of er nu 1 (enkel verwijderen) of 2
+// (opslaan + verwijderen) iconen getoond worden. flex-shrink: 0 voorkomt dat
+// de ronde knoppen ovaal worden getrokken op smallere schermbreedtes.
+.geig-iconen {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.geig-icoon-knop {
+  flex-shrink: 0;
+}
+
+// Rijen dicht bij elkaar houden; groter dan de vroegere -25px omdat de rij
+// door de ronde iconen nu iets hoger is dan voorheen
+.geig-functie-rij {
+  margin-bottom: 0px !important;
+}

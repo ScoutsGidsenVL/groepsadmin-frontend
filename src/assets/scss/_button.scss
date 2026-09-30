@@ -135,6 +135,32 @@
   }
 }
 
+// Zelfde groen als .add-button (i.p.v. PrimeVue's eigen p-button-success
+// groen, dat niet overeenkomt met het merkgroen elders op de site)
+.geig-opslaan-knop {
+  background-color: transparent !important;
+  color: $sgv-donkergroen !important;
+  border: 1px solid;
+  &:hover {
+    border: 1px solid $sgv-donkergroen !important;
+    box-shadow: 0 0 0 1px $sgv-donkergroen !important;
+  }
+  &:active {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:focus {
+    border: 1px solid $sgv-donkergroen !important;
+  }
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem transparent !important;
+    border-color: $sgv-donkergroen !important;
+  }
+  &:enabled:hover {
+    border-color: $sgv-donkergroen !important;
+    background-color: $sgv-lichtgroen;
+  }
+}
+
 .approve-button, .p-confirm-dialog-accept {
   background-color: $sgv-donkergroen !important;
   color: white !important;
