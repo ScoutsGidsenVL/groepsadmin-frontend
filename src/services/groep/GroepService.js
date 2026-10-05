@@ -341,7 +341,7 @@ export default {
       updateFacturatieBeschrijvingen();
       store.getters.groepen.forEach((groep) => {
         state.groepenArray.push({
-          label: groep.naam + " - " + groep.id,
+          label: groep.naam + " - " + groep.groepsnummer,
           value: groep,
         });
       });

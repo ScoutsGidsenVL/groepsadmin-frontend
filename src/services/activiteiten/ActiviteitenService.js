@@ -204,7 +204,7 @@ export default {
           groep.verantwoordelijkheden.includes("leiding")
         ) {
           state.groepenArray.push({
-            label: groep.naam + " - " + groep.id,
+            label: groep.naam + " - " + groep.groepsnummer,
             value: groep,
           });
           if (!state.selectedGroep.naam) {
