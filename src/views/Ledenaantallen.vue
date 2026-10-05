@@ -317,7 +317,7 @@ export default {
     this.selectedGroep = this.groepen[0];
     this.groepen.forEach((groep) => {
       this.groepenArray.push({
-        label: groep.naam + " - " + groep.id,
+        label: groep.naam + " - " + groep.groepsnummer,
         value: groep,
       });
     });
