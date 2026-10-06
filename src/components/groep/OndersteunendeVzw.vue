@@ -40,12 +40,23 @@
             >
               <template #header>
                 <div class="row custom-height w-100">
-                  <div class="col-10 d-flex align-items-center">
-                    <span class="font15 cut-off-text-table">{{
-                      vzwTitel(vzw)
-                    }}</span>
-                  </div>
-                  <div class="col-2 d-flex justify-content-end">
+                  <div class="col-12 d-flex align-items-center">
+                    <span
+                      class="font15 cut-off-text-table flex-grow-1"
+                      style="min-width: 0"
+                      >{{ vzwTitel(vzw) }}</span
+                    >
+                    <Button
+                      v-if="kanGroepWijzigen && magOpslaan(vzw)"
+                      icon="pi pi-save"
+                      :loading="isBezigMetOpslaan(vzw)"
+                      class="p-button-rounded p-button-outlined add-button top--5 mr-1"
+                      @click="
+                        $event.stopPropagation();
+                        opslaanVzw(vzw);
+                      "
+                      title="Bewaar vzw"
+                    />
                     <Button
                       v-if="kanGroepWijzigen"
                       icon="pi pi-trash"
@@ -67,12 +78,15 @@
               <base-input
                 v-model="vzw.kbo"
                 label="KBO Nummer"
-                placeholder="XXXX.XXX.XXX"
+                placeholder="xxxx.xxx.xxx"
                 :disabled="!kanGroepWijzigen"
                 :help-link="kboLink(vzw)"
                 help-icon="pi pi-external-link"
                 help-title="Bekijk in de KBO database"
-                @changeValue="v.$touch()"
+                @changeValue="
+                  formatteerKbo(vzw);
+                  v.$touch();
+                "
                 :invalid="
                   v.$dirty &&
                   v.groep.ondersteunendeVzws.$each.$response.$errors[index]
@@ -156,6 +170,10 @@ export default {
       state,
       voegVzwToe,
       verwijderVzw,
+      opslaanVzw,
+      magOpslaan,
+      isBezigMetOpslaan,
+      formatteerKbo,
       vzwTitel,
       kboLink,
       v,
@@ -165,6 +183,10 @@ export default {
       ...toRefs(state),
       voegVzwToe,
       verwijderVzw,
+      opslaanVzw,
+      magOpslaan,
+      isBezigMetOpslaan,
+      formatteerKbo,
       vzwTitel,
       kboLink,
       v,
