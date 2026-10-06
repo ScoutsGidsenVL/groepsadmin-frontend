@@ -103,8 +103,16 @@ export default {
       return functies;
     };
 
+    const actieveFuncties = (functies) =>
+      gesorteerdeFuncties(functies).filter((functie) => functie.actief);
+
+    const inactieveFuncties = (functies) =>
+      functies.filter((functie) => !functie.actief);
+
     return {
       state,
+      actieveFuncties,
+      inactieveFuncties,
       groepsNaam,
       inactieveGroepsNaam,
       lidMagFunctieStoppen,

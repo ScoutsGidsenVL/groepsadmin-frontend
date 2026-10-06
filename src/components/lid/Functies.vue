@@ -33,10 +33,10 @@
             :header="groepsNaam(nummer)"
           >
             <div
-              v-for="(functie, index) in gesorteerdeFuncties(functies)"
+              v-for="(functie, index) in actieveFuncties(functies)"
               :key="index"
             >
-              <div v-if="functie.actief" class="functie-wrapper">
+              <div class="functie-wrapper">
                 <div class="flex-row">
                   <div class="flex justify-content-between">
                     <label>van {{ formatteerDatum(functie.begin) }}</label>
@@ -60,14 +60,20 @@
                     <label class="ml-4 font-bold">{{ functie.naam }}</label>
                   </div>
                 </div>
-                <div class="border mt-3"></div>
+                <div
+                  v-if="
+                    index < actieveFuncties(functies).length - 1 ||
+                    (historiek && inactieveFuncties(functies).length > 0)
+                  "
+                  class="border mt-3"
+                ></div>
               </div>
             </div>
-            <div v-for="(functie, index) in functies" :key="index">
+            <template v-if="historiek">
               <div
-                v-show="!functie.actief && historiek"
-                class="functie-wrapper"
-                :class="!functie.actief ? 'opacity-50' : ''"
+                v-for="(functie, index) in inactieveFuncties(functies)"
+                :key="'inactief-' + index"
+                class="functie-wrapper opacity-50"
               >
                 <div class="flex-row">
                   <div class="justify-content-between">
@@ -84,9 +90,12 @@
                     }}</label>
                   </div>
                 </div>
-                <div class="border mt-3"></div>
+                <div
+                  v-if="index < inactieveFuncties(functies).length - 1"
+                  class="border mt-3"
+                ></div>
               </div>
-            </div>
+            </template>
           </accordionTab>
         </accordion>
         <div v-if="historiek && !laden">
@@ -116,7 +125,10 @@
                     }}</label>
                   </div>
                 </div>
-                <div class="border mt-3"></div>
+                <div
+                  v-if="index < functies.length - 1"
+                  class="border mt-3"
+                ></div>
               </div>
             </accordionTab>
           </accordion>
@@ -155,6 +167,8 @@ export default {
       nietActieveGroepen,
       laden,
       gesorteerdeFuncties,
+      actieveFuncties,
+      inactieveFuncties,
       stopAlleFuncties,
     } = FunctieService.functieSpace(props, context);
 
@@ -168,6 +182,8 @@ export default {
       actieveGroepen,
       nietActieveGroepen,
       gesorteerdeFuncties,
+      actieveFuncties,
+      inactieveFuncties,
       laden,
       stopAlleFuncties,
     };

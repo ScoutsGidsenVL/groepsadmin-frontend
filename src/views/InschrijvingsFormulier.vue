@@ -15,7 +15,9 @@
         <h2 class="lg:ml-2">Lid worden van {{ groep.naam }}</h2>
         <p class="lg:ml-2">
           Word jij ons nieuwste lid? Vul dan onderstaand formulier in om een
-          aanvraag te verzenden naar {{ groep.naam }} ({{ groep.id }}).
+          aanvraag te verzenden naar {{ groep.naam }} ({{
+            groep.groepsnummer
+          }}).
         </p>
       </div>
       <form @submit.prevent="opslaan" autocomplete="off">
