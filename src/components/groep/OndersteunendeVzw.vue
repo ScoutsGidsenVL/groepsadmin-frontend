@@ -129,7 +129,7 @@
                 "
               ></base-input>
               <base-text-area
-                v-model="vzw.doel"
+                v-model="vzw.omschrijving"
                 label="Doel van de vzw"
                 placeholder="Wat doet jullie vzw; lokaalbeheer, verhuur, evenementen, ..."
                 :disabled="!kanGroepWijzigen"

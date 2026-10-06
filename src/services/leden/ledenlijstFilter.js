@@ -663,7 +663,7 @@ export default {
     _.forEach(Object.entries(geg), function (value) {
       _.forEach(groepen, (groep) => {
         groepsObject = {};
-        if (groep.id === value[0]) {
+        if (groep.groepsnummer === value[0]) {
           groepsObject.value = groep.groepsnummer;
           groepsObject.label = groep.naam + " - " + groep.groepsnummer;
           groepsObject.sortering = groep.groepsnummer;

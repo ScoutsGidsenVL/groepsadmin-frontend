@@ -163,7 +163,7 @@ export default createStore({
       return state.functies.find((functie) => functie.id === id);
     },
     groepByNummer: (state) => (index) => {
-      return state.groepen.find((groep) => groep.id === index);
+      return state.groepen.find((groep) => groep.groepsnummer === index);
     },
     inactieveGroepByNummer: (state) => (index) => {
       return state.inactieveGroepen[index];
@@ -214,10 +214,12 @@ export default createStore({
       commit("setGroepenLaden", true);
       return RestService.getGroepen().then((response) => {
         if (response.data.groepen) {
-          response.data.groepen.sort((a, b) => a.id.localeCompare(b.id));
+          response.data.groepen.sort((a, b) =>
+            a.groepsnummer.localeCompare(b.groepsnummer)
+          );
           commit("setGroepen", response.data.groepen);
           response.data.groepen.forEach((groep) => {
-            groepen[groep.id] = groep;
+            groepen[groep.groepsnummer] = groep;
           });
           commit("setIndexedGroepen", groepen);
           commit("setGroepenLaden", false);
