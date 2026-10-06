@@ -25,7 +25,7 @@ export default {
 
     const isNieuw = (vzw) => vzw.id.startsWith("tempVzw");
 
-    // Optionele lege velden (kbo, email, doel) worden niet meegestuurd naar
+    // Optionele lege velden (kbo, email, omschrijving) worden niet meegestuurd naar
     // de API, enkel effectief ingevulde waarden
     const vzwVelden = (vzw) => {
       const velden = { naam: vzw.naam };
@@ -35,8 +35,8 @@ export default {
       if (vzw.email) {
         velden.email = vzw.email;
       }
-      if (vzw.doel) {
-        velden.doel = vzw.doel;
+      if (vzw.omschrijving) {
+        velden.omschrijving = vzw.omschrijving;
       }
       return velden;
     };
@@ -83,7 +83,7 @@ export default {
         naam: "",
         kbo: "",
         email: "",
-        doel: "",
+        omschrijving: "",
       });
       state.activeIndex = [
         ...state.activeIndex,
