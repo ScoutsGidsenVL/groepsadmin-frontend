@@ -31,6 +31,12 @@
             v-model="instantie.kbo"
             :disabled="!bewerkbaar"
             label="KBO (optioneel)"
+            placeholder="xxxx.xxx.xxx"
+            @changeValue="formatteerKbo"
+            :invalid="v.instantie.kbo.$error"
+            :error-message="
+              v.instantie.kbo.$error ? v.instantie.kbo.$errors[0].$message : ''
+            "
           ></base-input>
         </div>
       </template>
@@ -43,6 +49,9 @@ import AdresVelden from "@/components/adres/AdresVelden";
 import BaseInput from "@/components/input/BaseInput";
 import { reactive, toRefs } from "@vue/reactivity";
 import { onUpdated } from "@vue/runtime-core";
+import KboNummer from "@/services/kbo/KboNummer";
+import { useVuelidate } from "@vuelidate/core";
+import { helpers } from "@vuelidate/validators";
 
 export default {
   name: "instantie",
@@ -94,8 +103,28 @@ export default {
         };
     });
 
+    const rules = {
+      instantie: {
+        kbo: {
+          isGeldigKboNummer: helpers.withMessage(
+            "Geen geldig KBO nummer",
+            (value) => KboNummer.validateNumber(value)
+          ),
+        },
+      },
+    };
+
+    const v = useVuelidate(rules, state);
+
+    const formatteerKbo = () => {
+      state.instantie.kbo = KboNummer.formatNumber(state.instantie.kbo);
+      v.value.instantie.kbo.$touch();
+    };
+
     return {
       ...toRefs(state),
+      formatteerKbo,
+      v,
     };
   },
 };

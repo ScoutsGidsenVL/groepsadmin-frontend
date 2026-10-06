@@ -7,6 +7,7 @@ import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import useEmitter from "@/services/utils/useEmitter";
 import DateUtil from "@/services/dates/DateUtil";
+import KboNummer from "@/services/kbo/KboNummer";
 
 export default {
   groepSpace() {
@@ -109,7 +110,20 @@ export default {
         delete state.selectedGroep.instantie.adres;
       }
       state.watchable = false;
-      RestService.updateGroep(state.selectedGroep)
+      // Het KBO nummer van de erkenningsinstantie staat in het scherm als
+      // xxxx.xxx.xxx, maar gaat enkel als 10 cijfers naar de API
+      const instantie = state.selectedGroep.instantie;
+      const teVersturenGroep =
+        instantie && instantie.kbo
+          ? {
+              ...state.selectedGroep,
+              instantie: {
+                ...instantie,
+                kbo: KboNummer.cleanNumber(instantie.kbo),
+              },
+            }
+          : state.selectedGroep;
+      RestService.updateGroep(teVersturenGroep)
         .then((res) => {
           if (res.status === 200) {
             state.selectedGroep.groepseigenFuncties =
@@ -267,6 +281,9 @@ export default {
       }
 
       state.selectedGroep.opgericht = new Date(groep.opgericht);
+      state.selectedGroep.instantie.kbo = KboNummer.formatNumber(
+        state.selectedGroep.instantie.kbo
+      );
       getContacten();
       updateFacturatieBeschrijvingen();
       getGroepseigenFuncties(groep);
@@ -337,6 +354,9 @@ export default {
           straat: "",
         };
       }
+      state.selectedGroep.instantie.kbo = KboNummer.formatNumber(
+        state.selectedGroep.instantie.kbo
+      );
       getContacten();
       updateFacturatieBeschrijvingen();
       store.getters.groepen.forEach((groep) => {
