@@ -22,11 +22,51 @@ export default {
     const state = reactive({
       groep: props.modelValue,
       gesorteerdeFuncties: [],
+      // Laatst opgeslagen beschrijving per functie-id, om per rij te kunnen
+      // tonen of er nog niet-opgeslagen wijzigingen zijn
+      originelen: {},
+      opslaandeFunctieIds: {},
     });
+
+    const isNieuw = (functie) => functie.id.startsWith("tempFunctie");
+
+    // Vult enkel ontbrekende originelen aan, overschrijft nooit een reeds
+    // gekende waarde: anders zou elke re-render (bv. bij het typen) de net
+    // ingegeven tekst als "origineel" beschouwen en het wijzigingen-icoon
+    // meteen weer laten verdwijnen
+    const zorgVoorOriginelen = () => {
+      (state.groep?.groepseigenFuncties || []).forEach((functie) => {
+        if (!isNieuw(functie) && !(functie.id in state.originelen)) {
+          state.originelen[functie.id] = functie.beschrijving;
+        }
+      });
+    };
+
+    const isGewijzigd = (functie) =>
+      isNieuw(functie) || state.originelen[functie.id] !== functie.beschrijving;
+
+    const isBezigMetOpslaan = (functie) =>
+      !!state.opslaandeFunctieIds[functie.id];
+
+    const magOpslaan = (functie) =>
+      isGewijzigd(functie) &&
+      !isBezigMetOpslaan(functie) &&
+      !!(functie.beschrijving && functie.beschrijving.trim());
 
     const remove = (index) => {
       let geif = state.groep.groepseigenFuncties[index];
       let id = geif.id.substring(0, 11);
+
+      // Splitst op object-identiteit i.p.v. de index van bij de klik te
+      // hergebruiken: die kan intussen niet meer overeenkomen, bv. omdat de
+      // lijst opnieuw gesorteerd werd terwijl de bevestigingsdialoog open
+      // stond, of tijdens het wachten op de API-respons hieronder.
+      const verwijderUitLijst = () => {
+        const huidigeIndex = state.groep.groepseigenFuncties.indexOf(geif);
+        if (huidigeIndex !== -1) {
+          state.groep.groepseigenFuncties.splice(huidigeIndex, 1);
+        }
+      };
 
       confirm.require({
         message:
@@ -40,7 +80,7 @@ export default {
             RestService.verwijderFunctie(geif.id)
               .then((res) => {
                 if (res.status === 204) {
-                  state.groep.groepseigenFuncties.splice(index, 1);
+                  verwijderUitLijst();
                   store.dispatch("getGroepen");
                   toast.add({
                     severity: "success",
@@ -68,7 +108,7 @@ export default {
                 }
               });
           } else {
-            state.groep.groepseigenFuncties.splice(index, 1);
+            verwijderUitLijst();
             toast.add({
               severity: "success",
               summary: "Functie",
@@ -97,6 +137,84 @@ export default {
       sorteerFuncties();
     };
 
+    // Slaat één functie individueel op, los van de algemene "Opslaan"-knop
+    // van de groep: een nieuwe (tempFunctie) wordt aangemaakt, een bestaande
+    // wordt aangepast. Nadien wordt originelen[id] bijgewerkt zodat het
+    // opslaan-icoon voor deze rij weer verdwijnt tot de volgende wijziging.
+    const opslaanFunctie = (functie) => {
+      if (!magOpslaan(functie)) {
+        return;
+      }
+      state.opslaandeFunctieIds[functie.id] = true;
+
+      if (isNieuw(functie)) {
+        RestService.postFuncties(functie)
+          .then((res) => {
+            if (res.status === 201) {
+              const huidigeIndex = state.groep.groepseigenFuncties.indexOf(
+                functie
+              );
+              if (huidigeIndex !== -1) {
+                state.groep.groepseigenFuncties.splice(
+                  huidigeIndex,
+                  1,
+                  res.data
+                );
+              }
+              delete state.opslaandeFunctieIds[functie.id];
+              state.originelen[res.data.id] = res.data.beschrijving;
+              store.dispatch("getGroepen");
+              store.dispatch("getFuncties");
+              toast.add({
+                severity: "success",
+                summary: "Functie",
+                detail: "Functie opgeslagen.",
+                life: 3000,
+              });
+              sorteerFuncties();
+            }
+          })
+          .catch((error) => {
+            delete state.opslaandeFunctieIds[functie.id];
+            toast.add({
+              severity: "warn",
+              summary:
+                (error.response && error.response.data.titel) || "Functie",
+              detail:
+                error.response &&
+                (error.response.data.beschrijving || error.response.data.titel),
+              life: 8000,
+            });
+          });
+      } else {
+        RestService.pasFunctieAan(functie.id, functie)
+          .then((res) => {
+            if (res.status === 200) {
+              delete state.opslaandeFunctieIds[functie.id];
+              state.originelen[functie.id] = functie.beschrijving;
+              toast.add({
+                severity: "success",
+                summary: "Functie",
+                detail: "Functie opgeslagen.",
+                life: 3000,
+              });
+            }
+          })
+          .catch((error) => {
+            delete state.opslaandeFunctieIds[functie.id];
+            toast.add({
+              severity: "warn",
+              summary:
+                (error.response && error.response.data.titel) || "Functie",
+              detail:
+                error.response &&
+                (error.response.data.beschrijving || error.response.data.titel),
+              life: 8000,
+            });
+          });
+      }
+    };
+
     const kanGroepWijzigen = computed(() => {
       return rechtenService.kanWijzigen(state.groep);
     });
@@ -108,6 +226,7 @@ export default {
     onUpdated(() => {
       state.groep = props.modelValue;
       sorteerFuncties();
+      zorgVoorOriginelen();
     });
 
     const sorteerFuncties = () => {
@@ -131,6 +250,9 @@ export default {
       state,
       voegGeifToe,
       remove,
+      opslaanFunctie,
+      magOpslaan,
+      isBezigMetOpslaan,
       kanFunctieWijzigen,
       kanGroepWijzigen,
     };
