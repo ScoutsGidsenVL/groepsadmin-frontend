@@ -7,6 +7,7 @@ import specialeFuncties from "@/services/functies/SpecialeFuncties";
 import rechtenService from "@/services/rechten/rechtenService";
 import useEmitter from "@/services/utils/useEmitter";
 import DateUtil from "@/services/dates/DateUtil";
+import KboNummer from "@/services/kbo/KboNummer";
 
 export default {
   groepSpace() {
@@ -98,15 +99,7 @@ export default {
         delete state.selectedGroep.instantie.adres;
       }
       state.watchable = false;
-      // Groepseigen functies worden niet langer via deze algemene opslaan
-      // beheerd: elke functie heeft haar eigen opslaan-icoon (zie
-      // GroepseigenFunctieService), volledig los van deze aanroep. Daarom
-      // wordt groepseigenFuncties hier ook niet meer meegestuurd, noch
-      // overgenomen uit de respons: dat zou een net individueel opgeslagen
-      // functie kunnen overschrijven met een verouderde serverstand.
-      const teVersturenGroep = { ...state.selectedGroep };
-      delete teVersturenGroep.groepseigenFuncties;
-      RestService.updateGroep(teVersturenGroep)
+      RestService.updateGroep(state.selectedGroep)
         .then((res) => {
           if (res.status === 200) {
             state.laden = false;
@@ -181,6 +174,9 @@ export default {
       }
 
       state.selectedGroep.opgericht = new Date(groep.opgericht);
+      state.selectedGroep.instantie.kbo = KboNummer.formatNumber(
+        state.selectedGroep.instantie.kbo
+      );
       getContacten();
       updateFacturatieBeschrijvingen();
       getGroepseigenFuncties(groep);
@@ -251,6 +247,9 @@ export default {
           straat: "",
         };
       }
+      state.selectedGroep.instantie.kbo = KboNummer.formatNumber(
+        state.selectedGroep.instantie.kbo
+      );
       getContacten();
       updateFacturatieBeschrijvingen();
       store.getters.groepen.forEach((groep) => {

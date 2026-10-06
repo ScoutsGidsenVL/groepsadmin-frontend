@@ -202,6 +202,38 @@ export default {
     );
   },
 
+  getOndersteunendeVzws(groepsId) {
+    return apiClient().get(
+      baseUrl + "groep/" + groepsId + "/ondersteunende-vzw"
+    );
+  },
+
+  getOndersteunendeVzw(groepsId, id) {
+    return apiClient().get(
+      baseUrl + "groep/" + groepsId + "/ondersteunende-vzw/" + id
+    );
+  },
+
+  maakOndersteunendeVzw(groepsId, vzw) {
+    return apiClient().post(
+      baseUrl + "groep/" + groepsId + "/ondersteunende-vzw",
+      vzw
+    );
+  },
+
+  updateOndersteunendeVzw(groepsId, id, vzw) {
+    return apiClient().patch(
+      baseUrl + "groep/" + groepsId + "/ondersteunende-vzw/" + id,
+      vzw
+    );
+  },
+
+  verwijderOndersteunendeVzw(groepsId, id) {
+    return apiClient().delete(
+      baseUrl + "groep/" + groepsId + "/ondersteunende-vzw/" + id
+    );
+  },
+
   getIndividueleSteekkaart(id) {
     return apiClient().get(baseUrl + "lid/" + id + "/steekkaart");
   },
