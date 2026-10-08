@@ -17,6 +17,7 @@ export default {
 
     const state = reactive({
       selectedGroep: {},
+      origineleGroep: null,
       groepenArray: [],
       contactenLaden: false,
       magFunctiesToevoegen: false,
@@ -72,6 +73,41 @@ export default {
       }
     };
 
+    // Zelfde normalisatie als bij het opslaan (uur altijd op 2 gezet, zie
+    // opslaan() hieronder) maar dan al bij het laden/wisselen van groep.
+    // Zonder dit zou de eerste keer opslaan opgericht altijd als "gewijzigd"
+    // zien: de snapshot staat dan nog op het ruwe, ongenormaliseerde uur.
+    const normaliseerOpgerichtDatum = (datum) => {
+      const opgerichtDatum = new Date(datum);
+      opgerichtDatum.setHours(2);
+      return opgerichtDatum;
+    };
+
+    // Momentopname van de groep zoals laatst geladen/opgeslagen, om bij het
+    // opslaan enkel effectief gewijzigde velden mee te sturen in de PATCH
+    const maakSnapshot = () => {
+      state.origineleGroep = JSON.parse(JSON.stringify(state.selectedGroep));
+    };
+
+    const berekenWijzigingen = (nieuweGroep, origineleGroep) => {
+      if (!origineleGroep) {
+        // Geen snapshot gekend: stuur alles, maar als kopie, zodat
+        // verderop veilig velden uit het resultaat verwijderd kunnen
+        // worden zonder state.selectedGroep zelf te muteren
+        return { ...nieuweGroep };
+      }
+      const wijzigingen = {};
+      Object.keys(nieuweGroep).forEach((key) => {
+        if (
+          JSON.stringify(nieuweGroep[key]) !==
+          JSON.stringify(origineleGroep[key])
+        ) {
+          wijzigingen[key] = nieuweGroep[key];
+        }
+      });
+      return wijzigingen;
+    };
+
     const opslaan = () => {
       emitter.emit("groepOpslaan");
       state.laden = true;
@@ -101,29 +137,48 @@ export default {
       }
 
       // Conversie om datum correct door te sturen
-      let opgerichtDatum = new Date(state.selectedGroep.opgericht);
-      opgerichtDatum.setHours(2);
+      let opgerichtDatum = normaliseerOpgerichtDatum(
+        state.selectedGroep.opgericht
+      );
       state.selectedGroep.opgericht = opgerichtDatum.toISOString();
-      if (state.selectedGroep.instantie.naam == "") {
-        delete state.selectedGroep.instantie;
-      } else if (state.selectedGroep.instantie.adres.gemeente == "") {
-        delete state.selectedGroep.instantie.adres;
-      }
       state.watchable = false;
-      // Het KBO nummer van de erkenningsinstantie staat in het scherm als
-      // xxxx.xxx.xxx, maar gaat enkel als 10 cijfers naar de API
-      const instantie = state.selectedGroep.instantie;
-      const teVersturenGroep =
-        instantie && instantie.kbo
-          ? {
-              ...state.selectedGroep,
-              instantie: {
-                ...instantie,
-                kbo: KboNummer.cleanNumber(instantie.kbo),
-              },
-            }
-          : state.selectedGroep;
-      RestService.updateGroep(teVersturenGroep)
+      // Vergelijk tegen de ongewijzigde stand van state.selectedGroep zelf:
+      // die wordt hieronder nergens gemuteerd, enkel de uitgaande payload
+      // wordt opgeschoond. Zo blijft instantie correct "ongewijzigd" wanneer
+      // de gebruiker er niets aan aanpaste.
+      const teSturenWijzigingen = berekenWijzigingen(
+        state.selectedGroep,
+        state.origineleGroep
+      );
+      // Groepseigen functies en ondersteunende vzw's worden niet via deze
+      // algemene PATCH beheerd: functies lopen hieronder via hun eigen
+      // postFuncties/pasFunctieAan-aanroepen, vzw's via
+      // OndersteunendeVzwService. Zonder deze uitsluiting zou de generieke
+      // diff ze toch meesturen zodra er iets aan wijzigde.
+      delete teSturenWijzigingen.groepseigenFuncties;
+      delete teSturenWijzigingen.ondersteunendeVzws;
+      if (teSturenWijzigingen.instantie) {
+        const instantie = teSturenWijzigingen.instantie;
+        if (instantie.naam == "") {
+          delete teSturenWijzigingen.instantie;
+        } else {
+          teSturenWijzigingen.instantie = { ...instantie };
+          if (instantie.adres && instantie.adres.gemeente == "") {
+            delete teSturenWijzigingen.instantie.adres;
+          }
+          // Het KBO nummer van de erkenningsinstantie staat in het scherm
+          // als xxxx.xxx.xxx, maar gaat enkel als 10 cijfers naar de API
+          if (instantie.kbo) {
+            teSturenWijzigingen.instantie.kbo = KboNummer.cleanNumber(
+              instantie.kbo
+            );
+          }
+        }
+      }
+      RestService.updateGroep(
+        state.selectedGroep.groepsnummer,
+        teSturenWijzigingen
+      )
         .then((res) => {
           if (res.status === 200) {
             state.selectedGroep.groepseigenFuncties =
@@ -157,6 +212,9 @@ export default {
                 straat: "",
               };
             }
+            // Volgende keer opslaan moet enkel afwijken van deze zonet
+            // opgeslagen stand, niet van de oorspronkelijk geladen stand
+            maakSnapshot();
           }
         })
         .catch((error) => {
@@ -280,13 +338,16 @@ export default {
         };
       }
 
-      state.selectedGroep.opgericht = new Date(groep.opgericht);
+      state.selectedGroep.opgericht = normaliseerOpgerichtDatum(
+        groep.opgericht
+      );
       state.selectedGroep.instantie.kbo = KboNummer.formatNumber(
         state.selectedGroep.instantie.kbo
       );
       getContacten();
       updateFacturatieBeschrijvingen();
       getGroepseigenFuncties(groep);
+      maakSnapshot();
       nextTick(() => {
         state.watchable = true;
       });
@@ -338,6 +399,9 @@ export default {
 
     onMounted(() => {
       state.selectedGroep = store.getters.groepen[0];
+      state.selectedGroep.opgericht = normaliseerOpgerichtDatum(
+        state.selectedGroep.opgericht
+      );
       if (!state.selectedGroep.instantie) {
         state.selectedGroep.instantie = {
           naam: "",
@@ -367,6 +431,7 @@ export default {
       });
       state.selectedGroep.publiekInschrijven =
         state.selectedGroep["publiek-inschrijven"];
+      maakSnapshot();
       nextTick(() => {
         state.watchable = true;
       });
