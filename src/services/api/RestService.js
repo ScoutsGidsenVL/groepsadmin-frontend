@@ -191,13 +191,13 @@ export default {
     return apiClient().patch(baseUrl + "functie/" + id, functie);
   },
 
-  updateGroep(groep) {
+  updateGroep(groepsnummer, groep) {
     return apiClient().patch(
       baseUrl +
         "groep/" +
-        groep.groepsnummer +
+        groepsnummer +
         "?bevestig=true&groepsnummer=" +
-        groep.groepsnummer,
+        groepsnummer,
       groep
     );
   },
