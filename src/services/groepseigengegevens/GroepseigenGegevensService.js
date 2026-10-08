@@ -91,7 +91,7 @@ export default {
         accept: () => {
           emitter.emit("laden");
           element.keuzes.splice(index, 1);
-          RestService.updateGroep(state.groep)
+          RestService.updateGroep(state.groep.groepsnummer, state.groep)
             .then((res) => {
               if (res.status === 200) {
                 emitter.emit("laden");
