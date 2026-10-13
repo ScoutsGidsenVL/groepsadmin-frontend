@@ -34,4 +34,19 @@ export default {
   parseDatum(datum) {
     return moment(datum, ["DD/MM/YYYY", moment.ISO_8601], true);
   },
+
+  // Het werkjaar loopt van 1 september tot en met 31 augustus.
+  // Het jaartal hieronder is het jaartal van de septembermaand waarin het huidige werkjaar start.
+  huidigWerkjaarStartjaar() {
+    const nu = moment();
+    return nu.month() >= 8 ? nu.year() : nu.year() - 1;
+  },
+
+  isMinstensXJarigInHuidigWerkjaar(geboortedatum, leeftijd) {
+    if (!geboortedatum) {
+      return false;
+    }
+    const geboortejaar = moment(geboortedatum, "DD/MM/YYYY").year();
+    return this.huidigWerkjaarStartjaar() - geboortejaar >= leeftijd;
+  },
 };

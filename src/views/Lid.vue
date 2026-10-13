@@ -54,6 +54,34 @@
                   {{ lid.nietVerzekerdReden }}
                 </Message>
               </div>
+              <div class="col-12" v-if="!loadingLid && wordtBinnenkortOudLid">
+                <Message severity="warn" class="wordt-oud-lid-balk">
+                  <div
+                    class="flex align-items-center justify-content-between w-full flex-wrap gap-2"
+                  >
+                    <span>
+                      Je bent 20 jaar of ouder. Bezorg een uittreksel uit je
+                      strafregister ter controle.
+                      <a
+                        href="https://wiki.scoutsengidsenvlaanderen.be/strafregister"
+                        target="_blank"
+                        class="wiki-icoon ml-1"
+                      >
+                        <i class="fa fa-question-circle" title="meer info"></i>
+                      </a>
+                    </span>
+                    <FileUpload
+                      mode="basic"
+                      name="uittrekselStrafregister"
+                      :customUpload="true"
+                      :auto="false"
+                      chooseLabel="Uittreksel opladen"
+                      uploadIcon="pi pi-upload"
+                      @uploader="uploadUittrekselStrafregister"
+                    ></FileUpload>
+                  </div>
+                </Message>
+              </div>
               <div class="col-12 col-lg-6 col-xl-4">
                 <persoonlijk
                   v-model="lid"
@@ -124,6 +152,7 @@ import GroepseigenGegevens from "@/components/lid/GroepseigenGegevens";
 import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import MessageDialog from "@/components/dialog/MessageDialog.vue";
 import Message from "primevue/message";
+import FileUpload from "primevue/fileupload";
 
 export default {
   name: "Lid",
@@ -142,6 +171,7 @@ export default {
     GroepseigenGegevens,
     LidBovenBalk,
     Message,
+    FileUpload,
   },
   setup() {
     const {
@@ -160,7 +190,10 @@ export default {
       attestAfdrukken,
       lidkaartAfdrukken,
       voegFunctieToe,
+      wordtBinnenkortOudLid,
     } = LidService.lidSpace();
+
+    const uploadUittrekselStrafregister = () => {};
 
     return {
       ...toRefs(state),
@@ -169,6 +202,7 @@ export default {
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
+      wordtBinnenkortOudLid,
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
@@ -178,6 +212,7 @@ export default {
       attestAfdrukken,
       lidkaartAfdrukken,
       voegFunctieToe,
+      uploadUittrekselStrafregister,
     };
   },
 };
