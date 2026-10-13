@@ -5,7 +5,22 @@
 
 // Gelijke spacing boven en onder de waarschuwingsbalk ("niet verzekerd"),
 // gelijk aan de mb-4 (1.5rem) tussen bv. de blokken Adressen en Contacten
-.niet-verzekerd-balk {
+.niet-verzekerd-balk,
+.wordt-oud-lid-balk {
   margin-top: 0.5rem !important;
   margin-bottom: 0.5rem !important;
+}
+
+.wordt-oud-lid-balk .wiki-icoon {
+  cursor: pointer;
+  color: $sgv-donkergroen;
+}
+
+// De tekst neemt standaard enkel haar eigen breedte in, waardoor de
+// uploadknop niet tot tegen het sluitkruisje komt te staan.
+// margin-right is gelijk aan de padding-right van .p-message-wrapper,
+// zodat de marge rond het sluitkruisje links en rechts gelijk is.
+.wordt-oud-lid-balk .p-message-text {
+  flex: 1 1 auto;
+  margin-right: 1.5rem;
 }

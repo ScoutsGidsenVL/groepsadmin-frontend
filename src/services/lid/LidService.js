@@ -604,6 +604,17 @@ export default {
       },
     });
 
+    const wordtBinnenkortOudLid = computed(() => {
+      return (
+        isEigenProfiel.value &&
+        state.lid.isActiefVvksmLid &&
+        DateUtil.isMinstensXJarigInHuidigWerkjaar(
+          state.lid.vgagegevens.geboortedatum,
+          20,
+        )
+      );
+    });
+
     const wijzigingen = computed({
       get() {
         return state.changes;
@@ -700,6 +711,7 @@ export default {
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
+      wordtBinnenkortOudLid,
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
