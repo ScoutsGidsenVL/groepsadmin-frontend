@@ -253,6 +253,12 @@ export default {
     return apiClientPdf().get(baseUrl + "attest/download?lidId=" + lidId);
   },
 
+  uploadUittrekselStrafregister(lidId, documentId) {
+    return apiClient().post(baseUrl + "lid/" + lidId + "/strafregister", {
+      documentid: documentId,
+    });
+  },
+
   activiteitOpslaan(activiteit) {
     return apiClient().post(baseUrl + "activiteit", activiteit);
   },

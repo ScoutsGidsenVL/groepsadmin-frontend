@@ -18,6 +18,13 @@ module.exports = {
           from: path.resolve(__dirname, "node_modules/tinymce"),
           to: "js",
         },
+        {
+          from: path.resolve(
+            __dirname,
+            "node_modules/pdfjs-dist/legacy/build/pdf.worker.min.js"
+          ),
+          to: "js",
+        },
       ]),
     ],
   },
