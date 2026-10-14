@@ -56,29 +56,36 @@
               </div>
               <div class="col-12" v-if="!loadingLid && wordtBinnenkortOudLid">
                 <Message severity="warn" class="wordt-oud-lid-balk">
-                  <div
-                    class="flex align-items-center justify-content-between w-full flex-wrap gap-2"
-                  >
-                    <span>
-                      Je bent 20 jaar of ouder. Bezorg een uittreksel uit je
-                      strafregister ter controle.
-                      <a
-                        href="https://wiki.scoutsengidsenvlaanderen.be/strafregister"
-                        target="_blank"
-                        class="wiki-icoon ml-1"
-                      >
-                        <i class="fa fa-question-circle" title="meer info"></i>
-                      </a>
-                    </span>
-                    <FileUpload
-                      mode="basic"
-                      name="uittrekselStrafregister"
-                      :customUpload="true"
-                      :auto="false"
-                      chooseLabel="Uittreksel opladen"
-                      uploadIcon="pi pi-upload"
-                      @uploader="uploadUittrekselStrafregister"
-                    ></FileUpload>
+                  <div class="flex flex-column w-full gap-2">
+                    <div
+                      class="flex align-items-center justify-content-between w-full flex-wrap gap-2"
+                    >
+                      <span>
+                        Je bent 20 jaar of ouder. Bezorg een uittreksel uit je
+                        strafregister ter controle.
+                        <a
+                          href="https://wiki.scoutsengidsenvlaanderen.be/strafregister"
+                          target="_blank"
+                          class="wiki-icoon ml-1"
+                        >
+                          <i
+                            class="fa fa-question-circle"
+                            title="meer info"
+                          ></i>
+                        </a>
+                      </span>
+                      <FileUpload
+                        ref="fileUploadRef"
+                        mode="basic"
+                        name="uittrekselStrafregister"
+                        :customUpload="true"
+                        :auto="false"
+                        chooseLabel="Uittreksel opladen"
+                        uploadIcon="pi pi-upload"
+                        @select="selecteerUittrekselStrafregister"
+                        @uploader="uploadUittrekselStrafregister"
+                      ></FileUpload>
+                    </div>
                   </div>
                 </Message>
               </div>
@@ -90,6 +97,13 @@
                 ></persoonlijk>
               </div>
               <div class="col-12 col-lg-6 col-xl-4">
+                <uittreksel-strafregister
+                  :title="'Uittreksel strafregister'"
+                  v-if="
+                    moetUittrekselStrafregisterBezorgen &&
+                    (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)
+                  "
+                ></uittreksel-strafregister>
                 <adressen
                   v-model="lid"
                   :title="'Adressen'"
@@ -141,9 +155,12 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
+import { ref } from "vue";
 import { toRefs } from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
+import UittrekselStrafregisterService from "@/services/uittrekselStrafregister/UittrekselStrafregisterService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
+import UittrekselStrafregister from "@/components/lid/UittrekselStrafregister";
 import Adressen from "@/components/lid/Adressen";
 import Contacten from "@/components/lid/Contacten";
 import Functies from "@/components/lid/Functies";
@@ -153,6 +170,7 @@ import LidBovenBalk from "@/components/lid/LidBovenBalk";
 import MessageDialog from "@/components/dialog/MessageDialog.vue";
 import Message from "primevue/message";
 import FileUpload from "primevue/fileupload";
+import { useToast } from "primevue/usetoast";
 
 export default {
   name: "Lid",
@@ -164,6 +182,7 @@ export default {
     IngelogdLid,
     ConfirmDialog,
     Persoonlijk,
+    UittrekselStrafregister,
     Adressen,
     Contacten,
     Functies,
@@ -191,9 +210,72 @@ export default {
       lidkaartAfdrukken,
       voegFunctieToe,
       wordtBinnenkortOudLid,
+      moetUittrekselStrafregisterBezorgen,
     } = LidService.lidSpace();
 
+    const toast = useToast();
+
+    const fileUploadRef = ref(null);
+
+    // De FileUpload-knop vereist een @uploader-handler (customUpload), maar
+    // we sturen het uittreksel al meteen door in selecteerUittrekselStrafregister
+    // hieronder, dus hier is niets meer te doen
     const uploadUittrekselStrafregister = () => {};
+
+    const uploadDocument = (url) => {
+      UittrekselStrafregisterService.uploadUittreksel(state.lid.id, url)
+        .then(() => {
+          toast.add({
+            severity: "success",
+            summary: "Uittreksel strafregister",
+            detail: "Uittreksel opgeladen.",
+            life: 3000,
+          });
+        })
+        .catch((error) => {
+          toast.add({
+            severity: "warn",
+            summary:
+              (error.response && error.response.data.titel) ||
+              "Uittreksel strafregister",
+            detail:
+              error.response &&
+              (error.response.data.beschrijving || error.response.data.titel),
+            life: 8000,
+          });
+        });
+    };
+
+    const selecteerUittrekselStrafregister = async (event) => {
+      const bestand = event.files[event.files.length - 1];
+      // Meteen resetten zodat de knoptekst "Uittreksel opladen" blijft
+      // staan i.p.v. over te schakelen naar de bestandsnaam
+      if (fileUploadRef.value) {
+        fileUploadRef.value.clear();
+      }
+
+      let url = null;
+      try {
+        url = await UittrekselStrafregisterService.haalVerificatieUrlOp(
+          bestand
+        );
+      } catch (error) {
+        url = null;
+      }
+
+      if (!url) {
+        toast.add({
+          severity: "warn",
+          summary: "Uittreksel strafregister",
+          detail:
+            "Kan het uittreksel niet opladen: geen geldige verificatielink gevonden in dit bestand.",
+          life: 8000,
+        });
+        return;
+      }
+
+      uploadDocument(url);
+    };
 
     return {
       ...toRefs(state),
@@ -203,6 +285,7 @@ export default {
       magFunctiesToevoegen,
       isEigenProfiel,
       wordtBinnenkortOudLid,
+      moetUittrekselStrafregisterBezorgen,
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
@@ -213,6 +296,8 @@ export default {
       lidkaartAfdrukken,
       voegFunctieToe,
       uploadUittrekselStrafregister,
+      selecteerUittrekselStrafregister,
+      fileUploadRef,
     };
   },
 };

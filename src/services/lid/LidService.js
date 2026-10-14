@@ -604,15 +604,18 @@ export default {
       },
     });
 
-    const wordtBinnenkortOudLid = computed(() => {
+    const moetUittrekselStrafregisterBezorgen = computed(() => {
       return (
-        isEigenProfiel.value &&
         state.lid.isActiefVvksmLid &&
         DateUtil.isMinstensXJarigInHuidigWerkjaar(
           state.lid.vgagegevens.geboortedatum,
           20,
         )
       );
+    });
+
+    const wordtBinnenkortOudLid = computed(() => {
+      return isEigenProfiel.value && moetUittrekselStrafregisterBezorgen.value;
     });
 
     const wijzigingen = computed({
@@ -712,6 +715,7 @@ export default {
       magFunctiesToevoegen,
       isEigenProfiel,
       wordtBinnenkortOudLid,
+      moetUittrekselStrafregisterBezorgen,
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
