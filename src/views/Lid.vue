@@ -3,7 +3,7 @@
     <SideMenu />
     <toast position="bottom-right">
       <template #message="slotProps">
-        <div class="flex flex-column">
+        <div class="flex flex-column flex-grow-1">
           <div class="text-center">
             <i
               class="pi pi-exclamation-triangle"
@@ -54,13 +54,56 @@
                   {{ lid.nietVerzekerdReden }}
                 </Message>
               </div>
-              <div class="col-12" v-if="!loadingLid && wordtBinnenkortOudLid">
+              <div
+                class="col-12"
+                v-if="
+                  !loadingLid &&
+                  wordtBinnenkortOudLid &&
+                  strafregisterStatus !== null &&
+                  strafregisterStatus !== 'INGEDIEND' &&
+                  (strafregisterStatus !== 'GOEDGEKEURD' ||
+                    strafregisterBijnaVerlopen)
+                "
+              >
                 <Message severity="warn" class="wordt-oud-lid-balk">
                   <div class="flex flex-column w-full gap-2">
                     <div
                       class="flex align-items-center justify-content-between w-full flex-wrap gap-2"
                     >
-                      <span>
+                      <span v-if="strafregisterStatus === 'VERLOPEN'">
+                        Je uittreksel uit je strafregister is verlopen. Bezorg
+                        een nieuw uittreksel ter controle.
+                        <a
+                          href="https://wiki.scoutsengidsenvlaanderen.be/strafregister"
+                          target="_blank"
+                          class="wiki-icoon ml-1"
+                        >
+                          <i
+                            class="fa fa-question-circle"
+                            title="meer info"
+                          ></i>
+                        </a>
+                      </span>
+                      <span
+                        v-else-if="
+                          strafregisterStatus === 'GOEDGEKEURD' &&
+                          strafregisterBijnaVerlopen
+                        "
+                      >
+                        Je uittreksel uit je strafregister is bijna verlopen.
+                        Bezorg een nieuw uittreksel ter controle.
+                        <a
+                          href="https://wiki.scoutsengidsenvlaanderen.be/strafregister"
+                          target="_blank"
+                          class="wiki-icoon ml-1"
+                        >
+                          <i
+                            class="fa fa-question-circle"
+                            title="meer info"
+                          ></i>
+                        </a>
+                      </span>
+                      <span v-else>
                         Je bent 20 jaar of ouder. Bezorg een uittreksel uit je
                         strafregister ter controle.
                         <a
@@ -75,6 +118,7 @@
                         </a>
                       </span>
                       <FileUpload
+                        v-if="!bezigMetOpladen"
                         ref="fileUploadRef"
                         mode="basic"
                         name="uittrekselStrafregister"
@@ -85,6 +129,11 @@
                         @select="selecteerUittrekselStrafregister"
                         @uploader="uploadUittrekselStrafregister"
                       ></FileUpload>
+                      <i
+                        v-else
+                        class="fas fa-spinner fa-spin uittreksel-laad-icoon"
+                        title="Uittreksel wordt opgeladen..."
+                      ></i>
                     </div>
                   </div>
                 </Message>
@@ -99,6 +148,7 @@
               <div class="col-12 col-lg-6 col-xl-4">
                 <uittreksel-strafregister
                   :title="'Uittreksel strafregister'"
+                  :lid-id="lid.id"
                   v-if="
                     moetUittrekselStrafregisterBezorgen &&
                     (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)
@@ -171,6 +221,7 @@ import MessageDialog from "@/components/dialog/MessageDialog.vue";
 import Message from "primevue/message";
 import FileUpload from "primevue/fileupload";
 import { useToast } from "primevue/usetoast";
+import useEmitter from "@/services/utils/useEmitter";
 
 export default {
   name: "Lid",
@@ -214,8 +265,16 @@ export default {
     } = LidService.lidSpace();
 
     const toast = useToast();
+    const emitter = useEmitter();
 
     const fileUploadRef = ref(null);
+    const bezigMetOpladen = ref(false);
+    const strafregisterStatus = ref(null);
+    const strafregisterBijnaVerlopen = ref(false);
+    emitter.on("strafregisterStatusChanged", ({ status, bijnaVerlopen }) => {
+      strafregisterStatus.value = status;
+      strafregisterBijnaVerlopen.value = bijnaVerlopen;
+    });
 
     // De FileUpload-knop vereist een @uploader-handler (customUpload), maar
     // we sturen het uittreksel al meteen door in selecteerUittrekselStrafregister
@@ -223,8 +282,12 @@ export default {
     const uploadUittrekselStrafregister = () => {};
 
     const uploadDocument = (url) => {
+      bezigMetOpladen.value = true;
       UittrekselStrafregisterService.uploadUittreksel(state.lid.id, url)
-        .then(() => {
+        .then((res) => {
+          // UittrekselStrafregister.vue past status/datum aan op basis
+          // van de respons, i.p.v. opnieuw te moeten ophalen
+          emitter.emit("strafregisterOpgeladen", res.data);
           toast.add({
             severity: "success",
             summary: "Uittreksel strafregister",
@@ -243,6 +306,9 @@ export default {
               (error.response.data.beschrijving || error.response.data.titel),
             life: 8000,
           });
+        })
+        .finally(() => {
+          bezigMetOpladen.value = false;
         });
     };
 
@@ -286,6 +352,8 @@ export default {
       isEigenProfiel,
       wordtBinnenkortOudLid,
       moetUittrekselStrafregisterBezorgen,
+      strafregisterStatus,
+      strafregisterBijnaVerlopen,
       heeftFiscaalAttest,
       wijzigingen,
       teBekijkenLid,
@@ -298,9 +366,19 @@ export default {
       uploadUittrekselStrafregister,
       selecteerUittrekselStrafregister,
       fileUploadRef,
+      bezigMetOpladen,
     };
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Zelfde hoogte als de PrimeVue-knop die dit icoon vervangt tijdens het
+   opladen, anders verspringt de balk eromheen */
+.uittreksel-laad-icoon {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  font-size: 1.25rem;
+}
+</style>
