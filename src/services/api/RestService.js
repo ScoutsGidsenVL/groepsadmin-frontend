@@ -259,6 +259,10 @@ export default {
     });
   },
 
+  getStrafregister(lidId) {
+    return apiClient().get(baseUrl + "lid/" + lidId + "/strafregister");
+  },
+
   activiteitOpslaan(activiteit) {
     return apiClient().post(baseUrl + "activiteit", activiteit);
   },

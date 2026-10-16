@@ -35,4 +35,8 @@ export default {
     const documentId = this.haalDocumentIdUitUrl(verificatieUrl);
     return RestService.uploadUittrekselStrafregister(lidId, documentId);
   },
+
+  haalStrafregisterOp(lidId) {
+    return RestService.getStrafregister(lidId);
+  },
 };
