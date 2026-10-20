@@ -123,6 +123,7 @@ export default {
       veranderGroep,
       kanGroepWijzigen,
       groepenLaden,
+      changes,
     } = GroepService.groepSpace();
 
     return {
@@ -132,6 +133,7 @@ export default {
       veranderGroep,
       kanGroepWijzigen,
       groepenLaden,
+      changes,
     };
   },
 };
