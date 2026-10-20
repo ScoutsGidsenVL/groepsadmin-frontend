@@ -1,5 +1,5 @@
 import { reactive } from "@vue/reactivity";
-import { computed, nextTick, onMounted, watch } from "vue";
+import { computed, onMounted } from "vue";
 import RestService from "@/services/api/RestService";
 import { useStore } from "vuex";
 import { useToast } from "primevue/usetoast";
@@ -21,8 +21,6 @@ export default {
       groepenArray: [],
       contactenLaden: false,
       magFunctiesToevoegen: false,
-      changes: false,
-      watchable: false,
       laden: false,
       home: { icon: "pi pi-home", to: "/dashboard" },
       breadcrumbItems: [
@@ -31,16 +29,6 @@ export default {
         },
       ],
     });
-
-    watch(
-      () => state.selectedGroep,
-      () => {
-        if (state.watchable) {
-          state.changes = true;
-        }
-      },
-      { deep: true }
-    );
 
     const getContacten = () => {
       state.contactenLaden = true;
@@ -97,6 +85,24 @@ export default {
       return wijzigingen;
     };
 
+    // Bepaalt of de "Opslaan"-knop actief moet zijn. Hergebruikt dezelfde
+    // diff als bij het effectief opslaan, zodat groepseigenFuncties en
+    // ondersteunendeVzws (die elk hun eigen opslaan-icoon hebben) hier
+    // nooit voor tellen, ongeacht wanneer of waarom deze computed
+    // herberekend wordt.
+    const changes = computed(() => {
+      if (!state.origineleGroep) {
+        return false;
+      }
+      const wijzigingen = berekenWijzigingen(
+        state.selectedGroep,
+        state.origineleGroep
+      );
+      delete wijzigingen.groepseigenFuncties;
+      delete wijzigingen.ondersteunendeVzws;
+      return Object.keys(wijzigingen).length > 0;
+    });
+
     const opslaan = () => {
       emitter.emit("groepOpslaan");
       state.laden = true;
@@ -130,7 +136,6 @@ export default {
         state.selectedGroep.opgericht
       );
       state.selectedGroep.opgericht = opgerichtDatum.toISOString();
-      state.watchable = false;
       // Vergelijk tegen de ongewijzigde stand van state.selectedGroep zelf:
       // die wordt hieronder nergens gemuteerd, enkel de uitgaande payload
       // wordt opgeschoond. Zo blijft instantie correct "ongewijzigd" wanneer
@@ -212,11 +217,7 @@ export default {
         })
         .finally(() => {
           state.laden = false;
-          state.changes = false;
           store.commit("setGroepenLaden", false);
-          nextTick(() => {
-            state.watchable = true;
-          });
         });
     };
 
@@ -225,7 +226,6 @@ export default {
     };
 
     const veranderGroep = (groep) => {
-      state.watchable = false;
       state.selectedGroep = groep;
       if (!state.selectedGroep.instantie) {
         state.selectedGroep.instantie = {
@@ -254,20 +254,13 @@ export default {
       updateFacturatieBeschrijvingen();
       getGroepseigenFuncties(groep);
       maakSnapshot();
-      nextTick(() => {
-        state.watchable = true;
-      });
     };
 
     const getGroepseigenFuncties = (groep) => {
       RestService.getFunctiesVanGroep(groep.groepsnummer).then((res) => {
         if (res.status === 200) {
-          state.watchable = false;
           state.selectedGroep.groepseigenFunctie = res.data;
           // state.selectedGroep.groepseigenFuncties = res.data.functies; Is this correct???
-          nextTick(() => {
-            state.watchable = true;
-          });
         }
       });
     };
@@ -338,9 +331,6 @@ export default {
       state.selectedGroep.publiekInschrijven =
         state.selectedGroep["publiek-inschrijven"];
       maakSnapshot();
-      nextTick(() => {
-        state.watchable = true;
-      });
     });
 
     emitter.on("laden", () => {
@@ -358,6 +348,7 @@ export default {
       veranderGroep,
       kanGroepWijzigen,
       groepenLaden,
+      changes,
     };
   },
 };
