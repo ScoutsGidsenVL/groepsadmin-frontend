@@ -50,7 +50,7 @@
                       v-if="kanGroepWijzigen && magOpslaan(vzw)"
                       icon="pi pi-save"
                       :loading="isBezigMetOpslaan(vzw)"
-                      class="p-button-rounded p-button-outlined add-button top--5 mr-1"
+                      class="p-button-rounded rij-opslaan-knop top--5 mr-1"
                       @click="
                         $event.stopPropagation();
                         opslaanVzw(vzw);

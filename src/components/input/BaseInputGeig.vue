@@ -16,7 +16,7 @@
         v-if="toonOpslaan"
         icon="pi pi-save"
         :loading="bezigMetOpslaan"
-        class="p-button-rounded p-button-outlined geig-opslaan-knop geig-icoon-knop"
+        class="p-button-rounded rij-opslaan-knop geig-icoon-knop"
         @click="
           $event.stopPropagation();
           opslaan();
