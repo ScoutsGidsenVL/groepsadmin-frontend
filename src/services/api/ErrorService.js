@@ -1,6 +1,7 @@
 export default {
   handleError(error) {
     if (
+      error.response &&
       error.response.status === 403 &&
       error.response.config.headers.Accept === "application/pdf"
     ) {

@@ -28,7 +28,7 @@ export default function apiClient() {
       return response;
     },
     (error) => {
-      if (error.response.status === 500) {
+      if (error.response && error.response.status === 500) {
         internalInstance.appContext.config.globalProperties.$toast.add({
           severity: "error",
           summary: "Ai, er liep iets fout met de Groepsadministratie.",
