@@ -69,6 +69,11 @@
         class="text-align-left"
       >
       </BaseDropdown>
+      <div v-if="veld.type === 'groep'" class="veld-groep-lijn mb-4">
+        <span class="veld-groep-lijn-kort"></span>
+        <label class="text-align-left">{{ veld.label }}</label>
+        <span class="veld-groep-lijn-rest"></span>
+      </div>
       <BaseTextArea
         v-if="veld.type === 'tekst_meerdere_lijnen'"
         v-model="waarde[veld.id]"
