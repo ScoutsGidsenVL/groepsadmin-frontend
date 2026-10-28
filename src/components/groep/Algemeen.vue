@@ -42,9 +42,13 @@
             :disabled="!kanGroepWijzigen"
           />
           <BaseInput
-            v-model="groep.rekeningnummer"
+            v-model="v.groep.rekeningnummer.$model"
             label="Rekeningnummer"
             type="text"
+            :invalid="
+              v.groep.rekeningnummer.$dirty && v.groep.rekeningnummer.$invalid
+            "
+            error-message="Geen geldig rekeningnummer"
             :disabled="!kanGroepWijzigen"
           ></BaseInput>
           <BaseCheckbox
@@ -111,6 +115,19 @@ import BaseCheckbox from "@/components/input/BaseCheckbox";
 import DatePicker from "@/components/input/DatePicker";
 import BaseTextArea from "@/components/input/BaseTextArea";
 import rechtenService from "@/services/rechten/rechtenService";
+import { useVuelidate } from "@vuelidate/core";
+
+const ibantools = require("ibantools");
+const isGeldigRekeningnummer = (value) => {
+  if (!value || value.isEmpty) {
+    return true;
+  }
+  let trimmedValue = value.replace(/\s+/g, "");
+  if ((trimmedValue && trimmedValue.length === 0) || !value) {
+    return true;
+  }
+  return ibantools.isValidIBAN(trimmedValue);
+};
 
 export default {
   name: "Algemeen",
@@ -202,7 +219,16 @@ export default {
       state.groep.opgericht = new Date(props.modelValue.opgericht);
     });
 
-    return { ...toRefs(state) };
+    const rules = {
+      groep: {
+        rekeningnummer: {
+          isGeldigRekeningnummer,
+        },
+      },
+    };
+    const v = useVuelidate(rules, state);
+
+    return { ...toRefs(state), v };
   },
 };
 </script>
