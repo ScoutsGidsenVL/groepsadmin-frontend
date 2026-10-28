@@ -31,3 +31,26 @@
   max-height: 425px;
 }
 
+// Groepseigen gegeven van het type "groep": een zuiver visueel label met een
+// lijntje ervoor en erna, i.p.v. een echt invoerveld
+.veld-groep-lijn {
+  display: flex;
+  align-items: center;
+
+  label {
+    margin: 0 0.5rem;
+    white-space: nowrap;
+    transform: translateY(-0.2rem);
+  }
+}
+
+.veld-groep-lijn-kort {
+  width: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.veld-groep-lijn-rest {
+  flex: 1 1 auto;
+  border-top: 1px solid #dee2e6;
+}
+
