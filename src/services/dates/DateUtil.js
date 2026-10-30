@@ -46,7 +46,14 @@ export default {
     if (!geboortedatum) {
       return false;
     }
-    const geboortejaar = moment(geboortedatum, "DD/MM/YYYY").year();
+    // geboortedatum komt hier soms nog ruw van de backend (ISO) binnen en
+    // soms al geformatteerd (DD/MM/YYYY, via formatGeboortedatum), beide
+    // moeten correct geparsed worden
+    const geboortejaar = moment(
+      geboortedatum,
+      ["DD/MM/YYYY", moment.ISO_8601],
+      true
+    ).year();
     return this.huidigWerkjaarStartjaar() - geboortejaar >= leeftijd;
   },
 };

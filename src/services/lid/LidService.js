@@ -70,7 +70,7 @@ export default {
           state.gewijzigdLid.vgagegevens = state.lid.vgagegevens;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -81,7 +81,7 @@ export default {
           state.gewijzigdLid.persoonsgegevens = state.lid.persoonsgegevens;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -92,7 +92,7 @@ export default {
           state.gewijzigdLid.functies = state.lid.functies;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -103,7 +103,7 @@ export default {
           state.gewijzigdLid.adressen = state.lid.adressen;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -114,7 +114,7 @@ export default {
           state.gewijzigdLid.contacten = state.lid.contacten;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -125,7 +125,7 @@ export default {
           state.gewijzigdLid.groepseigenVelden = state.lid.groepseigenVelden;
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
     watch(
@@ -135,7 +135,7 @@ export default {
           state.changes = true;
           state.gewijzigdLid.email = state.lid.email;
         }
-      },
+      }
     );
 
     watch(
@@ -148,12 +148,12 @@ export default {
           await getLid(newId);
           state.changes = false;
         }
-      },
+      }
     );
 
     const setGeboorteDatum = () => {
       state.lid.vgagegevens.geboortedatum = DateUtil.formatGeboortedatum(
-        state.lid.vgagegevens.geboortedatum,
+        state.lid.vgagegevens.geboortedatum
       );
     };
 
@@ -179,7 +179,7 @@ export default {
           setGeboorteDatum();
           try {
             const attestRes = await RestService.controleerBeschikbaarheidAttest(
-              state.lid.id,
+              state.lid.id
             );
             heeftFiscaalAttest.value =
               attestRes.status >= 200 &&
@@ -252,7 +252,7 @@ export default {
       });
 
       let inactieveGroepen = Object.entries(ongesorteerdeFuncties).filter(
-        ([key]) => !ongesorteerdeFuncties[key].active,
+        ([key]) => !ongesorteerdeFuncties[key].active
       );
       inactieveGroepen.forEach((groep) => {
         store.dispatch("addGroep", groep[0]);
@@ -277,8 +277,8 @@ export default {
     const filterGroepsEigenVelden = () => {
       state.groepseigenVelden = Object.fromEntries(
         Object.entries(state.lid.groepseigenVelden).filter(
-          ([key]) => state.lid.groepseigenVelden[key].schema.length > 0,
-        ),
+          ([key]) => state.lid.groepseigenVelden[key].schema.length > 0
+        )
       );
     };
 
@@ -407,7 +407,7 @@ export default {
         if (isNaN(geboortedatum)) {
           geboortedatum = moment(
             state.lid.vgagegevens.geboortedatum,
-            "DD/MM/YYYY",
+            "DD/MM/YYYY"
           ).toDate();
         }
         geboortedatum.setHours(2);
@@ -428,7 +428,7 @@ export default {
                 delete groepseigenVelden.waarden[veld.id];
               }
             });
-          },
+          }
         );
       }
 
@@ -438,7 +438,7 @@ export default {
           .then((res) => {
             state.lid = res.data;
             state.lid.vgagegevens.geboortedatum = DateUtil.formatGeboortedatum(
-              state.lid.vgagegevens.geboortedatum,
+              state.lid.vgagegevens.geboortedatum
             );
             if (res.status === 200) {
               toast.add({
@@ -515,7 +515,7 @@ export default {
             });
             state.lid = res.data;
             state.lid.vgagegevens.geboortedatum = DateUtil.formatteerDatum(
-              state.lid.vgagegevens.geboortedatum,
+              state.lid.vgagegevens.geboortedatum
             );
             sorteerFuncties();
             filterGroepsEigenVelden();
@@ -536,12 +536,10 @@ export default {
 
     onMounted(() => {
       state.id = route.params.id ? route.params.id : "profiel";
-      if (state.id === "profiel" && store.getters.profiel) {
-        state.eigenProfiel = true;
-        getProfiel();
-      }
-
-      if (state.id && (!state.lid || state.id !== "profiel" || state.changed)) {
+      // getLid(state.id) hieronder dekt ook het "profiel"-geval al in (en
+      // zet daarbij zelf state.eigenProfiel = true), dus een aparte
+      // getProfiel()-call hier zou gewoon dezelfde GET nog eens uitvoeren
+      if (state.id) {
         getLid(state.id);
       }
       resetWatchable();
@@ -609,7 +607,7 @@ export default {
         state.lid.isActiefVvksmLid &&
         DateUtil.isMinstensXJarigInHuidigWerkjaar(
           state.lid.vgagegevens.geboortedatum,
-          20,
+          20
         )
       );
     });

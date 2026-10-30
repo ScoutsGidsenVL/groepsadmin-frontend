@@ -31,6 +31,11 @@
       :header="messageDialogHeader"
       @close="messageDialog = false"
     />
+    <UittrekselStrafregisterInfoDialog
+      :dialog-visible="toonUittrekselInfo"
+      @close="toonUittrekselInfo = false"
+      @opladen="bevestigUittrekselOpladen"
+    />
     <PageLayout :breadcrumb-items="breadcrumbItems" :home="home">
       <Loader :showLoader="loadingLid"></Loader>
       <div>
@@ -117,8 +122,20 @@
                           ></i>
                         </a>
                       </span>
-                      <FileUpload
+                      <Button
                         v-if="!bezigMetOpladen"
+                        label="Uittreksel opladen"
+                        icon="pi pi-upload"
+                        class="actie-button"
+                        @click="toonUittrekselInfo = true"
+                      />
+                      <i
+                        v-else
+                        class="fas fa-spinner fa-spin uittreksel-laad-icoon"
+                        title="Uittreksel wordt opgeladen..."
+                      ></i>
+                      <FileUpload
+                        v-show="false"
                         ref="fileUploadRef"
                         mode="basic"
                         name="uittrekselStrafregister"
@@ -129,11 +146,6 @@
                         @select="selecteerUittrekselStrafregister"
                         @uploader="uploadUittrekselStrafregister"
                       ></FileUpload>
-                      <i
-                        v-else
-                        class="fas fa-spinner fa-spin uittreksel-laad-icoon"
-                        title="Uittreksel wordt opgeladen..."
-                      ></i>
                     </div>
                   </div>
                 </Message>
@@ -148,11 +160,8 @@
               <div class="col-12 col-lg-6 col-xl-4">
                 <uittreksel-strafregister
                   :title="'Uittreksel strafregister'"
-                  :lid-id="lid.id"
-                  v-if="
-                    moetUittrekselStrafregisterBezorgen &&
-                    (lid.vgagegevens.voornaam || lid.vgagegevens.achternaam)
-                  "
+                  :lid-id="strafregisterLidId"
+                  v-if="toontUittrekselStrafregister"
                 ></uittreksel-strafregister>
                 <adressen
                   v-model="lid"
@@ -205,12 +214,14 @@ import Loader from "@/components/global/Loader";
 import SideMenu from "@/components/global/Menu";
 import IngelogdLid from "@/components/lid/IngelogdLid";
 import ConfirmDialog from "primevue/confirmdialog";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
 import { toRefs } from "@vue/reactivity";
 import LidService from "@/services/lid/LidService";
 import UittrekselStrafregisterService from "@/services/uittrekselStrafregister/UittrekselStrafregisterService";
 import Persoonlijk from "@/components/lid/Persoonlijk";
 import UittrekselStrafregister from "@/components/lid/UittrekselStrafregister";
+import UittrekselStrafregisterInfoDialog from "@/components/lid/UittrekselStrafregisterInfoDialog";
 import Adressen from "@/components/lid/Adressen";
 import Contacten from "@/components/lid/Contacten";
 import Functies from "@/components/lid/Functies";
@@ -222,6 +233,7 @@ import Message from "primevue/message";
 import FileUpload from "primevue/fileupload";
 import { useToast } from "primevue/usetoast";
 import useEmitter from "@/services/utils/useEmitter";
+import DateUtil from "@/services/dates/DateUtil";
 
 export default {
   name: "Lid",
@@ -234,6 +246,7 @@ export default {
     ConfirmDialog,
     Persoonlijk,
     UittrekselStrafregister,
+    UittrekselStrafregisterInfoDialog,
     Adressen,
     Contacten,
     Functies,
@@ -261,14 +274,39 @@ export default {
       lidkaartAfdrukken,
       voegFunctieToe,
       wordtBinnenkortOudLid,
-      moetUittrekselStrafregisterBezorgen,
     } = LidService.lidSpace();
 
     const toast = useToast();
     const emitter = useEmitter();
+    const store = useStore();
+
+    // Het uittreksel strafregister-blok is enkel zichtbaar op het eigen
+    // profiel, dus de ingelogde gebruiker is altijd ook het betrokken lid.
+    // store.getters.profiel bevat dezelfde lidgegevens als state.lid, maar
+    // is al opgehaald bij het opstarten van de app (zie getProfiel in
+    // main.js): door hierop te steunen i.p.v. op state.lid, moet het blok
+    // (en zijn eigen GET-call) niet wachten tot de getLid()-call van deze
+    // pagina klaar is.
+    const strafregisterLidId = computed(
+      () => store.getters.profiel && store.getters.profiel.id
+    );
+
+    const toontUittrekselStrafregister = computed(() => {
+      const profiel = store.getters.profiel;
+      return (
+        isEigenProfiel.value &&
+        !!profiel &&
+        profiel.isActiefVvksmLid &&
+        DateUtil.isMinstensXJarigInHuidigWerkjaar(
+          profiel.vgagegevens && profiel.vgagegevens.geboortedatum,
+          20
+        )
+      );
+    });
 
     const fileUploadRef = ref(null);
     const bezigMetOpladen = ref(false);
+    const toonUittrekselInfo = ref(false);
     const strafregisterStatus = ref(null);
     const strafregisterBijnaVerlopen = ref(false);
     emitter.on("strafregisterStatusChanged", ({ status, bijnaVerlopen }) => {
@@ -280,6 +318,13 @@ export default {
     // we sturen het uittreksel al meteen door in selecteerUittrekselStrafregister
     // hieronder, dus hier is niets meer te doen
     const uploadUittrekselStrafregister = () => {};
+
+    const bevestigUittrekselOpladen = () => {
+      toonUittrekselInfo.value = false;
+      if (fileUploadRef.value) {
+        fileUploadRef.value.choose();
+      }
+    };
 
     const uploadDocument = (url) => {
       bezigMetOpladen.value = true;
@@ -345,13 +390,14 @@ export default {
 
     return {
       ...toRefs(state),
+      strafregisterLidId,
+      toontUittrekselStrafregister,
       stopAlleFuncties,
       opslaan,
       volledigeNaam,
       magFunctiesToevoegen,
       isEigenProfiel,
       wordtBinnenkortOudLid,
-      moetUittrekselStrafregisterBezorgen,
       strafregisterStatus,
       strafregisterBijnaVerlopen,
       heeftFiscaalAttest,
@@ -367,6 +413,8 @@ export default {
       selecteerUittrekselStrafregister,
       fileUploadRef,
       bezigMetOpladen,
+      toonUittrekselInfo,
+      bevestigUittrekselOpladen,
     };
   },
 };
