@@ -294,7 +294,7 @@ export default {
           ", je staat op punt om al je functies bij Scouts en Gidsen Vlaanderen te schrappen. " +
           " <br/>" +
           "Ben je zeker? <br/><br/>" +
-          "<p><b>Opgelet:</b> Als je de functie VGA of FV hebt kan je deze zelf niet schrappen. " +
+          "<p><b>Opgelet:</b> Als je de functie VGA, FV of VSP hebt kan je deze zelf niet schrappen. " +
           "De VGA moet deze functies doorgeven aan een opvolger waarna ze bij jou automatisch stoppen. " +
           "Ondervind je hiermee toch problemen, neem dan contact op met groepsadministratie@scoutsengidsenvlaanderen.be" +
           "</p>",
