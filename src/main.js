@@ -149,6 +149,25 @@ app.config.globalProperties.emitter = emitter;
 // In het geval van het publiek formulier gaan we keycloak overslaan
 if (window.location.pathname.includes("formulier")) {
   app.mount("#app");
+} else if (process.env.VUE_APP_MOCK === "true") {
+  // `npm run serve:mock`: geen Keycloak, de mockserver levert alle data
+  app.config.globalProperties.$keycloak = {
+    token: "mock-token",
+    logout: () => console.log("[mock] logout"),
+    updateToken: () => Promise.resolve(false),
+  };
+  store.commit("resetLeden");
+  store.commit("setToken", "mock-token");
+  store.commit("setNaam", "Robin Mock");
+  store.commit("setGebruikersnaam", "robin.mock");
+  store.commit("setJustRegistered", false);
+  Promise.allSettled([
+    store.dispatch("getProfiel"),
+    store.dispatch("getGroepen"),
+    store.dispatch("getFuncties"),
+    store.dispatch("getKolommen"),
+    store.dispatch("getLinks"),
+  ]).then(() => app.mount("#app"));
 } else {
   let initOptions = getClient();
   const keycloak = new Keycloak(initOptions);

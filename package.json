@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "serve:mock": "cross-env NODE_OPTIONS=--openssl-legacy-provider VUE_APP_MOCK=true vue-cli-service serve",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
