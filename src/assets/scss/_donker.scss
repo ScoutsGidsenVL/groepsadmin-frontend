@@ -1,0 +1,75 @@
+// Overrides die enkel in het donkere thema gelden.
+// Het PrimeVue-thema (arya-green) regelt de PrimeVue-componenten zelf. Hier
+// staan Bootstrap-klassen en eigen stijlen die geen tokens gebruiken.
+
+[data-theme="donker"] {
+  body {
+    background-color: var(--ga-achtergrond);
+    color: var(--ga-tekst);
+  }
+
+  // Bootstrap-hulpklassen in templates
+  .bg-white {
+    background-color: var(--ga-oppervlak) !important;
+  }
+  .text-black {
+    color: var(--ga-tekst) !important;
+  }
+  .text-muted {
+    color: var(--ga-tekst-zacht) !important;
+  }
+
+  // Bootstrap-componenten die de app hier en daar gebruikt
+  .form-control,
+  .form-select {
+    background-color: var(--ga-oppervlak);
+    border-color: var(--ga-rand-sterk);
+    color: var(--ga-tekst);
+  }
+  .table {
+    --bs-table-bg: transparent;
+    color: var(--ga-tekst);
+    border-color: var(--ga-rand);
+  }
+  .card,
+  .modal-content,
+  .dropdown-menu,
+  .list-group-item {
+    background-color: var(--ga-oppervlak);
+    color: var(--ga-tekst);
+    border-color: var(--ga-rand);
+  }
+  .dropdown-item {
+    color: var(--ga-tekst);
+    &:hover,
+    &:focus {
+      background-color: var(--ga-hover);
+    }
+  }
+  hr {
+    color: var(--ga-rand-sterk);
+  }
+
+  // Het logo wordt in het opengeklapte menu omgekeerd tot zwart op wit.
+  // Op een donkere achtergrond blijft het wit. Laat er wel een filter op staan:
+  // een filter maakt .ga-logo het kader voor de absolute positie van het
+  // logo. Met `filter: none` schuift het logo buiten beeld.
+  .desktop-menu:hover .ga-logo {
+    filter: grayscale(1);
+  }
+
+  // Links in de tekst halen anders te weinig contrast
+  .page-layout > .container-fluid a:not(.p-button):not(.btn):not(.p-menuitem-link) {
+    color: var(--ga-groen-tekst);
+  }
+
+  // Het kruimelpad staat los op de pagina, zonder eigen vlak
+  .p-breadcrumb {
+    background: transparent;
+  }
+
+  // PrimeVue-kaarten en panelen krijgen een zichtbare rand op donker
+  .p-card {
+    border: 1px solid var(--ga-rand);
+  }
+}

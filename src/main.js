@@ -29,7 +29,8 @@ import Menu from "primevue/menu";
 import SplitButton from "primevue/splitbutton";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import "primevue/resources/themes/saga-blue/theme.css"; //theme
+// Het PrimeVue-thema laadt via public/index.html, zie ThemaService
+import "@/services/thema/ThemaService";
 import "primevue/resources/primevue.min.css"; //core css
 import "primeicons/primeicons.css"; //icons
 import "primeflex/primeflex.css";

@@ -17,6 +17,9 @@
         >
           <i class="fas fa-user-circle menu-icon" title="Account" />
         </div>
+        <div class="ml-35px">
+          <thema-wissel />
+        </div>
         <div class="ml-35px cursor-pointer mr--23px" @click="logout">
           <i class="fas fa-sign-out-alt menu-icon" title="Uitloggen" />
         </div>
@@ -27,11 +30,13 @@
 
 <script>
 import LidZoekAutoComplete from "@/components/global/LidZoekAutoComplete";
+import ThemaWissel from "@/components/global/ThemaWissel";
 
 export default {
   name: "IngelogdLid",
   components: {
     LidZoekAutoComplete,
+    ThemaWissel,
   },
   data() {
     return {

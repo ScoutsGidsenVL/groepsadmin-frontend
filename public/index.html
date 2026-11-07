@@ -5,6 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>static/img/favicons/favicon.ico">
+    <!-- PrimeVue-thema: src/services/thema/ThemaService.js wisselt dit tussen licht en donker -->
+    <link id="primevue-thema" rel="stylesheet" href="<%= BASE_URL %>themes/saga-blue/theme.css">
+    <script>
+      // Zet het thema voor de eerste render, zodat de pagina niet wit oplicht
+      (function () {
+        var keuze = null;
+        try { keuze = localStorage.getItem("ga-thema"); } catch (e) {}
+        var donker = keuze === "donker" || (keuze !== "licht" &&
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", donker ? "donker" : "licht");
+        if (donker) {
+          var link = document.getElementById("primevue-thema");
+          link.href = link.href.replace("saga-blue", "arya-green");
+        }
+      })();
+    </script>
     <title>Groepsadministratie Scouts en Gidsen Vlaanderen</title>
     <!-- favicon's -->
     <!-- Default favicon's -->

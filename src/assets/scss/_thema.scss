@@ -1,0 +1,48 @@
+// Kleurtokens voor licht en donker thema.
+// ThemaService zet `data-theme` op <html>. Gebruik deze variabelen voor
+// neutrale kleuren (achtergrond, tekst, randen). De merkkleuren uit
+// _variables.scss blijven gelijk in beide thema's.
+
+:root,
+[data-theme="licht"] {
+  --ga-achtergrond: #ffffff;
+  --ga-oppervlak: #ffffff;
+  --ga-oppervlak-zacht: #{$sgv-info};
+  --ga-hover: #{$background-color};
+  --ga-tekst: #{$sgv-black};
+  --ga-tekst-app: #2c3e50;
+  --ga-tekst-zacht: #6c757d;
+  --ga-icoon-zacht: #c4c4c4;
+  --ga-rand: #e5e4e4;
+  --ga-rand-sterk: lightgray;
+  --ga-rand-lijst: grey;
+  --ga-uitgeschakeld: darkgrey;
+  --ga-schaduw: rgba(0, 0, 0, 0.1);
+  --ga-schaduw-zacht: rgba(0, 0, 0, 0.02);
+  --ga-groen-tekst: #{$sgv-donkergroen};
+  color-scheme: light;
+}
+
+[data-theme="donker"] {
+  --ga-achtergrond: #121212;
+  --ga-oppervlak: #1e1e1e;
+  --ga-oppervlak-zacht: #262626;
+  --ga-hover: #2a2f12;
+  --ga-tekst: rgba(255, 255, 255, 0.87);
+  --ga-tekst-app: rgba(255, 255, 255, 0.87);
+  --ga-tekst-zacht: rgba(255, 255, 255, 0.6);
+  --ga-icoon-zacht: #5c5c5c;
+  --ga-rand: #383838;
+  --ga-rand-sterk: #4a4a4a;
+  --ga-rand-lijst: #4a4a4a;
+  --ga-uitgeschakeld: #555555;
+  --ga-schaduw: rgba(0, 0, 0, 0.5);
+  --ga-schaduw-zacht: rgba(0, 0, 0, 0.3);
+  // Donkergroen haalt op een donkere achtergrond te weinig contrast voor tekst
+  --ga-groen-tekst: #a9c23a;
+  color-scheme: dark;
+
+  // Bootstrap 5.1 leest de body-kleuren uit deze variabelen
+  --bs-body-bg: var(--ga-achtergrond);
+  --bs-body-color: var(--ga-tekst);
+}

@@ -1,3 +1,6 @@
+@import "./thema";
+@import "./primevue-donker";
+@import "./kampvuur";
 @import "./footer";
 @import "./github";
 @import "./top_menubalk";
@@ -15,6 +18,7 @@
 @import "./filter";
 @import "./text";
 @import "./datatable";
+@import "./donker";
 
 .content {
   min-height: 60vh;
@@ -27,12 +31,12 @@
     text-align: left;
   }
   .p-card-title {
-    color: $sgv-donkergroen;
+    color: var(--ga-groen-tekst);
   }
 }
 @media only screen and (max-width: 390px) {
   .border-bottom-general {
-    border-bottom: 2px solid lightgray;
+    border-bottom: 2px solid var(--ga-rand-sterk);
   }
 }
 
@@ -65,7 +69,7 @@
 }
 
 .lid-autocomplete-input::placeholder {
-  color: black !important;
+  color: var(--ga-tekst) !important;
 }
 
 .p-checkbox .p-checkbox-box.p-highlight {
@@ -189,7 +193,7 @@
 .p-splitbutton {
   .p-button {
     background-color: $sgv-donkergroen;
-    border-color: white;
+    border-color: var(--ga-oppervlak);
   }
 
   .p-button:enabled:focus {
@@ -211,7 +215,7 @@
 }
 
 .p-datatable-row-expansion td {
-  background-color: $sgv-info !important;
+  background-color: var(--ga-oppervlak-zacht) !important;
 }
 
 .panel-subtitle {
@@ -696,6 +700,6 @@ a.clean-link:hover {
 }
 
 .p-accordion-header-link {
-  color: $sgv-black;
+  color: var(--ga-tekst);
   text-decoration: none;
 }

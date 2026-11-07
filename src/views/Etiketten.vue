@@ -240,6 +240,7 @@
 <script>
 import BaseInput from "@/components/input/BaseInput";
 import Editor from "@tinymce/tinymce-vue";
+import ThemaService from "@/services/thema/ThemaService";
 import SaveTemplateDialog from "@/components/mail/SaveTemplateDialog";
 import RestService from "@/services/api/RestService";
 import store from "@/store";
@@ -407,6 +408,8 @@ export default {
     },
     getOptions() {
       return {
+        // Werkbalk volgt het thema, het blad zelf blijft wit zoals de echte mail of etiket
+        skin: ThemaService.isDonker() ? "oxide-dark" : "oxide",
         selector: "textarea",
         images_file_types: "jpg,svg,webp,png,bmp,jpeg",
         plugins: [
