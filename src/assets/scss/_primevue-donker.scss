@@ -1,0 +1,68 @@
+// Basisregels van het lichte PrimeVue-thema (saga-blue) die het donkere thema
+// (arya-green) anders zet. Zonder deze regels krijgen knoppen op donker
+// donkere tekst en zijn uitgeschakelde knoppen doffer dan op licht.
+//
+// :where() houdt de specificiteit gelijk aan die van het PrimeVue-thema.
+// Zo winnen eigen knopklassen (.opslaan-knop, .actie-button, ...) op donker
+// net zoals op licht. Dit bestand staat daarom vóór _button.scss.
+
+// Rood van "danger" in het lichte thema, en een lichtere variant voor donker
+$danger-licht: #d32f2f;
+$danger-donker: #ef5350;
+
+:where([data-theme="donker"]) {
+  .p-button,
+  .p-button:enabled:hover,
+  .p-button:enabled:active {
+    color: #ffffff;
+  }
+
+  .p-disabled,
+  .p-component:disabled {
+    opacity: 0.6;
+  }
+
+  // Het donkere thema maakt "danger" roze (#F48FB1). We houden het rood:
+  // gevuld zoals op licht, en voor rand- en tekstknoppen (de vuilnisbakjes)
+  // een iets lichter rood dat leesbaar blijft op een donkere achtergrond.
+  .p-button.p-button-danger {
+    color: #ffffff;
+    background: $danger-licht;
+    border: 1px solid $danger-licht;
+  }
+  .p-button.p-button-danger:enabled:hover {
+    color: #ffffff;
+    background: #c02929;
+    border-color: #c02929;
+  }
+  .p-button.p-button-danger:enabled:active {
+    color: #ffffff;
+    background: #aa2424;
+    border-color: #aa2424;
+  }
+  .p-button.p-button-danger:enabled:focus {
+    box-shadow: 0 0 0 1px $danger-donker;
+  }
+
+  .p-button.p-button-danger.p-button-outlined,
+  .p-button.p-button-danger.p-button-text,
+  .p-splitbutton.p-button-danger.p-button-outlined > .p-button,
+  .p-splitbutton.p-button-danger.p-button-text > .p-button {
+    background-color: transparent;
+    color: $danger-donker;
+  }
+  .p-button.p-button-danger.p-button-outlined:enabled:hover,
+  .p-button.p-button-danger.p-button-text:enabled:hover,
+  .p-splitbutton.p-button-danger.p-button-outlined > .p-button:enabled:hover,
+  .p-splitbutton.p-button-danger.p-button-text > .p-button:enabled:hover {
+    background: rgba(239, 83, 80, 0.08);
+    color: $danger-donker;
+  }
+  .p-button.p-button-danger.p-button-outlined:enabled:active,
+  .p-button.p-button-danger.p-button-text:enabled:active,
+  .p-splitbutton.p-button-danger.p-button-outlined > .p-button:enabled:active,
+  .p-splitbutton.p-button-danger.p-button-text > .p-button:enabled:active {
+    background: rgba(239, 83, 80, 0.16);
+    color: $danger-donker;
+  }
+}

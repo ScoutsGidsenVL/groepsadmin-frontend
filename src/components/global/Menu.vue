@@ -87,6 +87,7 @@
 <script>
 import WikiService from "@/services/wiki/WikiService";
 import rechtenService from "@/services/rechten/rechtenService";
+import ThemaService from "@/services/thema/ThemaService";
 
 export default {
   name: "SideMenu",
@@ -222,6 +223,15 @@ export default {
           rechtenService.hasPermission(obj.condition) ||
           rechtenService.hasAccess(obj.condition)
         );
+      });
+      const donker = ThemaService.thema.value === "donker";
+      mobileMenuItems.push({
+        label: donker ? "Lichte modus" : "Donkere modus",
+        condition: true,
+        icon: donker
+          ? "ga-kampvuur ga-kampvuur-aan"
+          : "ga-kampvuur ga-kampvuur-uit",
+        command: () => ThemaService.wissel(),
       });
       mobileMenuItems.push({
         label: "Afmelden",

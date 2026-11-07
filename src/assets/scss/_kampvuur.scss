@@ -1,0 +1,36 @@
+// Kampvuur-iconen voor de themawissel (ThemaWissel.vue en het mobiele menu).
+// Donker thema: het vuur brandt. Licht thema: het vuur is uit.
+//
+// Lijniconen in één kleur, zoals de andere menu-iconen. De SVG dient als
+// masker, de kleur komt van `currentColor`. Zo volgen ze de tekstkleur in
+// licht en donker. Als klasse, zodat PrimeVue Menu ze als `icon` kan gebruiken.
+
+.ga-kampvuur {
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.ga-kampvuur-aan {
+  -webkit-mask-image: url("~@/assets/iconen/kampvuur-aan.svg");
+  mask-image: url("~@/assets/iconen/kampvuur-aan.svg");
+}
+
+.ga-kampvuur-uit {
+  -webkit-mask-image: url("~@/assets/iconen/kampvuur-uit.svg");
+  mask-image: url("~@/assets/iconen/kampvuur-uit.svg");
+}
+
+// In het mobiele menu even groot als de andere menu-iconen
+.p-menuitem-icon.ga-kampvuur {
+  width: 1.15em;
+  height: 1.15em;
+}

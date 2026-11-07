@@ -16,7 +16,7 @@
       clip-path: none;
       transition: width .4s ease-in-out;
       width: 347px;
-      background-color: white;
+      background-color: var(--ga-oppervlak);
       border-right: solid 1px #7b8f1c;
     }
 
@@ -34,7 +34,7 @@
     .menu {
       overflow-x: hidden;
       overflow-y: auto;
-      background-color: white;
+      background-color: var(--ga-oppervlak);
       border-right: solid 1px #7b8f1c;
       height: calc(100vh - 9.3em);
       transition: width .4s ease-in-out;
@@ -45,7 +45,7 @@
       ul {
         li {
           transition: border-bottom-width 1s;
-          border-bottom: solid 1px grey;
+          border-bottom: solid 1px var(--ga-rand-lijst);
         }
       }
     }
@@ -60,7 +60,7 @@
 
 .menu {
   position: fixed;
-  background-color: white;
+  background-color: var(--ga-oppervlak);
   left: -0.8em;
   right: 0;
   top: 9.3em;
@@ -131,7 +131,7 @@
 }
 
 .lid-menu-item {
-  color: $sgv-black;
+  color: var(--ga-tekst);
   font-size: 1.2rem !important;
 
   &:hover {
@@ -195,7 +195,7 @@
 
 .sub-menu-button {
   margin-right: -30px !important;
-  color: $sgv-black !important;
+  color: var(--ga-tekst) !important;
   background-color: transparent !important;
   &:hover {
     color: $sgv-lichtgroen !important;
