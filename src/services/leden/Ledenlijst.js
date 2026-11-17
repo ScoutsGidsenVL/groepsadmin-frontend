@@ -266,6 +266,9 @@ export default {
     };
 
     const changeIndividueleSteekkaart = (criteria, aangepast, datum) => {
+      if (!DateUtil.isGeldigeDatum(datum)) {
+        return;
+      }
       if (!state.huidigeFilter.criteria[criteria.criteriaKey]) {
         state.huidigeFilter.criteria[criteria.criteriaKey] = {};
       }
