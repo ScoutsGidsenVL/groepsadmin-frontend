@@ -105,15 +105,21 @@ export default {
       (nieuweGroep) => {
         if (nieuweGroep?.instantie && state?.attest) {
           state.attest.certnaam = nieuweGroep.instantie.naam;
-          state.attest.certadres =
-            nieuweGroep.instantie.adres.straat +
-            " " +
-            nieuweGroep.instantie.adres.nummer +
-            " " +
-            nieuweGroep.instantie.adres.bus;
-          state.attest.certpostcode = nieuweGroep.instantie.adres.postcode;
-          state.attest.certgemeente = nieuweGroep.instantie.adres.gemeente;
           state.attest.certkbo = nieuweGroep.instantie.kbo;
+          if (nieuweGroep.instantie.adres) {
+            state.attest.certadres =
+              nieuweGroep.instantie.adres.straat +
+              " " +
+              nieuweGroep.instantie.adres.nummer +
+              " " +
+              nieuweGroep.instantie.adres.bus;
+            state.attest.certpostcode = nieuweGroep.instantie.adres.postcode;
+            state.attest.certgemeente = nieuweGroep.instantie.adres.gemeente;
+          } else {
+            state.attest.certadres = "";
+            state.attest.certpostcode = "";
+            state.attest.certgemeente = "";
+          }
         }
       },
       { immediate: true, deep: true }
