@@ -33,7 +33,7 @@
     "primeicons": "^6.0.1",
     "primevue": "^3.34.0",
     "tinymce": "5-latest",
-    "vue": "^3.2.20",
+    "vue": "^3.5.46",
     "vue-click-outside-element": "^1.0.15",
     "vue-router": "^4.0.12",
     "vue3-loading-overlay": "^0.0.1",
